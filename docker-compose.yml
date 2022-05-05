@@ -1,0 +1,40 @@
+version: "2.1"
+services:
+  db:
+    image: mysql:5.6
+    container_name: edx_exams.db
+    environment:
+      MYSQL_ROOT_PASSWORD: ""
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+    networks:
+      - devstack_default
+    volumes:
+      - edx_exams_mysql:/var/lib/mysql
+
+  memcache:
+    image: memcached:1.4.24
+    container_name: edx_exams.memcache
+
+  app:
+    # Uncomment this line to use the official edx_exams base image
+    image: openedx/edx_exams
+
+    container_name: edx_exams.app
+    volumes:
+      - .:/edx/app/edx_exams/
+    command: bash -c 'while true; do python /edx/app/edx_exams/manage.py runserver 0.0.0.0:8000; sleep 2; done'
+    environment:
+      DJANGO_SETTINGS_MODULE: edx_exams.settings.devstack
+    ports:
+      - "8000:8000" # TODO: change this to your port
+    networks:
+      - devstack_default
+    stdin_open: true
+    tty: true
+
+networks:
+  devstack_default:
+    external: true
+
+volumes:
+  edx_exams_mysql:
