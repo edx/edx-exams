@@ -20,6 +20,8 @@ MAINTAINER sre@edx.org
 
 # gcc; for compiling python extensions distributed with python packages like mysql-client
 
+# make; necessary to provision the container
+
 # If you add a package here please include a comment above describing what it is used for
 RUN apt-get update && apt-get -qy install --no-install-recommends \
  language-pack-en \
@@ -29,7 +31,8 @@ RUN apt-get update && apt-get -qy install --no-install-recommends \
  libmysqlclient-dev \
  libssl-dev \
  python3-dev \
- gcc
+ gcc \
+ make
 
 
 RUN pip install --upgrade pip setuptools

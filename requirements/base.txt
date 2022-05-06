@@ -4,8 +4,12 @@
 #
 #    make upgrade
 #
+appdirs==1.4.4
+    # via fs
 asgiref==3.5.2
     # via django
+bleach==5.0.0
+    # via lti-consumer-xblock
 certifi==2022.5.18.1
     # via requests
 cffi==1.15.0
@@ -37,9 +41,11 @@ django==3.2.13
     # via
     #   -c https://raw.githubusercontent.com/edx/edx-lint/master/edx_lint/files/common_constraints.txt
     #   -r requirements/base.in
+    #   django-config-models
     #   django-cors-headers
     #   django-crum
     #   django-extensions
+    #   django-filter
     #   djangorestframework
     #   drf-jwt
     #   drf-yasg
@@ -48,12 +54,19 @@ django==3.2.13
     #   edx-django-release-util
     #   edx-django-utils
     #   edx-drf-extensions
+    #   jsonfield
+    #   lti-consumer-xblock
+    #   openedx-filters
+django-config-models==2.3.0
+    # via lti-consumer-xblock
 django-cors-headers==3.12.0
     # via -r requirements/base.in
 django-crum==0.7.9
     # via edx-django-utils
 django-extensions==3.1.5
     # via -r requirements/base.in
+django-filter==21.1
+    # via lti-consumer-xblock
 django-rest-swagger==2.2.0
     # via -r requirements/base.in
 django-waffle==2.4.1
@@ -64,6 +77,7 @@ django-waffle==2.4.1
 djangorestframework==3.13.1
     # via
     #   -r requirements/base.in
+    #   django-config-models
     #   django-rest-swagger
     #   drf-jwt
     #   drf-yasg
@@ -82,14 +96,19 @@ edx-django-release-util==1.2.0
 edx-django-utils==5.0.0
     # via
     #   -r requirements/base.in
+    #   django-config-models
     #   edx-drf-extensions
     #   edx-rest-api-client
 edx-drf-extensions==8.0.1
     # via -r requirements/base.in
 edx-opaque-keys==2.3.0
-    # via edx-drf-extensions
+    # via
+    #   edx-drf-extensions
+    #   lti-consumer-xblock
 edx-rest-api-client==5.5.0
     # via -r requirements/base.in
+fs==2.4.16
+    # via xblock
 future==0.18.2
     # via pyjwkest
 idna==3.3
@@ -100,18 +119,38 @@ itypes==1.2.0
     # via coreapi
 jinja2==3.1.2
     # via coreschema
+jsonfield==3.1.0
+    # via lti-consumer-xblock
+lazy==1.4
+    # via lti-consumer-xblock
+lti-consumer-xblock @ git+https://github.com/openedx/xblock-lti-consumer.git@6625749fcc80e4e0df6f1deb4392b8a84d33d259
+    # via -r requirements/base.in
+lxml==4.9.0
+    # via
+    #   lti-consumer-xblock
+    #   xblock
+mako==1.2.0
+    # via
+    #   lti-consumer-xblock
+    #   xblock-utils
 markupsafe==2.1.1
-    # via jinja2
+    # via
+    #   jinja2
+    #   mako
+    #   xblock
 mysqlclient==2.1.0
     # via -r requirements/base.in
 newrelic==7.10.0.175
     # via edx-django-utils
 oauthlib==3.2.0
     # via
+    #   lti-consumer-xblock
     #   requests-oauthlib
     #   social-auth-core
 openapi-codec==1.3.2
     # via django-rest-swagger
+openedx-filters==0.7.0
+    # via lti-consumer-xblock
 packaging==21.3
     # via drf-yasg
 pbr==5.9.0
@@ -121,9 +160,13 @@ psutil==5.9.1
 pycparser==2.21
     # via cffi
 pycryptodomex==3.14.1
-    # via pyjwkest
+    # via
+    #   lti-consumer-xblock
+    #   pyjwkest
 pyjwkest==1.4.2
-    # via edx-drf-extensions
+    # via
+    #   edx-drf-extensions
+    #   lti-consumer-xblock
 pyjwt[crypto]==2.4.0
     # via
     #   drf-jwt
@@ -138,7 +181,9 @@ pynacl==1.5.0
 pyparsing==3.0.9
     # via packaging
 python-dateutil==2.8.2
-    # via edx-drf-extensions
+    # via
+    #   edx-drf-extensions
+    #   xblock
 python3-openid==3.2.0
     # via social-auth-core
 pytz==2022.1
@@ -146,8 +191,11 @@ pytz==2022.1
     #   -r requirements/base.in
     #   django
     #   djangorestframework
+    #   xblock
 pyyaml==6.0
-    # via edx-django-release-util
+    # via
+    #   edx-django-release-util
+    #   xblock
 requests==2.27.1
     # via
     #   coreapi
@@ -166,12 +214,16 @@ ruamel-yaml-clib==0.2.6
 semantic-version==2.10.0
     # via edx-drf-extensions
 simplejson==3.17.6
-    # via django-rest-swagger
+    # via
+    #   django-rest-swagger
+    #   xblock-utils
 six==1.16.0
     # via
+    #   bleach
     #   edx-auth-backends
     #   edx-django-release-util
     #   edx-drf-extensions
+    #   fs
     #   pyjwkest
     #   python-dateutil
 slumber==0.7.1
@@ -194,3 +246,20 @@ uritemplate==4.1.1
     #   drf-yasg
 urllib3==1.26.9
     # via requests
+web-fragments==2.0.0
+    # via
+    #   xblock
+    #   xblock-utils
+webencodings==0.5.1
+    # via bleach
+webob==1.8.7
+    # via xblock
+xblock==1.6.1
+    # via
+    #   lti-consumer-xblock
+    #   xblock-utils
+xblock-utils==3.0.0
+    # via lti-consumer-xblock
+
+# The following packages are considered to be unsafe in a requirements file:
+# setuptools

@@ -33,6 +33,7 @@ INSTALLED_APPS = (
     'release_util',
     'drf_yasg',
     'edx_api_doc_tools',
+    'lti_consumer.apps.LTIConsumerApp',
 )
 
 THIRD_PARTY_APPS = (
@@ -47,6 +48,7 @@ THIRD_PARTY_APPS = (
 PROJECT_APPS = (
     'edx_exams.apps.core',
     'edx_exams.apps.api',
+    'edx_exams.apps.lti',
 )
 
 INSTALLED_APPS += THIRD_PARTY_APPS
