@@ -1,5 +1,5 @@
 name="edx_exams"
-port="8000"
+port="18740"
 
 docker-compose up -d --build
 
