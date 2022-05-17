@@ -17,7 +17,7 @@ that is set up in either service but avoids adding configuration of lots of swit
 Decision
 --------
 This service will include all logic necessary to determine which proctoring implementation a particular API
-request is relevant for and forward requests `edx-proctoring`_ where appropriate.
+request is relevant for and forward requests to `edx-proctoring`_ where appropriate.
 
 #. edx-platform will not have configuration or state indicating if an exam or proctoring provider is configured
    by edx-exams or edx-proctoring.
@@ -32,7 +32,7 @@ request is relevant for and forward requests `edx-proctoring`_ where appropriate
     * These features should disable gracefully if no configuration is found.
 
 
-Consesqunces
+Consequences
 ------------
 #. edx-proctoring will have additional REST API endpoints created to handle requests from edx-exams in decision #2 above
 
