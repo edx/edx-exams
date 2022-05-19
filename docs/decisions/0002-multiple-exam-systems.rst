@@ -4,7 +4,7 @@ Support for Multiple Exam Systems
 Status
 ------
 
-Propsed (circa May 2022)
+Approved (circa May 2022)
 
 Context
 -------
