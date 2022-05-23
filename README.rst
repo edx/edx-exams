@@ -34,6 +34,12 @@ One Time Setup
   # Install/update the dev requirements
   make requirements
 
+  # Start LMS in devstack from your local devstack directory
+  make dev.up.lms
+
+  # Return to the edx-exams repo directory and provision credentials:
+  bash local-provision-edx-exams.sh
+
   # Run edx-exams locally
   python manage.py runserver localhost:18740 --settings=edx_exams.settings.local
 

@@ -21,8 +21,8 @@ services:
 
     container_name: edx_exams.app
     volumes:
-      - .:/edx/app/edx_exams/
-    command: bash -c 'while true; do python /edx/app/edx_exams/manage.py runserver 0.0.0.0:18740; sleep 2; done'
+      - .:/edx/app/edx-exams/
+    command: bash -c 'while true; do python /edx/app/edx-exams/manage.py runserver 0.0.0.0:18740; sleep 2; done'
     environment:
       DJANGO_SETTINGS_MODULE: edx_exams.settings.devstack
     ports:
