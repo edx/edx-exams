@@ -31,6 +31,12 @@ One Time Setup
   # Set up a virtualenv using virtualenvwrapper with the same name as the repo and activate it
   mkvirtualenv -p python3.8 edx-exams
 
+  # Install/update the dev requirements
+  make requirements
+
+  # Run edx-exams locally
+  python manage.py runserver localhost:18740 --settings=edx_exams.settings.local
+
 
 Every time you develop something in this repo
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
