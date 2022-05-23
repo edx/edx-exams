@@ -242,7 +242,7 @@ pep517==0.12.0
     # via
     #   -r requirements/pip-tools.txt
     #   pip-tools
-pip-tools==6.6.0
+pip-tools==6.6.1
     # via -r requirements/pip-tools.txt
 pkginfo==1.8.2
     # via
