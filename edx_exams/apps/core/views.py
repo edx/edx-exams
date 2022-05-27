@@ -8,7 +8,9 @@ from django.db import DatabaseError, connection, transaction
 from django.http import Http404, JsonResponse
 from django.shortcuts import redirect
 from django.views.generic import View
+from edx_api_doc_tools import schema
 from edx_django_utils.monitoring import ignore_transaction
+from rest_framework.views import APIView
 
 from edx_exams.apps.core.constants import Status
 
@@ -17,7 +19,7 @@ User = get_user_model()
 
 
 @transaction.non_atomic_requests
-def health(_):
+class Health(APIView):
     """Allows a load balancer to verify this service is up.
 
     Checks the status of the database connection on which this service relies.
@@ -34,31 +36,41 @@ def health(_):
         '{"overall_status": "OK", "detailed_status": {"database_status": "OK", "lms_status": "OK"}}'
     """
 
-    # Ignores health check in performance monitoring so as to not artifically inflate our response time metrics
-    ignore_transaction()
-
-    try:
-        cursor = connection.cursor()
-        cursor.execute("SELECT 1")
-        cursor.fetchone()
-        cursor.close()
-        database_status = Status.OK
-    except DatabaseError:
-        database_status = Status.UNAVAILABLE
-
-    overall_status = Status.OK if (database_status == Status.OK) else Status.UNAVAILABLE
-
-    data = {
-        'overall_status': overall_status,
-        'detailed_status': {
-            'database_status': database_status,
+    @schema(
+        parameters=[],
+        responses={
+            200: "OK",
+            503: "Service unavailable"
         },
-    }
+        summary='Allows a load balancer to verify this service is up.',
+        description='Checks the status of the database connection on which this service relies.'
+    )
+    def get(self, request):
+        # Ignores health check in performance monitoring so as to not artifically inflate our response time metrics
+        ignore_transaction()
 
-    if overall_status == Status.OK:
-        return JsonResponse(data)
-    else:
-        return JsonResponse(data, status=503)
+        try:
+            cursor = connection.cursor()
+            cursor.execute("SELECT 1")
+            cursor.fetchone()
+            cursor.close()
+            database_status = Status.OK
+        except DatabaseError:
+            database_status = Status.UNAVAILABLE
+
+        overall_status = Status.OK if (database_status == Status.OK) else Status.UNAVAILABLE
+
+        data = {
+            'overall_status': overall_status,
+            'detailed_status': {
+                'database_status': database_status,
+            },
+        }
+
+        if overall_status == Status.OK:
+            return JsonResponse(data)
+        else:
+            return JsonResponse(data, status=503)
 
 
 class AutoAuth(View):

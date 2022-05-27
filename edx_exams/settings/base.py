@@ -31,6 +31,8 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'release_util',
+    'drf_yasg',
+    'edx_api_doc_tools',
 )
 
 THIRD_PARTY_APPS = (
