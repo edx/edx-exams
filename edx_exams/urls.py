@@ -21,7 +21,7 @@ from auth_backends.urls import oauth2_urlpatterns
 from django.conf import settings
 from django.conf.urls import include, url
 from django.contrib import admin
-from rest_framework_swagger.views import get_swagger_view
+from edx_api_doc_tools import make_api_info, make_docs_urls
 
 from edx_exams.apps.api import urls as api_urls
 from edx_exams.apps.core import views as core_views
@@ -31,10 +31,9 @@ admin.autodiscover()
 urlpatterns = oauth2_urlpatterns + [
     url(r'^admin/', admin.site.urls),
     url(r'^api/', include(api_urls)),
-    url(r'^api-docs/', get_swagger_view(title='edx-exams API')),
     url(r'^auto_auth/$', core_views.AutoAuth.as_view(), name='auto_auth'),
     url(r'', include('csrf.urls')),  # Include csrf urls from edx-drf-extensions
-    url(r'^health/$', core_views.health, name='health'),
+    url(r'^health/$', core_views.Health.as_view(), name='health'),
 ]
 
 if settings.DEBUG and os.environ.get('ENABLE_DJANGO_TOOLBAR', False):  # pragma: no cover
@@ -42,3 +41,14 @@ if settings.DEBUG and os.environ.get('ENABLE_DJANGO_TOOLBAR', False):  # pragma:
     # for CI build
     import debug_toolbar  # pylint: disable=import-error
     urlpatterns.append(url(r'^__debug__/', include(debug_toolbar.urls)))
+
+api_info = make_api_info(
+    title="edX Exams API",
+    version="v0",
+    description="A REST API for interacting with the edX exams service."
+)
+
+urlpatterns += make_docs_urls(
+    api_info,
+    api_url_patterns=[url(r'^health/$', core_views.Health.as_view(), name='health'), url(r'^api/', include(api_urls))]
+)
