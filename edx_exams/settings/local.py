@@ -68,3 +68,15 @@ LOGGING = get_logger_config(debug=DEBUG)
 # Lastly, see if the developer has any local overrides.
 if os.path.isfile(join(dirname(abspath(__file__)), 'private.py')):
     from .private import *  # pylint: disable=import-error
+
+# Use the below URL when using port forwarding for testing with the IMS testing tool.
+ROOT_URL = 'localhost:18740'
+
+LMS_BASE = 'localhost:18000'
+LMS_ROOT_URL = f'http://{LMS_BASE}'
+
+# TODO: What security considerations are there for settings these settings to these values? Should we store the
+#       anti-CSRF token on the attempt model instead and forego the need for the session cookie?
+# TODO: These settings should be moved to base.py if we feel comfortable with them.
+SESSION_COOKIE_SAMESITE='None'
+SESSION_COOKIE_SECURE=True
