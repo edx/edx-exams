@@ -10,10 +10,16 @@ Overview
 --------
 
 Please note that the code in this Djangoapp is part of a proof-of-concept and has been approved and merged as a
-reference for future work. Changes will be necessary before this code is ready for production. For example, most of
-the view logic in this Djangoapp will need to move to the xblock-lti-consumer library once that library has been
-refactored to be less reliant on xBlocks and the xBlock runtime. For that reason, some of this code may not be
-appropriate for a production environment without further modification.
+reference for future work. Changes will be necessary before this code is ready for production. For example, most of the
+view logic in this Djangoapp will need to move to the xblock-lti-consumer library once that library has been refactored
+to be less reliant on xBlocks and the xBlock runtime. For that reason, some of this code may not be appropriate for a
+production environment without further modification.
 
 Also note that this Djangoapp relies on changes to the xblock-lti-consumer library that are in a branch and not on the
 master branch.
+
+Additional Documentation
+------------------------
+
+Please view the `LTI for Proctoring in edx-exams Independently Deployable Application
+<https://github.com/edx/edx-exams/blob/main/docs/lti.rst>`_ documentation for further details about LTI for proctoring.
