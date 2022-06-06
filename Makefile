@@ -39,6 +39,9 @@ clean_pycrypto: ## temporary (?) hack to deal with the pycrypto dep that's insta
 
 requirements: clean_pycrypto piptools dev_requirements ## sync to default requirements
 
+test_requirements:
+	pip-sync -q requirements/test.txt
+
 ci_requirements: validation_requirements ## sync to requirements needed for CI checks
 
 dev_requirements: ## sync to requirements for local development
@@ -105,6 +108,7 @@ upgrade: piptools ## update the requirements/*.txt files with the latest package
 	pip install -qr requirements/pip-tools.txt
 	pip-compile --upgrade -o requirements/base.txt requirements/base.in
 	pip-compile --upgrade -o requirements/test.txt requirements/test.in
+	pip-compile --upgrade -o requirements/ci.txt requirements/ci.in
 	pip-compile --upgrade -o requirements/doc.txt requirements/doc.in
 	pip-compile --upgrade -o requirements/quality.txt requirements/quality.in
 	pip-compile --upgrade -o requirements/validation.txt requirements/validation.in
