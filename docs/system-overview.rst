@@ -48,11 +48,11 @@ implementing the required callback URLs to complete the launch flow.
 LTI Launch Flow
 ^^^^^^^^^^^^^^^
 A series of handshakes that ensures the proctoring tool is launched and authenticated with the correct
-context about the learner and the exam. For more details on the specifics of the lauch flow see `TODO LTI DOC <todo>`_
+context about the learner and the exam. For more details on the specifics of the launch flow see `LTI <./lti.rst>`_
 
 Assessment Control Service API
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-The Assessment Control Service (ACS) interface may be used by the proctoring provider to update an
+The Assessment Control Service (ACS) is a backend service API available to the proctoring provider update an
 exam attempt during or after and exam. This API can be used to post review violations or terminate
 a current exam session.
 
@@ -71,7 +71,7 @@ Example Action Sequence
 The diagrams below describes the happy-path of interactions between components to
 sucessfully begin a proctored exam.
 
-Specifics on LTI messages and launch flow can be found at `TODO LIT DOC <todo>`_
+Specifics on LTI messages and launch flow can be found at `LTI <./lti.rst>`
 
 Note: This is not final, design work is ongoing as the service is built.
 
