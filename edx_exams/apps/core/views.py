@@ -46,7 +46,10 @@ class Health(APIView):
         description='Checks the status of the database connection on which this service relies.'
     )
     def get(self, request):
-        # Ignores health check in performance monitoring so as to not artifically inflate our response time metrics
+        """
+        Get health status of service
+        """
+        # Ignores health check in performance monitoring so as to not artificially inflate our response time metrics
         ignore_transaction()
 
         try:

@@ -1,3 +1,7 @@
+"""
+LTI Views
+"""
+
 from urllib.parse import urljoin
 
 from django.conf import settings
@@ -7,7 +11,6 @@ from django.urls import reverse
 from django.utils.crypto import get_random_string
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
-
 from lti_consumer.lti_1p3.exceptions import (
     BadJwtSignature,
     InvalidClaimValue,
@@ -15,19 +18,20 @@ from lti_consumer.lti_1p3.exceptions import (
     MissingRequiredClaim,
     NoSuitableKeys,
     TokenSignatureExpired,
-    UnauthorizedToken,
+    UnauthorizedToken
 )
 
 from edx_exams.apps.lti.api import (
     get_lti1p3_consumer,
     get_lti_preflight_url,
-    get_resource_link,
     get_optional_user_identity_claims,
+    get_resource_link
 )
+
 
 def start_proctoring(request):
     """
-    This view represents a "Platform-Originating Message"; the Assessment Platform is directing the browser to send a 
+    This view represents a "Platform-Originating Message"; the Assessment Platform is directing the browser to send a
     "start proctoring" message to the Proctoring Tool. Because the Assessment Platform acts as the identity provider
     (IdP), it must follow the "OpenID Connect Launch Flow". The first step is the third-party initiated login; it is a
     "third-party" initiated login to protect against login CSRF attacks.
@@ -36,7 +40,7 @@ def start_proctoring(request):
     Relying Party. In this case, the initiator redirects to the Relying Party at its login initiation endpoint, which
     requests that the Relying Party send an Authentication Request to a specified OpenID Provider."
     https://www.imsglobal.org/spec/security/v1p0/#openid_connect_launch_flow
-    
+
     This view redirects the learner's browser to the Proctoring Tool's initial OIDC login initiation URL, which acts as
     the first step of third-party initiated login. The Proctoring Tool should redirect the learner's browser to the
     Assessment Platform's "OIDC Authorization end-point", which starts the OpenID Connect authentication flow,
@@ -53,9 +57,10 @@ def start_proctoring(request):
 
     return redirect(preflight_url)
 
+
 def end_assessment(request):
     """
-    This view represents a "Platform-Originating Message"; the Assessment Platform is directing the browser to send a 
+    This view represents a "Platform-Originating Message"; the Assessment Platform is directing the browser to send a
     "end assessment" message to the Proctoring Tool. Because the Assessment Platform acts as the identity provider
     (IdP), it must follow the "OpenID Connect Launch Flow". The first step is the third-party initiated login; it is a
     "third-party" initiated login to protect against login CSRF attacks.
@@ -64,9 +69,9 @@ def end_assessment(request):
     Relying Party. In this case, the initiator redirects to the Relying Party at its login initiation endpoint, which
     requests that the Relying Party send an Authentication Request to a specified OpenID Provider."
     https://www.imsglobal.org/spec/security/v1p0/#openid_connect_launch_flow
-    
+
     This view redirects the learner's browser to the Proctoring Tool's initial OIDC login initiation URL, which acts as
-    the first step of third-party initiated login. The Proctoring Tool should redirect the learner's browser to the 
+    the first step of third-party initiated login. The Proctoring Tool should redirect the learner's browser to the
     Assessment Platform's "OIDC Authorization end-point", which starts the OpenID Connect authentication flow,
     implemented by the authenticate view.
 
@@ -86,12 +91,13 @@ def end_assessment(request):
     # We remove the end_assessment_return session data, since the learner has completed the proctoring flow.
     end_assessment_return = request.session.pop('end_assessment_return')
     if end_assessment_return:
-            lti_message_hint = 'LtiEndAssessment'
-            preflight_url = get_lti_preflight_url(lti_message_hint)
+        lti_message_hint = 'LtiEndAssessment'
+        preflight_url = get_lti_preflight_url(lti_message_hint)
 
-            return redirect(preflight_url)
+        return redirect(preflight_url)
 
-    return JsonResponse()
+    return JsonResponse()  # pylint: disable=no-value-for-parameter
+
 
 def public_keyset(request):
     """
@@ -104,13 +110,14 @@ def public_keyset(request):
       get_lti1p3_consumer().get_public_keyset(),
     )
 
+
 # We do not want Django's CSRF protection enabled for POSTs made by external services to this endpoint.
 # This is because Django uses the double-submit cookie method of CSRF protection, but the Proctoring Specification
 # lends itself better to the synchronizer token method of CSRF protection.
 # Django's method requires an anti-CSRF token to be included in both a cookie and a hidden from value in the request
 # to CSRF procted endpoints.
 # In the Proctoring Specification, there are a number of issues supporting the double-submit cookie method.
-# 1. Django requires that a cookie is sent with the request to the Assessment Platform that contains the anti-CSRF 
+# 1. Django requires that a cookie is sent with the request to the Assessment Platform that contains the anti-CSRF
 #    token. When the learner's browser makes a request to the start_proctoring view, an anti-CSRF token is set in the
 #    cookie.
 #    The default SameSite attribute for cookies is "Lax" (stored in the Django setting CSRF_COOKIE_SAMESITE),
@@ -143,7 +150,7 @@ def authenticate(request):
     The Assessment Platform directs the learner's browser to make a request to the Proctoring Tool, acting as the
     "authentication response". This request must be made to the URL specified by the "redirect_uri" claim in the
     request.
-    
+
     This signifies the second leg of the LTI launch workflow - otherwise know as the LTI launch or "OpenID Connect
     authorization flow".
 
@@ -179,7 +186,7 @@ def authenticate(request):
 
     lti_consumer.enable_proctoring(
         # NOTE TO SELF: attempt_number is an auto-incrementing integer from 1 per learner, per assessment.
-        29, # attempt_number
+        29,  # attempt_number
         session_data,
         resource_link,
         start_assessment_url=start_assessment_url,
@@ -215,16 +222,17 @@ def authenticate(request):
     preflight_response = request.GET if preflight_response_method == 'GET' else request.POST
 
     context.update({
-    'preflight_response': preflight_response.dict(),
-    'launch_request': lti_consumer.generate_launch_request(
-        preflight_response,
-        resource_link,
-    )
+        'preflight_response': preflight_response.dict(),
+        'launch_request': lti_consumer.generate_launch_request(
+            preflight_response,
+            resource_link,
+        )
     })
 
     # This template renders an auto-submitting form, which makes a POST request to the redirect_uri, specified in the
     # Tool's response to the request the Assessment Platform made to the Tool's OIDC login initiation URL.
     return render(request, 'lti/lti_launch_request_form.html', context)
+
 
 # We do not want Django's CSRF protection enabled for POSTs made by external services to this endpoint.
 # Please see the comment for the authenticate view for a more detailed justification.
@@ -259,7 +267,7 @@ def start_assessment(request):
     session_data = request.session.get('lti_proctoring_session_data')
 
     start_assessment_url = urljoin(settings.ROOT_URL, reverse('lti:start-assessment'))
-    
+
     # TODO: The resource link should uniquely represent the assessment in the Assessment Platform.
     # TODO: We SHOULD provide a value for the title attribute.
     # TODO: It's RECOMMENDED to provide a value for the description attribute.
@@ -268,7 +276,7 @@ def start_assessment(request):
 
     lti_consumer.enable_proctoring(
         # NOTE TO SELF: attempt_number is an auto-incrementing integer from 1 per learner, per assessment.
-        29, # attempt_number,
+        29,  # attempt_number,
         session_data,
         resource_link,
         start_assessment_url=start_assessment_url,
@@ -281,13 +289,13 @@ def start_assessment(request):
 
     # Required user claim data
     lti_consumer.set_user_data(
-    user_id=user_id,
-      # Pass Django user role to library
-      # TODO: A role of 'student' is not correctly mapped to the corresponding LTI claim for the Proctoring
-      #       Specification.
-      role='student'
+        user_id=user_id,
+        # Pass Django user role to library
+        # TODO: A role of 'student' is not correctly mapped to the corresponding LTI claim for the Proctoring
+        #       Specification.
+        role='student'
     )
-    
+
     # These claims are optional. They are necessary to set in order to properly verify the verified_user claim,
     # if the Proctoring Tool includes it in the JWT.
     # TODO: This will need to have additional consideration for PII.

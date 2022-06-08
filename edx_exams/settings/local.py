@@ -78,5 +78,5 @@ LMS_ROOT_URL = f'http://{LMS_BASE}'
 # TODO: What security considerations are there for settings these settings to these values? Should we store the
 #       anti-CSRF token on the attempt model instead and forego the need for the session cookie?
 # TODO: These settings should be moved to base.py if we feel comfortable with them.
-SESSION_COOKIE_SAMESITE='None'
-SESSION_COOKIE_SECURE=True
+SESSION_COOKIE_SAMESITE = 'None'
+SESSION_COOKIE_SECURE = True

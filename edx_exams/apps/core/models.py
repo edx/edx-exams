@@ -39,6 +39,7 @@ class User(AbstractUser):
     def __str__(self):
         return str(self.get_full_name())
 
+
 class ProctoringProvider(TimeStampedModel):
     """
     Information about the Proctoring Provider

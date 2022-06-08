@@ -1,7 +1,11 @@
-from django.conf import settings
+"""
+LTI API
+"""
 
+from django.conf import settings
 from lti_consumer.lti_1p3.consumer import LtiAdvantageConsumer
 from lti_consumer.models import LtiConfiguration
+
 
 def get_lti1p3_consumer():
     """
@@ -26,17 +30,20 @@ def get_lti1p3_consumer():
       tool_keyset_url=lti_config.lti_1p3_tool_keyset_url
     )
 
+
 def get_lti_preflight_url(lti_message_hint):
     lti_consumer = get_lti1p3_consumer()
     context = lti_consumer.prepare_preflight_url(lti_hint=lti_message_hint)
     return context
 
-def get_resource_link():
-  # TODO: The resource link should uniquely represent the assessment in the Assessment Platform.
-  # TODO: We SHOULD provide a value for the title attribute.
-  # TODO: It's RECOMMENDED to provide a value for the description attribute.
-  # TODO: The xblock-lti-consumer library does not currently support setting these attributes.
-  return 'edx:proctored_exam:12345'
+
+def get_resource_link():  # pylint: disable=missing-function-docstring
+    # TODO: The resource link should uniquely represent the assessment in the Assessment Platform.
+    # TODO: We SHOULD provide a value for the title attribute.
+    # TODO: It's RECOMMENDED to provide a value for the description attribute.
+    # TODO: The xblock-lti-consumer library does not currently support setting these attributes.
+    return 'edx:proctored_exam:12345'
+
 
 def get_optional_user_identity_claims():
     # These claims are optional.

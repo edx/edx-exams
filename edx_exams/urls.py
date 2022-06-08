@@ -42,7 +42,7 @@ if settings.DEBUG and os.environ.get('ENABLE_DJANGO_TOOLBAR', False):  # pragma:
     # Disable pylint import error because we don't install django-debug-toolbar
     # for CI build
     import debug_toolbar  # pylint: disable=import-error
-    urlpatterns.append(url(r'^__debug__/', include(debug_toolbar.urls)))
+    urlpatterns.append(path(r'^__debug__/', include(debug_toolbar.urls)))
 
 api_info = make_api_info(
     title="edX Exams API",

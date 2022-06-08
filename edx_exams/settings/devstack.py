@@ -28,7 +28,10 @@ SOCIAL_AUTH_EDX_OAUTH2_PUBLIC_URL_ROOT = os.environ.get(
 
 # OAuth2 variables specific to backend service API calls.
 BACKEND_SERVICE_EDX_OAUTH2_KEY = os.environ.get('BACKEND_SERVICE_EDX_OAUTH2_KEY', 'edx_exams-backend-service-key')
-BACKEND_SERVICE_EDX_OAUTH2_SECRET = os.environ.get('BACKEND_SERVICE_EDX_OAUTH2_SECRET', 'edx_exams-backend-service-secret')
+BACKEND_SERVICE_EDX_OAUTH2_SECRET = os.environ.get(
+    'BACKEND_SERVICE_EDX_OAUTH2_SECRET',
+    'edx_exams-backend-service-secret'
+)
 
 JWT_AUTH.update({
     'JWT_SECRET_KEY': 'lms-secret',
