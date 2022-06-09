@@ -15,7 +15,7 @@ is meant to function in parallel to the existing in-platform plugin, edx-proctor
 Documentation
 -------------
 
-(TODO: `Set up documentation <https://openedx.atlassian.net/wiki/spaces/DOC/pages/21627535/Publish+Documentation+on+Read+the+Docs>`_)
+(TODO: `Set up documentation <https://2u-internal.atlassian.net/wiki/spaces/DOC/pages/10489531/Publish+Documentation+on+Read+the+Docs>`_)
 
 Development Workflow
 --------------------
