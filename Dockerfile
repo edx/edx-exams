@@ -32,7 +32,8 @@ RUN apt-get update && apt-get -qy install --no-install-recommends \
  libssl-dev \
  python3-dev \
  gcc \
- make
+ make \
+ git
 
 
 RUN pip install --upgrade pip setuptools
