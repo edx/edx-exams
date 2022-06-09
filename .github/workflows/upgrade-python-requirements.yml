@@ -8,13 +8,13 @@ on:
       branch:
         description: "Target branch against which to create requirements PR"
         required: true
-        default: 'master'
+        default: 'main'
 
 jobs:
   call-upgrade-python-requirements-workflow:
     uses: edx/.github/.github/workflows/upgrade-python-requirements.yml@master
     with:
-      branch: ${{ github.event.inputs.branch || 'master' }}
+      branch: ${{ github.event.inputs.branch || 'main' }}
       # optional parameters below; fill in if you'd like github or email notifications
       # user_reviewers: ""
       # team_reviewers: ""
