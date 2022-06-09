@@ -84,6 +84,7 @@ distlib==0.3.4
     #   django-crum
     #   django-extensions
     #   django-filter
+    #   django-model-utils
     #   djangorestframework
     #   drf-jwt
     #   drf-yasg
@@ -99,7 +100,7 @@ django-config-models==2.3.0
     # via
     #   -r requirements/base.txt
     #   lti-consumer-xblock
-django-cors-headers==3.12.0
+django-cors-headers==3.13.0
     # via -r requirements/base.txt
 django-crum==0.7.9
     # via
@@ -113,9 +114,11 @@ django-filter==21.1
     # via
     #   -r requirements/base.txt
     #   lti-consumer-xblock
+django-model-utils==4.2.0
+    # via -r requirements/base.txt
 django-rest-swagger==2.2.0
     # via -r requirements/base.txt
-django-waffle==2.4.1
+django-waffle==2.5.0
     # via
     #   -r requirements/base.txt
     #   edx-django-utils
@@ -293,7 +296,7 @@ pyjwt[crypto]==2.4.0
     #   edx-drf-extensions
     #   edx-rest-api-client
     #   social-auth-core
-pylint==2.14.0
+pylint==2.14.1
     # via
     #   edx-lint
     #   pylint-celery

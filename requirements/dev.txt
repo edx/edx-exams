@@ -106,6 +106,7 @@ django==3.2.13
     #   django-debug-toolbar
     #   django-extensions
     #   django-filter
+    #   django-model-utils
     #   djangorestframework
     #   drf-jwt
     #   drf-yasg
@@ -122,7 +123,7 @@ django-config-models==2.3.0
     # via
     #   -r requirements/validation.txt
     #   lti-consumer-xblock
-django-cors-headers==3.12.0
+django-cors-headers==3.13.0
     # via -r requirements/validation.txt
 django-crum==0.7.9
     # via
@@ -138,9 +139,11 @@ django-filter==21.1
     # via
     #   -r requirements/validation.txt
     #   lti-consumer-xblock
+django-model-utils==4.2.0
+    # via -r requirements/validation.txt
 django-rest-swagger==2.2.0
     # via -r requirements/validation.txt
-django-waffle==2.4.1
+django-waffle==2.5.0
     # via
     #   -r requirements/validation.txt
     #   edx-django-utils
@@ -239,7 +242,7 @@ jsonfield==3.1.0
     # via
     #   -r requirements/validation.txt
     #   lti-consumer-xblock
-keyring==23.5.1
+keyring==23.6.0
     # via
     #   -r requirements/validation.txt
     #   twine
@@ -313,7 +316,7 @@ pep517==0.12.0
     #   pip-tools
 pip-tools==6.6.2
     # via -r requirements/pip-tools.txt
-pkginfo==1.8.2
+pkginfo==1.8.3
     # via
     #   -r requirements/validation.txt
     #   twine
@@ -371,7 +374,7 @@ pyjwt[crypto]==2.4.0
     #   edx-drf-extensions
     #   edx-rest-api-client
     #   social-auth-core
-pylint==2.14.0
+pylint==2.14.1
     # via
     #   -r requirements/validation.txt
     #   edx-lint
