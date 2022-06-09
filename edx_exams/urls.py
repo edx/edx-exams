@@ -30,19 +30,19 @@ from edx_exams.apps.lti import urls as lti_urls
 admin.autodiscover()
 
 urlpatterns = oauth2_urlpatterns + [
-    path(r'^admin/', admin.site.urls),
-    path(r'^api/', include(api_urls)),
-    path(r'^auto_auth/$', core_views.AutoAuth.as_view(), name='auto_auth'),
-    path(r'', include('csrf.urls')),  # Include csrf urls from edx-drf-extensions
-    path(r'^health/$', core_views.Health.as_view(), name='health'),
-    path(r'^lti/', include(lti_urls)),
+    path('admin/', admin.site.urls),
+    path('api/', include(api_urls)),
+    path('auto_auth/', core_views.AutoAuth.as_view(), name='auto_auth'),
+    path('', include('csrf.urls')),  # Include csrf urls from edx-drf-extensions
+    path('health/', core_views.Health.as_view(), name='health'),
+    path('lti/', include(lti_urls)),
 ]
 
 if settings.DEBUG and os.environ.get('ENABLE_DJANGO_TOOLBAR', False):  # pragma: no cover
     # Disable pylint import error because we don't install django-debug-toolbar
     # for CI build
     import debug_toolbar  # pylint: disable=import-error
-    urlpatterns.append(path(r'^__debug__/', include(debug_toolbar.urls)))
+    urlpatterns.append(path('__debug__/', include(debug_toolbar.urls)))
 
 api_info = make_api_info(
     title="edX Exams API",
@@ -52,5 +52,5 @@ api_info = make_api_info(
 
 urlpatterns += make_docs_urls(
     api_info,
-    api_url_patterns=[path(r'^health/$', core_views.Health.as_view(), name='health'), path(r'^api/', include(api_urls))]
+    api_url_patterns=[path('health/', core_views.Health.as_view(), name='health'), path('api/', include(api_urls))]
 )
