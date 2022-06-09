@@ -28,4 +28,4 @@ to replace the existing in-platform plugin. That proposal also includes the foll
 References
 ----------
 
-* Spec Document: https://openedx.atlassian.net/wiki/spaces/PT/pages/3251535873/Independently+Deployable+Special+Exam+Service
+* Spec Document: https://2u-internal.atlassian.net/wiki/spaces/PT/pages/15439734/Independently+Deployable+Special+Exam+Service
