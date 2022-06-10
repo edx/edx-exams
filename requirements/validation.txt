@@ -92,6 +92,7 @@ cryptography==37.0.2
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   pyjwt
+    #   secretstorage
     #   social-auth-core
 defusedxml==0.7.1
     # via
@@ -218,7 +219,7 @@ edx-drf-extensions==8.0.1
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
-edx-lint==5.2.2
+edx-lint==5.2.4
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -278,6 +279,11 @@ itypes==1.2.0
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   coreapi
+jeepney==0.8.0
+    # via
+    #   -r requirements/quality.txt
+    #   keyring
+    #   secretstorage
 jinja2==3.1.2
     # via
     #   -r requirements/quality.txt
@@ -339,7 +345,7 @@ mysqlclient==2.1.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
-newrelic==7.10.0.175
+newrelic==7.12.0.176
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -522,7 +528,7 @@ readme-renderer==35.0
     # via
     #   -r requirements/quality.txt
     #   twine
-requests==2.27.1
+requests==2.28.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -562,6 +568,10 @@ ruamel-yaml-clib==0.2.6
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   ruamel-yaml
+secretstorage==3.3.2
+    # via
+    #   -r requirements/quality.txt
+    #   keyring
 semantic-version==2.10.0
     # via
     #   -r requirements/quality.txt

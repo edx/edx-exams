@@ -81,6 +81,7 @@ cryptography==37.0.2
     # via
     #   -r requirements/validation.txt
     #   pyjwt
+    #   secretstorage
     #   social-auth-core
 defusedxml==0.7.1
     # via
@@ -185,7 +186,7 @@ edx-drf-extensions==8.0.1
     # via -r requirements/validation.txt
 edx-i18n-tools==0.9.1
     # via -r requirements/dev.in
-edx-lint==5.2.2
+edx-lint==5.2.4
     # via -r requirements/validation.txt
 edx-opaque-keys==2.3.0
     # via
@@ -232,6 +233,11 @@ itypes==1.2.0
     # via
     #   -r requirements/validation.txt
     #   coreapi
+jeepney==0.8.0
+    # via
+    #   -r requirements/validation.txt
+    #   keyring
+    #   secretstorage
 jinja2==3.1.2
     # via
     #   -r requirements/validation.txt
@@ -280,7 +286,7 @@ mock==4.0.3
     # via -r requirements/validation.txt
 mysqlclient==2.1.0
     # via -r requirements/validation.txt
-newrelic==7.10.0.175
+newrelic==7.12.0.176
     # via
     #   -r requirements/validation.txt
     #   edx-django-utils
@@ -445,7 +451,7 @@ readme-renderer==35.0
     # via
     #   -r requirements/validation.txt
     #   twine
-requests==2.27.1
+requests==2.28.0
     # via
     #   -r requirements/validation.txt
     #   coreapi
@@ -481,6 +487,10 @@ ruamel-yaml-clib==0.2.6
     # via
     #   -r requirements/validation.txt
     #   ruamel-yaml
+secretstorage==3.3.2
+    # via
+    #   -r requirements/validation.txt
+    #   keyring
 semantic-version==2.10.0
     # via
     #   -r requirements/validation.txt
