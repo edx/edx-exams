@@ -10,5 +10,5 @@ from edx_exams.apps.api.v1 import urls as v1_urls
 
 app_name = 'api'
 urlpatterns = [
-    path(r'^v1/', include(v1_urls)),
+    path('v1/', include(v1_urls)),
 ]

@@ -5,6 +5,8 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from model_utils.models import TimeStampedModel
 
+from edx_exams.apps.core.exam_types import EXAM_TYPES
+
 
 class User(AbstractUser):
     """
@@ -66,11 +68,16 @@ class Exam(TimeStampedModel):
     .. no_pii:
     """
 
+    EXAM_CHOICES = (
+        (exam_type.name, exam_type.description)
+        for exam_type in EXAM_TYPES
+    )
+
     resource_id = models.CharField(max_length=255, db_index=True)
 
     course_id = models.CharField(max_length=255, db_index=True)
 
-    provider = models.ForeignKey(ProctoringProvider, on_delete=models.CASCADE)
+    provider = models.ForeignKey(ProctoringProvider, on_delete=models.CASCADE, null=True)
 
     # pointer to the id of the piece of course_ware that is the proctored exam.
     content_id = models.CharField(max_length=255, db_index=True)
@@ -79,7 +86,7 @@ class Exam(TimeStampedModel):
     exam_name = models.TextField()
 
     # type of Exam (proctored, practice, etc).
-    exam_type = models.CharField(max_length=255, db_index=True)
+    exam_type = models.CharField(max_length=255, choices=EXAM_CHOICES, db_index=True)
 
     # Time limit (in minutes) that a student can finish this exam.
     time_limit_mins = models.PositiveIntegerField()
@@ -97,6 +104,7 @@ class Exam(TimeStampedModel):
         """ Meta class for this Django model """
         db_table = 'exams_exam'
         verbose_name = 'exam'
+        unique_together = (('course_id', 'content_id', 'exam_type', 'provider'),)
 
 
 class ExamAttempt(TimeStampedModel):

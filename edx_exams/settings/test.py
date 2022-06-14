@@ -14,3 +14,10 @@ DATABASES = {
     },
 }
 # END IN-MEMORY TEST DATABASE
+JWT_AUTH.update(
+    {
+        "JWT_SECRET_KEY": SOCIAL_AUTH_EDX_OAUTH2_SECRET,
+        "JWT_ISSUER": "https://test-provider/oauth2",
+        "JWT_AUDIENCE": SOCIAL_AUTH_EDX_OAUTH2_KEY,
+    }
+)

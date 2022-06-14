@@ -14,7 +14,7 @@ asgiref==3.5.2
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   django
-astroid==2.11.5
+astroid==2.11.6
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -93,6 +93,10 @@ cryptography==37.0.2
     #   -r requirements/test.txt
     #   pyjwt
     #   social-auth-core
+ddt==1.5.0
+    # via
+    #   -r requirements/quality.txt
+    #   -r requirements/test.txt
 defusedxml==0.7.1
     # via
     #   -r requirements/quality.txt
@@ -218,7 +222,7 @@ edx-drf-extensions==8.0.1
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
-edx-lint==5.2.2
+edx-lint==5.2.4
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -232,6 +236,15 @@ edx-rest-api-client==5.5.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
+factory-boy==3.2.1
+    # via
+    #   -r requirements/quality.txt
+    #   -r requirements/test.txt
+faker==13.13.0
+    # via
+    #   -r requirements/quality.txt
+    #   -r requirements/test.txt
+    #   factory-boy
 filelock==3.7.1
     # via
     #   -r requirements/quality.txt
@@ -339,7 +352,7 @@ mysqlclient==2.1.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
-newrelic==7.10.0.175
+newrelic==7.12.0.176
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -435,7 +448,7 @@ pyjwt[crypto]==2.4.0
     #   edx-drf-extensions
     #   edx-rest-api-client
     #   social-auth-core
-pylint==2.14.1
+pylint==2.14.2
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -493,6 +506,7 @@ python-dateutil==2.8.2
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   edx-drf-extensions
+    #   faker
     #   xblock
 python-slugify==6.1.2
     # via
@@ -522,7 +536,7 @@ readme-renderer==35.0
     # via
     #   -r requirements/quality.txt
     #   twine
-requests==2.27.1
+requests==2.28.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -602,7 +616,7 @@ social-auth-app-django==5.0.0
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   edx-auth-backends
-social-auth-core==4.2.0
+social-auth-core==4.3.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
