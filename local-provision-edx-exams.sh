@@ -1,5 +1,5 @@
 name="edx_exams"
-port="8140"
+port="18740"
 
 # Create superuser
 echo -e "${GREEN}Creating super-user for ${name}...${NC}"
