@@ -23,7 +23,7 @@ attrs==21.4.0
     # via
     #   -r requirements/test.txt
     #   pytest
-babel==2.10.2
+babel==2.10.3
     # via sphinx
 bleach==5.0.0
     # via
@@ -32,7 +32,7 @@ bleach==5.0.0
     #   readme-renderer
 build==0.8.0
     # via -r requirements/doc.in
-certifi==2022.5.18.1
+certifi==2022.6.15
     # via
     #   -r requirements/test.txt
     #   requests
@@ -133,7 +133,7 @@ django-dynamic-fixture==3.1.2
     # via -r requirements/test.txt
 django-extensions==3.1.5
     # via -r requirements/test.txt
-django-filter==21.1
+django-filter==22.1
     # via
     #   -r requirements/test.txt
     #   lti-consumer-xblock
@@ -198,7 +198,7 @@ edx-sphinx-theme==3.0.0
     # via -r requirements/doc.in
 factory-boy==3.2.1
     # via -r requirements/test.txt
-faker==13.13.0
+faker==13.14.0
     # via
     #   -r requirements/test.txt
     #   factory-boy
@@ -290,7 +290,7 @@ mccabe==0.7.0
     #   pylint
 mock==4.0.3
     # via -r requirements/test.txt
-mysqlclient==2.1.0
+mysqlclient==2.1.1
     # via -r requirements/test.txt
 newrelic==7.12.0.176
     # via
@@ -349,7 +349,7 @@ pycparser==2.21
     # via
     #   -r requirements/test.txt
     #   cffi
-pycryptodomex==3.14.1
+pycryptodomex==3.15.0
     # via
     #   -r requirements/test.txt
     #   lti-consumer-xblock
@@ -373,7 +373,7 @@ pyjwt[crypto]==2.4.0
     #   edx-drf-extensions
     #   edx-rest-api-client
     #   social-auth-core
-pylint==2.14.2
+pylint==2.14.3
     # via
     #   -r requirements/test.txt
     #   edx-lint
@@ -517,7 +517,7 @@ social-auth-core==4.3.0
     #   -r requirements/test.txt
     #   edx-auth-backends
     #   social-auth-app-django
-sphinx==5.0.1
+sphinx==5.0.2
     # via
     #   -r requirements/doc.in
     #   edx-sphinx-theme

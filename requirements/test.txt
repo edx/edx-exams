@@ -22,7 +22,7 @@ bleach==5.0.0
     # via
     #   -r requirements/base.txt
     #   lti-consumer-xblock
-certifi==2022.5.18.1
+certifi==2022.6.15
     # via
     #   -r requirements/base.txt
     #   requests
@@ -112,7 +112,7 @@ django-dynamic-fixture==3.1.2
     # via -r requirements/test.in
 django-extensions==3.1.5
     # via -r requirements/base.txt
-django-filter==21.1
+django-filter==22.1
     # via
     #   -r requirements/base.txt
     #   lti-consumer-xblock
@@ -167,7 +167,7 @@ edx-rest-api-client==5.5.0
     # via -r requirements/base.txt
 factory-boy==3.2.1
     # via -r requirements/test.in
-faker==13.13.0
+faker==13.14.0
     # via factory-boy
 filelock==3.7.1
     # via
@@ -234,7 +234,7 @@ mccabe==0.7.0
     # via pylint
 mock==4.0.3
     # via -r requirements/test.in
-mysqlclient==2.1.0
+mysqlclient==2.1.1
     # via -r requirements/base.txt
 newrelic==7.12.0.176
     # via
@@ -284,7 +284,7 @@ pycparser==2.21
     # via
     #   -r requirements/base.txt
     #   cffi
-pycryptodomex==3.14.1
+pycryptodomex==3.15.0
     # via
     #   -r requirements/base.txt
     #   lti-consumer-xblock
@@ -302,7 +302,7 @@ pyjwt[crypto]==2.4.0
     #   edx-drf-extensions
     #   edx-rest-api-client
     #   social-auth-core
-pylint==2.14.2
+pylint==2.14.3
     # via
     #   edx-lint
     #   pylint-celery

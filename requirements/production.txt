@@ -16,7 +16,7 @@ bleach==5.0.0
     # via
     #   -r requirements/base.txt
     #   lti-consumer-xblock
-certifi==2022.5.18.1
+certifi==2022.6.15
     # via
     #   -r requirements/base.txt
     #   requests
@@ -86,7 +86,7 @@ django-crum==0.7.9
     #   edx-django-utils
 django-extensions==3.1.5
     # via -r requirements/base.txt
-django-filter==21.1
+django-filter==22.1
     # via
     #   -r requirements/base.txt
     #   lti-consumer-xblock
@@ -193,7 +193,7 @@ markupsafe==2.1.1
     #   jinja2
     #   mako
     #   xblock
-mysqlclient==2.1.0
+mysqlclient==2.1.1
     # via
     #   -r requirements/base.txt
     #   -r requirements/production.in
@@ -231,7 +231,7 @@ pycparser==2.21
     # via
     #   -r requirements/base.txt
     #   cffi
-pycryptodomex==3.14.1
+pycryptodomex==3.15.0
     # via
     #   -r requirements/base.txt
     #   lti-consumer-xblock
