@@ -12,13 +12,13 @@ asgiref==3.5.2
     # via
     #   -r requirements/base.txt
     #   django
-astroid==2.11.6
+astroid==2.11.7
     # via
     #   pylint
     #   pylint-celery
 attrs==21.4.0
     # via pytest
-bleach==5.0.0
+bleach==5.0.1
     # via
     #   -r requirements/base.txt
     #   lti-consumer-xblock
@@ -26,12 +26,12 @@ certifi==2022.6.15
     # via
     #   -r requirements/base.txt
     #   requests
-cffi==1.15.0
+cffi==1.15.1
     # via
     #   -r requirements/base.txt
     #   cryptography
     #   pynacl
-charset-normalizer==2.0.12
+charset-normalizer==2.1.0
     # via
     #   -r requirements/base.txt
     #   requests
@@ -63,7 +63,7 @@ coverage[toml]==6.4.1
     # via
     #   -r requirements/test.in
     #   pytest-cov
-cryptography==37.0.2
+cryptography==37.0.4
     # via
     #   -r requirements/base.txt
     #   pyjwt
@@ -110,7 +110,7 @@ django-crum==0.7.9
     #   edx-django-utils
 django-dynamic-fixture==3.1.2
     # via -r requirements/test.in
-django-extensions==3.1.5
+django-extensions==3.2.0
     # via -r requirements/base.txt
 django-filter==22.1
     # via
@@ -167,7 +167,7 @@ edx-rest-api-client==5.5.0
     # via -r requirements/base.txt
 factory-boy==3.2.1
     # via -r requirements/test.in
-faker==13.14.0
+faker==13.15.0
     # via factory-boy
 filelock==3.7.1
     # via
@@ -214,12 +214,12 @@ lazy-object-proxy==1.7.1
     # via astroid
 lti-consumer-xblock @ git+https://github.com/openedx/xblock-lti-consumer.git@6625749fcc80e4e0df6f1deb4392b8a84d33d259
     # via -r requirements/base.txt
-lxml==4.9.0
+lxml==4.9.1
     # via
     #   -r requirements/base.txt
     #   lti-consumer-xblock
     #   xblock
-mako==1.2.0
+mako==1.2.1
     # via
     #   -r requirements/base.txt
     #   lti-consumer-xblock
@@ -236,7 +236,7 @@ mock==4.0.3
     # via -r requirements/test.in
 mysqlclient==2.1.1
     # via -r requirements/base.txt
-newrelic==7.12.0.176
+newrelic==7.14.0.177
     # via
     #   -r requirements/base.txt
     #   edx-django-utils
@@ -302,7 +302,7 @@ pyjwt[crypto]==2.4.0
     #   edx-drf-extensions
     #   edx-rest-api-client
     #   social-auth-core
-pylint==2.14.3
+pylint==2.14.4
     # via
     #   edx-lint
     #   pylint-celery
@@ -360,7 +360,7 @@ pyyaml==6.0
     #   code-annotations
     #   edx-django-release-util
     #   xblock
-requests==2.28.0
+requests==2.28.1
     # via
     #   -r requirements/base.txt
     #   coreapi
@@ -437,11 +437,11 @@ tomli==2.0.1
     #   coverage
     #   pylint
     #   pytest
-tomlkit==0.11.0
+tomlkit==0.11.1
     # via pylint
-tox==3.25.0
+tox==3.25.1
     # via -r requirements/test.in
-typing-extensions==4.2.0
+typing-extensions==4.3.0
     # via
     #   astroid
     #   pylint
@@ -450,11 +450,11 @@ uritemplate==4.1.1
     #   -r requirements/base.txt
     #   coreapi
     #   drf-yasg
-urllib3==1.26.9
+urllib3==1.26.10
     # via
     #   -r requirements/base.txt
     #   requests
-virtualenv==20.14.1
+virtualenv==20.15.1
     # via tox
 web-fragments==2.0.0
     # via
