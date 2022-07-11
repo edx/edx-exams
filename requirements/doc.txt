@@ -14,7 +14,7 @@ asgiref==3.5.2
     # via
     #   -r requirements/test.txt
     #   django
-astroid==2.11.6
+astroid==2.11.7
     # via
     #   -r requirements/test.txt
     #   pylint
@@ -25,7 +25,7 @@ attrs==21.4.0
     #   pytest
 babel==2.10.3
     # via sphinx
-bleach==5.0.0
+bleach==5.0.1
     # via
     #   -r requirements/test.txt
     #   lti-consumer-xblock
@@ -36,12 +36,12 @@ certifi==2022.6.15
     # via
     #   -r requirements/test.txt
     #   requests
-cffi==1.15.0
+cffi==1.15.1
     # via
     #   -r requirements/test.txt
     #   cryptography
     #   pynacl
-charset-normalizer==2.0.12
+charset-normalizer==2.1.0
     # via
     #   -r requirements/test.txt
     #   requests
@@ -77,7 +77,7 @@ coverage[toml]==6.4.1
     # via
     #   -r requirements/test.txt
     #   pytest-cov
-cryptography==37.0.2
+cryptography==37.0.4
     # via
     #   -r requirements/test.txt
     #   pyjwt
@@ -98,7 +98,7 @@ distlib==0.3.4
     # via
     #   -r requirements/test.txt
     #   virtualenv
-django==3.2.13
+django==3.2.14
     # via
     #   -c https://raw.githubusercontent.com/edx/edx-lint/master/edx_lint/files/common_constraints.txt
     #   -r requirements/test.txt
@@ -131,7 +131,7 @@ django-crum==0.7.9
     #   edx-django-utils
 django-dynamic-fixture==3.1.2
     # via -r requirements/test.txt
-django-extensions==3.1.5
+django-extensions==3.2.0
     # via -r requirements/test.txt
 django-filter==22.1
     # via
@@ -198,7 +198,7 @@ edx-sphinx-theme==3.0.0
     # via -r requirements/doc.in
 factory-boy==3.2.1
     # via -r requirements/test.txt
-faker==13.14.0
+faker==13.15.0
     # via
     #   -r requirements/test.txt
     #   factory-boy
@@ -219,9 +219,9 @@ idna==3.3
     # via
     #   -r requirements/test.txt
     #   requests
-imagesize==1.3.0
+imagesize==1.4.1
     # via sphinx
-importlib-metadata==4.11.4
+importlib-metadata==4.12.0
     # via
     #   keyring
     #   sphinx
@@ -268,12 +268,12 @@ lazy-object-proxy==1.7.1
     #   astroid
 lti-consumer-xblock @ git+https://github.com/openedx/xblock-lti-consumer.git@6625749fcc80e4e0df6f1deb4392b8a84d33d259
     # via -r requirements/test.txt
-lxml==4.9.0
+lxml==4.9.1
     # via
     #   -r requirements/test.txt
     #   lti-consumer-xblock
     #   xblock
-mako==1.2.0
+mako==1.2.1
     # via
     #   -r requirements/test.txt
     #   lti-consumer-xblock
@@ -292,7 +292,7 @@ mock==4.0.3
     # via -r requirements/test.txt
 mysqlclient==2.1.1
     # via -r requirements/test.txt
-newrelic==7.12.0.176
+newrelic==7.14.0.177
     # via
     #   -r requirements/test.txt
     #   edx-django-utils
@@ -373,7 +373,7 @@ pyjwt[crypto]==2.4.0
     #   edx-drf-extensions
     #   edx-rest-api-client
     #   social-auth-core
-pylint==2.14.3
+pylint==2.14.4
     # via
     #   -r requirements/test.txt
     #   edx-lint
@@ -443,7 +443,7 @@ pyyaml==6.0
     #   xblock
 readme-renderer==35.0
     # via twine
-requests==2.28.0
+requests==2.28.1
     # via
     #   -r requirements/test.txt
     #   coreapi
@@ -560,15 +560,15 @@ tomli==2.0.1
     #   pep517
     #   pylint
     #   pytest
-tomlkit==0.11.0
+tomlkit==0.11.1
     # via
     #   -r requirements/test.txt
     #   pylint
-tox==3.25.0
+tox==3.25.1
     # via -r requirements/test.txt
 twine==4.0.1
     # via -r requirements/doc.in
-typing-extensions==4.2.0
+typing-extensions==4.3.0
     # via
     #   -r requirements/test.txt
     #   astroid
@@ -579,12 +579,12 @@ uritemplate==4.1.1
     #   -r requirements/test.txt
     #   coreapi
     #   drf-yasg
-urllib3==1.26.9
+urllib3==1.26.10
     # via
     #   -r requirements/test.txt
     #   requests
     #   twine
-virtualenv==20.14.1
+virtualenv==20.15.1
     # via
     #   -r requirements/test.txt
     #   tox
