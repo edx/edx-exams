@@ -87,3 +87,9 @@ private.py
 *.trace
 
 docs/_build/
+
+# Visual Studio Code
+.vscode/
+
+# Temp reports file
+reports/
