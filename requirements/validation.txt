@@ -82,7 +82,7 @@ coreschema==0.0.4
     #   -r requirements/test.txt
     #   coreapi
     #   drf-yasg
-coverage[toml]==6.4.1
+coverage[toml]==6.4.2
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -109,7 +109,7 @@ dill==0.3.5.1
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   pylint
-distlib==0.3.4
+distlib==0.3.5
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -170,7 +170,7 @@ django-rest-swagger==2.2.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
-django-waffle==2.5.0
+django-waffle==2.6.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -195,7 +195,7 @@ drf-jwt==1.19.2
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   edx-drf-extensions
-drf-yasg==1.20.0
+drf-yasg==1.21.3
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -241,7 +241,7 @@ factory-boy==3.2.1
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
-faker==13.15.0
+faker==13.15.1
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -308,7 +308,7 @@ jsonfield==3.1.0
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   lti-consumer-xblock
-keyring==23.6.0
+keyring==23.7.0
     # via
     #   -r requirements/quality.txt
     #   twine
@@ -358,7 +358,7 @@ mysqlclient==2.1.1
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
-newrelic==7.14.0.177
+newrelic==7.16.0.178
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -454,7 +454,7 @@ pyjwt[crypto]==2.4.0
     #   edx-drf-extensions
     #   edx-rest-api-client
     #   social-auth-core
-pylint==2.14.4
+pylint==2.14.5
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -530,6 +530,7 @@ pytz==2022.1
     #   -r requirements/test.txt
     #   django
     #   djangorestframework
+    #   drf-yasg
     #   xblock
 pyyaml==6.0
     # via
@@ -568,7 +569,7 @@ rfc3986==2.0.0
     # via
     #   -r requirements/quality.txt
     #   twine
-rich==12.4.4
+rich==12.5.1
     # via
     #   -r requirements/quality.txt
     #   twine
@@ -637,7 +638,7 @@ sqlparse==0.4.2
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   django
-stevedore==3.5.0
+stevedore==4.0.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -728,7 +729,7 @@ xblock-utils==3.0.0
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   lti-consumer-xblock
-zipp==3.8.0
+zipp==3.8.1
     # via
     #   -r requirements/quality.txt
     #   importlib-metadata

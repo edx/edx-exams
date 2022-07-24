@@ -72,7 +72,7 @@ django-model-utils==4.2.0
     # via -r requirements/base.in
 django-rest-swagger==2.2.0
     # via -r requirements/base.in
-django-waffle==2.5.0
+django-waffle==2.6.0
     # via
     #   -r requirements/base.in
     #   edx-django-utils
@@ -88,7 +88,7 @@ djangorestframework==3.13.1
     #   edx-drf-extensions
 drf-jwt==1.19.2
     # via edx-drf-extensions
-drf-yasg==1.20.0
+drf-yasg==1.21.3
     # via edx-api-doc-tools
 edx-api-doc-tools==1.6.0
     # via -r requirements/base.in
@@ -143,7 +143,7 @@ markupsafe==2.1.1
     #   xblock
 mysqlclient==2.1.1
     # via -r requirements/base.in
-newrelic==7.14.0.177
+newrelic==7.16.0.178
     # via edx-django-utils
 oauthlib==3.2.0
     # via
@@ -194,6 +194,7 @@ pytz==2022.1
     #   -r requirements/base.in
     #   django
     #   djangorestframework
+    #   drf-yasg
     #   xblock
 pyyaml==6.0
     # via
@@ -239,7 +240,7 @@ social-auth-core==4.3.0
     #   social-auth-app-django
 sqlparse==0.4.2
     # via django
-stevedore==3.5.0
+stevedore==4.0.0
     # via
     #   edx-django-utils
     #   edx-opaque-keys
