@@ -73,7 +73,7 @@ coreschema==0.0.4
     #   -r requirements/test.txt
     #   coreapi
     #   drf-yasg
-coverage[toml]==6.4.1
+coverage[toml]==6.4.2
     # via
     #   -r requirements/test.txt
     #   pytest-cov
@@ -81,7 +81,6 @@ cryptography==37.0.4
     # via
     #   -r requirements/test.txt
     #   pyjwt
-    #   secretstorage
     #   social-auth-core
 ddt==1.5.0
     # via -r requirements/test.txt
@@ -94,7 +93,7 @@ dill==0.3.5.1
     # via
     #   -r requirements/test.txt
     #   pylint
-distlib==0.3.4
+distlib==0.3.5
     # via
     #   -r requirements/test.txt
     #   virtualenv
@@ -141,7 +140,7 @@ django-model-utils==4.2.0
     # via -r requirements/test.txt
 django-rest-swagger==2.2.0
     # via -r requirements/test.txt
-django-waffle==2.5.0
+django-waffle==2.6.0
     # via
     #   -r requirements/test.txt
     #   edx-django-utils
@@ -157,7 +156,7 @@ djangorestframework==3.13.1
     #   edx-drf-extensions
 doc8==0.11.2
     # via -r requirements/doc.in
-docutils==0.18.1
+docutils==0.19
     # via
     #   doc8
     #   readme-renderer
@@ -167,7 +166,7 @@ drf-jwt==1.19.2
     # via
     #   -r requirements/test.txt
     #   edx-drf-extensions
-drf-yasg==1.20.0
+drf-yasg==1.21.3
     # via
     #   -r requirements/test.txt
     #   edx-api-doc-tools
@@ -198,7 +197,7 @@ edx-sphinx-theme==3.0.0
     # via -r requirements/doc.in
 factory-boy==3.2.1
     # via -r requirements/test.txt
-faker==13.15.0
+faker==13.15.1
     # via
     #   -r requirements/test.txt
     #   factory-boy
@@ -242,10 +241,6 @@ itypes==1.2.0
     # via
     #   -r requirements/test.txt
     #   coreapi
-jeepney==0.8.0
-    # via
-    #   keyring
-    #   secretstorage
 jinja2==3.1.2
     # via
     #   -r requirements/test.txt
@@ -256,7 +251,7 @@ jsonfield==3.1.0
     # via
     #   -r requirements/test.txt
     #   lti-consumer-xblock
-keyring==23.6.0
+keyring==23.7.0
     # via twine
 lazy==1.4
     # via
@@ -292,7 +287,7 @@ mock==4.0.3
     # via -r requirements/test.txt
 mysqlclient==2.1.1
     # via -r requirements/test.txt
-newrelic==7.14.0.177
+newrelic==7.16.0.178
     # via
     #   -r requirements/test.txt
     #   edx-django-utils
@@ -373,7 +368,7 @@ pyjwt[crypto]==2.4.0
     #   edx-drf-extensions
     #   edx-rest-api-client
     #   social-auth-core
-pylint==2.14.4
+pylint==2.14.5
     # via
     #   -r requirements/test.txt
     #   edx-lint
@@ -434,6 +429,7 @@ pytz==2022.1
     #   babel
     #   django
     #   djangorestframework
+    #   drf-yasg
     #   xblock
 pyyaml==6.0
     # via
@@ -466,7 +462,7 @@ restructuredtext-lint==1.4.0
     # via doc8
 rfc3986==2.0.0
     # via twine
-rich==12.4.4
+rich==12.5.1
     # via twine
 ruamel-yaml==0.17.21
     # via
@@ -476,8 +472,6 @@ ruamel-yaml-clib==0.2.6
     # via
     #   -r requirements/test.txt
     #   ruamel-yaml
-secretstorage==3.3.2
-    # via keyring
 semantic-version==2.10.0
     # via
     #   -r requirements/test.txt
@@ -517,7 +511,7 @@ social-auth-core==4.3.0
     #   -r requirements/test.txt
     #   edx-auth-backends
     #   social-auth-app-django
-sphinx==5.0.2
+sphinx==5.1.0
     # via
     #   -r requirements/doc.in
     #   edx-sphinx-theme
@@ -537,7 +531,7 @@ sqlparse==0.4.2
     # via
     #   -r requirements/test.txt
     #   django
-stevedore==3.5.0
+stevedore==4.0.0
     # via
     #   -r requirements/test.txt
     #   code-annotations
@@ -579,7 +573,7 @@ uritemplate==4.1.1
     #   -r requirements/test.txt
     #   coreapi
     #   drf-yasg
-urllib3==1.26.10
+urllib3==1.26.11
     # via
     #   -r requirements/test.txt
     #   requests
@@ -614,7 +608,7 @@ xblock-utils==3.0.0
     # via
     #   -r requirements/test.txt
     #   lti-consumer-xblock
-zipp==3.8.0
+zipp==3.8.1
     # via importlib-metadata
 
 # The following packages are considered to be unsafe in a requirements file:

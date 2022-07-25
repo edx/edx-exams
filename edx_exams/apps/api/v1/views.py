@@ -4,6 +4,7 @@ V1 API Views
 import logging
 import uuid
 
+from django.core.exceptions import ObjectDoesNotExist
 from edx_api_doc_tools import path_parameter, schema
 from edx_rest_framework_extensions.auth.jwt.authentication import JwtAuthentication
 from rest_framework import status
@@ -13,7 +14,7 @@ from rest_framework.views import APIView
 from edx_exams.apps.api.permissions import StaffUserPermissions
 from edx_exams.apps.api.serializers import ExamSerializer
 from edx_exams.apps.core.exam_types import get_exam_type
-from edx_exams.apps.core.models import CourseExamConfiguration, Exam
+from edx_exams.apps.core.models import CourseExamConfiguration, Exam, ProctoringProvider
 
 log = logging.getLogger(__name__)
 
@@ -177,5 +178,58 @@ class CourseExamsView(APIView):
         else:
             response_status = status.HTTP_400_BAD_REQUEST
             data = {"detail": "Invalid data", "errors": serializer.errors}
+
+        return Response(status=response_status, data=data)
+
+
+class CourseExamConfigurationsView(APIView):
+    """
+    View to create and update course exam configs for a specific course.
+
+    Given a course id and a proctoring provider name, this view will either create a new course exam configuration
+    (if one doesn't exist), or modify the proctoring provider on an existing course exam config.
+
+    HTTP PATCH
+    Creates or updates a CourseExamConfiguration.
+    Expected PATCH data: {
+        'provider': 'test_provider',
+    }
+    **PATCH data Parameters**
+        * name: This is the name of the proctoring provider.
+    **Exceptions**
+        * HTTP_400_BAD_REQUEST
+    """
+
+    authentication_classes = (JwtAuthentication,)
+    permission_classes = (StaffUserPermissions,)
+
+    @classmethod
+    def handle_config(cls, provider, course_id):
+        """
+        Helper method that decides whether to update existing or create new config.
+        """
+        CourseExamConfiguration.objects.update_or_create(
+            course_id=course_id,
+            defaults={'provider': provider})
+        log.info(f"Created or updated course exam configuration course_id={course_id},provider={provider.name}")
+
+    def patch(self, request, course_id):
+        """
+        Create/update course exam configuration.
+        """
+        # check that proctoring provider is in request
+        if request.data.get('provider') is None:
+            response_status = status.HTTP_400_BAD_REQUEST
+            data = {"detail": "No proctoring provider name in request."}
+        else:
+            try:
+                provider = ProctoringProvider.objects.get(name=request.data['provider'])
+                self.handle_config(provider, course_id)
+                response_status = status.HTTP_204_NO_CONTENT
+                data = {}
+            # return 400 if proctoring provider does not exist
+            except ObjectDoesNotExist:
+                response_status = status.HTTP_400_BAD_REQUEST
+                data = {"detail": "Proctoring provider does not exist."}
 
         return Response(status=response_status, data=data)

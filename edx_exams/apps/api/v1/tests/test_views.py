@@ -11,7 +11,7 @@ from django.urls import reverse
 
 from edx_exams.apps.api.test_utils import ExamsAPITestCase
 from edx_exams.apps.api.test_utils.factories import UserFactory
-from edx_exams.apps.core.models import CourseExamConfiguration, Exam
+from edx_exams.apps.core.models import CourseExamConfiguration, Exam, ProctoringProvider
 
 
 @ddt.ddt
@@ -256,3 +256,93 @@ class CourseExamsViewTests(ExamsAPITestCase):
         self.assertEqual(new_exam.due_date, pytz.utc.localize(datetime.fromisoformat('2025-07-01 00:00:00')))
         self.assertEqual(new_exam.hide_after_due, False)
         self.assertEqual(new_exam.is_active, True)
+
+
+@ddt.ddt
+class CourseExamConfigurationsViewTests(ExamsAPITestCase):
+    """
+    Test CourseExamConfigurationsView
+    """
+
+    def setUp(self):
+        super().setUp()
+
+        self.course_id = 'course-v1:edx+test+f19'
+
+        self.url = reverse('api:v1:course-exam-config', kwargs={'course_id': self.course_id})
+
+    def patch_api(self, user, data):
+        """
+        Helper function to make patch request to the API
+        """
+
+        data = json.dumps(data)
+        headers = self.build_jwt_headers(user)
+
+        return self.client.patch(self.url, data, **headers, content_type="application/json")
+
+    def test_auth_failures(self):
+        """
+        Verify the endpoint validates permissions
+        """
+        # Test unauthenticated
+        response = self.client.patch(self.url)
+        self.assertEqual(response.status_code, 401)
+
+        # Test non-staff user
+        random_user = UserFactory()
+        response = self.patch_api(random_user, {})
+        self.assertEqual(403, response.status_code)
+
+    def test_invalid_data(self):
+        """
+        Assert that endpoint returns 400 if provider is missing
+        """
+        data = {}
+
+        response = self.patch_api(self.user, data)
+        self.assertEqual(400, response.status_code)
+
+    def test_invalid_provider(self):
+        """
+        Assert endpoint returns 400 if provider is invalid
+        """
+        data = {'provider': 'nonexistent_provider'}
+
+        response = self.patch_api(self.user, data)
+        self.assertEqual(400, response.status_code)
+
+    def test_config_update(self):
+        """
+        Test that config is updated
+        """
+        CourseExamConfiguration.objects.create(
+            course_id=self.course_id,
+            provider=self.test_provider
+        )
+        provider = ProctoringProvider.objects.create(
+            name='test_provider_2',
+            verbose_name='testing_provider_2',
+            lti_configuration_id='223456789'
+        )
+        data = {'provider': provider.name}
+
+        response = self.patch_api(self.user, data)
+        self.assertEqual(204, response.status_code)
+        self.assertEqual(len(CourseExamConfiguration.objects.all()), 1)
+
+        config = CourseExamConfiguration.objects.get(course_id=self.course_id)
+        self.assertEqual(config.provider, provider)
+
+    def test_config_create(self):
+        """
+        Test that config is created
+        """
+        data = {'provider': 'test_provider'}
+
+        response = self.patch_api(self.user, data)
+        self.assertEqual(204, response.status_code)
+        self.assertEqual(len(CourseExamConfiguration.objects.all()), 1)
+
+        config = CourseExamConfiguration.objects.get(course_id=self.course_id)
+        self.assertEqual(config.provider, self.test_provider)
