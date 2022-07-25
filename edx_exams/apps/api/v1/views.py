@@ -232,4 +232,29 @@ class CourseExamConfigurationsView(APIView):
                 response_status = status.HTTP_400_BAD_REQUEST
                 data = {"detail": "Proctoring provider does not exist."}
 
+
+class ProctoringProvidersView(APIView):
+    """
+    Retrieve a list of all available proctoring providers
+
+    This endpoint returns an object for each provider
+
+    Path: /api/[version]/intents/most-recent-and-certain
+    Returns:
+     * 200: OK, list of ProctoringProviderObjects
+    """
+
+    authentication_classes = (JwtAuthentication,)
+
+    def get(self, request):
+        """
+        This view should return a list of all available proctoring providers
+        """
+
+        proctoring_providers = ProctoringProvider.objects.all()
+        proctoring_providers_list = list(proctoring_providers.values())
+
+        response_status = status.HTTP_200_OK
+        data = proctoring_providers_list
+
         return Response(status=response_status, data=data)
