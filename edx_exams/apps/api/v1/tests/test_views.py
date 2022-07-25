@@ -362,7 +362,6 @@ class ProctoringProvidersViewTest(ExamsAPITestCase):
         return response
 
     def test_proctoring_providers_list(self):
-
         test_provider2 = ProctoringProvider.objects.create(
             name='test_provider2',
             verbose_name='testing_provider2',
@@ -376,3 +375,13 @@ class ProctoringProvidersViewTest(ExamsAPITestCase):
         self.assertEqual(len(proctoring_providers_list), 2)
         self.assertIn(self.test_provider, proctoring_providers_list)
         self.assertIn(test_provider2, proctoring_providers_list)
+
+    def test_proctoring_providers_list_empty(self):
+
+        self.test_provider.delete()
+
+        response = self.get_response()
+        proctoring_providers_list = ProctoringProvider.objects.all()
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(proctoring_providers_list), 0)
