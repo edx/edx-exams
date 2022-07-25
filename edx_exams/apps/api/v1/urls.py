@@ -17,7 +17,7 @@ urlpatterns = [
             name='course-exam-config'
     ),
     re_path(
-        r"^providers/available?$",
+        r"^providers?$",
         ProctoringProvidersView.as_view(),
         name="proctoring-providers-list",
     ),
