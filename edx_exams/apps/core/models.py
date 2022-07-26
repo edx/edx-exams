@@ -140,7 +140,7 @@ class CourseExamConfiguration(TimeStampedModel):
     .. no_pii:
     """
 
-    course_id = models.CharField(max_length=255, db_index=True)
+    course_id = models.CharField(max_length=255, db_index=True, unique=True)
 
     provider = models.ForeignKey(ProctoringProvider, on_delete=models.CASCADE)
 
