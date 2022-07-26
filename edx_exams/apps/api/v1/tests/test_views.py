@@ -368,20 +368,23 @@ class ProctoringProvidersViewTest(ExamsAPITestCase):
             lti_configuration_id='223456789'
         )
 
+        # import pudb; pu.db
+
         response = self.get_response()
         proctoring_providers_list = ProctoringProvider.objects.all()
 
+        expected_data = [self.test_provider.verbose_name, test_provider2.verbose_name]
+
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(proctoring_providers_list), 2)
-        self.assertIn(self.test_provider, proctoring_providers_list)
-        self.assertIn(test_provider2, proctoring_providers_list)
+        self.assertIn(response.data[0]['verbose_name'], expected_data)
+        self.assertIn(response.data[1]['verbose_name'], expected_data)
 
     def test_proctoring_providers_list_empty(self):
 
         self.test_provider.delete()
 
         response = self.get_response()
-        proctoring_providers_list = ProctoringProvider.objects.all()
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(proctoring_providers_list), 0)
+        self.assertEqual(len(response.data), 0)
