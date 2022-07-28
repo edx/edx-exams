@@ -50,7 +50,7 @@ class ProctoringProvider(TimeStampedModel):
     .. no_pii:
     """
 
-    name = models.CharField(max_length=255, db_index=True)
+    name = models.CharField(max_length=255, db_index=True, unique=True)
 
     verbose_name = models.CharField(max_length=255, db_index=True)
 
