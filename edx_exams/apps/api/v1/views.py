@@ -238,9 +238,9 @@ class ProctoringProvidersView(ListAPIView):
     """
     Retrieve a list of all available proctoring providers
 
-    This endpoint returns an object for each provider
+    This endpoint returns a list of ProctoringProvider objects
 
-    Path: /api/[version]/intents/most-recent-and-certain
+    Path: /api/[version]/providers
     Returns:
      * 200: OK, list of ProctoringProviderObjects
     """

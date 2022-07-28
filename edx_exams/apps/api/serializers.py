@@ -50,4 +50,4 @@ class ProctoringProviderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ProctoringProvider
-        fields = "__all__"
+        fields = ["name", "verbose_name", "lti_configuration_id"]
