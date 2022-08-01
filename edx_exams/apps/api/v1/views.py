@@ -233,6 +233,8 @@ class CourseExamConfigurationsView(APIView):
                 response_status = status.HTTP_400_BAD_REQUEST
                 data = {"detail": "Proctoring provider does not exist."}
 
+        return Response(status=response_status, data=data)
+
 
 class ProctoringProvidersView(ListAPIView):
     """
