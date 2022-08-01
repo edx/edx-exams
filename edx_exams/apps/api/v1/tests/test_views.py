@@ -367,14 +367,19 @@ class ProctoringProvidersViewTest(ExamsAPITestCase):
             verbose_name='testing_provider2',
             lti_configuration_id='223456789'
         )
-
         response = self.get_response()
+        response_data_list = []
 
-        expected_data = [self.test_provider.verbose_name, test_provider2.verbose_name]
+        for item in response.data:
+            response_data_list.append(item['name'])
+
+        response_data_list.sort()
+
+        expected_data = sorted([self.test_provider.name, test_provider2.name])
 
         self.assertEqual(response.status_code, 200)
-        self.assertIn(response.data[0]['verbose_name'], expected_data)
-        self.assertIn(response.data[1]['verbose_name'], expected_data)
+        self.assertIn(response_data_list[0], expected_data[0])
+        self.assertIn(response_data_list[1], expected_data[1])
 
     def test_proctoring_providers_list_empty(self):
 
