@@ -10,16 +10,12 @@ app_name = 'v1'
 urlpatterns = [
     re_path(fr'exams/course_id/{COURSE_ID_PATTERN}',
             CourseExamsView.as_view(),
-            name='exams-course_exams'
-    ),
+            name='exams-course_exams'),
     re_path(fr'configs/course_id/{COURSE_ID_PATTERN}',
             CourseExamConfigurationsView.as_view(),
-            name='course-exam-config'
-    ),
-    re_path(
-        r"^providers?$",
-        ProctoringProvidersView.as_view(),
-        name="proctoring-providers-list",
-    ),
+            name='course-exam-config'),
+    re_path(r"^providers?$",
+            ProctoringProvidersView.as_view(),
+            name="proctoring-providers-list",),
 
 ]
