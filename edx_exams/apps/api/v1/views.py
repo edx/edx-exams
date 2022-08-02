@@ -8,11 +8,12 @@ from django.core.exceptions import ObjectDoesNotExist
 from edx_api_doc_tools import path_parameter, schema
 from edx_rest_framework_extensions.auth.jwt.authentication import JwtAuthentication
 from rest_framework import status
+from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from edx_exams.apps.api.permissions import StaffUserPermissions
-from edx_exams.apps.api.serializers import ExamSerializer
+from edx_exams.apps.api.serializers import ExamSerializer, ProctoringProviderSerializer
 from edx_exams.apps.core.exam_types import get_exam_type
 from edx_exams.apps.core.models import CourseExamConfiguration, Exam, ProctoringProvider
 
@@ -233,3 +234,20 @@ class CourseExamConfigurationsView(APIView):
                 data = {"detail": "Proctoring provider does not exist."}
 
         return Response(status=response_status, data=data)
+
+
+class ProctoringProvidersView(ListAPIView):
+    """
+    Retrieve a list of all available proctoring providers
+
+    This endpoint returns a list of ProctoringProvider objects
+
+    Path: /api/[version]/providers
+    Returns:
+     * 200: OK, list of ProctoringProviderObjects
+    """
+
+    authentication_classes = (JwtAuthentication,)
+    model = ProctoringProvider
+    serializer_class = ProctoringProviderSerializer
+    queryset = ProctoringProvider.objects.all()

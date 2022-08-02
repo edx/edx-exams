@@ -346,3 +346,44 @@ class CourseExamConfigurationsViewTests(ExamsAPITestCase):
 
         config = CourseExamConfiguration.objects.get(course_id=self.course_id)
         self.assertEqual(config.provider, self.test_provider)
+
+
+class ProctoringProvidersViewTest(ExamsAPITestCase):
+    """
+    Tests ProctoringProvidersView
+    """
+
+    def get_response(self):
+        """
+        Helper function to make a get request
+        """
+        url = reverse("api:v1:proctoring-providers-list")
+        response = self.client.get(url)
+        return response
+
+    def test_proctoring_providers_list(self):
+        test_provider2 = ProctoringProvider.objects.create(
+            name='test_provider2',
+            verbose_name='testing_provider2',
+            lti_configuration_id='223456789'
+        )
+        response = self.get_response()
+        response_data_list = []
+
+        for item in response.data:
+            response_data_list.append(item['name'])
+
+        response_data_list.sort()
+
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(response_data_list[0], self.test_provider.name)
+        self.assertIn(response_data_list[1], test_provider2.name)
+
+    def test_proctoring_providers_list_empty(self):
+
+        self.test_provider.delete()
+
+        response = self.get_response()
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data), 0)

@@ -4,7 +4,7 @@ Serializers for the edx-exams API
 from rest_framework import serializers
 
 from edx_exams.apps.core.exam_types import EXAM_TYPES
-from edx_exams.apps.core.models import Exam
+from edx_exams.apps.core.models import Exam, ProctoringProvider
 
 
 class ExamSerializer(serializers.ModelSerializer):
@@ -41,3 +41,13 @@ class ExamSerializer(serializers.ModelSerializer):
         if value not in valid_exam_types:
             raise serializers.ValidationError("Must be a valid exam type.")
         return value
+
+
+class ProctoringProviderSerializer(serializers.ModelSerializer):
+    """
+        Serializer for the ProctoringProvider Model
+    """
+
+    class Meta:
+        model = ProctoringProvider
+        fields = ["name", "verbose_name", "lti_configuration_id"]

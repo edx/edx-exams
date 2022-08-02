@@ -2,7 +2,7 @@
 
 from django.urls import re_path
 
-from edx_exams.apps.api.v1.views import CourseExamConfigurationsView, CourseExamsView
+from edx_exams.apps.api.v1.views import CourseExamConfigurationsView, CourseExamsView, ProctoringProvidersView
 from edx_exams.apps.core.constants import COURSE_ID_PATTERN
 
 app_name = 'v1'
@@ -13,5 +13,9 @@ urlpatterns = [
             name='exams-course_exams'),
     re_path(fr'configs/course_id/{COURSE_ID_PATTERN}',
             CourseExamConfigurationsView.as_view(),
-            name='course-exam-config')
+            name='course-exam-config'),
+    re_path(r"^providers?$",
+            ProctoringProvidersView.as_view(),
+            name="proctoring-providers-list",),
+
 ]
