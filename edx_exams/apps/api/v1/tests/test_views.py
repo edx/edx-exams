@@ -375,11 +375,9 @@ class ProctoringProvidersViewTest(ExamsAPITestCase):
 
         response_data_list.sort()
 
-        expected_data = sorted([self.test_provider.name, test_provider2.name])
-
         self.assertEqual(response.status_code, 200)
-        self.assertIn(response_data_list[0], expected_data[0])
-        self.assertIn(response_data_list[1], expected_data[1])
+        self.assertIn(response_data_list[0], self.test_provider.name)
+        self.assertIn(response_data_list[1], test_provider2.name)
 
     def test_proctoring_providers_list_empty(self):
 
