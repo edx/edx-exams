@@ -20,6 +20,7 @@ astroid==2.12.12
 attrs==22.1.0
     # via
     #   -r requirements/test.txt
+    #   lti-consumer-xblock
     #   pytest
 bleach==5.0.1
     # via
@@ -75,7 +76,6 @@ cryptography==38.0.3
     # via
     #   -r requirements/test.txt
     #   pyjwt
-    #   secretstorage
     #   social-auth-core
 ddt==1.6.0
     # via -r requirements/test.txt
@@ -234,10 +234,6 @@ itypes==1.2.0
     #   coreapi
 jaraco-classes==3.2.3
     # via keyring
-jeepney==0.8.0
-    # via
-    #   keyring
-    #   secretstorage
 jinja2==3.1.2
     # via
     #   -r requirements/test.txt
@@ -257,7 +253,7 @@ lazy-object-proxy==1.8.0
     # via
     #   -r requirements/test.txt
     #   astroid
-lti-consumer-xblock @ git+https://github.com/openedx/xblock-lti-consumer.git@6625749fcc80e4e0df6f1deb4392b8a84d33d259
+lti-consumer-xblock===6.3.0
     # via -r requirements/test.txt
 lxml==4.9.1
     # via
@@ -466,8 +462,6 @@ ruamel-yaml-clib==0.2.7
     # via
     #   -r requirements/test.txt
     #   ruamel-yaml
-secretstorage==3.3.3
-    # via keyring
 semantic-version==2.10.0
     # via
     #   -r requirements/test.txt

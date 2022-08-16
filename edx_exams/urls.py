@@ -36,6 +36,7 @@ urlpatterns = oauth2_urlpatterns + [
     path('', include('csrf.urls')),  # Include csrf urls from edx-drf-extensions
     path('health/', core_views.Health.as_view(), name='health'),
     path('lti/', include(lti_urls)),
+    path('lti/', include('lti_consumer.plugin.urls')),
 ]
 
 if settings.DEBUG and os.environ.get('ENABLE_DJANGO_TOOLBAR', False):  # pragma: no cover
