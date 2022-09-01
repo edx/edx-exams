@@ -212,26 +212,34 @@ class CourseExamConfigurationsView(APIView):
         CourseExamConfiguration.objects.update_or_create(
             course_id=course_id,
             defaults={'provider': provider})
-        log.info(f"Created or updated course exam configuration course_id={course_id},provider={provider.name}")
+        provider_name = provider.name if provider else None
+        log.info(f"Created or updated course exam configuration course_id={course_id},provider={provider_name}")
 
     def patch(self, request, course_id):
         """
         Create/update course exam configuration.
         """
+        error = None
+
         # check that proctoring provider is in request
-        if request.data.get('provider') is None:
-            response_status = status.HTTP_400_BAD_REQUEST
-            data = {"detail": "No proctoring provider name in request."}
+        if not 'provider' in request.data:
+            error = {"detail": "No proctoring provider name in request."}
+        elif request.data.get('provider') is None:
+            provider = None
         else:
             try:
                 provider = ProctoringProvider.objects.get(name=request.data['provider'])
-                self.handle_config(provider, course_id)
-                response_status = status.HTTP_204_NO_CONTENT
-                data = {}
             # return 400 if proctoring provider does not exist
             except ObjectDoesNotExist:
-                response_status = status.HTTP_400_BAD_REQUEST
-                data = {"detail": "Proctoring provider does not exist."}
+                error = {"detail": "Proctoring provider does not exist."}
+
+        if not error:
+            self.handle_config(provider, course_id)
+            response_status = status.HTTP_204_NO_CONTENT
+            data = {}
+        else:
+            response_status = status.HTTP_400_BAD_REQUEST
+            data = error
 
         return Response(status=response_status, data=data)
 

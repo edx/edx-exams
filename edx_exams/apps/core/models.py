@@ -142,7 +142,7 @@ class CourseExamConfiguration(TimeStampedModel):
 
     course_id = models.CharField(max_length=255, db_index=True, unique=True)
 
-    provider = models.ForeignKey(ProctoringProvider, on_delete=models.CASCADE)
+    provider = models.ForeignKey(ProctoringProvider, on_delete=models.CASCADE, null=True)
 
     allow_opt_out = models.BooleanField(default=False)
 
