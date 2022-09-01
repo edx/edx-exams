@@ -76,6 +76,7 @@ MIDDLEWARE = (
     'edx_rest_framework_extensions.middleware.RequestMetricsMiddleware',
     # Ensures proper DRF permissions in support of JWTs
     'edx_rest_framework_extensions.auth.jwt.middleware.EnsureJWTAuthSettingsMiddleware',
+    'edx_exams.apps.router.middleware.ExamRequestMiddleware'
 )
 
 # Enable CORS
@@ -240,6 +241,8 @@ EXTRA_SCOPE = ['permissions']
 
 # TODO Set this to another (non-staff, ideally) path.
 LOGIN_REDIRECT_URL = '/admin/'
+
+LMS_ROOT_URL = None
 # END AUTHENTICATION CONFIGURATION
 
 

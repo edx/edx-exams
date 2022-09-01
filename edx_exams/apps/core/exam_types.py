@@ -35,9 +35,33 @@ class TimedExamType(ExamType):
     is_practice = False
 
 
+class PracticeExamType(ExamType):
+    """
+    Properties for practice exam
+    """
+    name = 'practice'
+    description = 'Practice, non-proctored, timed exam'
+    is_proctored = False
+    is_timed = True
+    is_practice = False
+
+
+class OnboardingExamType(ExamType):
+    """
+    Properties for proctored onboarding exam
+    """
+    name = 'onboarding'
+    description = 'Practice, timed, proctored exam'
+    is_proctored = True
+    is_timed = True
+    is_practice = True
+
+
 EXAM_TYPES = [
   ProctoredExamType,
-  TimedExamType
+  TimedExamType,
+  PracticeExamType,
+  OnboardingExamType,
 ]
 
 

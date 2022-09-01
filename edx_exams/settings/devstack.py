@@ -50,3 +50,5 @@ JWT_AUTH.update({
         'SECRET_KEY': 'lms-secret',
     }],
 })
+
+LMS_ROOT_URL = 'http://edx.devstack.lms:18000'

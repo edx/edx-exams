@@ -150,3 +150,14 @@ class CourseExamConfiguration(TimeStampedModel):
         """ Meta class for this Django model """
         db_table = 'exams_courseexamconfiguration'
         verbose_name = 'course exam configuration'
+
+    @classmethod
+    def get_configuration_for_course(cls, course_id):
+        """
+        Return exam configuration for a course
+        """
+        try:
+            configuration = cls.objects.get(course_id=course_id)
+        except cls.DoesNotExist:
+            configuration = None
+        return configuration
