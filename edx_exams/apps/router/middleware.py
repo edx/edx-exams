@@ -6,10 +6,10 @@ from django.utils.deprecation import MiddlewareMixin
 
 from edx_exams.apps.api.v1.views import CourseExamsView
 from edx_exams.apps.core.models import CourseExamConfiguration
-from edx_exams.apps.router.views import CourseExamsOverrideView
+from edx_exams.apps.router.views import CourseExamsLegacyView
 
-OVERRIDE_VIEW_MAP = {
-    CourseExamsView: CourseExamsOverrideView
+LEGACY_VIEW_MAP = {
+    CourseExamsView: CourseExamsLegacyView
 }
 
 class ExamRequestMiddleware(MiddlewareMixin):
@@ -20,13 +20,13 @@ class ExamRequestMiddleware(MiddlewareMixin):
     """
     def process_view(self, request, view_func, view_args, view_kwargs):
         try:
-            override_view = OVERRIDE_VIEW_MAP.get(view_func.view_class)
+            legacy_view = LEGACY_VIEW_MAP.get(view_func.view_class)
         except AttributeError:
-            override_view = None
+            legacy_view = None
 
         # call into override if a function is defined for this request method
-        if override_view and getattr(override_view, request.method.lower()):
+        if legacy_view and getattr(legacy_view, request.method.lower()):
             course_id = view_kwargs.get('course_id')
             course_configuration = CourseExamConfiguration.get_configuration_for_course(course_id)
             if not course_configuration or course_configuration.provider is None:
-                return override_view.as_view()(request=request, *view_args, **view_kwargs)
+                return legacy_view.as_view()(request=request, *view_args, **view_kwargs)

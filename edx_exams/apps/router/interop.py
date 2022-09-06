@@ -10,12 +10,12 @@ from edx_exams.apps.core.rest_utils import get_client, make_request
 
 LMS_REGISTER_PROCTORED_EXAMS_API_TPL = 'api/edx_proctoring/v1/proctored_exam/exam_registration/course_id/{}'
 
-def register_exams(course_id, request_data):
+def register_exams(course_id, exam_list):
     path = LMS_REGISTER_PROCTORED_EXAMS_API_TPL.format(course_id)
     url = urljoin(settings.LMS_ROOT_URL, path)
     client = get_client(settings.LMS_ROOT_URL)
     try:
-        response = make_request('PATCH', url, client, json=request_data)
+        response = make_request('PATCH', url, client, json=exam_list)
     except HTTPError as e:
         response = e.response
     return response

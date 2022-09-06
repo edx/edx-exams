@@ -17,12 +17,12 @@ from rest_framework.exceptions import ValidationError
 from edx_exams.apps.api.test_utils import ExamsAPITestCase
 from edx_exams.apps.api.test_utils.factories import UserFactory
 from edx_exams.apps.core.models import CourseExamConfiguration, Exam
-from edx_exams.apps.router.views import CourseExamsOverrideView
+from edx_exams.apps.router.views import CourseExamsLegacyView
 
 
 @ddt.ddt
-class CourseExamsOverrideViewTest(ExamsAPITestCase):
-    """ Tests for register_exams """
+class CourseExamsLegacyViewTest(ExamsAPITestCase):
+    """ Tests for exam registration endpoints """
 
     def setUp(self):
         super().setUp()
