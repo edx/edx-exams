@@ -1,7 +1,10 @@
+"""
+Views to wrap interactions with the legacy procuring service
+"""
 import json
 import logging
 
-from django.http import HttpResponse
+from django.http import JsonResponse
 from edx_rest_framework_extensions.auth.jwt.authentication import JwtAuthentication
 from rest_framework import status
 from rest_framework.views import APIView
@@ -23,6 +26,9 @@ class CourseExamsLegacyView(APIView):
     permission_classes = (StaffUserPermissions,)
 
     def patch(self, request, course_id):
+        """
+        Create or update a list of exams in edx-proctoring.
+        """
         exam_list = json.loads(request.body)
 
         # edx-proctoring does not support exam type so convert to
@@ -39,8 +45,8 @@ class CourseExamsLegacyView(APIView):
         if response.status_code != status.HTTP_200_OK:
             log.error(f'Failed to publish exams for course_id {course_id} response was {response_data}')
 
-        return HttpResponse(
-            content=response,
-            content_type='application/json',
-            status=response.status_code
+        return JsonResponse(
+            data=response.json(),
+            status=response.status_code,
+            safe=False,
         )

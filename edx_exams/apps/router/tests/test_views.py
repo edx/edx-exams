@@ -43,7 +43,7 @@ class CourseExamsLegacyViewTest(ExamsAPITestCase):
             is_active=True
         )
 
-    def notest_auth_failures(self):
+    def test_auth_failures(self):
         """
         Verify the endpoint validates permissions
         """
@@ -54,7 +54,8 @@ class CourseExamsLegacyViewTest(ExamsAPITestCase):
 
         # Test non-staff worker
         random_user = UserFactory()
-        self.get_response(random_user, [], 403)
+        response = self.patch_api(random_user, [])
+        self.assertEqual(response.status_code, 403)
 
     def patch_api(self, user, data):
         """
@@ -95,28 +96,30 @@ class CourseExamsLegacyViewTest(ExamsAPITestCase):
 
         mock_register_exams.return_value = self.build_mock_response()
         response = self.patch_api(self.user, data)
+        self.assertEqual(response.status_code, 200)
+
         mock_register_exams.assert_called_with(
             self.course_id,
             [
-            {
-                'course_id': self.course_id,
-                'content_id': '123foo',
-                'exam_name': 'test practice exam',
-                'exam_type': 'practice',
-                'backend': 'mockprock',
-                'is_proctored': False,
-                'is_practice_exam': True,
-            },
-            {
-                'course_id': self.course_id,
-                'content_id': '123bar',
-                'exam_name': 'test proctored exam',
-                'exam_type': 'proctored',
-                'backend': 'mockprock',
-                'is_proctored': True,
-                'is_practice_exam': False,
-            },
-        ]
+                {
+                    'course_id': self.course_id,
+                    'content_id': '123foo',
+                    'exam_name': 'test practice exam',
+                    'exam_type': 'practice',
+                    'backend': 'mockprock',
+                    'is_proctored': False,
+                    'is_practice_exam': True,
+                },
+                {
+                    'course_id': self.course_id,
+                    'content_id': '123bar',
+                    'exam_name': 'test proctored exam',
+                    'exam_type': 'proctored',
+                    'backend': 'mockprock',
+                    'is_proctored': True,
+                    'is_practice_exam': False,
+                },
+            ]
         )
         self.assertEqual(Exam.objects.all().count(), 1)
 
@@ -129,6 +132,8 @@ class CourseExamsLegacyViewTest(ExamsAPITestCase):
         mock_register_exams.return_value = self.build_mock_response()
 
         response = self.patch_api(self.user, [])
+        self.assertEqual(response.status_code, 200)
+
         mock_register_exams.assert_called_with(
             self.course_id,
             []
@@ -152,16 +157,18 @@ class CourseExamsLegacyViewTest(ExamsAPITestCase):
 
         mock_register_exams.return_value = self.build_mock_response()
         response = self.patch_api(self.user, data)
+        self.assertEqual(response.status_code, 200)
+
         mock_register_exams.assert_called_with(
             self.course_id,
             [
-            {
-                'course_id': self.course_id,
-                'content_id': '123foo',
-                'exam_name': 'test practice exam',
-                'backend': 'mockprock',
-            }
-        ]
+                {
+                    'course_id': self.course_id,
+                    'content_id': '123foo',
+                    'exam_name': 'test practice exam',
+                    'backend': 'mockprock',
+                }
+            ]
         )
         self.assertEqual(Exam.objects.all().count(), 1)
 
@@ -180,8 +187,25 @@ class CourseExamsLegacyViewTest(ExamsAPITestCase):
         )
 
         response = self.patch_api(self.user, [])
+        self.assertEqual(response.status_code, 200)
+
         mock_register_exams.assert_called_with(
             self.course_id,
             []
         )
         self.assertEqual(Exam.objects.all().count(), 1)
+
+    @mock.patch('edx_exams.apps.router.views.register_exams')
+    def test_patch_exams_failure(self, mock_register_exams):
+        """
+        And error response from the LMS should be returned with
+        the same code
+        """
+        mock_response = Mock(spec=Response)
+        mock_response.json.return_value = "some error"
+        mock_response.status_code = 422
+        mock_register_exams.return_value = mock_response
+
+        response = self.patch_api(self.user, [])
+        self.assertEqual(response.status_code, 422)
+        self.assertEqual(response.json(), "some error")

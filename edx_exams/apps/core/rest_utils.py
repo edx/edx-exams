@@ -3,7 +3,6 @@ Utils for reading and writing data to other services using REST.
 """
 from django.conf import settings
 from edx_rest_api_client import client as rest_client
-from requests.exceptions import HTTPError
 
 
 # pylint: disable=inconsistent-return-statements

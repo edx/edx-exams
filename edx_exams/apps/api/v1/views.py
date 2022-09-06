@@ -222,7 +222,7 @@ class CourseExamConfigurationsView(APIView):
         error = None
 
         # check that proctoring provider is in request
-        if not 'provider' in request.data:
+        if 'provider' not in request.data:
             error = {"detail": "No proctoring provider name in request."}
         elif request.data.get('provider') is None:
             provider = None

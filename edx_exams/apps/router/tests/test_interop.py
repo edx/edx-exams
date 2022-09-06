@@ -20,7 +20,10 @@ class RegisterExamsTest(TestCase):
     def setUp(self):
         super().setUp()
         self.course_id = 'course-v1:edx+test+f19'
-        self.lms_url = f'{settings.LMS_ROOT_URL}/api/edx_proctoring/v1/proctored_exam/exam_registration/course_id/{self.course_id}'
+        self.lms_url = (
+            f'{settings.LMS_ROOT_URL}/api/edx_proctoring/v1/proctored_exam/exam_registration/'
+            f'course_id/{self.course_id}'
+        )
 
     def mock_oauth_login(fn):
         """

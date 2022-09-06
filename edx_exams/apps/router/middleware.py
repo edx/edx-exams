@@ -12,13 +12,14 @@ LEGACY_VIEW_MAP = {
     CourseExamsView: CourseExamsLegacyView
 }
 
+
 class ExamRequestMiddleware(MiddlewareMixin):
     """
     Intercept requests and determine if exams for this course
     should be managed by legacy edx-proctoring system. If so, requests
     are intercepted and forwarded to that service
     """
-    def process_view(self, request, view_func, view_args, view_kwargs):
+    def process_view(self, request, view_func, view_args, view_kwargs):  # pylint: disable=missing-function-docstring
         try:
             legacy_view = LEGACY_VIEW_MAP.get(view_func.view_class)
         except AttributeError:
@@ -30,3 +31,5 @@ class ExamRequestMiddleware(MiddlewareMixin):
             course_configuration = CourseExamConfiguration.get_configuration_for_course(course_id)
             if not course_configuration or course_configuration.provider is None:
                 return legacy_view.as_view()(request=request, *view_args, **view_kwargs)
+
+        return None
