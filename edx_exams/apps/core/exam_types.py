@@ -43,7 +43,7 @@ class PracticeExamType(ExamType):
     description = 'Practice, non-proctored, timed exam'
     is_proctored = False
     is_timed = True
-    is_practice = False
+    is_practice = True
 
 
 class OnboardingExamType(ExamType):

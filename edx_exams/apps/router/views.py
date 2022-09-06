@@ -1,14 +1,14 @@
 import json
 import logging
 
-from rest_framework.views import APIView
+from django.http import HttpResponse
 from edx_rest_framework_extensions.auth.jwt.authentication import JwtAuthentication
 from rest_framework import status
-from django.http import HttpResponse
+from rest_framework.views import APIView
 
+from edx_exams.apps.api.permissions import StaffUserPermissions
 from edx_exams.apps.core.exam_types import get_exam_type
 from edx_exams.apps.router.interop import register_exams
-from edx_exams.apps.api.permissions import StaffUserPermissions
 
 log = logging.getLogger(__name__)
 
@@ -29,8 +29,9 @@ class CourseExamsOverrideView(APIView):
         # individual properties
         for exam in request_data:
             exam_type = get_exam_type(exam.get('exam_type'))
-            exam['is_proctored'] = exam_type.is_proctored
-            exam['is_practice_exam'] = exam_type.is_practice
+            if exam_type:
+                exam['is_proctored'] = exam_type.is_proctored
+                exam['is_practice_exam'] = exam_type.is_practice
 
         response = register_exams(course_id, request_data)
         response_data = response.json()
