@@ -123,7 +123,7 @@ class CourseExamsView(APIView):
                 provider = None
                 # get exam type class, which has specific attributes like is_proctored, is_timed, etc.
                 exam_type_class = get_exam_type(exam['exam_type'])
-                config = CourseExamConfiguration.objects.filter(course_id=course_id).first()
+                config = CourseExamConfiguration.get_configuration_for_course(course_id)
 
                 # if exam type requires proctoring and the course has a config, use the configured provider
                 if exam_type_class and exam_type_class.is_proctored and config:

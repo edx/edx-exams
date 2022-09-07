@@ -49,6 +49,8 @@ class PracticeExamType(ExamType):
 class OnboardingExamType(ExamType):
     """
     Properties for proctored onboarding exam
+    Note: Onboarding exams are currently not supported by this service
+    this type exists solely to translate requests bound for edx-proctoring
     """
     name = 'onboarding'
     description = 'Practice, timed, proctored exam'
