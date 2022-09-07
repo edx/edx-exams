@@ -345,6 +345,19 @@ class CourseExamConfigurationsViewTests(ExamsAPITestCase):
         config = CourseExamConfiguration.get_configuration_for_course(self.course_id)
         self.assertEqual(config.provider, self.test_provider)
 
+    def test_null_provider(self):
+        """
+        Assert provider can be explicitly set to null
+        """
+        data = {'provider': None}
+
+        response = self.patch_api(self.user, data)
+        self.assertEqual(204, response.status_code)
+        self.assertEqual(len(CourseExamConfiguration.objects.all()), 1)
+
+        config = CourseExamConfiguration.get_configuration_for_course(self.course_id)
+        self.assertEqual(config.provider, None)
+
 
 class ProctoringProvidersViewTest(ExamsAPITestCase):
     """
