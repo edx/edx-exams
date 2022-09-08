@@ -18,7 +18,7 @@ class ProctoredExamType(ExamType):
     Properties for a proctored exam
     """
     name = 'proctored'
-    description = 'Non-practice, timed, proctored exam'
+    description = 'Non-practice, proctored, timed exam'
     is_proctored = True
     is_timed = True
     is_practice = False
@@ -35,9 +35,35 @@ class TimedExamType(ExamType):
     is_practice = False
 
 
+class PracticeExamType(ExamType):
+    """
+    Properties for practice exam
+    """
+    name = 'practice'
+    description = 'Practice, non-proctored, timed exam'
+    is_proctored = False
+    is_timed = True
+    is_practice = True
+
+
+class OnboardingExamType(ExamType):
+    """
+    Properties for proctored onboarding exam
+    Note: Onboarding exams are currently not supported by this service
+    this type exists solely to translate requests bound for edx-proctoring
+    """
+    name = 'onboarding'
+    description = 'Practice, proctored, timed exam'
+    is_proctored = True
+    is_timed = True
+    is_practice = True
+
+
 EXAM_TYPES = [
   ProctoredExamType,
-  TimedExamType
+  TimedExamType,
+  PracticeExamType,
+  OnboardingExamType,
 ]
 
 

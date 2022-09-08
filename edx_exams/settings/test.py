@@ -21,3 +21,5 @@ JWT_AUTH.update(
         "JWT_AUDIENCE": SOCIAL_AUTH_EDX_OAUTH2_KEY,
     }
 )
+
+LMS_ROOT_URL = 'http://test.lms:18000'

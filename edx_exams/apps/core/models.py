@@ -142,7 +142,7 @@ class CourseExamConfiguration(TimeStampedModel):
 
     course_id = models.CharField(max_length=255, db_index=True, unique=True)
 
-    provider = models.ForeignKey(ProctoringProvider, on_delete=models.CASCADE)
+    provider = models.ForeignKey(ProctoringProvider, on_delete=models.CASCADE, null=True)
 
     allow_opt_out = models.BooleanField(default=False)
 
@@ -150,3 +150,14 @@ class CourseExamConfiguration(TimeStampedModel):
         """ Meta class for this Django model """
         db_table = 'exams_courseexamconfiguration'
         verbose_name = 'course exam configuration'
+
+    @classmethod
+    def get_configuration_for_course(cls, course_id):
+        """
+        Return exam configuration for a course
+        """
+        try:
+            configuration = cls.objects.get(course_id=course_id)
+        except cls.DoesNotExist:
+            configuration = None
+        return configuration

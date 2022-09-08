@@ -219,10 +219,8 @@ class CourseExamsViewTests(ExamsAPITestCase):
         self.assertEqual(proctored_exam.is_active, True)
 
     @ddt.data(
-        (True, 'proctored', True),  # test case for a proctored exam with no course config
         (False, 'proctored', False),  # test case for a proctored exam with a course config
         (False, 'timed', True),  # test case for a timed exam with a course config
-        (True, 'timed', True)  # test case for a timed exam with no course config
     )
     @ddt.unpack
     def test_exams_config(self, other_course_id, exam_type, expect_none_provider):
@@ -331,7 +329,7 @@ class CourseExamConfigurationsViewTests(ExamsAPITestCase):
         self.assertEqual(204, response.status_code)
         self.assertEqual(len(CourseExamConfiguration.objects.all()), 1)
 
-        config = CourseExamConfiguration.objects.get(course_id=self.course_id)
+        config = CourseExamConfiguration.get_configuration_for_course(self.course_id)
         self.assertEqual(config.provider, provider)
 
     def test_config_create(self):
@@ -344,8 +342,21 @@ class CourseExamConfigurationsViewTests(ExamsAPITestCase):
         self.assertEqual(204, response.status_code)
         self.assertEqual(len(CourseExamConfiguration.objects.all()), 1)
 
-        config = CourseExamConfiguration.objects.get(course_id=self.course_id)
+        config = CourseExamConfiguration.get_configuration_for_course(self.course_id)
         self.assertEqual(config.provider, self.test_provider)
+
+    def test_null_provider(self):
+        """
+        Assert provider can be explicitly set to null
+        """
+        data = {'provider': None}
+
+        response = self.patch_api(self.user, data)
+        self.assertEqual(204, response.status_code)
+        self.assertEqual(len(CourseExamConfiguration.objects.all()), 1)
+
+        config = CourseExamConfiguration.get_configuration_for_course(self.course_id)
+        self.assertEqual(config.provider, None)
 
 
 class ProctoringProvidersViewTest(ExamsAPITestCase):

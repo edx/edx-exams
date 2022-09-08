@@ -11,4 +11,5 @@ factory-boy
 mock
 pytest-cov
 pytest-django
+responses
 tox

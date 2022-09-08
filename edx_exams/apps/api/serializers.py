@@ -16,7 +16,7 @@ class ExamSerializer(serializers.ModelSerializer):
     course_id = serializers.CharField(required=False)
     content_id = serializers.CharField(required=True)
     time_limit_mins = serializers.IntegerField(required=True)
-    due_date = serializers.DateTimeField(required=False, format=None)
+    due_date = serializers.DateTimeField(required=True, format=None, allow_null=True)
     exam_type = serializers.CharField(required=True)
     hide_after_due = serializers.BooleanField(required=True)
     is_active = serializers.BooleanField(required=True)
