@@ -22,7 +22,7 @@ class ExamRequestMiddleware(MiddlewareMixin):
     def process_view(self, request, view_func, view_args, view_kwargs):  # pylint: disable=missing-function-docstring
         try:
             legacy_view = LEGACY_VIEW_MAP.get(view_func.view_class)
-        except AttributeError:
+        except AttributeError:      # pragma: no cover
             legacy_view = None
 
         # call into override if a function is defined for this request method

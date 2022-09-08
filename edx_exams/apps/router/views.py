@@ -1,5 +1,6 @@
 """
-Views to wrap interactions with the legacy procuring service
+Views to wrap interactions with the legacy proctoring plugin
+at https://github.com/openedx/edx-proctoring
 """
 import json
 import logging

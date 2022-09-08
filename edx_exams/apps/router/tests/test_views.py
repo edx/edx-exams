@@ -126,8 +126,8 @@ class CourseExamsLegacyViewTest(ExamsAPITestCase):
     @mock.patch('edx_exams.apps.router.views.register_exams')
     def test_patch_exams_empty(self, mock_register_exams):
         """
-        Request is forwarded to the LMS, no exams in this
-        service should be removed.
+        Request is forwarded to the LMS and the api/v1 view is not called
+        (no exams in this service should be removed)
         """
         mock_register_exams.return_value = self.build_mock_response()
 
