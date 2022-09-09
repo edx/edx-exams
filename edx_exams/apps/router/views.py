@@ -9,6 +9,7 @@ from django.http import JsonResponse
 from edx_rest_framework_extensions.auth.jwt.authentication import JwtAuthentication
 from rest_framework import status
 from rest_framework.views import APIView
+from simplejson import JSONDecodeError
 
 from edx_exams.apps.api.permissions import StaffUserPermissions
 from edx_exams.apps.core.exam_types import get_exam_type
@@ -41,13 +42,20 @@ class CourseExamsLegacyView(APIView):
                 exam['is_practice_exam'] = exam_type.is_practice
 
         response = register_exams(course_id, exam_list)
-        response_data = response.json()
+
+        try:
+            response_data = response.json()
+        except JSONDecodeError:      # pragma: no cover
+            response_data = 'Invalid JSON response received from edx-proctoring'
 
         if response.status_code != status.HTTP_200_OK:
-            log.error(f'Failed to publish exams for course_id {course_id} response was {response_data}')
+            log.error(
+                f'Failed to publish exams for course_id {course_id} '
+                f'got status={response.status_code} content={response.content}'
+            )
 
         return JsonResponse(
-            data=response.json(),
+            data=response_data,
             status=response.status_code,
             safe=False,
         )
