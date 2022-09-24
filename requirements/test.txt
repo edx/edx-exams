@@ -12,7 +12,7 @@ asgiref==3.5.2
     # via
     #   -r requirements/base.txt
     #   django
-astroid==2.12.9
+astroid==2.12.10
     # via
     #   pylint
     #   pylint-celery
@@ -22,7 +22,7 @@ bleach==5.0.1
     # via
     #   -r requirements/base.txt
     #   lti-consumer-xblock
-certifi==2022.6.15.1
+certifi==2022.9.24
     # via
     #   -r requirements/base.txt
     #   requests
@@ -125,7 +125,7 @@ django-waffle==3.0.0
     #   -r requirements/base.txt
     #   edx-django-utils
     #   edx-drf-extensions
-djangorestframework==3.13.1
+djangorestframework==3.14.0
     # via
     #   -r requirements/base.txt
     #   django-config-models
@@ -148,7 +148,7 @@ edx-auth-backends==4.1.0
     # via -r requirements/base.txt
 edx-django-release-util==1.2.0
     # via -r requirements/base.txt
-edx-django-utils==5.0.1
+edx-django-utils==5.1.0
     # via
     #   -r requirements/base.txt
     #   django-config-models
@@ -156,7 +156,7 @@ edx-django-utils==5.0.1
     #   edx-rest-api-client
 edx-drf-extensions==8.3.1
     # via -r requirements/base.txt
-edx-lint==5.2.5
+edx-lint==5.3.0
     # via -r requirements/test.in
 edx-opaque-keys==2.3.0
     # via
@@ -167,7 +167,7 @@ edx-rest-api-client==5.5.0
     # via -r requirements/base.txt
 factory-boy==3.2.1
     # via -r requirements/test.in
-faker==14.2.0
+faker==14.2.1
     # via factory-boy
 filelock==3.8.0
     # via
@@ -181,7 +181,7 @@ future==0.18.2
     # via
     #   -r requirements/base.txt
     #   pyjwkest
-idna==3.3
+idna==3.4
     # via
     #   -r requirements/base.txt
     #   requests
@@ -206,7 +206,7 @@ jsonfield==3.1.0
     # via
     #   -r requirements/base.txt
     #   lti-consumer-xblock
-lazy==1.4
+lazy==1.5
     # via
     #   -r requirements/base.txt
     #   lti-consumer-xblock
@@ -219,7 +219,7 @@ lxml==4.9.1
     #   -r requirements/base.txt
     #   lti-consumer-xblock
     #   xblock
-mako==1.2.2
+mako==1.2.3
     # via
     #   -r requirements/base.txt
     #   lti-consumer-xblock
@@ -236,7 +236,7 @@ mock==4.0.3
     # via -r requirements/test.in
 mysqlclient==2.1.1
     # via -r requirements/base.txt
-newrelic==8.0.0.179
+newrelic==8.1.0.180
     # via
     #   -r requirements/base.txt
     #   edx-django-utils
@@ -294,7 +294,7 @@ pyjwkest==1.4.2
     #   -r requirements/base.txt
     #   edx-drf-extensions
     #   lti-consumer-xblock
-pyjwt[crypto]==2.4.0
+pyjwt[crypto]==2.5.0
     # via
     #   -r requirements/base.txt
     #   drf-jwt
@@ -302,7 +302,7 @@ pyjwt[crypto]==2.4.0
     #   edx-drf-extensions
     #   edx-rest-api-client
     #   social-auth-core
-pylint==2.15.2
+pylint==2.15.3
     # via
     #   edx-lint
     #   pylint-celery
@@ -421,7 +421,7 @@ social-auth-core==4.3.0
     #   -r requirements/base.txt
     #   edx-auth-backends
     #   social-auth-app-django
-sqlparse==0.4.2
+sqlparse==0.4.3
     # via
     #   -r requirements/base.txt
     #   django
@@ -443,6 +443,10 @@ tomlkit==0.11.4
     # via pylint
 tox==3.26.0
     # via -r requirements/test.in
+types-cryptography==3.3.23
+    # via
+    #   -r requirements/base.txt
+    #   pyjwt
 typing-extensions==4.3.0
     # via
     #   astroid
