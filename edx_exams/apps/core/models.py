@@ -1,5 +1,4 @@
 """ Core models. """
-import uuid
 
 from django.contrib.auth.models import AbstractUser
 from django.db import models
@@ -19,10 +18,7 @@ class User(AbstractUser):
 
     """
     full_name = models.CharField(_('Full Name'), max_length=255, blank=True, null=True)
-
     lms_user_id = models.IntegerField(null=True, db_index=True)
-
-    anonymous_user_id = models.UUIDField(default=uuid.uuid4, unique=True)
 
     @property
     def access_token(self):
