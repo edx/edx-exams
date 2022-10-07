@@ -12,7 +12,7 @@ from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from edx_exams.apps.api.permissions import StaffUserPermissions, StaffUserOrReadOnlyPermissions
+from edx_exams.apps.api.permissions import StaffUserOrReadOnlyPermissions, StaffUserPermissions
 from edx_exams.apps.api.serializers import ExamSerializer, ProctoringProviderSerializer
 from edx_exams.apps.core.exam_types import get_exam_type
 from edx_exams.apps.core.models import CourseExamConfiguration, Exam, ProctoringProvider
