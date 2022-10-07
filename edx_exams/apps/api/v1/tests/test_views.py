@@ -279,7 +279,7 @@ class CourseExamConfigurationsViewTests(ExamsAPITestCase):
 
         return self.client.patch(self.url, data, **headers, content_type="application/json")
 
-    def test_auth_failures(self):
+    def test_patch_auth_failures(self):
         """
         Verify the endpoint validates permissions
         """
@@ -292,7 +292,7 @@ class CourseExamConfigurationsViewTests(ExamsAPITestCase):
         response = self.patch_api(random_user, {})
         self.assertEqual(403, response.status_code)
 
-    def test_invalid_data(self):
+    def test_patch_invalid_data(self):
         """
         Assert that endpoint returns 400 if provider is missing
         """
@@ -301,7 +301,7 @@ class CourseExamConfigurationsViewTests(ExamsAPITestCase):
         response = self.patch_api(self.user, data)
         self.assertEqual(400, response.status_code)
 
-    def test_invalid_provider(self):
+    def test_patch_invalid_provider(self):
         """
         Assert endpoint returns 400 if provider is invalid
         """
@@ -310,13 +310,13 @@ class CourseExamConfigurationsViewTests(ExamsAPITestCase):
         response = self.patch_api(self.user, data)
         self.assertEqual(400, response.status_code)
 
-    def test_config_update(self):
+    def test_patch_config_update(self):
         """
         Test that config is updated
         """
         CourseExamConfiguration.objects.create(
             course_id=self.course_id,
-            provider=self.test_provider
+            provider=self.test_provider,
         )
         provider = ProctoringProvider.objects.create(
             name='test_provider_2',
@@ -332,7 +332,7 @@ class CourseExamConfigurationsViewTests(ExamsAPITestCase):
         config = CourseExamConfiguration.get_configuration_for_course(self.course_id)
         self.assertEqual(config.provider, provider)
 
-    def test_config_create(self):
+    def test_patch_config_create(self):
         """
         Test that config is created
         """
@@ -345,7 +345,7 @@ class CourseExamConfigurationsViewTests(ExamsAPITestCase):
         config = CourseExamConfiguration.get_configuration_for_course(self.course_id)
         self.assertEqual(config.provider, self.test_provider)
 
-    def test_null_provider(self):
+    def test_patch_null_provider(self):
         """
         Assert provider can be explicitly set to null
         """
@@ -357,6 +357,30 @@ class CourseExamConfigurationsViewTests(ExamsAPITestCase):
 
         config = CourseExamConfiguration.get_configuration_for_course(self.course_id)
         self.assertEqual(config.provider, None)
+
+    def test_get_config(self):
+        """
+        Non-staff users can get course configuration
+        """
+        CourseExamConfiguration.objects.create(
+            course_id=self.course_id,
+            provider=self.test_provider
+        )
+        nonstaff_user = UserFactory()
+        headers = self.build_jwt_headers(nonstaff_user)
+        response = self.client.get(self.url, **headers)
+        self.assertEqual(200, response.status_code)
+        self.assertEqual('test_provider', response.data.get('provider'))
+
+    def test_get_missing_config(self):
+        """
+        Returns null values if no configuration exists
+        """
+        nonstaff_user = UserFactory()
+        headers = self.build_jwt_headers(nonstaff_user)
+        response = self.client.get(self.url, **headers)
+        self.assertEqual(200, response.status_code)
+        self.assertIsNone(response.data.get('provider'))
 
 
 class ProctoringProvidersViewTest(ExamsAPITestCase):
