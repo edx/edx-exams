@@ -12,7 +12,7 @@ from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from edx_exams.apps.api.permissions import StaffUserPermissions
+from edx_exams.apps.api.permissions import StaffUserOrReadOnlyPermissions, StaffUserPermissions
 from edx_exams.apps.api.serializers import ExamSerializer, ProctoringProviderSerializer
 from edx_exams.apps.core.exam_types import get_exam_type
 from edx_exams.apps.core.models import CourseExamConfiguration, Exam, ProctoringProvider
@@ -190,6 +190,13 @@ class CourseExamConfigurationsView(APIView):
     Given a course id and a proctoring provider name, this view will either create a new course exam configuration
     (if one doesn't exist), or modify the proctoring provider on an existing course exam config.
 
+    HTTP GET
+    Gets CourseExamConfiguration.
+    **Returns**
+    {
+        'provider': 'test_provider',
+    }
+
     HTTP PATCH
     Creates or updates a CourseExamConfiguration.
     Expected PATCH data: {
@@ -202,7 +209,7 @@ class CourseExamConfigurationsView(APIView):
     """
 
     authentication_classes = (JwtAuthentication,)
-    permission_classes = (StaffUserPermissions,)
+    permission_classes = (StaffUserOrReadOnlyPermissions,)
 
     @classmethod
     def handle_config(cls, provider, course_id):
@@ -214,6 +221,22 @@ class CourseExamConfigurationsView(APIView):
             defaults={'provider': provider})
         provider_name = provider.name if provider else None
         log.info(f"Created or updated course exam configuration course_id={course_id},provider={provider_name}")
+
+    def get(self, request, course_id):
+        """
+        Get exam configuration for a course
+
+        TODO: This view should use a serializer to ensure the read/write bodies are the same
+        once more fields are added.
+        """
+        try:
+            provider = CourseExamConfiguration.objects.get(course_id=course_id).provider
+        except ObjectDoesNotExist:
+            provider = None
+
+        return Response({
+            'provider': provider.name if provider else None
+        })
 
     def patch(self, request, course_id):
         """
