@@ -190,6 +190,13 @@ class CourseExamConfigurationsView(APIView):
     Given a course id and a proctoring provider name, this view will either create a new course exam configuration
     (if one doesn't exist), or modify the proctoring provider on an existing course exam config.
 
+    HTTP GET
+    Gets CourseExamConfiguration.
+    **Returns**
+    {
+        'provider': 'test_provider',
+    }
+
     HTTP PATCH
     Creates or updates a CourseExamConfiguration.
     Expected PATCH data: {
@@ -218,6 +225,9 @@ class CourseExamConfigurationsView(APIView):
     def get(self, request, course_id):
         """
         Get exam configuration for a course
+
+        TODO: This view should use a serializer to ensure the read/write bodies are the same
+        once more fields are added.
         """
         try:
             provider = CourseExamConfiguration.objects.get(course_id=course_id).provider
