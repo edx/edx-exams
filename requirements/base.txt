@@ -143,9 +143,9 @@ markupsafe==2.1.1
     #   xblock
 mysqlclient==2.1.1
     # via -r requirements/base.in
-newrelic==8.2.0.181
+newrelic==8.2.1
     # via edx-django-utils
-oauthlib==3.2.1
+oauthlib==3.2.2
     # via
     #   lti-consumer-xblock
     #   requests-oauthlib
@@ -156,9 +156,9 @@ openedx-filters==0.8.0
     # via lti-consumer-xblock
 packaging==21.3
     # via drf-yasg
-pbr==5.10.0
+pbr==5.11.0
     # via stevedore
-psutil==5.9.2
+psutil==5.9.3
     # via edx-django-utils
 pycparser==2.21
     # via cffi
@@ -170,7 +170,7 @@ pyjwkest==1.4.2
     # via
     #   edx-drf-extensions
     #   lti-consumer-xblock
-pyjwt[crypto]==2.5.0
+pyjwt[crypto]==2.6.0
     # via
     #   drf-jwt
     #   edx-auth-backends
@@ -189,7 +189,7 @@ python-dateutil==2.8.2
     #   xblock
 python3-openid==3.2.0
     # via social-auth-core
-pytz==2022.4
+pytz==2022.5
     # via
     #   -r requirements/base.in
     #   django
@@ -213,7 +213,7 @@ requests-oauthlib==1.3.1
     # via social-auth-core
 ruamel-yaml==0.17.21
     # via drf-yasg
-ruamel-yaml-clib==0.2.6
+ruamel-yaml-clib==0.2.7
     # via ruamel-yaml
 semantic-version==2.10.0
     # via edx-drf-extensions
@@ -240,12 +240,10 @@ social-auth-core==4.3.0
     #   social-auth-app-django
 sqlparse==0.4.3
     # via django
-stevedore==4.0.0
+stevedore==4.1.0
     # via
     #   edx-django-utils
     #   edx-opaque-keys
-types-cryptography==3.3.23
-    # via pyjwt
 uritemplate==4.1.1
     # via
     #   coreapi
