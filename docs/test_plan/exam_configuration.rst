@@ -1,8 +1,14 @@
 Exam Setup and Configuration
 ============================
 
-Exam Configuration (edx-exams)
-------------------------------
+Helpful ReadTheDocs Pages:
+
+- `Configuring a Proctoring Provider <https://edx.readthedocs.io/projects/edx-partner-course-staff/en/latest/proctored_exams/proctored_enabling.html#configuring-proctoring-provider>`_
+- `Creating a Proctored Exam <https://edx.readthedocs.io/projects/edx-partner-course-staff/en/latest/proctored_exams/pt_create.html#creating-a-proctored-exam>`_
+
+
+Exam Configuration with LTI (edx-exams)
+---------------------------------------
 
 Prerequisite Steps:
    #. Make sure `course_apps.exams_ida` CourseWaffleFlag is enabled for your test course
