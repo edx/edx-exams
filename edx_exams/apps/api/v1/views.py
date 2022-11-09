@@ -211,17 +211,6 @@ class CourseExamConfigurationsView(APIView):
     authentication_classes = (JwtAuthentication,)
     permission_classes = (StaffUserOrReadOnlyPermissions,)
 
-    @classmethod
-    def handle_config(cls, provider, course_id):
-        """
-        Helper method that decides whether to update existing or create new config.
-        """
-        CourseExamConfiguration.objects.update_or_create(
-            course_id=course_id,
-            defaults={'provider': provider})
-        provider_name = provider.name if provider else None
-        log.info(f"Created or updated course exam configuration course_id={course_id},provider={provider_name}")
-
     def get(self, request, course_id):
         """
         Get exam configuration for a course
@@ -257,7 +246,7 @@ class CourseExamConfigurationsView(APIView):
                 error = {"detail": "Proctoring provider does not exist."}
 
         if not error:
-            self.handle_config(provider, course_id)
+            CourseExamConfiguration.create_or_update(provider, course_id)
             response_status = status.HTTP_204_NO_CONTENT
             data = {}
         else:

@@ -332,6 +332,97 @@ class CourseExamConfigurationsViewTests(ExamsAPITestCase):
         config = CourseExamConfiguration.get_configuration_for_course(self.course_id)
         self.assertEqual(config.provider, provider)
 
+    def test_patch_config_update_exams(self):
+        """
+        Test that config is updated
+        """
+        CourseExamConfiguration.objects.create(
+            course_id=self.course_id,
+            provider=self.test_provider,
+        )
+        provider = ProctoringProvider.objects.create(
+            name='test_provider_2',
+            verbose_name='testing_provider_2',
+            lti_configuration_id='223456789'
+        )
+        Exam.objects.create(
+            resource_id=str(uuid.uuid4()),
+            course_id=self.course_id,
+            provider=self.test_provider,
+            content_id='11111',
+            exam_name='test_exam1',
+            exam_type='proctored',
+            time_limit_mins=30,
+            due_date='2021-07-01 00:00:00',
+            hide_after_due=False,
+            is_active=True
+        )
+        Exam.objects.create(
+            resource_id=str(uuid.uuid4()),
+            course_id=self.course_id,
+            provider=self.test_provider,
+            content_id='22222',
+            exam_name='test_exam2',
+            exam_type='proctored',
+            time_limit_mins=30,
+            due_date='2021-07-01 00:00:00',
+            hide_after_due=False,
+            is_active=True
+        )
+        exams = Exam.objects.filter(course_id=self.course_id, is_active=True)
+        self.assertEqual(2, len(exams))
+
+        data = {'provider': provider.name}
+        response = self.patch_api(self.user, data)
+        self.assertEqual(204, response.status_code)
+        self.assertEqual(len(CourseExamConfiguration.objects.all()), 1)
+        config = CourseExamConfiguration.get_configuration_for_course(self.course_id)
+        self.assertEqual(config.provider, provider)
+
+        exams = Exam.objects.filter(course_id=self.course_id, is_active=True)
+        self.assertEqual(2, len(exams))
+        for exam in exams:
+            self.assertEqual(provider, exam.provider)
+
+        inactive_exams = Exam.objects.filter(course_id=self.course_id, is_active=False)
+        self.assertEqual(2, len(inactive_exams))
+        for exam in inactive_exams:
+            self.assertEqual(self.test_provider, exam.provider)
+
+        # updating to the same provider is a do nothing, no new exams
+        data = {'provider': provider.name}
+        response = self.patch_api(self.user, data)
+        self.assertEqual(204, response.status_code)
+        self.assertEqual(len(CourseExamConfiguration.objects.all()), 1)
+        config = CourseExamConfiguration.get_configuration_for_course(self.course_id)
+        self.assertEqual(config.provider, provider)
+
+        exams = Exam.objects.filter(course_id=self.course_id, is_active=True)
+        self.assertEqual(2, len(exams))
+        for exam in exams:
+            self.assertEqual(provider, exam.provider)
+
+        inactive_exams = Exam.objects.filter(course_id=self.course_id, is_active=False)
+        self.assertEqual(2, len(inactive_exams))
+        for exam in inactive_exams:
+            self.assertEqual(self.test_provider, exam.provider)
+
+        # updating back to the original provider creates two new active exams, now 4 inactive
+        data = {'provider': self.test_provider.name}
+        response = self.patch_api(self.user, data)
+        self.assertEqual(204, response.status_code)
+        self.assertEqual(len(CourseExamConfiguration.objects.all()), 1)
+        config = CourseExamConfiguration.get_configuration_for_course(self.course_id)
+        self.assertEqual(config.provider, self.test_provider)
+
+        exams = Exam.objects.filter(course_id=self.course_id, is_active=True)
+        self.assertEqual(2, len(exams))
+        for exam in exams:
+            self.assertEqual(self.test_provider, exam.provider)
+
+        inactive_exams = Exam.objects.filter(course_id=self.course_id, is_active=False)
+        self.assertEqual(4, len(inactive_exams))
+
     def test_patch_config_create(self):
         """
         Test that config is created
