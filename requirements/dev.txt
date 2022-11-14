@@ -26,7 +26,7 @@ bleach==5.0.1
     #   -r requirements/validation.txt
     #   lti-consumer-xblock
     #   readme-renderer
-build==0.8.0
+build==0.9.0
     # via
     #   -r requirements/pip-tools.txt
     #   pip-tools
@@ -81,7 +81,7 @@ coverage[toml]==6.5.0
     # via
     #   -r requirements/validation.txt
     #   pytest-cov
-cryptography==38.0.1
+cryptography==38.0.3
     # via
     #   -r requirements/validation.txt
     #   pyjwt
@@ -201,9 +201,13 @@ edx-opaque-keys==2.3.0
     #   lti-consumer-xblock
 edx-rest-api-client==5.5.0
     # via -r requirements/validation.txt
+exceptiongroup==1.0.1
+    # via
+    #   -r requirements/validation.txt
+    #   pytest
 factory-boy==3.2.1
     # via -r requirements/validation.txt
-faker==15.1.1
+faker==15.3.1
     # via
     #   -r requirements/validation.txt
     #   factory-boy
@@ -264,7 +268,7 @@ jsonfield==3.1.0
     # via
     #   -r requirements/validation.txt
     #   lti-consumer-xblock
-keyring==23.9.3
+keyring==23.11.0
     # via
     #   -r requirements/validation.txt
     #   twine
@@ -272,7 +276,7 @@ lazy==1.5
     # via
     #   -r requirements/validation.txt
     #   lti-consumer-xblock
-lazy-object-proxy==1.7.1
+lazy-object-proxy==1.8.0
     # via
     #   -r requirements/validation.txt
     #   astroid
@@ -306,7 +310,7 @@ more-itertools==9.0.0
     #   jaraco-classes
 mysqlclient==2.1.1
     # via -r requirements/validation.txt
-newrelic==8.2.1
+newrelic==8.4.0
     # via
     #   -r requirements/validation.txt
     #   edx-django-utils
@@ -348,7 +352,7 @@ pkginfo==1.8.3
     # via
     #   -r requirements/validation.txt
     #   twine
-platformdirs==2.5.2
+platformdirs==2.5.3
     # via
     #   -r requirements/validation.txt
     #   pylint
@@ -361,14 +365,13 @@ pluggy==1.0.0
     #   tox
 polib==1.1.1
     # via edx-i18n-tools
-psutil==5.9.3
+psutil==5.9.4
     # via
     #   -r requirements/validation.txt
     #   edx-django-utils
 py==1.11.0
     # via
     #   -r requirements/validation.txt
-    #   pytest
     #   tox
 pycodestyle==2.9.1
     # via -r requirements/validation.txt
@@ -422,7 +425,7 @@ pylint-plugin-utils==0.7
     #   -r requirements/validation.txt
     #   pylint-celery
     #   pylint-django
-pymongo==3.12.3
+pymongo==3.13.0
     # via
     #   -r requirements/validation.txt
     #   edx-opaque-keys
@@ -435,7 +438,7 @@ pyparsing==3.0.9
     #   -r requirements/pip-tools.txt
     #   -r requirements/validation.txt
     #   packaging
-pytest==7.1.3
+pytest==7.2.0
     # via
     #   -r requirements/validation.txt
     #   pytest-cov
@@ -458,7 +461,7 @@ python3-openid==3.2.0
     # via
     #   -r requirements/validation.txt
     #   social-auth-core
-pytz==2022.5
+pytz==2022.6
     # via
     #   -r requirements/validation.txt
     #   django
@@ -472,7 +475,7 @@ pyyaml==6.0
     #   edx-django-release-util
     #   edx-i18n-tools
     #   xblock
-readme-renderer==37.2
+readme-renderer==37.3
     # via
     #   -r requirements/validation.txt
     #   twine
@@ -493,7 +496,7 @@ requests-oauthlib==1.3.1
     # via
     #   -r requirements/validation.txt
     #   social-auth-core
-requests-toolbelt==0.10.0
+requests-toolbelt==0.10.1
     # via
     #   -r requirements/validation.txt
     #   twine
@@ -563,7 +566,7 @@ sqlparse==0.4.3
     #   -r requirements/validation.txt
     #   django
     #   django-debug-toolbar
-stevedore==4.1.0
+stevedore==4.1.1
     # via
     #   -r requirements/validation.txt
     #   code-annotations
@@ -587,11 +590,11 @@ tomli==2.0.1
     #   pylint
     #   pytest
     #   tox
-tomlkit==0.11.5
+tomlkit==0.11.6
     # via
     #   -r requirements/validation.txt
     #   pylint
-tox==3.26.0
+tox==3.27.0
     # via -r requirements/validation.txt
 twine==4.0.1
     # via -r requirements/validation.txt
@@ -616,7 +619,7 @@ urllib3==1.26.12
     #   requests
     #   responses
     #   twine
-virtualenv==20.16.5
+virtualenv==20.16.6
     # via
     #   -r requirements/validation.txt
     #   tox
@@ -633,7 +636,7 @@ webob==1.8.7
     # via
     #   -r requirements/validation.txt
     #   xblock
-wheel==0.37.1
+wheel==0.38.4
     # via
     #   -r requirements/pip-tools.txt
     #   pip-tools
