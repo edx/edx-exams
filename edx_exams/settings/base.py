@@ -19,8 +19,6 @@ SECRET_KEY = os.environ.get('EDX_EXAMS_SECRET_KEY', 'insecure-secret-key')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = []
-
 # Application definition
 
 INSTALLED_APPS = (
@@ -87,6 +85,11 @@ CORS_ALLOW_HEADERS = corsheaders_default_headers + (
 CORS_ORIGIN_WHITELIST = []
 
 ROOT_URLCONF = 'edx_exams.urls'
+
+# This is the usage_id pattern. It's needed by the xblock-lti-consumer library, because some Django view URLs still
+# use the usage_ids of components. For now, we include these here to support the use of the library. When the library
+# is fully decoupled this can be removed. This setting is taken from edx-platform.
+USAGE_ID_PATTERN = r'(?P<usage_id>(?:i4x://?[^/]+/[^/]+/[^/]+/[^@]+(?:@[^/]+)?)|(?:[^/]+))'
 
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'edx_exams.wsgi.application'
