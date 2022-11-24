@@ -94,7 +94,7 @@ django-filter==22.1
     # via
     #   -r requirements/base.txt
     #   lti-consumer-xblock
-django-model-utils==4.2.0
+django-model-utils==4.3.1
     # via -r requirements/base.txt
 django-rest-swagger==2.2.0
     # via -r requirements/base.txt
@@ -186,7 +186,7 @@ lxml==4.9.1
     #   -r requirements/base.txt
     #   lti-consumer-xblock
     #   xblock
-mako==1.2.3
+mako==1.2.4
     # via
     #   -r requirements/base.txt
     #   lti-consumer-xblock
@@ -315,7 +315,7 @@ semantic-version==2.10.0
     # via
     #   -r requirements/base.txt
     #   edx-drf-extensions
-simplejson==3.17.6
+simplejson==3.18.0
     # via
     #   -r requirements/base.txt
     #   django-rest-swagger
@@ -358,7 +358,7 @@ uritemplate==4.1.1
     #   -r requirements/base.txt
     #   coreapi
     #   drf-yasg
-urllib3==1.26.12
+urllib3==1.26.13
     # via
     #   -r requirements/base.txt
     #   requests
@@ -386,7 +386,7 @@ xblock-utils==3.0.0
     #   lti-consumer-xblock
 zope-event==4.5.0
     # via gevent
-zope-interface==5.5.1
+zope-interface==5.5.2
     # via gevent
 
 # The following packages are considered to be unsafe in a requirements file:

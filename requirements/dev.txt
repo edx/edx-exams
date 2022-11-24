@@ -12,7 +12,7 @@ asgiref==3.5.2
     # via
     #   -r requirements/validation.txt
     #   django
-astroid==2.12.12
+astroid==2.12.13
     # via
     #   -r requirements/validation.txt
     #   pylint
@@ -86,6 +86,7 @@ cryptography==38.0.3
     # via
     #   -r requirements/validation.txt
     #   pyjwt
+    #   secretstorage
     #   social-auth-core
 ddt==1.6.0
     # via -r requirements/validation.txt
@@ -94,7 +95,7 @@ defusedxml==0.7.1
     #   -r requirements/validation.txt
     #   python3-openid
     #   social-auth-core
-diff-cover==7.0.1
+diff-cover==7.0.2
     # via -r requirements/dev.in
 dill==0.3.6
     # via
@@ -146,7 +147,7 @@ django-filter==22.1
     # via
     #   -r requirements/validation.txt
     #   lti-consumer-xblock
-django-model-utils==4.2.0
+django-model-utils==4.3.1
     # via -r requirements/validation.txt
 django-rest-swagger==2.2.0
     # via -r requirements/validation.txt
@@ -201,13 +202,13 @@ edx-opaque-keys==2.3.0
     #   lti-consumer-xblock
 edx-rest-api-client==5.5.0
     # via -r requirements/validation.txt
-exceptiongroup==1.0.1
+exceptiongroup==1.0.4
     # via
     #   -r requirements/validation.txt
     #   pytest
 factory-boy==3.2.1
     # via -r requirements/validation.txt
-faker==15.3.1
+faker==15.3.3
     # via
     #   -r requirements/validation.txt
     #   factory-boy
@@ -228,7 +229,7 @@ idna==3.4
     # via
     #   -r requirements/validation.txt
     #   requests
-importlib-metadata==5.0.0
+importlib-metadata==5.1.0
     # via
     #   -r requirements/validation.txt
     #   keyring
@@ -253,6 +254,11 @@ jaraco-classes==3.2.3
     # via
     #   -r requirements/validation.txt
     #   keyring
+jeepney==0.8.0
+    # via
+    #   -r requirements/validation.txt
+    #   keyring
+    #   secretstorage
 jinja2==3.1.2
     # via
     #   -r requirements/validation.txt
@@ -282,7 +288,7 @@ lxml==4.9.1
     #   -r requirements/validation.txt
     #   lti-consumer-xblock
     #   xblock
-mako==1.2.3
+mako==1.2.4
     # via
     #   -r requirements/validation.txt
     #   lti-consumer-xblock
@@ -341,13 +347,13 @@ pep517==0.13.0
     # via
     #   -r requirements/pip-tools.txt
     #   build
-pip-tools==6.9.0
+pip-tools==6.10.0
     # via -r requirements/pip-tools.txt
 pkginfo==1.8.3
     # via
     #   -r requirements/validation.txt
     #   twine
-platformdirs==2.5.3
+platformdirs==2.5.4
     # via
     #   -r requirements/validation.txt
     #   pylint
@@ -368,7 +374,7 @@ py==1.11.0
     # via
     #   -r requirements/validation.txt
     #   tox
-pycodestyle==2.9.1
+pycodestyle==2.10.0
     # via -r requirements/validation.txt
 pycparser==2.21
     # via
@@ -400,7 +406,7 @@ pyjwt[crypto]==2.6.0
     #   edx-drf-extensions
     #   edx-rest-api-client
     #   social-auth-core
-pylint==2.15.5
+pylint==2.15.6
     # via
     #   -r requirements/validation.txt
     #   edx-lint
@@ -448,7 +454,7 @@ python-dateutil==2.8.2
     #   edx-drf-extensions
     #   faker
     #   xblock
-python-slugify==6.1.2
+python-slugify==7.0.0
     # via
     #   -r requirements/validation.txt
     #   code-annotations
@@ -513,11 +519,15 @@ ruamel-yaml-clib==0.2.7
     # via
     #   -r requirements/validation.txt
     #   ruamel-yaml
+secretstorage==3.3.3
+    # via
+    #   -r requirements/validation.txt
+    #   keyring
 semantic-version==2.10.0
     # via
     #   -r requirements/validation.txt
     #   edx-drf-extensions
-simplejson==3.17.6
+simplejson==3.18.0
     # via
     #   -r requirements/validation.txt
     #   django-rest-swagger
@@ -585,11 +595,11 @@ tomlkit==0.11.6
     # via
     #   -r requirements/validation.txt
     #   pylint
-tox==3.27.0
+tox==3.27.1
     # via -r requirements/validation.txt
 twine==4.0.1
     # via -r requirements/validation.txt
-types-toml==0.10.8
+types-toml==0.10.8.1
     # via
     #   -r requirements/validation.txt
     #   responses
@@ -604,13 +614,13 @@ uritemplate==4.1.1
     #   -r requirements/validation.txt
     #   coreapi
     #   drf-yasg
-urllib3==1.26.12
+urllib3==1.26.13
     # via
     #   -r requirements/validation.txt
     #   requests
     #   responses
     #   twine
-virtualenv==20.16.6
+virtualenv==20.16.7
     # via
     #   -r requirements/validation.txt
     #   tox
