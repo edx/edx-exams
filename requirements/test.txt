@@ -12,15 +12,12 @@ asgiref==3.5.2
     # via
     #   -r requirements/base.txt
     #   django
-astroid==2.12.12
+astroid==2.12.13
     # via
     #   pylint
     #   pylint-celery
 attrs==22.1.0
-    # via
-    #   -r requirements/base.txt
-    #   lti-consumer-xblock
-    #   pytest
+    # via pytest
 bleach==5.0.1
     # via
     #   -r requirements/base.txt
@@ -66,7 +63,7 @@ coverage[toml]==6.5.0
     # via
     #   -r requirements/test.in
     #   pytest-cov
-cryptography==38.0.3
+cryptography==38.0.4
     # via
     #   -r requirements/base.txt
     #   pyjwt
@@ -119,7 +116,7 @@ django-filter==22.1
     # via
     #   -r requirements/base.txt
     #   lti-consumer-xblock
-django-model-utils==4.2.0
+django-model-utils==4.3.1
     # via -r requirements/base.txt
 django-rest-swagger==2.2.0
     # via -r requirements/base.txt
@@ -168,11 +165,11 @@ edx-opaque-keys==2.3.0
     #   lti-consumer-xblock
 edx-rest-api-client==5.5.0
     # via -r requirements/base.txt
-exceptiongroup==1.0.1
+exceptiongroup==1.0.4
     # via pytest
 factory-boy==3.2.1
     # via -r requirements/test.in
-faker==15.3.1
+faker==15.3.3
     # via factory-boy
 filelock==3.8.0
     # via
@@ -217,14 +214,14 @@ lazy==1.5
     #   lti-consumer-xblock
 lazy-object-proxy==1.8.0
     # via astroid
-lti-consumer-xblock===6.3.0
+lti-consumer-xblock @ git+https://github.com/openedx/xblock-lti-consumer.git@c32e713935daae87d14da52996cbc4fb1932b0d1
     # via -r requirements/base.txt
 lxml==4.9.1
     # via
     #   -r requirements/base.txt
     #   lti-consumer-xblock
     #   xblock
-mako==1.2.3
+mako==1.2.4
     # via
     #   -r requirements/base.txt
     #   lti-consumer-xblock
@@ -269,7 +266,7 @@ pbr==5.11.0
     # via
     #   -r requirements/base.txt
     #   stevedore
-platformdirs==2.5.3
+platformdirs==2.5.4
     # via
     #   pylint
     #   virtualenv
@@ -287,7 +284,7 @@ pycparser==2.21
     # via
     #   -r requirements/base.txt
     #   cffi
-pycryptodomex==3.15.0
+pycryptodomex==3.16.0
     # via
     #   -r requirements/base.txt
     #   lti-consumer-xblock
@@ -305,7 +302,7 @@ pyjwt[crypto]==2.6.0
     #   edx-drf-extensions
     #   edx-rest-api-client
     #   social-auth-core
-pylint==2.15.5
+pylint==2.15.7
     # via
     #   edx-lint
     #   pylint-celery
@@ -345,7 +342,7 @@ python-dateutil==2.8.2
     #   edx-drf-extensions
     #   faker
     #   xblock
-python-slugify==6.1.2
+python-slugify==7.0.0
     # via code-annotations
 python3-openid==3.2.0
     # via
@@ -393,7 +390,7 @@ semantic-version==2.10.0
     # via
     #   -r requirements/base.txt
     #   edx-drf-extensions
-simplejson==3.17.6
+simplejson==3.18.0
     # via
     #   -r requirements/base.txt
     #   django-rest-swagger
@@ -446,9 +443,9 @@ tomli==2.0.1
     #   tox
 tomlkit==0.11.6
     # via pylint
-tox==3.27.0
+tox==3.27.1
     # via -r requirements/test.in
-types-toml==0.10.8
+types-toml==0.10.8.1
     # via responses
 typing-extensions==4.4.0
     # via
@@ -459,12 +456,12 @@ uritemplate==4.1.1
     #   -r requirements/base.txt
     #   coreapi
     #   drf-yasg
-urllib3==1.26.12
+urllib3==1.26.13
     # via
     #   -r requirements/base.txt
     #   requests
     #   responses
-virtualenv==20.16.6
+virtualenv==20.17.0
     # via tox
 web-fragments==2.0.0
     # via
