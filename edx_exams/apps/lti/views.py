@@ -8,8 +8,8 @@ from django.http import JsonResponse
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.views.decorators.http import require_http_methods
-from lti_consumer.api import get_end_assessment_return, get_lti_1p3_launch_start_url
-from lti_consumer.data import Lti1p3LaunchData, Lti1p3ProctoringLaunchData
+# from lti_consumer.api import get_end_assessment_return, get_lti_1p3_launch_start_url
+# from lti_consumer.data import Lti1p3LaunchData, Lti1p3ProctoringLaunchData
 from lti_consumer.models import LtiConfiguration
 
 from edx_exams.apps.core.models import ExamAttempt
