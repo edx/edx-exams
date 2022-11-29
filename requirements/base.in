@@ -14,9 +14,6 @@ edx-django-utils
 edx-django-release-util
 edx-drf-extensions
 edx-rest-api-client
-lti-consumer-xblock===6.3.0
+lti-consumer-xblock
 mysqlclient
 pytz
-
-# Libraries to install from GitHub
-git+https://github.com/openedx/xblock-lti-consumer.git@c32e713935daae87d14da52996cbc4fb1932b0d1#egg=lti-consumer-xblock
