@@ -24,6 +24,7 @@ attrs==22.1.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
+    #   lti-consumer-xblock
     #   pytest
 bleach==5.0.1
     # via
@@ -331,7 +332,7 @@ lazy-object-proxy==1.8.0
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   astroid
-lti-consumer-xblock @ git+https://github.com/openedx/xblock-lti-consumer.git@c32e713935daae87d14da52996cbc4fb1932b0d1
+lti-consumer-xblock==7.0.1
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
