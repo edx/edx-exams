@@ -33,7 +33,7 @@ bleach==5.0.1
     #   readme-renderer
 build==0.9.0
     # via -r requirements/doc.in
-certifi==2022.9.24
+certifi==2022.12.7
     # via
     #   -r requirements/test.txt
     #   requests
@@ -82,7 +82,6 @@ cryptography==38.0.4
     # via
     #   -r requirements/test.txt
     #   pyjwt
-    #   secretstorage
     #   social-auth-core
 ddt==1.6.0
     # via -r requirements/test.txt
@@ -207,7 +206,7 @@ faker==15.3.4
     # via
     #   -r requirements/test.txt
     #   factory-boy
-filelock==3.8.0
+filelock==3.8.2
     # via
     #   -r requirements/test.txt
     #   tox
@@ -249,10 +248,6 @@ itypes==1.2.0
     #   coreapi
 jaraco-classes==3.2.3
     # via keyring
-jeepney==0.8.0
-    # via
-    #   keyring
-    #   secretstorage
 jinja2==3.1.2
     # via
     #   -r requirements/test.txt
@@ -301,7 +296,7 @@ more-itertools==9.0.0
     # via jaraco-classes
 mysqlclient==2.1.1
     # via -r requirements/test.txt
-newrelic==8.4.0
+newrelic==8.5.0
     # via
     #   -r requirements/test.txt
     #   edx-django-utils
@@ -319,7 +314,7 @@ openedx-filters==0.8.0
     # via
     #   -r requirements/test.txt
     #   lti-consumer-xblock
-packaging==21.3
+packaging==22.0
     # via
     #   -r requirements/test.txt
     #   build
@@ -335,7 +330,7 @@ pep517==0.13.0
     # via build
 pkginfo==1.9.2
     # via twine
-platformdirs==2.5.4
+platformdirs==2.6.0
     # via
     #   -r requirements/test.txt
     #   pylint
@@ -381,7 +376,7 @@ pyjwt[crypto]==2.6.0
     #   edx-drf-extensions
     #   edx-rest-api-client
     #   social-auth-core
-pylint==2.15.7
+pylint==2.15.8
     # via
     #   -r requirements/test.txt
     #   edx-lint
@@ -409,10 +404,6 @@ pynacl==1.5.0
     # via
     #   -r requirements/test.txt
     #   edx-django-utils
-pyparsing==3.0.9
-    # via
-    #   -r requirements/test.txt
-    #   packaging
 pytest==7.2.0
     # via
     #   -r requirements/test.txt
@@ -488,8 +479,6 @@ ruamel-yaml-clib==0.2.7
     # via
     #   -r requirements/test.txt
     #   ruamel-yaml
-secretstorage==3.3.3
-    # via keyring
 semantic-version==2.10.0
     # via
     #   -r requirements/test.txt
@@ -578,7 +567,9 @@ tomlkit==0.11.6
     #   -r requirements/test.txt
     #   pylint
 tox==3.27.1
-    # via -r requirements/test.txt
+    # via
+    #   -c https://raw.githubusercontent.com/edx/edx-lint/master/edx_lint/files/common_constraints.txt
+    #   -r requirements/test.txt
 twine==4.0.2
     # via -r requirements/doc.in
 types-toml==0.10.8.1
@@ -590,7 +581,6 @@ typing-extensions==4.4.0
     #   -r requirements/test.txt
     #   astroid
     #   pylint
-    #   rich
 uritemplate==4.1.1
     # via
     #   -r requirements/test.txt
@@ -602,7 +592,7 @@ urllib3==1.26.13
     #   requests
     #   responses
     #   twine
-virtualenv==20.17.0
+virtualenv==20.17.1
     # via
     #   -r requirements/test.txt
     #   tox

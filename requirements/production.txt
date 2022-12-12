@@ -20,7 +20,7 @@ bleach==5.0.1
     # via
     #   -r requirements/base.txt
     #   lti-consumer-xblock
-certifi==2022.9.24
+certifi==2022.12.7
     # via
     #   -r requirements/base.txt
     #   requests
@@ -201,7 +201,7 @@ mysqlclient==2.1.1
     # via
     #   -r requirements/base.txt
     #   -r requirements/production.in
-newrelic==8.4.0
+newrelic==8.5.0
     # via
     #   -r requirements/base.txt
     #   edx-django-utils
@@ -219,7 +219,7 @@ openedx-filters==0.8.0
     # via
     #   -r requirements/base.txt
     #   lti-consumer-xblock
-packaging==21.3
+packaging==22.0
     # via
     #   -r requirements/base.txt
     #   drf-yasg
@@ -261,10 +261,6 @@ pynacl==1.5.0
     # via
     #   -r requirements/base.txt
     #   edx-django-utils
-pyparsing==3.0.9
-    # via
-    #   -r requirements/base.txt
-    #   packaging
 python-dateutil==2.8.2
     # via
     #   -r requirements/base.txt
