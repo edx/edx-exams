@@ -31,7 +31,7 @@ build==0.9.0
     # via
     #   -r requirements/pip-tools.txt
     #   pip-tools
-certifi==2022.9.24
+certifi==2022.12.7
     # via
     #   -r requirements/validation.txt
     #   requests
@@ -86,7 +86,6 @@ cryptography==38.0.4
     # via
     #   -r requirements/validation.txt
     #   pyjwt
-    #   secretstorage
     #   social-auth-core
 ddt==1.6.0
     # via -r requirements/validation.txt
@@ -95,7 +94,7 @@ defusedxml==0.7.1
     #   -r requirements/validation.txt
     #   python3-openid
     #   social-auth-core
-diff-cover==7.2.0
+diff-cover==7.3.0
     # via -r requirements/dev.in
 dill==0.3.6
     # via
@@ -137,7 +136,7 @@ django-crum==0.7.9
     # via
     #   -r requirements/validation.txt
     #   edx-django-utils
-django-debug-toolbar==3.7.0
+django-debug-toolbar==3.8.1
     # via -r requirements/dev.in
 django-dynamic-fixture==3.1.2
     # via -r requirements/validation.txt
@@ -212,7 +211,7 @@ faker==15.3.4
     # via
     #   -r requirements/validation.txt
     #   factory-boy
-filelock==3.8.0
+filelock==3.8.2
     # via
     #   -r requirements/validation.txt
     #   tox
@@ -254,11 +253,6 @@ jaraco-classes==3.2.3
     # via
     #   -r requirements/validation.txt
     #   keyring
-jeepney==0.8.0
-    # via
-    #   -r requirements/validation.txt
-    #   keyring
-    #   secretstorage
 jinja2==3.1.2
     # via
     #   -r requirements/validation.txt
@@ -311,7 +305,7 @@ more-itertools==9.0.0
     #   jaraco-classes
 mysqlclient==2.1.1
     # via -r requirements/validation.txt
-newrelic==8.4.0
+newrelic==8.5.0
     # via
     #   -r requirements/validation.txt
     #   edx-django-utils
@@ -329,7 +323,7 @@ openedx-filters==0.8.0
     # via
     #   -r requirements/validation.txt
     #   lti-consumer-xblock
-packaging==21.3
+packaging==22.0
     # via
     #   -r requirements/pip-tools.txt
     #   -r requirements/validation.txt
@@ -353,7 +347,7 @@ pkginfo==1.9.2
     # via
     #   -r requirements/validation.txt
     #   twine
-platformdirs==2.5.4
+platformdirs==2.6.0
     # via
     #   -r requirements/validation.txt
     #   pylint
@@ -406,7 +400,7 @@ pyjwt[crypto]==2.6.0
     #   edx-drf-extensions
     #   edx-rest-api-client
     #   social-auth-core
-pylint==2.15.7
+pylint==2.15.8
     # via
     #   -r requirements/validation.txt
     #   edx-lint
@@ -434,11 +428,6 @@ pynacl==1.5.0
     # via
     #   -r requirements/validation.txt
     #   edx-django-utils
-pyparsing==3.0.9
-    # via
-    #   -r requirements/pip-tools.txt
-    #   -r requirements/validation.txt
-    #   packaging
 pytest==7.2.0
     # via
     #   -r requirements/validation.txt
@@ -519,10 +508,6 @@ ruamel-yaml-clib==0.2.7
     # via
     #   -r requirements/validation.txt
     #   ruamel-yaml
-secretstorage==3.3.3
-    # via
-    #   -r requirements/validation.txt
-    #   keyring
 semantic-version==2.10.0
     # via
     #   -r requirements/validation.txt
@@ -608,7 +593,6 @@ typing-extensions==4.4.0
     #   -r requirements/validation.txt
     #   astroid
     #   pylint
-    #   rich
 uritemplate==4.1.1
     # via
     #   -r requirements/validation.txt
@@ -620,7 +604,7 @@ urllib3==1.26.13
     #   requests
     #   responses
     #   twine
-virtualenv==20.17.0
+virtualenv==20.17.1
     # via
     #   -r requirements/validation.txt
     #   tox
