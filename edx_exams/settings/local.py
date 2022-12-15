@@ -93,6 +93,10 @@ ENABLE_AUTO_AUTH = True
 
 LOGGING = get_logger_config(debug=DEBUG)
 
+SESSION_COOKIE_SAMESITE = None
+SESSION_COOKIE_SECURE = None
+SESSION_COOKIE_DOMAIN = 'localhost'
+
 #####################################################################
 # Lastly, see if the developer has any local overrides.
 if os.path.isfile(join(dirname(abspath(__file__)), 'private.py')):
