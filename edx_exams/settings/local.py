@@ -97,6 +97,9 @@ SESSION_COOKIE_SAMESITE = None
 SESSION_COOKIE_SECURE = None
 SESSION_COOKIE_DOMAIN = 'localhost'
 
+ROOT_URL = 'http://localhost:8740'
+LMS_ROOT_URL = 'http://localhost:18000'
+
 #####################################################################
 # Lastly, see if the developer has any local overrides.
 if os.path.isfile(join(dirname(abspath(__file__)), 'private.py')):

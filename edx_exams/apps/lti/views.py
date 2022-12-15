@@ -10,16 +10,17 @@ from django.shortcuts import redirect
 from django.urls import reverse
 from django.views.decorators.http import require_http_methods
 from edx_rest_framework_extensions.auth.jwt.authentication import JwtAuthentication
-from rest_framework.decorators import authentication_classes, permission_classes
-from rest_framework.permissions import IsAuthenticated
 from lti_consumer.api import get_end_assessment_return, get_lti_1p3_launch_start_url
 from lti_consumer.data import Lti1p3LaunchData, Lti1p3ProctoringLaunchData
 from lti_consumer.models import LtiConfiguration
+from rest_framework.decorators import authentication_classes, permission_classes
+from rest_framework.permissions import IsAuthenticated
 
 from edx_exams.apps.core.models import ExamAttempt
 from edx_exams.apps.lti.utils import get_lti_root
 
 EDX_OAUTH_BACKEND = 'auth_backends.backends.EdXOAuth2'
+
 
 @require_http_methods(['GET'])
 @authentication_classes((JwtAuthentication,))
@@ -31,7 +32,7 @@ def start_proctoring(request, attempt_id):
     # TODO: Here we'd do all the start of proctoring things.
 
     # user is authenticated via JWT so use that to create a
-    # session with this service's authentication backend 
+    # session with this service's authentication backend
     request.user.backend = EDX_OAUTH_BACKEND
     login(request, request.user)
 
