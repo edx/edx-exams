@@ -181,6 +181,8 @@ TEMPLATES = [
 # multiple Django services are running behind the same hostname.
 # Detailed information at: https://docs.djangoproject.com/en/dev/ref/settings/
 SESSION_COOKIE_NAME = 'edx_exams_sessionid'
+SESSION_COOKIE_SAMESITE = 'None'
+SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_NAME = 'edx_exams_csrftoken'
 LANGUAGE_COOKIE_NAME = 'edx_exams_language'
 # END COOKIE CONFIGURATION
