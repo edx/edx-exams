@@ -6,9 +6,9 @@
 #
 appdirs==1.4.4
     # via fs
-asgiref==3.5.2
+asgiref==3.6.0
     # via django
-attrs==22.1.0
+attrs==22.2.0
     # via lti-consumer-xblock
 bleach==5.0.1
     # via lti-consumer-xblock
@@ -104,7 +104,7 @@ edx-django-utils==5.2.0
     #   django-config-models
     #   edx-drf-extensions
     #   edx-rest-api-client
-edx-drf-extensions==8.3.1
+edx-drf-extensions==8.4.0
     # via -r requirements/base.in
 edx-opaque-keys==2.3.0
     # via
@@ -128,9 +128,9 @@ jsonfield==3.1.0
     # via lti-consumer-xblock
 lazy==1.5
     # via lti-consumer-xblock
-lti-consumer-xblock==7.0.3
+lti-consumer-xblock==7.2.0
     # via -r requirements/base.in
-lxml==4.9.1
+lxml==4.9.2
     # via
     #   lti-consumer-xblock
     #   xblock
@@ -189,7 +189,7 @@ python-dateutil==2.8.2
     #   xblock
 python3-openid==3.2.0
     # via social-auth-core
-pytz==2022.6
+pytz==2022.7
     # via
     #   -r requirements/base.in
     #   django
