@@ -8,15 +8,15 @@ appdirs==1.4.4
     # via
     #   -r requirements/base.txt
     #   fs
-asgiref==3.5.2
+asgiref==3.6.0
     # via
     #   -r requirements/base.txt
     #   django
-astroid==2.12.13
+astroid==2.13.2
     # via
     #   pylint
     #   pylint-celery
-attrs==22.1.0
+attrs==22.2.0
     # via
     #   -r requirements/base.txt
     #   lti-consumer-xblock
@@ -62,11 +62,11 @@ coreschema==0.0.4
     #   -r requirements/base.txt
     #   coreapi
     #   drf-yasg
-coverage[toml]==6.5.0
+coverage[toml]==7.0.4
     # via
     #   -r requirements/test.in
     #   pytest-cov
-cryptography==38.0.4
+cryptography==39.0.0
     # via
     #   -r requirements/base.txt
     #   pyjwt
@@ -158,7 +158,7 @@ edx-django-utils==5.2.0
     #   django-config-models
     #   edx-drf-extensions
     #   edx-rest-api-client
-edx-drf-extensions==8.3.1
+edx-drf-extensions==8.4.0
     # via -r requirements/base.txt
 edx-lint==5.3.0
     # via -r requirements/test.in
@@ -169,13 +169,13 @@ edx-opaque-keys==2.3.0
     #   lti-consumer-xblock
 edx-rest-api-client==5.5.0
     # via -r requirements/base.txt
-exceptiongroup==1.0.4
+exceptiongroup==1.1.0
     # via pytest
 factory-boy==3.2.1
     # via -r requirements/test.in
-faker==15.3.4
+faker==16.1.0
     # via factory-boy
-filelock==3.8.2
+filelock==3.9.0
     # via
     #   tox
     #   virtualenv
@@ -195,9 +195,9 @@ inflection==0.5.1
     # via
     #   -r requirements/base.txt
     #   drf-yasg
-iniconfig==1.1.1
+iniconfig==2.0.0
     # via pytest
-isort==5.10.1
+isort==5.11.4
     # via pylint
 itypes==1.2.0
     # via
@@ -216,11 +216,11 @@ lazy==1.5
     # via
     #   -r requirements/base.txt
     #   lti-consumer-xblock
-lazy-object-proxy==1.8.0
+lazy-object-proxy==1.9.0
     # via astroid
-lti-consumer-xblock==7.0.3
+lti-consumer-xblock==7.2.0
     # via -r requirements/base.txt
-lxml==4.9.1
+lxml==4.9.2
     # via
     #   -r requirements/base.txt
     #   lti-consumer-xblock
@@ -238,7 +238,7 @@ markupsafe==2.1.1
     #   xblock
 mccabe==0.7.0
     # via pylint
-mock==4.0.3
+mock==5.0.1
     # via -r requirements/test.in
 mysqlclient==2.1.1
     # via -r requirements/base.txt
@@ -260,7 +260,7 @@ openedx-filters==0.8.0
     # via
     #   -r requirements/base.txt
     #   lti-consumer-xblock
-packaging==22.0
+packaging==23.0
     # via
     #   -r requirements/base.txt
     #   drf-yasg
@@ -270,7 +270,7 @@ pbr==5.11.0
     # via
     #   -r requirements/base.txt
     #   stevedore
-platformdirs==2.6.0
+platformdirs==2.6.2
     # via
     #   pylint
     #   virtualenv
@@ -306,7 +306,7 @@ pyjwt[crypto]==2.6.0
     #   edx-drf-extensions
     #   edx-rest-api-client
     #   social-auth-core
-pylint==2.15.8
+pylint==2.15.10
     # via
     #   edx-lint
     #   pylint-celery
@@ -348,7 +348,7 @@ python3-openid==3.2.0
     # via
     #   -r requirements/base.txt
     #   social-auth-core
-pytz==2022.6
+pytz==2022.7
     # via
     #   -r requirements/base.txt
     #   django
@@ -390,7 +390,7 @@ semantic-version==2.10.0
     # via
     #   -r requirements/base.txt
     #   edx-drf-extensions
-simplejson==3.18.0
+simplejson==3.18.1
     # via
     #   -r requirements/base.txt
     #   django-rest-swagger
@@ -443,7 +443,7 @@ tomli==2.0.1
     #   tox
 tomlkit==0.11.6
     # via pylint
-tox==3.27.1
+tox==3.28.0
     # via
     #   -c https://raw.githubusercontent.com/edx/edx-lint/master/edx_lint/files/common_constraints.txt
     #   -r requirements/test.in
