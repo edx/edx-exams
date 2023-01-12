@@ -6,9 +6,9 @@
 #
 appdirs==1.4.4
     # via fs
-asgiref==3.5.2
+asgiref==3.6.0
     # via django
-attrs==22.1.0
+attrs==22.2.0
     # via lti-consumer-xblock
 bleach==5.0.1
     # via lti-consumer-xblock
@@ -18,7 +18,7 @@ cffi==1.15.1
     # via
     #   cryptography
     #   pynacl
-charset-normalizer==2.1.1
+charset-normalizer==3.0.1
     # via requests
 click==8.1.3
     # via edx-django-utils
@@ -31,7 +31,7 @@ coreschema==0.0.4
     # via
     #   coreapi
     #   drf-yasg
-cryptography==38.0.4
+cryptography==39.0.0
     # via
     #   pyjwt
     #   social-auth-core
@@ -104,7 +104,7 @@ edx-django-utils==5.2.0
     #   django-config-models
     #   edx-drf-extensions
     #   edx-rest-api-client
-edx-drf-extensions==8.3.1
+edx-drf-extensions==8.4.0
     # via -r requirements/base.in
 edx-opaque-keys==2.3.0
     # via
@@ -128,9 +128,9 @@ jsonfield==3.1.0
     # via lti-consumer-xblock
 lazy==1.5
     # via lti-consumer-xblock
-lti-consumer-xblock==7.0.3
+lti-consumer-xblock==7.2.1
     # via -r requirements/base.in
-lxml==4.9.1
+lxml==4.9.2
     # via
     #   lti-consumer-xblock
     #   xblock
@@ -156,9 +156,9 @@ openapi-codec==1.3.2
     # via django-rest-swagger
 openedx-filters==0.8.0
     # via lti-consumer-xblock
-packaging==22.0
+packaging==23.0
     # via drf-yasg
-pbr==5.11.0
+pbr==5.11.1
     # via stevedore
 psutil==5.9.4
     # via edx-django-utils
@@ -189,7 +189,7 @@ python-dateutil==2.8.2
     #   xblock
 python3-openid==3.2.0
     # via social-auth-core
-pytz==2022.6
+pytz==2022.7
     # via
     #   -r requirements/base.in
     #   django
@@ -200,7 +200,7 @@ pyyaml==6.0
     # via
     #   edx-django-release-util
     #   xblock
-requests==2.28.1
+requests==2.28.2
     # via
     #   coreapi
     #   edx-drf-extensions
@@ -217,7 +217,7 @@ ruamel-yaml-clib==0.2.7
     # via ruamel-yaml
 semantic-version==2.10.0
     # via edx-drf-extensions
-simplejson==3.18.0
+simplejson==3.18.1
     # via
     #   django-rest-swagger
     #   xblock-utils
@@ -248,7 +248,7 @@ uritemplate==4.1.1
     # via
     #   coreapi
     #   drf-yasg
-urllib3==1.26.13
+urllib3==1.26.14
     # via requests
 web-fragments==2.0.0
     # via

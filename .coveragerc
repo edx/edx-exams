@@ -3,7 +3,7 @@ branch = True
 data_file = .coverage
 source=edx_exams
 omit =
-    edx_exams/settings*
+    edx_exams/settings/*
     edx_exams/conf*
     *wsgi.py
     *migrations*
