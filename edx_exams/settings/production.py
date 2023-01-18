@@ -14,7 +14,7 @@ LOGGING = get_logger_config()
 
 # Keep track of the names of settings that represent dicts. Instead of overriding the values in base.py,
 # the values read from disk should UPDATE the pre-configured dicts.
-DICT_UPDATE_KEYS = ('JWT_AUTH', 'EDX_DRF_EXTENSIONS',)
+DICT_UPDATE_KEYS = ('JWT_AUTH', 'EDX_DRF_EXTENSIONS', 'TOKEN_SIGNING')
 
 # This may be overridden by the YAML in edx_exams_CFG,
 # but it should be here as a default.

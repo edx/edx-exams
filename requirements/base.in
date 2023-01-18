@@ -17,3 +17,4 @@ edx-rest-api-client
 lti-consumer-xblock
 mysqlclient
 pytz
+edx-token-utils

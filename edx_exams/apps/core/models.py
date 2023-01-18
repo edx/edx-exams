@@ -3,6 +3,7 @@ import logging
 import uuid
 
 from django.contrib.auth.models import AbstractUser
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import models, transaction
 from django.utils.translation import gettext_lazy as _
 from model_utils.models import TimeStampedModel
@@ -152,6 +153,17 @@ class ExamAttempt(TimeStampedModel):
         """ Meta class for this Django model """
         db_table = 'exams_examattempt'
         verbose_name = 'exam attempt'
+
+    @classmethod
+    def get_current_exam_attempt(cls, user, exam):
+        """
+        Given a user and exam, get the user's latest exam attempt, if exists.
+        """
+        try:
+            exam_attempt = cls.objects.filter(user=user, exam=exam).latest('created')
+        except ObjectDoesNotExist:
+            exam_attempt = None
+        return exam_attempt
 
 
 class CourseExamConfiguration(TimeStampedModel):

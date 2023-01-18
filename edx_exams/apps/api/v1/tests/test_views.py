@@ -3,15 +3,17 @@ Tests for the exams API views
 """
 import json
 import uuid
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import ddt
 import pytz
 from django.urls import reverse
+from django.utils import timezone
+from token_utils.api import unpack_token_for
 
 from edx_exams.apps.api.test_utils import ExamsAPITestCase
 from edx_exams.apps.api.test_utils.factories import UserFactory
-from edx_exams.apps.core.models import CourseExamConfiguration, Exam, ProctoringProvider
+from edx_exams.apps.core.models import CourseExamConfiguration, Exam, ExamAttempt, ProctoringProvider
 
 
 @ddt.ddt
@@ -513,3 +515,265 @@ class ProctoringProvidersViewTest(ExamsAPITestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.data), 0)
+
+
+@ddt.ddt
+class ExamAccessTicketsViewsTests(ExamsAPITestCase):
+    """
+    Tests for Exam Access Ticket Views.
+    """
+
+    def setUp(self):
+        super().setUp()
+
+        self.course_id = 'course-v1:edx+test+f19'
+
+        self.due_date = timezone.now() + timedelta(minutes=5)
+        self.exam = Exam.objects.create(
+            resource_id=str(uuid.uuid4()),
+            course_id=self.course_id,
+            provider=self.test_provider,
+            content_id='abcd1234',
+            exam_name='test_exam',
+            exam_type='proctored',
+            time_limit_mins=30,
+            due_date=self.due_date,
+            hide_after_due=False,
+            is_active=True
+        )
+        self.exam_id = self.exam.id
+        self.url = reverse('api:v1:exam-access-tickets', kwargs={'exam_id': self.exam_id})
+
+        self.past_due_date = timezone.now() - timedelta(minutes=5)
+        self.past_due_exam = Exam.objects.create(
+            resource_id=str(uuid.uuid4()),
+            course_id=self.course_id,
+            provider=self.test_provider,
+            content_id='abcd1234',
+            exam_name='test_exam',
+            exam_type='proctored',
+            time_limit_mins=30,
+            due_date=self.past_due_date,
+            hide_after_due=False,
+            is_active=True
+        )
+
+        self.past_due_exam_id = self.past_due_exam.id
+        self.past_due_url = reverse('api:v1:exam-access-tickets', kwargs={'exam_id': self.past_due_exam_id})
+
+    def get_exam_access(self, user, url):
+        """
+        Helper function to make a get request
+        """
+        headers = self.build_jwt_headers(user)
+        return self.client.get(url, **headers)
+
+    def assert_valid_exam_access_ticket(self, response, user, exam):
+        ticket = response.cookies["exam_access_ticket"].value
+        self.assertEqual(unpack_token_for(ticket, user.lms_user_id).get('course_id'), exam.course_id)
+        self.assertEqual(unpack_token_for(ticket, user.lms_user_id).get('content_id'), exam.content_id)
+
+    def test_auth_failures(self):
+        """
+        Verify the endpoint validates permissions
+        """
+        # Test unauthenticated
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 401)
+
+    def test_exam_not_found(self):
+        """
+        Verify the endpoint returns 404 if exam is not found
+        """
+        url = reverse('api:v1:exam-access-tickets', kwargs={'exam_id': 674})
+
+        headers = self.build_jwt_headers(self.user)
+        response = self.client.get(url, **headers)
+        self.assertEqual(response.status_code, 404)
+
+    def test_access_not_granted(self):
+        """
+        Verify the endpoint doesn't grant access for an exam
+        without an existing exam attempt or past due date.
+        """
+        response = self.get_exam_access(self.user, self.url)
+        self.assertEqual(403, response.status_code)
+
+    @ddt.data(
+        (False, 'started', 200),
+        (False, 'created', 403),
+        (True, 'verified', 200),
+        (True, 'created', 403),
+    )
+    @ddt.unpack
+    def test_access_granted_started_exam_attempt(self, exam_past_due, attempt_status, response_status):
+        """
+        Verify the endpoint grants/doesn't grant access for an exam
+        based on the status of the exam attempt.
+        """
+        exam = self.past_due_exam if exam_past_due else self.exam
+        due_date = self.past_due_date if exam_past_due else self.due_date
+
+        start_time = due_date - timedelta(minutes=60)
+        allowed_time_limit_mins = exam.time_limit_mins
+        ExamAttempt.objects.create(
+            user=self.user,
+            exam=exam,
+            attempt_number=1,
+            status=attempt_status,
+            start_time=start_time,
+            allowed_time_limit_mins=allowed_time_limit_mins
+        )
+
+        url = reverse('api:v1:exam-access-tickets', kwargs={'exam_id': exam.id})
+        response = self.get_exam_access(self.user, url)
+        self.assertEqual(response_status, response.status_code)
+        if response_status == 200:
+            self.assert_valid_exam_access_ticket(response, self.user, exam)
+
+    def test_access_not_granted_started_exam_attempt_missing_start_time(self):
+        """
+        Verify the endpoint does not grant access for an exam
+        with an existing, started exam attempt that is missing start_time.
+        """
+        allowed_time_limit_mins = self.exam.time_limit_mins
+        ExamAttempt.objects.create(
+            user=self.user,
+            exam=self.exam,
+            attempt_number=1,
+            status='started',
+            allowed_time_limit_mins=allowed_time_limit_mins
+        )
+
+        response = self.get_exam_access(self.user, self.url)
+        self.assertEqual(403, response.status_code)
+
+    @ddt.data(
+        ('started', 200),
+        ('created', 403),
+    )
+    @ddt.unpack
+    def test_access_no_due_date(self, attempt_status, response_status):
+        """
+        Verify the endpoint grants access for an exam
+        with no due date, if started exam attempt.
+        """
+        no_due_date_exam = Exam.objects.create(
+            resource_id=str(uuid.uuid4()),
+            course_id=self.course_id,
+            provider=self.test_provider,
+            content_id='abcd1234',
+            exam_name='test_exam',
+            exam_type='proctored',
+            time_limit_mins=30,
+            hide_after_due=False,
+            is_active=True
+        )
+
+        no_due_date_exam_id = no_due_date_exam.id
+        no_due_date_url = reverse('api:v1:exam-access-tickets', kwargs={'exam_id': no_due_date_exam_id})
+
+        start_time = timezone.now() - timedelta(minutes=60)
+        allowed_time_limit_mins = no_due_date_exam.time_limit_mins
+        ExamAttempt.objects.create(
+            user=self.user,
+            exam=no_due_date_exam,
+            attempt_number=1,
+            status=attempt_status,
+            start_time=start_time,
+            allowed_time_limit_mins=allowed_time_limit_mins
+        )
+
+        response = self.get_exam_access(self.user, no_due_date_url)
+        self.assertEqual(response_status, response.status_code)
+        if response_status == 200:
+            self.assert_valid_exam_access_ticket(response, self.user, no_due_date_exam)
+
+    def test_access_not_granted_if_hide_after_due(self):
+        """
+        Verify the endpoint does not grant access for past-due exam
+        when the exam is set to hide after due.
+        """
+        past_due_exam_hide = Exam.objects.create(
+            resource_id=str(uuid.uuid4()),
+            course_id=self.course_id,
+            provider=self.test_provider,
+            content_id='abcd1234',
+            exam_name='test_exam',
+            exam_type='proctored',
+            time_limit_mins=30,
+            due_date=self.past_due_date,
+            hide_after_due=True,
+            is_active=True
+        )
+
+        past_due_exam_id = past_due_exam_hide.id
+        past_due_url = reverse('api:v1:exam-access-tickets', kwargs={'exam_id': past_due_exam_id})
+
+        start_time = self.past_due_date - timedelta(minutes=60)
+        allowed_time_limit_mins = past_due_exam_hide.time_limit_mins
+        ExamAttempt.objects.create(
+            user=self.user,
+            exam=past_due_exam_hide,
+            attempt_number=1,
+            status='verified',
+            start_time=start_time,
+            allowed_time_limit_mins=allowed_time_limit_mins
+        )
+
+        response = self.get_exam_access(self.user, past_due_url)
+        self.assertEqual(403, response.status_code)
+
+    def test_access_not_granted_no_status_exam_attempt(self):
+        """
+        Verify the endpoint does not grant access for an exam
+        with an existing exam attempt that is not started.
+        """
+        start_time = self.due_date - timedelta(minutes=60)
+        allowed_time_limit_mins = self.exam.time_limit_mins
+        ExamAttempt.objects.create(
+            user=self.user,
+            exam=self.exam,
+            attempt_number=1,
+            start_time=start_time,
+            allowed_time_limit_mins=allowed_time_limit_mins
+        )
+
+        response = self.get_exam_access(self.user, self.url)
+        self.assertEqual(403, response.status_code)
+
+    @ddt.data(
+        (-timedelta(minutes=25), 403),  # exam attempt with zero time remaining
+        (timedelta(minutes=5), 403),  # exam attempt that is past due date
+        (-timedelta(seconds=2140), 200),  # exam attempt time remaining less than due date
+    )
+    @ddt.unpack
+    def test_access_granted_started_exam_attempt_various_times(self, start_time_delta, response_status):
+        """
+        Verify the endpoint grants access for an exam
+        with an existing exam attempt.
+        """
+        start_time = self.due_date + start_time_delta
+        allowed_time_limit_mins = self.exam.time_limit_mins
+        ExamAttempt.objects.create(
+            user=self.user,
+            exam=self.exam,
+            attempt_number=1,
+            status='started',
+            start_time=start_time,
+            allowed_time_limit_mins=allowed_time_limit_mins
+        )
+
+        response = self.get_exam_access(self.user, self.url)
+        self.assertEqual(response_status, response.status_code)
+        if response_status == 200:
+            self.assert_valid_exam_access_ticket(response, self.user, self.exam)
+
+    def test_access_granted_past_due_exam_no_attempt(self):
+        """
+        Verify the endpoint grants access for an exam
+        with no existing attempt that is past due.
+        """
+        response = self.get_exam_access(self.user, self.past_due_url)
+        self.assertEqual(200, response.status_code)
+        self.assert_valid_exam_access_ticket(response, self.user, self.past_due_exam)
