@@ -64,7 +64,7 @@ class ProctoringProvider(TimeStampedModel):
         db_table = 'exams_proctoringprovider'
         verbose_name = 'proctoring provider'
 
-    def __str__(self):
+    def __str__(self):      # pragma: no cover
         return self.verbose_name
 
 
@@ -112,7 +112,7 @@ class Exam(TimeStampedModel):
         db_table = 'exams_exam'
         verbose_name = 'exam'
 
-    def __str__(self):
+    def __str__(self):      # pragma: no cover
         return self.exam_name
 
 
