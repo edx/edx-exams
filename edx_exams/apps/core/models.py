@@ -8,6 +8,7 @@ from django.utils.translation import gettext_lazy as _
 from model_utils.models import TimeStampedModel
 
 from edx_exams.apps.core.exam_types import EXAM_TYPES
+from edx_exams.apps.core.statuses import ExamAttemptStatus
 
 log = logging.getLogger(__name__)
 
@@ -44,9 +45,6 @@ class User(AbstractUser):
     def get_full_name(self):
         return self.full_name or super().get_full_name()
 
-    def __str__(self):
-        return str(self.get_full_name())
-
 
 class ProctoringProvider(TimeStampedModel):
     """
@@ -66,6 +64,9 @@ class ProctoringProvider(TimeStampedModel):
         db_table = 'exams_proctoringprovider'
         verbose_name = 'proctoring provider'
 
+    def __str__(self):      # pragma: no cover
+        return self.verbose_name
+
 
 class Exam(TimeStampedModel):
     """
@@ -75,7 +76,7 @@ class Exam(TimeStampedModel):
     """
 
     EXAM_CHOICES = (
-        (exam_type.name, exam_type.description)
+        (exam_type.name, exam_type.name)
         for exam_type in EXAM_TYPES
     )
 
@@ -111,6 +112,9 @@ class Exam(TimeStampedModel):
         db_table = 'exams_exam'
         verbose_name = 'exam'
 
+    def __str__(self):      # pragma: no cover
+        return self.exam_name
+
 
 class ExamAttempt(TimeStampedModel):
     """
@@ -119,13 +123,26 @@ class ExamAttempt(TimeStampedModel):
     .. no_pii:
     """
 
+    STATUS_CHOICES = [
+        ExamAttemptStatus.created,
+        ExamAttemptStatus.download_software_clicked,
+        ExamAttemptStatus.ready_to_start,
+        ExamAttemptStatus.started,
+        ExamAttemptStatus.ready_to_submit,
+        ExamAttemptStatus.timed_out,
+        ExamAttemptStatus.submitted,
+        ExamAttemptStatus.verified,
+        ExamAttemptStatus.rejected,
+        ExamAttemptStatus.expired,
+    ]
+
     user = models.ForeignKey(User, db_index=True, on_delete=models.CASCADE)
 
     exam = models.ForeignKey(Exam, on_delete=models.CASCADE)
 
     attempt_number = models.PositiveIntegerField()
 
-    status = models.CharField(max_length=64)
+    status = models.CharField(max_length=64, choices=[(status, status) for status in STATUS_CHOICES])
 
     start_time = models.DateTimeField(null=True)
 
