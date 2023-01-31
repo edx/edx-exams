@@ -147,6 +147,8 @@ class ExamAttempt(TimeStampedModel):
 
     start_time = models.DateTimeField(null=True)
 
+    end_time = models.DateTimeField(null=True)
+
     allowed_time_limit_mins = models.IntegerField(null=True)
 
     class Meta:
@@ -164,6 +166,17 @@ class ExamAttempt(TimeStampedModel):
         except ObjectDoesNotExist:
             exam_attempt = None
         return exam_attempt
+
+    @classmethod
+    def get_attempt_by_id(cls, attempt_id):
+        """
+        Return ExamAttempt for a given id
+        """
+        try:
+            attempt = cls.objects.get(id=attempt_id)
+        except cls.DoesNotExist:
+            attempt = None
+        return attempt
 
 
 class CourseExamConfiguration(TimeStampedModel):
