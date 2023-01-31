@@ -32,6 +32,7 @@ INSTALLED_APPS = (
     'drf_yasg',
     'edx_api_doc_tools',
     'lti_consumer.apps.LTIConsumerApp',
+    'token_utils',
 )
 
 THIRD_PARTY_APPS = (
@@ -231,6 +232,13 @@ JWT_AUTH = {
     'JWT_AUTH_REFRESH_COOKIE': 'edx-jwt-refresh-cookie',
 }
 
+TOKEN_SIGNING = {
+    'JWT_ISSUER': 'http://127.0.0.1:8740/',
+    'JWT_SIGNING_ALGORITHM': 'RS512',
+    'JWT_SUPPORTED_VERSION': '1.2.0',
+    'JWT_PRIVATE_SIGNING_JWK': 'replace-me',
+}
+
 # Carry fields from the JWT token and LMS user into the local user
 EDX_DRF_EXTENSIONS = {
     "JWT_PAYLOAD_USER_ATTRIBUTE_MAPPING": {
@@ -259,3 +267,7 @@ PLATFORM_NAME = 'Your Platform Name Here'
 
 # Set up logging for development use (logging to stdout)
 LOGGING = get_logger_config(debug=DEBUG)
+
+# Exam access ticket cookie config
+ACCESS_TOKEN_COOKIE_NAME = 'exam_access_ticket'
+ACCESS_TOKEN_COOKIE_DOMAIN = None

@@ -115,6 +115,7 @@ django==3.2.16
     #   edx-django-release-util
     #   edx-django-utils
     #   edx-drf-extensions
+    #   edx-token-utils
     #   jsonfield
     #   lti-consumer-xblock
     #   openedx-filters
@@ -195,6 +196,8 @@ edx-rest-api-client==5.5.0
     # via -r requirements/test.txt
 edx-sphinx-theme==3.1.0
     # via -r requirements/doc.in
+edx-token-utils==0.2.1
+    # via -r requirements/test.txt
 exceptiongroup==1.1.0
     # via
     #   -r requirements/test.txt
@@ -374,6 +377,7 @@ pyjwkest==1.4.2
     # via
     #   -r requirements/test.txt
     #   edx-drf-extensions
+    #   edx-token-utils
     #   lti-consumer-xblock
 pyjwt[crypto]==2.6.0
     # via

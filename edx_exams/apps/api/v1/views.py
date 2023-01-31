@@ -5,17 +5,22 @@ import logging
 import uuid
 
 from django.core.exceptions import ObjectDoesNotExist
+from django.utils import timezone
 from edx_api_doc_tools import path_parameter, schema
 from edx_rest_framework_extensions.auth.jwt.authentication import JwtAuthentication
 from rest_framework import status
 from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from token_utils.api import sign_token_for
 
 from edx_exams.apps.api.permissions import StaffUserOrReadOnlyPermissions, StaffUserPermissions
 from edx_exams.apps.api.serializers import ExamSerializer, ProctoringProviderSerializer
+from edx_exams.apps.api.utils import get_exam_attempt_time_remaining
 from edx_exams.apps.core.exam_types import get_exam_type
-from edx_exams.apps.core.models import CourseExamConfiguration, Exam, ProctoringProvider
+from edx_exams.apps.core.models import CourseExamConfiguration, Exam, ExamAttempt, ProctoringProvider
+from edx_exams.apps.core.statuses import ExamAttemptStatus
+from edx_exams.settings.base import ACCESS_TOKEN_COOKIE_DOMAIN, ACCESS_TOKEN_COOKIE_NAME
 
 log = logging.getLogger(__name__)
 
@@ -271,3 +276,103 @@ class ProctoringProvidersView(ListAPIView):
     model = ProctoringProvider
     serializer_class = ProctoringProviderSerializer
     queryset = ProctoringProvider.objects.all()
+
+
+class ExamAccessTicketsView(APIView):
+    """
+    View to create signed exam access tickets for a specific user and exam.
+
+    Given an exam_id and user (in request), this view will either grant access
+    as an exam access ticket or not grant access. Access is granted if there is an
+    existing exam attempt (must be started if no due date or prior to due date or
+    verified if past the due date.) or if the exam is past its due date.
+
+    HTTP GET
+    Provides an Exam Access Ticket as a cookie if access is granted.
+    **GET data Parameters**
+        * exam_id: This is the id of the exam that the user is requesting access to
+    **Exceptions**
+        * HTTP_403_FORBIDDEN
+    """
+
+    authentication_classes = (JwtAuthentication,)
+    permission_classes = (StaffUserOrReadOnlyPermissions,)
+
+    @classmethod
+    def get_expiration_window(cls, exam_attempt, default_exp_seconds):
+        """
+        Set exam access ticket expiration window.
+
+        Use default exp window or the time to the end of the exam attempt,
+        whichever is shorter.
+        """
+        secs_remaining = get_exam_attempt_time_remaining(exam_attempt)
+        # If not past due and attempt time remaining is less than default, set window to remaining
+        if 0 <= secs_remaining < default_exp_seconds:
+            exp_window = secs_remaining
+        else:
+            exp_window = default_exp_seconds
+
+        return exp_window
+
+    @classmethod
+    def get_response(cls, exam, user):
+        """
+        Get response, with exam access ticket if access granted.
+
+        403 error if access is not granted.
+        """
+        claims = {"course_id": exam.course_id, "content_id": exam.content_id}
+        expiration_window = 60
+        exam_attempt = ExamAttempt.get_current_exam_attempt(user, exam)
+
+        data = {"detail": "Exam access ticket not granted"}
+        grant_access = False
+        response_status = status.HTTP_403_FORBIDDEN
+
+        # If exam attempt exists for user, then grant exam access
+        if exam_attempt is not None:
+            # If no due date or if before due date, grant access if attempt started
+            # and get expiration window.
+            if exam.due_date is None or timezone.now() < exam.due_date:
+                if exam_attempt.status == ExamAttemptStatus.started:
+                    expiration_window = cls.get_expiration_window(exam_attempt, expiration_window)
+                    if expiration_window != 0:
+                        data, grant_access, response_status = {}, True, status.HTTP_200_OK
+            # Else (at or after due date),
+            # grant access if attempt is submitted or verified
+            else:
+                if exam_attempt.status in (ExamAttemptStatus.submitted, ExamAttemptStatus.verified) and \
+                        not exam.hide_after_due:
+                    data, grant_access, response_status = {}, True, status.HTTP_200_OK
+
+        # If exam is past the due date, then grant exam access
+        elif exam.due_date is not None and timezone.now() >= exam.due_date:
+            data, grant_access, response_status = {}, True, status.HTTP_200_OK
+
+        response = Response(status=response_status,
+                            data=data)
+
+        if grant_access:
+            log.info("Creating exam access ticket")
+            access_ticket = sign_token_for(user.lms_user_id, expiration_window, claims)
+            response.set_cookie(ACCESS_TOKEN_COOKIE_NAME, access_ticket, domain=ACCESS_TOKEN_COOKIE_DOMAIN)
+
+        return response
+
+    def get(self, request, exam_id):
+        """
+        Get exam access ticket as JWT added as cookie to response.
+
+        Exam access ticket corresponds to given exam and user in request.
+        """
+        try:
+            exam = Exam.objects.get(id=exam_id)
+        except ObjectDoesNotExist:
+            response_status = status.HTTP_404_NOT_FOUND
+            return Response(status=response_status,
+                            data={"detail": "Exam does not exist"})
+
+        response = self.get_response(exam, request.user)
+
+        return response

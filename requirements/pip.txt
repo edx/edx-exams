@@ -10,3 +10,5 @@ setuptools==66.1.1
     # via -r requirements/pip.in
 wheel==0.38.4
     # via -r requirements/pip.in
+wheel==0.38.4
+    # via -r requirements/pip.in

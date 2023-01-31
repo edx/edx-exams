@@ -14,3 +14,6 @@ INTERNAL_COURSE_KEY_PATTERN = r'([^/+]+(/|\+)[^/+]+(/|\+)[^/?]+)'
 EXTERNAL_COURSE_KEY_PATTERN = r'([A-Za-z0-9-_:]+)'
 
 COURSE_ID_PATTERN = rf'(?P<course_id>({INTERNAL_COURSE_KEY_PATTERN}|{EXTERNAL_COURSE_KEY_PATTERN}))'
+
+# EXAM_ID_PATTERN = r'(/\d+/)'
+EXAM_ID_PATTERN = r'(?P<exam_id>\d+)'
