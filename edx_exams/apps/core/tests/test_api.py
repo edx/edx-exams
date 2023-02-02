@@ -59,7 +59,7 @@ class TestExamAttemptTimeRemaining(ExamsAPITestCase):
         """
         Verify that exam attempt that is past due returns zero.
         """
-        test_now = datetime(2023, 11, 4, 2, 5, 23)
+        test_now = datetime(2023, 11, 4, 13, 5, 23)
         time_left = get_exam_attempt_time_remaining(self.exam_attempt, test_now)
         self.assertEqual(0, time_left)
 
@@ -67,9 +67,9 @@ class TestExamAttemptTimeRemaining(ExamsAPITestCase):
         """
         Verify that exam attempt time remaining is correct.
         """
-        test_now = datetime(2023, 11, 4, 12, 5, 23)
+        test_now = datetime(2023, 11, 4, 10, 5, 23)
         time_left = get_exam_attempt_time_remaining(self.exam_attempt, test_now)
-        self.assertEqual(1800, time_left)
+        self.assertEqual(5400, time_left)
 
     def test_get_exam_attempt_missing_start_time(self):
         """

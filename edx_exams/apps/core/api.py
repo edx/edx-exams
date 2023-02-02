@@ -29,7 +29,8 @@ def get_attempt_by_id(attempt_id):
 
 def update_attempt_status(attempt_id, to_status):
     """
-    Helper method to handle state transition of attempt status
+    Function to handle state transition of attempt status. Checks that status transition
+    is allowed before updating attempt.
     """
 
     attempt_obj = ExamAttempt.get_attempt_by_id(attempt_id)
@@ -138,6 +139,6 @@ def get_exam_attempt_time_remaining(exam_attempt, now=None):
         secs_to_end = 0
     # Else calculate seconds remaining for attempt
     else:
-        secs_to_end = (now - end_time).total_seconds()
+        secs_to_end = (end_time-now).total_seconds()
 
     return secs_to_end
