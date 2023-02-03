@@ -4,6 +4,7 @@ V1 API Views
 import logging
 import uuid
 
+from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
 from edx_api_doc_tools import path_parameter, schema
@@ -11,21 +12,20 @@ from edx_rest_framework_extensions.auth.jwt.authentication import JwtAuthenticat
 from rest_framework import status
 from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
-from rest_framework.views import APIView
 from token_utils.api import sign_token_for
 
 from edx_exams.apps.api.permissions import StaffUserOrReadOnlyPermissions, StaffUserPermissions
 from edx_exams.apps.api.serializers import ExamSerializer, ProctoringProviderSerializer
-from edx_exams.apps.api.utils import get_exam_attempt_time_remaining
+from edx_exams.apps.api.v1 import ExamsAPIView
+from edx_exams.apps.core.api import get_attempt_by_id, get_exam_attempt_time_remaining, update_attempt_status
 from edx_exams.apps.core.exam_types import get_exam_type
 from edx_exams.apps.core.models import CourseExamConfiguration, Exam, ExamAttempt, ProctoringProvider
 from edx_exams.apps.core.statuses import ExamAttemptStatus
-from edx_exams.settings.base import ACCESS_TOKEN_COOKIE_DOMAIN, ACCESS_TOKEN_COOKIE_NAME
 
 log = logging.getLogger(__name__)
 
 
-class CourseExamsView(APIView):
+class CourseExamsView(ExamsAPIView):
     """
     View to modify exams for a specific course.
 
@@ -188,7 +188,7 @@ class CourseExamsView(APIView):
         return Response(status=response_status, data=data)
 
 
-class CourseExamConfigurationsView(APIView):
+class CourseExamConfigurationsView(ExamsAPIView):
     """
     View to create and update course exam configs for a specific course.
 
@@ -278,7 +278,7 @@ class ProctoringProvidersView(ListAPIView):
     queryset = ProctoringProvider.objects.all()
 
 
-class ExamAccessTicketsView(APIView):
+class ExamAccessTicketsView(ExamsAPIView):
     """
     View to create signed exam access tickets for a specific user and exam.
 
@@ -356,7 +356,10 @@ class ExamAccessTicketsView(APIView):
         if grant_access:
             log.info("Creating exam access ticket")
             access_ticket = sign_token_for(user.lms_user_id, expiration_window, claims)
-            response.set_cookie(ACCESS_TOKEN_COOKIE_NAME, access_ticket, domain=ACCESS_TOKEN_COOKIE_DOMAIN)
+            response.set_cookie(
+                settings.ACCESS_TOKEN_COOKIE_NAME, access_ticket,
+                domain=settings.ACCESS_TOKEN_COOKIE_DOMAIN
+            )
 
         return response
 
@@ -376,3 +379,77 @@ class ExamAccessTicketsView(APIView):
         response = self.get_response(exam, request.user)
 
         return response
+
+
+class ExamAttemptView(ExamsAPIView):
+    """
+    Endpoint for the ExamAttempt
+    /exams/attempt/<attempt_id>
+
+    Supports:
+        HTTP PUT: Update an attempt's status.
+
+    HTTP PUT
+    Updates the attempt status based on a provided action
+
+    PUT Path Parameters
+        'attempt_id': The unique identifier for the exam attempt.
+
+    PUT data Parameters
+        'action': The action to perform on the exam attempt. Each action will trigger a status update if appropriate
+
+    PUT Response Values
+        {'exam_attempt_id': <attempt_id>}: The attempt id of the attempt being updated
+    """
+
+    authentication_classes = (JwtAuthentication,)
+
+    def put(self, request, attempt_id):
+        """
+        HTTP PUT handler to update exam attempt status based on a specified action
+
+        Parameters:
+            request: The request object
+            attempt_id: The unique identifier for the exam attempt.
+
+        Returns:
+            A Response object containing the `exam_attempt_id`.
+        """
+
+        # get serialized attempt
+        attempt = get_attempt_by_id(attempt_id)
+        action = request.data.get('action')
+
+        if not attempt:
+            return Response(
+                status=status.HTTP_400_BAD_REQUEST,
+                data={'detail': f'Attempt with attempt_id={attempt_id} does not exit.'}
+            )
+
+        # user should only be able to update their own attempt
+        if attempt['user']['id'] != request.user.id:
+            error_msg = (
+                f"user_id={attempt['user']['id']} attempted to update attempt_id={attempt['id']} in "
+                f"course_id={attempt['exam']['course_id']} but does not have access to it. (action={action})"
+            )
+            error = {'detail': error_msg}
+            return Response(status=status.HTTP_403_FORBIDDEN, data=error)
+
+        action_mapping = {
+            'stop': ExamAttemptStatus.ready_to_submit,
+            'start': ExamAttemptStatus.started,
+            'submit': ExamAttemptStatus.submitted,
+            'click_download_software': ExamAttemptStatus.download_software_clicked,
+            'error': ExamAttemptStatus.error,
+        }
+
+        to_status = action_mapping.get(action)
+        if to_status:
+            attempt_id = update_attempt_status(attempt_id, to_status)
+            data = {"exam_attempt_id": attempt_id}
+            return Response(data)
+
+        return Response(
+            status=status.HTTP_400_BAD_REQUEST,
+            data={'detail': f'Unrecognized action "{action}"'}
+        )

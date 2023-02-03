@@ -4,16 +4,20 @@ Tests for the exams API views
 import json
 import uuid
 from datetime import datetime, timedelta
+from unittest.mock import patch
 
 import ddt
 import pytz
 from django.urls import reverse
 from django.utils import timezone
+from freezegun import freeze_time
 from token_utils.api import unpack_token_for
 
 from edx_exams.apps.api.test_utils import ExamsAPITestCase
 from edx_exams.apps.api.test_utils.factories import UserFactory
+from edx_exams.apps.core.exceptions import ExamIllegalStatusTransition
 from edx_exams.apps.core.models import CourseExamConfiguration, Exam, ExamAttempt, ProctoringProvider
+from edx_exams.apps.core.statuses import ExamAttemptStatus
 
 
 @ddt.ddt
@@ -614,8 +618,8 @@ class ExamAccessTicketsViewsTests(ExamsAPITestCase):
         exam = self.past_due_exam if exam_past_due else self.exam
         due_date = self.past_due_date if exam_past_due else self.due_date
 
-        start_time = due_date - timedelta(minutes=60)
         allowed_time_limit_mins = exam.time_limit_mins
+        start_time = due_date - timedelta(minutes=allowed_time_limit_mins/2)
         ExamAttempt.objects.create(
             user=self.user,
             exam=exam,
@@ -673,8 +677,8 @@ class ExamAccessTicketsViewsTests(ExamsAPITestCase):
         no_due_date_exam_id = no_due_date_exam.id
         no_due_date_url = reverse('api:v1:exam-access-tickets', kwargs={'exam_id': no_due_date_exam_id})
 
-        start_time = timezone.now() - timedelta(minutes=60)
         allowed_time_limit_mins = no_due_date_exam.time_limit_mins
+        start_time = timezone.now() - timedelta(minutes=allowed_time_limit_mins/2)
         ExamAttempt.objects.create(
             user=self.user,
             exam=no_due_date_exam,
@@ -743,28 +747,31 @@ class ExamAccessTicketsViewsTests(ExamsAPITestCase):
         self.assertEqual(403, response.status_code)
 
     @ddt.data(
-        (-timedelta(minutes=25), 403),  # exam attempt with zero time remaining
-        (timedelta(minutes=5), 403),  # exam attempt that is past due date
-        (-timedelta(seconds=2140), 200),  # exam attempt time remaining less than due date
+        (timedelta(minutes=35), timedelta(minutes=0), 403),  # exam attempt with zero time remaining
+        (timedelta(minutes=10), timedelta(minutes=10), 403),  # exam attempt that is past due date
+        (timedelta(minutes=20), timedelta(minutes=0), 200),  # exam attempt time remaining less than due date
     )
     @ddt.unpack
-    def test_access_granted_started_exam_attempt_various_times(self, start_time_delta, response_status):
+    def test_access_granted_started_exam_attempt_various_times(self, start_delta, current_time_delta, response_status):
         """
         Verify the endpoint grants access for an exam
         with an existing exam attempt.
         """
-        start_time = self.due_date + start_time_delta
-        allowed_time_limit_mins = self.exam.time_limit_mins
-        ExamAttempt.objects.create(
-            user=self.user,
-            exam=self.exam,
-            attempt_number=1,
-            status='started',
-            start_time=start_time,
-            allowed_time_limit_mins=allowed_time_limit_mins
-        )
 
-        response = self.get_exam_access(self.user, self.url)
+        # freeze time adding the delta to the due_date, this way we can manipulate if the due date has actually passed
+        with freeze_time(timezone.now() + current_time_delta):
+            start_time = self.due_date - start_delta
+            allowed_time_limit_mins = self.exam.time_limit_mins
+            ExamAttempt.objects.create(
+                user=self.user,
+                exam=self.exam,
+                attempt_number=1,
+                status='started',
+                start_time=start_time,
+                allowed_time_limit_mins=allowed_time_limit_mins
+            )
+
+            response = self.get_exam_access(self.user, self.url)
         self.assertEqual(response_status, response.status_code)
         if response_status == 200:
             self.assert_valid_exam_access_ticket(response, self.user, self.exam)
@@ -777,3 +784,144 @@ class ExamAccessTicketsViewsTests(ExamsAPITestCase):
         response = self.get_exam_access(self.user, self.past_due_url)
         self.assertEqual(200, response.status_code)
         self.assert_valid_exam_access_ticket(response, self.user, self.past_due_exam)
+
+
+@ddt.ddt
+class ExamAttemptViewTest(ExamsAPITestCase):
+    """
+    Tests ExamAttemptView
+    """
+
+    def setUp(self):
+        super().setUp()
+
+        self.course_id = 'course-v1:edx+test+f19'
+        self.content_id = '11111111'
+
+        self.course_exam_config = CourseExamConfiguration.objects.create(
+            course_id=self.course_id,
+            provider=self.test_provider,
+            allow_opt_out=False
+        )
+
+        self.exam = Exam.objects.create(
+            resource_id=str(uuid.uuid4()),
+            course_id=self.course_id,
+            provider=self.test_provider,
+            content_id=self.content_id,
+            exam_name='test_exam',
+            exam_type='proctored',
+            time_limit_mins=30,
+            due_date='2040-07-01 00:00:00',
+            hide_after_due=False,
+            is_active=True
+        )
+
+        self.non_staff_user = UserFactory()
+
+    def put_api(self, user, attempt_id, data):
+        """
+        Helper function to make patch request to the API
+        """
+
+        data = json.dumps(data)
+        headers = self.build_jwt_headers(user)
+        url = reverse('api:v1:exams-attempt', args=[attempt_id])
+
+        return self.client.put(url, data, **headers, content_type="application/json")
+
+    def test_user_update_permissions(self):
+        """
+        Test that non-staff users cannot update the attempt of another user
+        """
+        # create non-staff user with attempt
+        other_user = UserFactory()
+        attempt = ExamAttempt.objects.create(
+            user=other_user,
+            exam=self.exam,
+            attempt_number=1111111,
+            status=ExamAttemptStatus.created,
+            start_time=None,
+            allowed_time_limit_mins=None,
+        )
+
+        # try to update other user's attempt
+        response = self.put_api(self.non_staff_user, attempt.id, {'action': 'start'})
+        self.assertEqual(response.status_code, 403)
+
+    def test_attempt_does_not_exist(self):
+        """
+        Test that updating an attempt that does not exist fails
+        """
+        response = self.put_api(self.non_staff_user, 111111111, {'action': 'start'})
+        self.assertEqual(response.status_code, 400)
+
+    @ddt.data(
+        ('start', ExamAttemptStatus.started),
+        ('stop', ExamAttemptStatus.ready_to_submit),
+        ('submit', ExamAttemptStatus.submitted),
+        ('click_download_software', ExamAttemptStatus.download_software_clicked),
+        ('error', ExamAttemptStatus.error),
+    )
+    @ddt.unpack
+    @patch('edx_exams.apps.api.v1.views.update_attempt_status')
+    def test_update_exam_attempt(self, action, expected_status, mock_update_attempt_status):
+        """
+        Test that an exam can be updated
+        """
+        # create exam attempt for user
+        attempt = ExamAttempt.objects.create(
+            user=self.non_staff_user,
+            exam=self.exam,
+            attempt_number=1111111,
+            status=ExamAttemptStatus.created,
+            start_time=None,
+            allowed_time_limit_mins=None,
+        )
+
+        mock_update_attempt_status.return_value = attempt.id
+
+        response = self.put_api(self.non_staff_user, attempt.id, {'action': action})
+        self.assertEqual(response.status_code, 200)
+        mock_update_attempt_status.assert_called_once_with(attempt.id, expected_status)
+
+    @patch('edx_exams.apps.api.v1.views.update_attempt_status')
+    def test_exception_raised(self, mock_update_attempt_status):
+        """
+        Test that if an exception is raised, endpoint returns 400 with error message
+        """
+        error_msg = 'Something bad happened'
+        mock_update_attempt_status.side_effect = ExamIllegalStatusTransition(error_msg)
+
+        attempt = ExamAttempt.objects.create(
+            user=self.non_staff_user,
+            exam=self.exam,
+            attempt_number=1111111,
+            status=ExamAttemptStatus.created,
+            start_time=None,
+            allowed_time_limit_mins=None,
+        )
+
+        response = self.put_api(self.non_staff_user, attempt.id, {'action': 'start'})
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(error_msg, response.data['detail'])
+
+    def test_invalid_action(self):
+        """
+        Test that an unrecognized action fails
+        """
+
+        attempt = ExamAttempt.objects.create(
+            user=self.non_staff_user,
+            exam=self.exam,
+            attempt_number=1111111,
+            status=ExamAttemptStatus.started,
+            start_time='2020-07-01 00:00:00',
+            allowed_time_limit_mins=None,
+        )
+
+        # try to update other user's attempt
+        response = self.put_api(self.non_staff_user, attempt.id, {'action': 'junk'})
+        self.assertEqual(response.status_code, 400)
+        # check that error message is specific to starting an attempt
+        self.assertIn('Unrecognized action', response.data['detail'])

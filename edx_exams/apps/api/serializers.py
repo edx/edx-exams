@@ -2,9 +2,30 @@
 Serializers for the edx-exams API
 """
 from rest_framework import serializers
+from rest_framework.fields import DateTimeField
 
 from edx_exams.apps.core.exam_types import EXAM_TYPES
-from edx_exams.apps.core.models import Exam, ProctoringProvider
+from edx_exams.apps.core.models import Exam, ExamAttempt, ProctoringProvider, User
+
+
+class UserSerializer(serializers.ModelSerializer):
+    """
+    Serializer for the User Model.
+    """
+    id = serializers.IntegerField(required=False)  # pylint: disable=invalid-name
+    lms_user_id = serializers.IntegerField(required=False)
+    username = serializers.CharField(required=True)
+    email = serializers.CharField(required=True)
+
+    class Meta:
+        """
+        Meta Class
+        """
+        model = User
+
+        fields = (
+            "id", "username", "email", "lms_user_id"
+        )
 
 
 class ExamSerializer(serializers.ModelSerializer):
@@ -51,3 +72,25 @@ class ProctoringProviderSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProctoringProvider
         fields = ["name", "verbose_name", "lti_configuration_id"]
+
+
+class ExamAttemptSerializer(serializers.ModelSerializer):
+    """
+    Serializer for the ExamAttempt Model
+    """
+    exam = ExamSerializer()
+    user = UserSerializer()
+
+    start_time = DateTimeField(format=None)
+    end_time = DateTimeField(format=None)
+
+    class Meta:
+        """
+        Meta Class
+        """
+        model = ExamAttempt
+
+        fields = (
+            "id", "created", "modified", "user", "start_time", "end_time",
+            "status", "exam", "allowed_time_limit_mins", "attempt_number"
+        )
