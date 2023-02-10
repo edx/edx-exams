@@ -15,7 +15,7 @@ from token_utils.api import unpack_token_for
 
 from edx_exams.apps.api.test_utils import ExamsAPITestCase
 from edx_exams.apps.api.test_utils.factories import UserFactory
-from edx_exams.apps.core.exceptions import ExamIllegalStatusTransition
+from edx_exams.apps.core.exceptions import ExamAttemptOnPastDueExam, ExamIllegalStatusTransition
 from edx_exams.apps.core.models import CourseExamConfiguration, Exam, ExamAttempt, ProctoringProvider
 from edx_exams.apps.core.statuses import ExamAttemptStatus
 
@@ -830,7 +830,17 @@ class ExamAttemptViewTest(ExamsAPITestCase):
 
         return self.client.put(url, data, **headers, content_type="application/json")
 
-    def test_user_update_permissions(self):
+    def post_api(self, user, data):
+        """
+        Helper function to make post request to the API
+        """
+        data = json.dumps(data)
+        headers = self.build_jwt_headers(user)
+        url = reverse('api:v1:exams-attempt')
+
+        return self.client.post(url, data, **headers, content_type="application/json")
+
+    def test_put_user_update_permissions(self):
         """
         Test that non-staff users cannot update the attempt of another user
         """
@@ -849,7 +859,7 @@ class ExamAttemptViewTest(ExamsAPITestCase):
         response = self.put_api(self.non_staff_user, attempt.id, {'action': 'start'})
         self.assertEqual(response.status_code, 403)
 
-    def test_attempt_does_not_exist(self):
+    def test_put_attempt_does_not_exist(self):
         """
         Test that updating an attempt that does not exist fails
         """
@@ -865,7 +875,7 @@ class ExamAttemptViewTest(ExamsAPITestCase):
     )
     @ddt.unpack
     @patch('edx_exams.apps.api.v1.views.update_attempt_status')
-    def test_update_exam_attempt(self, action, expected_status, mock_update_attempt_status):
+    def test_put_update_exam_attempt(self, action, expected_status, mock_update_attempt_status):
         """
         Test that an exam can be updated
         """
@@ -886,7 +896,7 @@ class ExamAttemptViewTest(ExamsAPITestCase):
         mock_update_attempt_status.assert_called_once_with(attempt.id, expected_status)
 
     @patch('edx_exams.apps.api.v1.views.update_attempt_status')
-    def test_exception_raised(self, mock_update_attempt_status):
+    def test_put_exception_raised(self, mock_update_attempt_status):
         """
         Test that if an exception is raised, endpoint returns 400 with error message
         """
@@ -906,7 +916,7 @@ class ExamAttemptViewTest(ExamsAPITestCase):
         self.assertEqual(response.status_code, 400)
         self.assertEqual(error_msg, response.data['detail'])
 
-    def test_invalid_action(self):
+    def test_put_invalid_action(self):
         """
         Test that an unrecognized action fails
         """
@@ -925,3 +935,48 @@ class ExamAttemptViewTest(ExamsAPITestCase):
         self.assertEqual(response.status_code, 400)
         # check that error message is specific to starting an attempt
         self.assertIn('Unrecognized action', response.data['detail'])
+
+    @patch('edx_exams.apps.api.v1.views.create_exam_attempt')
+    def test_post_exception_raised(self, mock_create_attempt):
+        """
+        Test that endpoint returns 400 if exception is raised
+        """
+        error_msg = 'Something bad happened'
+        mock_create_attempt.side_effect = ExamAttemptOnPastDueExam(error_msg)
+
+        data = {
+            'start_clock': 'false',
+            'exam_id': self.exam.id,
+        }
+        response = self.post_api(self.non_staff_user, data)
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(error_msg, response.data['detail'])
+
+    @ddt.data(
+        True,
+        False,
+    )
+    @patch('edx_exams.apps.api.v1.views.create_exam_attempt')
+    @patch('edx_exams.apps.api.v1.views.update_attempt_status')
+    def test_post_create_attempt(self, start_immediately, mock_update_attempt, mock_create_attempt):
+        """
+        Test that an exam attempt can be created
+        """
+        mock_attempt_id = 1111111
+        mock_create_attempt.return_value = mock_attempt_id
+        mock_update_attempt.return_value = mock_attempt_id
+
+        data = {
+            'start_clock': str(start_immediately).lower(),
+            'exam_id': self.exam.id,
+        }
+
+        response = self.post_api(self.non_staff_user, data)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data['exam_attempt_id'], mock_attempt_id)
+
+        mock_create_attempt.assert_called_once_with(self.exam.id, self.non_staff_user.id)
+
+        if start_immediately:
+            mock_update_attempt.assert_called_once_with(mock_attempt_id, ExamAttemptStatus.started)

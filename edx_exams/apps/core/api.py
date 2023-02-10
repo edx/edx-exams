@@ -8,8 +8,14 @@ import pytz
 from django.utils import timezone
 
 from edx_exams.apps.api.serializers import ExamAttemptSerializer
-from edx_exams.apps.core.exceptions import ExamIllegalStatusTransition
-from edx_exams.apps.core.models import ExamAttempt
+from edx_exams.apps.core.exam_types import OnboardingExamType, PracticeExamType, get_exam_type
+from edx_exams.apps.core.exceptions import (
+    ExamAttemptAlreadyExists,
+    ExamAttemptOnPastDueExam,
+    ExamDoesNotExist,
+    ExamIllegalStatusTransition
+)
+from edx_exams.apps.core.models import Exam, ExamAttempt
 from edx_exams.apps.core.statuses import ExamAttemptStatus
 
 log = logging.getLogger(__name__)
@@ -142,3 +148,69 @@ def get_exam_attempt_time_remaining(exam_attempt, now=None):
         secs_to_end = (end_time-now).total_seconds()
 
     return secs_to_end
+
+
+def create_exam_attempt(exam_id, user_id):
+    """
+    Creates an exam attempt for user_id against exam_id. There should only
+    be one exam_attempt per user per exam.
+    """
+
+    exam_obj = Exam.get_exam_by_id(exam_id)
+
+    if exam_obj is None:
+        err_msg = (
+            f'Exam with exam_id={exam_id} does not exist.'
+        )
+        raise ExamDoesNotExist(err_msg)
+
+    if ExamAttempt.get_current_exam_attempt(user_id, exam_id) is not None:
+        err_msg = (
+            f'Cannot create attempt for exam_id={exam_id} and user_id={user_id} '
+            f'because an attempt already exists.'
+        )
+        raise ExamAttemptAlreadyExists(err_msg)
+
+    log.info(
+        ('Creating exam attempt for exam_id=%(exam_id)s for user_id=%(user_id)s '
+         'in course_id=%(course_id)s'),
+        {
+            'exam_id': exam_id,
+            'user_id': user_id,
+            'course_id': exam_obj.course_id,
+        }
+    )
+
+    practice_exam_types = [PracticeExamType, OnboardingExamType]
+
+    # if exam is past the due date, and it is a non-practice exam, raise error
+    if get_exam_type(exam_obj.exam_type) not in practice_exam_types and timezone.now() > exam_obj.due_date:
+        err_msg = (
+            f'user_id={user_id} trying to create exam attempt for past due non-practice exam '
+            f'exam_id={exam_id} in course_id={exam_obj.course_id}. Do not register an exam attempt!'
+        )
+        raise ExamAttemptOnPastDueExam(err_msg)
+
+    # because we only support one attempt per exam per user,
+    # always set the attempt number to 1 when creating an attempt
+    attempt_number = 1
+
+    # create exam attempt
+    attempt = ExamAttempt.objects.create(
+        exam_id=exam_id,
+        user_id=user_id,
+        status=ExamAttemptStatus.created,
+        attempt_number=attempt_number,
+    )
+
+    log.info(
+        ('Created exam attempt_id=%(attempt_id)s for exam_id=%(exam_id)s for '
+         'user_id=%(user_id)s.'),
+        {
+            'attempt_id': attempt.id,
+            'exam_id': exam_id,
+            'user_id': user_id,
+        }
+    )
+
+    return attempt.id
