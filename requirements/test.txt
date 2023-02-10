@@ -66,7 +66,7 @@ coverage[toml]==7.1.0
     # via
     #   -r requirements/test.in
     #   pytest-cov
-cryptography==39.0.0
+cryptography==39.0.1
     # via
     #   -r requirements/base.txt
     #   pyjwt
@@ -143,7 +143,7 @@ drf-jwt==1.19.2
     # via
     #   -r requirements/base.txt
     #   edx-drf-extensions
-drf-yasg==1.21.4
+drf-yasg==1.21.5
     # via
     #   -r requirements/base.txt
     #   edx-api-doc-tools
@@ -176,7 +176,7 @@ exceptiongroup==1.1.0
     # via pytest
 factory-boy==3.2.1
     # via -r requirements/test.in
-faker==16.6.1
+faker==16.8.1
     # via factory-boy
 filelock==3.9.0
     # via
@@ -223,7 +223,7 @@ lazy==1.5
     #   lti-consumer-xblock
 lazy-object-proxy==1.9.0
     # via astroid
-lti-consumer-xblock==8.0.0
+lti-consumer-xblock==8.0.1
     # via -r requirements/base.txt
 lxml==4.9.2
     # via
@@ -247,7 +247,7 @@ mock==5.0.1
     # via -r requirements/test.in
 mysqlclient==2.1.1
     # via -r requirements/base.txt
-newrelic==8.5.0
+newrelic==8.6.0
     # via
     #   -r requirements/base.txt
     #   edx-django-utils
@@ -275,7 +275,7 @@ pbr==5.11.1
     # via
     #   -r requirements/base.txt
     #   stevedore
-platformdirs==2.6.2
+platformdirs==3.0.0
     # via
     #   pylint
     #   virtualenv
@@ -312,7 +312,7 @@ pyjwt[crypto]==2.6.0
     #   edx-drf-extensions
     #   edx-rest-api-client
     #   social-auth-core
-pylint==2.16.0
+pylint==2.16.1
     # via
     #   edx-lint
     #   pylint-celery
@@ -397,7 +397,7 @@ semantic-version==2.10.0
     # via
     #   -r requirements/base.txt
     #   edx-drf-extensions
-simplejson==3.18.1
+simplejson==3.18.3
     # via
     #   -r requirements/base.txt
     #   django-rest-swagger
@@ -454,7 +454,7 @@ tox==3.28.0
     # via
     #   -c https://raw.githubusercontent.com/edx/edx-lint/master/edx_lint/files/common_constraints.txt
     #   -r requirements/test.in
-types-toml==0.10.8.1
+types-toml==0.10.8.3
     # via responses
 typing-extensions==4.4.0
     # via
@@ -470,7 +470,7 @@ urllib3==1.26.14
     #   -r requirements/base.txt
     #   requests
     #   responses
-virtualenv==20.17.1
+virtualenv==20.19.0
     # via tox
 web-fragments==2.0.0
     # via

@@ -78,10 +78,11 @@ coverage[toml]==7.1.0
     # via
     #   -r requirements/validation.txt
     #   pytest-cov
-cryptography==39.0.0
+cryptography==39.0.1
     # via
     #   -r requirements/validation.txt
     #   pyjwt
+    #   secretstorage
     #   social-auth-core
 ddt==1.6.0
     # via -r requirements/validation.txt
@@ -169,7 +170,7 @@ drf-jwt==1.19.2
     # via
     #   -r requirements/validation.txt
     #   edx-drf-extensions
-drf-yasg==1.21.4
+drf-yasg==1.21.5
     # via
     #   -r requirements/validation.txt
     #   edx-api-doc-tools
@@ -206,7 +207,7 @@ exceptiongroup==1.1.0
     #   pytest
 factory-boy==3.2.1
     # via -r requirements/validation.txt
-faker==16.6.1
+faker==16.8.1
     # via
     #   -r requirements/validation.txt
     #   factory-boy
@@ -234,6 +235,10 @@ importlib-metadata==6.0.0
     #   -r requirements/validation.txt
     #   keyring
     #   twine
+importlib-resources==5.10.2
+    # via
+    #   -r requirements/validation.txt
+    #   keyring
 inflection==0.5.1
     # via
     #   -r requirements/validation.txt
@@ -254,6 +259,11 @@ jaraco-classes==3.2.3
     # via
     #   -r requirements/validation.txt
     #   keyring
+jeepney==0.8.0
+    # via
+    #   -r requirements/validation.txt
+    #   keyring
+    #   secretstorage
 jinja2==3.1.2
     # via
     #   -r requirements/validation.txt
@@ -276,7 +286,7 @@ lazy-object-proxy==1.9.0
     # via
     #   -r requirements/validation.txt
     #   astroid
-lti-consumer-xblock==8.0.0
+lti-consumer-xblock==8.0.1
     # via -r requirements/validation.txt
 lxml==4.9.2
     # via
@@ -314,7 +324,7 @@ more-itertools==9.0.0
     #   jaraco-classes
 mysqlclient==2.1.1
     # via -r requirements/validation.txt
-newrelic==8.5.0
+newrelic==8.6.0
     # via
     #   -r requirements/validation.txt
     #   edx-django-utils
@@ -352,7 +362,7 @@ pkginfo==1.9.6
     # via
     #   -r requirements/validation.txt
     #   twine
-platformdirs==2.6.2
+platformdirs==3.0.0
     # via
     #   -r requirements/validation.txt
     #   pylint
@@ -406,7 +416,7 @@ pyjwt[crypto]==2.6.0
     #   edx-drf-extensions
     #   edx-rest-api-client
     #   social-auth-core
-pylint==2.16.0
+pylint==2.16.1
     # via
     #   -r requirements/validation.txt
     #   edx-lint
@@ -519,11 +529,15 @@ ruamel-yaml-clib==0.2.7
     # via
     #   -r requirements/validation.txt
     #   ruamel-yaml
+secretstorage==3.3.3
+    # via
+    #   -r requirements/validation.txt
+    #   keyring
 semantic-version==2.10.0
     # via
     #   -r requirements/validation.txt
     #   edx-drf-extensions
-simplejson==3.18.1
+simplejson==3.18.3
     # via
     #   -r requirements/validation.txt
     #   django-rest-swagger
@@ -595,7 +609,7 @@ tox==3.28.0
     # via -r requirements/validation.txt
 twine==4.0.2
     # via -r requirements/validation.txt
-types-toml==0.10.8.1
+types-toml==0.10.8.3
     # via
     #   -r requirements/validation.txt
     #   responses
@@ -604,6 +618,7 @@ typing-extensions==4.4.0
     #   -r requirements/validation.txt
     #   astroid
     #   pylint
+    #   rich
 uritemplate==4.1.1
     # via
     #   -r requirements/validation.txt
@@ -615,7 +630,7 @@ urllib3==1.26.14
     #   requests
     #   responses
     #   twine
-virtualenv==20.17.1
+virtualenv==20.19.0
     # via
     #   -r requirements/validation.txt
     #   tox
@@ -649,10 +664,11 @@ xblock-utils==3.0.0
     # via
     #   -r requirements/validation.txt
     #   lti-consumer-xblock
-zipp==3.12.0
+zipp==3.13.0
     # via
     #   -r requirements/validation.txt
     #   importlib-metadata
+    #   importlib-resources
 
 # The following packages are considered to be unsafe in a requirements file:
 # pip

@@ -76,10 +76,11 @@ coverage[toml]==7.1.0
     # via
     #   -r requirements/test.txt
     #   pytest-cov
-cryptography==39.0.0
+cryptography==39.0.1
     # via
     #   -r requirements/test.txt
     #   pyjwt
+    #   secretstorage
     #   social-auth-core
 ddt==1.6.0
     # via -r requirements/test.txt
@@ -166,7 +167,7 @@ drf-jwt==1.19.2
     # via
     #   -r requirements/test.txt
     #   edx-drf-extensions
-drf-yasg==1.21.4
+drf-yasg==1.21.5
     # via
     #   -r requirements/test.txt
     #   edx-api-doc-tools
@@ -203,7 +204,7 @@ exceptiongroup==1.1.0
     #   pytest
 factory-boy==3.2.1
     # via -r requirements/test.txt
-faker==16.6.1
+faker==16.8.1
     # via
     #   -r requirements/test.txt
     #   factory-boy
@@ -233,6 +234,8 @@ importlib-metadata==6.0.0
     #   keyring
     #   sphinx
     #   twine
+importlib-resources==5.10.2
+    # via keyring
 inflection==0.5.1
     # via
     #   -r requirements/test.txt
@@ -251,6 +254,10 @@ itypes==1.2.0
     #   coreapi
 jaraco-classes==3.2.3
     # via keyring
+jeepney==0.8.0
+    # via
+    #   keyring
+    #   secretstorage
 jinja2==3.1.2
     # via
     #   -r requirements/test.txt
@@ -271,7 +278,7 @@ lazy-object-proxy==1.9.0
     # via
     #   -r requirements/test.txt
     #   astroid
-lti-consumer-xblock==8.0.0
+lti-consumer-xblock==8.0.1
     # via -r requirements/test.txt
 lxml==4.9.2
     # via
@@ -303,7 +310,7 @@ more-itertools==9.0.0
     # via jaraco-classes
 mysqlclient==2.1.1
     # via -r requirements/test.txt
-newrelic==8.5.0
+newrelic==8.6.0
     # via
     #   -r requirements/test.txt
     #   edx-django-utils
@@ -335,7 +342,7 @@ pbr==5.11.1
     #   stevedore
 pkginfo==1.9.6
     # via twine
-platformdirs==2.6.2
+platformdirs==3.0.0
     # via
     #   -r requirements/test.txt
     #   pylint
@@ -382,7 +389,7 @@ pyjwt[crypto]==2.6.0
     #   edx-drf-extensions
     #   edx-rest-api-client
     #   social-auth-core
-pylint==2.16.0
+pylint==2.16.1
     # via
     #   -r requirements/test.txt
     #   edx-lint
@@ -488,11 +495,13 @@ ruamel-yaml-clib==0.2.7
     # via
     #   -r requirements/test.txt
     #   ruamel-yaml
+secretstorage==3.3.3
+    # via keyring
 semantic-version==2.10.0
     # via
     #   -r requirements/test.txt
     #   edx-drf-extensions
-simplejson==3.18.1
+simplejson==3.18.3
     # via
     #   -r requirements/test.txt
     #   django-rest-swagger
@@ -582,7 +591,7 @@ tox==3.28.0
     #   -r requirements/test.txt
 twine==4.0.2
     # via -r requirements/doc.in
-types-toml==0.10.8.1
+types-toml==0.10.8.3
     # via
     #   -r requirements/test.txt
     #   responses
@@ -591,6 +600,7 @@ typing-extensions==4.4.0
     #   -r requirements/test.txt
     #   astroid
     #   pylint
+    #   rich
 uritemplate==4.1.1
     # via
     #   -r requirements/test.txt
@@ -602,7 +612,7 @@ urllib3==1.26.14
     #   requests
     #   responses
     #   twine
-virtualenv==20.17.1
+virtualenv==20.19.0
     # via
     #   -r requirements/test.txt
     #   tox
@@ -632,8 +642,10 @@ xblock-utils==3.0.0
     # via
     #   -r requirements/test.txt
     #   lti-consumer-xblock
-zipp==3.12.0
-    # via importlib-metadata
+zipp==3.13.0
+    # via
+    #   importlib-metadata
+    #   importlib-resources
 
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools
