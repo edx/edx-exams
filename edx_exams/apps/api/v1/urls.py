@@ -5,7 +5,7 @@ from django.urls import path, re_path
 from edx_exams.apps.api.v1.views import (
     CourseExamConfigurationsView,
     CourseExamsView,
-    ExamAccessTicketsView,
+    ExamAccessTokensView,
     ExamAttemptView,
     ProctoringProvidersView
 )
@@ -24,8 +24,8 @@ urlpatterns = [
             ProctoringProvidersView.as_view(),
             name="proctoring-providers-list",),
     re_path(fr'access_tokens/exam_id/{EXAM_ID_PATTERN}',
-            ExamAccessTicketsView.as_view(),
-            name="exam-access-tickets"),
+            ExamAccessTokensView.as_view(),
+            name="exam-access-tokens"),
     path('exams/attempt/<int:attempt_id>',
          ExamAttemptView.as_view(),
          name='exams-attempt',),

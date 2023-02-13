@@ -283,17 +283,17 @@ class ProctoringProvidersView(ListAPIView):
     queryset = ProctoringProvider.objects.all()
 
 
-class ExamAccessTicketsView(ExamsAPIView):
+class ExamAccessTokensView(ExamsAPIView):
     """
-    View to create signed exam access tickets for a specific user and exam.
+    View to create signed exam access tokens for a specific user and exam.
 
     Given an exam_id and user (in request), this view will either grant access
-    as an exam access ticket or not grant access. Access is granted if there is an
+    as an exam access token or not grant access. Access is granted if there is an
     existing exam attempt (must be started if no due date or prior to due date or
     verified if past the due date.) or if the exam is past its due date.
 
     HTTP GET
-    Provides an Exam Access Ticket as a cookie if access is granted.
+    Provides an Exam Access Token as a cookie if access is granted.
     **GET data Parameters**
         * exam_id: This is the id of the exam that the user is requesting access to
     **Exceptions**
@@ -306,7 +306,7 @@ class ExamAccessTicketsView(ExamsAPIView):
     @classmethod
     def get_expiration_window(cls, exam_attempt, default_exp_seconds):
         """
-        Set exam access ticket expiration window.
+        Set exam access token expiration window.
 
         Use default exp window or the time to the end of the exam attempt,
         whichever is shorter.
@@ -323,7 +323,7 @@ class ExamAccessTicketsView(ExamsAPIView):
     @classmethod
     def get_response(cls, exam, user):
         """
-        Get response, with exam access ticket if access granted.
+        Get response, with exam access token if access granted.
 
         403 error if access is not granted.
         """
@@ -331,7 +331,7 @@ class ExamAccessTicketsView(ExamsAPIView):
         expiration_window = 60
         exam_attempt = ExamAttempt.get_current_exam_attempt(user.id, exam.id)
 
-        data = {"detail": "Exam access ticket not granted"}
+        data = {"detail": "Exam access token not granted"}
         grant_access = False
         response_status = status.HTTP_403_FORBIDDEN
 
@@ -359,10 +359,10 @@ class ExamAccessTicketsView(ExamsAPIView):
                             data=data)
 
         if grant_access:
-            log.info("Creating exam access ticket")
-            access_ticket = sign_token_for(user.lms_user_id, expiration_window, claims)
+            log.info("Creating exam access token")
+            access_token = sign_token_for(user.lms_user_id, expiration_window, claims)
             response.set_cookie(
-                settings.ACCESS_TOKEN_COOKIE_NAME, access_ticket,
+                settings.ACCESS_TOKEN_COOKIE_NAME, access_token,
                 domain=settings.ACCESS_TOKEN_COOKIE_DOMAIN
             )
 
@@ -370,9 +370,9 @@ class ExamAccessTicketsView(ExamsAPIView):
 
     def get(self, request, exam_id):
         """
-        Get exam access ticket as JWT added as cookie to response.
+        Get exam access token as JWT added as cookie to response.
 
-        Exam access ticket corresponds to given exam and user in request.
+        Exam access token corresponds to given exam and user in request.
         """
         try:
             exam = Exam.objects.get(id=exam_id)
