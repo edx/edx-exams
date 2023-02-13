@@ -11,8 +11,18 @@ from freezegun import freeze_time
 
 from edx_exams.apps.api.serializers import ExamAttemptSerializer
 from edx_exams.apps.api.test_utils import ExamsAPITestCase
-from edx_exams.apps.core.api import get_attempt_by_id, get_exam_attempt_time_remaining, update_attempt_status
-from edx_exams.apps.core.exceptions import ExamIllegalStatusTransition
+from edx_exams.apps.core.api import (
+    create_exam_attempt,
+    get_attempt_by_id,
+    get_exam_attempt_time_remaining,
+    update_attempt_status
+)
+from edx_exams.apps.core.exceptions import (
+    ExamAttemptAlreadyExists,
+    ExamAttemptOnPastDueExam,
+    ExamDoesNotExist,
+    ExamIllegalStatusTransition
+)
 from edx_exams.apps.core.models import Exam, ExamAttempt
 from edx_exams.apps.core.statuses import ExamAttemptStatus
 
@@ -273,3 +283,121 @@ class TestGetAttemptById(ExamsAPITestCase):
         Test that if the attempt does not exist, None is returned
         """
         self.assertIsNone(get_attempt_by_id(111111111))
+
+
+@ddt.ddt
+class TestCreateExamAttempt(ExamsAPITestCase):
+    """
+    Tests for the API utility function `create_exam_attempt`
+    """
+
+    def setUp(self):
+        super().setUp()
+
+        self.course_id = 'course-v1:edx+test+f19'
+        self.exam = Exam.objects.create(
+            resource_id=str(uuid.uuid4()),
+            course_id=self.course_id,
+            provider=self.test_provider,
+            content_id='abcd1234',
+            exam_name='test_exam',
+            exam_type='proctored',
+            time_limit_mins=30,
+        )
+
+    @ddt.data(
+        'proctored',
+        'timed',
+    )
+    def test_exam_passed_due(self, exam_type):
+        """
+        Test that we can not create an attempt for an exam that is passed due
+        """
+
+        # create exam that was due an hour ago
+        passed_due_exam = Exam.objects.create(
+            resource_id=str(uuid.uuid4()),
+            course_id=self.course_id,
+            provider=self.test_provider,
+            content_id='abcd1234',
+            exam_name='test_exam',
+            exam_type=exam_type,
+            time_limit_mins=30,
+            due_date=timezone.now() - timedelta(minutes=60)
+        )
+
+        with self.assertRaises(ExamAttemptOnPastDueExam) as exc:
+            create_exam_attempt(passed_due_exam.id, self.user.id)
+
+        self.assertIn('trying to create exam attempt for past due non-practice exam', str(exc.exception))
+
+    @ddt.data(
+        ('proctored', timedelta(minutes=60)),  # proctored exam, due in the future
+        ('timed', timedelta(minutes=60)),  # timed exam, due in the future
+        ('onboarding', timedelta(minutes=60)),  # onboarding exam, due in the future
+        ('practice', timedelta(minutes=60)),  # practice exam, due in the future
+        ('onboarding', -timedelta(minutes=60)),  # onboarding exam, passed due
+        ('practice', -timedelta(minutes=60)),  # practice exam, passed due
+    )
+    @ddt.unpack
+    def test_create_exam_attempt(self, exam_type, due_date_delta):
+        """
+        Test that we can create an exam attempt
+        """
+        exam = Exam.objects.create(
+            resource_id=str(uuid.uuid4()),
+            course_id=self.course_id,
+            provider=self.test_provider,
+            content_id='abcd1234',
+            exam_name='test_exam',
+            exam_type=exam_type,
+            time_limit_mins=30,
+            due_date=timezone.now() + due_date_delta
+        )
+
+        attempt_id = create_exam_attempt(exam.id, self.user.id)
+        attempt_obj = ExamAttempt.get_attempt_by_id(attempt_id)
+
+        self.assertEqual(attempt_obj.status, ExamAttemptStatus.created)
+        self.assertEqual(attempt_obj.exam_id, exam.id)
+        self.assertEqual(attempt_obj.user_id, self.user.id)
+        self.assertEqual(attempt_obj.attempt_number, 1)
+
+    def test_bad_exam_id(self):
+        """
+        Test that a non existant exam raises an error
+        """
+        fake_exam_id = 11111111
+
+        with self.assertRaises(ExamDoesNotExist) as exc:
+            create_exam_attempt(fake_exam_id, self.user.id)
+
+        err_msg = f'Exam with exam_id={fake_exam_id} does not exist.'
+        self.assertEqual(err_msg, str(exc.exception))
+
+    def test_attempt_already_exists(self):
+        """
+        Test that trying to create an attempt for a user that already has an attempt fails
+        """
+        ExamAttempt.objects.create(
+            user=self.user,
+            exam=self.exam,
+            attempt_number=1,
+            status=ExamAttemptStatus.created,
+        )
+
+        exam_id = self.exam.id
+        user_id = self.user.id
+
+        with self.assertRaises(ExamAttemptAlreadyExists) as exc:
+            create_exam_attempt(exam_id, user_id)
+
+        err_msg = (
+            f'Cannot create attempt for exam_id={exam_id} and user_id={user_id} '
+            f'because an attempt already exists.'
+        )
+        self.assertEqual(err_msg, str(exc.exception))
+
+        # check to ensure that only one attempt exists for exam and user
+        filtered_attempts = ExamAttempt.objects.filter(user_id=user_id, exam_id=exam_id)
+        self.assertEqual(len(filtered_attempts), 1)

@@ -17,7 +17,12 @@ from token_utils.api import sign_token_for
 from edx_exams.apps.api.permissions import StaffUserOrReadOnlyPermissions, StaffUserPermissions
 from edx_exams.apps.api.serializers import ExamSerializer, ProctoringProviderSerializer
 from edx_exams.apps.api.v1 import ExamsAPIView
-from edx_exams.apps.core.api import get_attempt_by_id, get_exam_attempt_time_remaining, update_attempt_status
+from edx_exams.apps.core.api import (
+    create_exam_attempt,
+    get_attempt_by_id,
+    get_exam_attempt_time_remaining,
+    update_attempt_status
+)
 from edx_exams.apps.core.exam_types import get_exam_type
 from edx_exams.apps.core.models import CourseExamConfiguration, Exam, ExamAttempt, ProctoringProvider
 from edx_exams.apps.core.statuses import ExamAttemptStatus
@@ -324,7 +329,7 @@ class ExamAccessTicketsView(ExamsAPIView):
         """
         claims = {"course_id": exam.course_id, "content_id": exam.content_id}
         expiration_window = 60
-        exam_attempt = ExamAttempt.get_current_exam_attempt(user, exam)
+        exam_attempt = ExamAttempt.get_current_exam_attempt(user.id, exam.id)
 
         data = {"detail": "Exam access ticket not granted"}
         grant_access = False
@@ -384,7 +389,7 @@ class ExamAccessTicketsView(ExamsAPIView):
 class ExamAttemptView(ExamsAPIView):
     """
     Endpoint for the ExamAttempt
-    /exams/attempt/<attempt_id>
+    /exams/attempt
 
     Supports:
         HTTP PUT: Update an attempt's status.
@@ -400,6 +405,16 @@ class ExamAttemptView(ExamsAPIView):
 
     PUT Response Values
         {'exam_attempt_id': <attempt_id>}: The attempt id of the attempt being updated
+
+    HTTP POST
+    Creates a new attempt based on a provided exam_id
+
+    POST data Parameters
+        'exam_id': The unique identifier for the exam
+        'start_clock': Boolean value representing whether or not the attempt should immediately transition to 'started'
+
+    POST Response Values
+        {'exam_attempt_id': <attempt_id>}: The attempt id of the attempt that was created
     """
 
     authentication_classes = (JwtAuthentication,)
@@ -407,6 +422,7 @@ class ExamAttemptView(ExamsAPIView):
     def put(self, request, attempt_id):
         """
         HTTP PUT handler to update exam attempt status based on a specified action
+        /exams/attempt/<attempt_id>
 
         Parameters:
             request: The request object
@@ -453,3 +469,19 @@ class ExamAttemptView(ExamsAPIView):
             status=status.HTTP_400_BAD_REQUEST,
             data={'detail': f'Unrecognized action "{action}"'}
         )
+
+    def post(self, request):
+        """
+        HTTP POST handler to create exam attempt
+        """
+        should_start_immediately = request.data.get('start_clock', 'false').lower() == 'true'
+        exam_id = request.data.get('exam_id', None)
+        user_id = request.user.id
+
+        exam_attempt_id = create_exam_attempt(exam_id, user_id)
+
+        if should_start_immediately:
+            update_attempt_status(exam_attempt_id, ExamAttemptStatus.started)
+
+        data = {'exam_attempt_id': exam_attempt_id}
+        return Response(data)

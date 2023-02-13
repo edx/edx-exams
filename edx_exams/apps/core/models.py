@@ -116,6 +116,17 @@ class Exam(TimeStampedModel):
     def __str__(self):      # pragma: no cover
         return self.exam_name
 
+    @classmethod
+    def get_exam_by_id(cls, exam_id):
+        """
+        Return Exam for a given id
+        """
+        try:
+            exam = cls.objects.get(id=exam_id)
+        except cls.DoesNotExist:
+            exam = None
+        return exam
+
 
 class ExamAttempt(TimeStampedModel):
     """
@@ -157,12 +168,12 @@ class ExamAttempt(TimeStampedModel):
         verbose_name = 'exam attempt'
 
     @classmethod
-    def get_current_exam_attempt(cls, user, exam):
+    def get_current_exam_attempt(cls, user_id, exam_id):
         """
         Given a user and exam, get the user's latest exam attempt, if exists.
         """
         try:
-            exam_attempt = cls.objects.filter(user=user, exam=exam).latest('created')
+            exam_attempt = cls.objects.filter(user_id=user_id, exam=exam_id).latest('created')
         except ObjectDoesNotExist:
             exam_attempt = None
         return exam_attempt

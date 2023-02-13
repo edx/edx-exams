@@ -29,4 +29,7 @@ urlpatterns = [
     path('exams/attempt/<int:attempt_id>',
          ExamAttemptView.as_view(),
          name='exams-attempt',),
+    path('exams/attempt',
+         ExamAttemptView.as_view(),
+         name='exams-attempt',),
 ]
