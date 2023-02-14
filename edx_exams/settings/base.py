@@ -268,6 +268,6 @@ PLATFORM_NAME = 'Your Platform Name Here'
 # Set up logging for development use (logging to stdout)
 LOGGING = get_logger_config(debug=DEBUG)
 
-# Exam access ticket cookie config
-ACCESS_TOKEN_COOKIE_NAME = 'exam_access_ticket'
+# Exam access token cookie config
+ACCESS_TOKEN_COOKIE_NAME = 'exam_access_token'
 ACCESS_TOKEN_COOKIE_DOMAIN = None

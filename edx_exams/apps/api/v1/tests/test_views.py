@@ -522,9 +522,9 @@ class ProctoringProvidersViewTest(ExamsAPITestCase):
 
 
 @ddt.ddt
-class ExamAccessTicketsViewsTests(ExamsAPITestCase):
+class ExamAccessTokensViewsTests(ExamsAPITestCase):
     """
-    Tests for Exam Access Ticket Views.
+    Tests for Exam Access Token Views.
     """
 
     def setUp(self):
@@ -546,7 +546,7 @@ class ExamAccessTicketsViewsTests(ExamsAPITestCase):
             is_active=True
         )
         self.exam_id = self.exam.id
-        self.url = reverse('api:v1:exam-access-tickets', kwargs={'exam_id': self.exam_id})
+        self.url = reverse('api:v1:exam-access-tokens', kwargs={'exam_id': self.exam_id})
 
         self.past_due_date = timezone.now() - timedelta(minutes=5)
         self.past_due_exam = Exam.objects.create(
@@ -563,7 +563,7 @@ class ExamAccessTicketsViewsTests(ExamsAPITestCase):
         )
 
         self.past_due_exam_id = self.past_due_exam.id
-        self.past_due_url = reverse('api:v1:exam-access-tickets', kwargs={'exam_id': self.past_due_exam_id})
+        self.past_due_url = reverse('api:v1:exam-access-tokens', kwargs={'exam_id': self.past_due_exam_id})
 
     def get_exam_access(self, user, url):
         """
@@ -572,10 +572,10 @@ class ExamAccessTicketsViewsTests(ExamsAPITestCase):
         headers = self.build_jwt_headers(user)
         return self.client.get(url, **headers)
 
-    def assert_valid_exam_access_ticket(self, response, user, exam):
-        ticket = response.cookies["exam_access_ticket"].value
-        self.assertEqual(unpack_token_for(ticket, user.lms_user_id).get('course_id'), exam.course_id)
-        self.assertEqual(unpack_token_for(ticket, user.lms_user_id).get('content_id'), exam.content_id)
+    def assert_valid_exam_access_token(self, response, user, exam):
+        token = response.cookies["exam_access_token"].value
+        self.assertEqual(unpack_token_for(token, user.lms_user_id).get('course_id'), exam.course_id)
+        self.assertEqual(unpack_token_for(token, user.lms_user_id).get('content_id'), exam.content_id)
 
     def test_auth_failures(self):
         """
@@ -589,7 +589,7 @@ class ExamAccessTicketsViewsTests(ExamsAPITestCase):
         """
         Verify the endpoint returns 404 if exam is not found
         """
-        url = reverse('api:v1:exam-access-tickets', kwargs={'exam_id': 674})
+        url = reverse('api:v1:exam-access-tokens', kwargs={'exam_id': 674})
 
         headers = self.build_jwt_headers(self.user)
         response = self.client.get(url, **headers)
@@ -629,11 +629,11 @@ class ExamAccessTicketsViewsTests(ExamsAPITestCase):
             allowed_time_limit_mins=allowed_time_limit_mins
         )
 
-        url = reverse('api:v1:exam-access-tickets', kwargs={'exam_id': exam.id})
+        url = reverse('api:v1:exam-access-tokens', kwargs={'exam_id': exam.id})
         response = self.get_exam_access(self.user, url)
         self.assertEqual(response_status, response.status_code)
         if response_status == 200:
-            self.assert_valid_exam_access_ticket(response, self.user, exam)
+            self.assert_valid_exam_access_token(response, self.user, exam)
 
     def test_access_not_granted_started_exam_attempt_missing_start_time(self):
         """
@@ -675,7 +675,7 @@ class ExamAccessTicketsViewsTests(ExamsAPITestCase):
         )
 
         no_due_date_exam_id = no_due_date_exam.id
-        no_due_date_url = reverse('api:v1:exam-access-tickets', kwargs={'exam_id': no_due_date_exam_id})
+        no_due_date_url = reverse('api:v1:exam-access-tokens', kwargs={'exam_id': no_due_date_exam_id})
 
         allowed_time_limit_mins = no_due_date_exam.time_limit_mins
         start_time = timezone.now() - timedelta(minutes=allowed_time_limit_mins/2)
@@ -691,7 +691,7 @@ class ExamAccessTicketsViewsTests(ExamsAPITestCase):
         response = self.get_exam_access(self.user, no_due_date_url)
         self.assertEqual(response_status, response.status_code)
         if response_status == 200:
-            self.assert_valid_exam_access_ticket(response, self.user, no_due_date_exam)
+            self.assert_valid_exam_access_token(response, self.user, no_due_date_exam)
 
     def test_access_not_granted_if_hide_after_due(self):
         """
@@ -712,7 +712,7 @@ class ExamAccessTicketsViewsTests(ExamsAPITestCase):
         )
 
         past_due_exam_id = past_due_exam_hide.id
-        past_due_url = reverse('api:v1:exam-access-tickets', kwargs={'exam_id': past_due_exam_id})
+        past_due_url = reverse('api:v1:exam-access-tokens', kwargs={'exam_id': past_due_exam_id})
 
         start_time = self.past_due_date - timedelta(minutes=60)
         allowed_time_limit_mins = past_due_exam_hide.time_limit_mins
@@ -774,7 +774,7 @@ class ExamAccessTicketsViewsTests(ExamsAPITestCase):
             response = self.get_exam_access(self.user, self.url)
         self.assertEqual(response_status, response.status_code)
         if response_status == 200:
-            self.assert_valid_exam_access_ticket(response, self.user, self.exam)
+            self.assert_valid_exam_access_token(response, self.user, self.exam)
 
     def test_access_granted_past_due_exam_no_attempt(self):
         """
@@ -783,7 +783,7 @@ class ExamAccessTicketsViewsTests(ExamsAPITestCase):
         """
         response = self.get_exam_access(self.user, self.past_due_url)
         self.assertEqual(200, response.status_code)
-        self.assert_valid_exam_access_ticket(response, self.user, self.past_due_exam)
+        self.assert_valid_exam_access_token(response, self.user, self.past_due_exam)
 
 
 @ddt.ddt
