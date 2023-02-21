@@ -79,6 +79,13 @@ Every time you develop something in this repo
 
   # Open a PR and ask for review.
 
+Setting up an exam and proctoring tool
+--------------------------------------
+
+Instructions can be found in `this document <https://2u-internal.atlassian.net/wiki/spaces/PT/pages/256737327/Local+Development+LTI+Configuration>`_
+
+This is a living document while this repo is in development and will be converterd to a public format on release.
+
 License
 -------
 
