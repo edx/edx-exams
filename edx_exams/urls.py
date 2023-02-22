@@ -30,11 +30,21 @@ from edx_exams.apps.lti import urls as lti_urls
 admin.autodiscover()
 
 urlpatterns = oauth2_urlpatterns + [
+    
+    # Django admin route
     path('admin/', admin.site.urls),
+    
+    # The API path, the big part, see edx_exams/apps/api
     path('api/', include(api_urls)),
+    
+    # Authentication
     path('auto_auth/', core_views.AutoAuth.as_view(), name='auto_auth'),
     path('', include('csrf.urls')),  # Include csrf urls from edx-drf-extensions
+    
+    # Maintenance thingy
     path('health/', core_views.Health.as_view(), name='health'),
+    
+    # LTI services
     path('lti/', include(lti_urls)),
     path('lti/', include('lti_consumer.plugin.urls')),
 ]

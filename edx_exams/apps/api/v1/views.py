@@ -64,6 +64,8 @@ class CourseExamsView(ExamsAPIView):
     """
 
     authentication_classes = (JwtAuthentication,)
+
+    # Staff = instructor in this case, can access all users
     permission_classes = (StaffUserPermissions,)
 
     @classmethod
@@ -71,6 +73,7 @@ class CourseExamsView(ExamsAPIView):
         """
         Given an exam object, update to the given fields value
         """
+
         for attr, value in fields.items():
             setattr(exam_object, attr, value)
         exam_object.save()
@@ -392,10 +395,21 @@ class ExamAccessTokensView(ExamsAPIView):
 class ExamAttemptView(ExamsAPIView):
     """
     Endpoint for the ExamAttempt
-    /exams/attempt
+
+    Given the id of the attmpt, this view will
+    /exams/attempt/<attempt_id>
 
     Supports:
+        HTTP GET: Get an attempt's status.
         HTTP PUT: Update an attempt's status.
+
+    HTTP GET
+    **Returns**
+    ExamAttempt = {
+        "id", "created", "modified", "user", "start_time", "end_time", "status", "exam", "allowed_time_limit_mins", "attempt_number"
+    }
+    **Exceptions**
+        * HTTP_404_NOT_FOUND
 
     HTTP PUT
     Updates the attempt status based on a provided action
@@ -408,6 +422,10 @@ class ExamAttemptView(ExamsAPIView):
 
     PUT Response Values
         {'exam_attempt_id': <attempt_id>}: The attempt id of the attempt being updated
+        
+    **Exceptions**
+        * HTTP_400_BAD_REQUEST
+        * HTTP_403_FORBIDDEN
 
     HTTP POST
     Creates a new attempt based on a provided exam_id
@@ -421,6 +439,20 @@ class ExamAttemptView(ExamsAPIView):
     """
 
     authentication_classes = (JwtAuthentication,)
+
+    def get(self, request, attempt_id):
+        # TODO, maybe: Only allow authenticated users with the right role to view other's exam attempts
+        try:
+            attempt = get_attempt_by_id(attempt_id)
+        except ObjectDoesNotExist:
+            response_status = status.HTTP_404_NOT_FOUND
+            return Response(status=response_status,
+                            data={"detail": "Exam attempt does not exist"})
+
+        response = self.get_response(attempt, request.user)
+
+        return response
+
 
     def get(self, request, attempt_id='None'):
         """
@@ -441,6 +473,7 @@ class ExamAttemptView(ExamsAPIView):
             
         return Response(status=status.HTTP_404_NOT_FOUND)
 
+    
     def put(self, request, attempt_id):
         """
         HTTP PUT handler to update exam attempt status based on a specified action
@@ -483,6 +516,7 @@ class ExamAttemptView(ExamsAPIView):
 
         to_status = action_mapping.get(action)
         if to_status:
+            # This is the part that returns the attempt data
             attempt_id = update_attempt_status(attempt_id, to_status)
             data = {"exam_attempt_id": attempt_id}
             return Response(data)
