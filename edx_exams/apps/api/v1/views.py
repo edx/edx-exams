@@ -15,7 +15,7 @@ from rest_framework.response import Response
 from token_utils.api import sign_token_for
 
 from edx_exams.apps.api.permissions import StaffUserOrReadOnlyPermissions, StaffUserPermissions
-from edx_exams.apps.api.serializers import ExamSerializer, ProctoringProviderSerializer, StudentAttemptSerializer
+from edx_exams.apps.api.serializers import ExamSerializer, ExamAttemptSerializer, ProctoringProviderSerializer, StudentAttemptSerializer
 from edx_exams.apps.api.v1 import ExamsAPIView
 from edx_exams.apps.core.api import (
     create_exam_attempt,
@@ -441,45 +441,18 @@ class ExamAttemptView(ExamsAPIView):
     authentication_classes = (JwtAuthentication,)
 
     def get(self, request, attempt_id):
-        """ 
-
-        # CODE FROM edx-proctoring:
-
-        exams = get_active_exams_for_user(request.user.id)
-
-        if exams:
-            exam_info = exams[0]
-
-            exam = exam_info['exam']
-            attempt = exam_info['attempt']
-            response_dict = get_exam_attempt_data(exam.get('id'), attempt.get('id'))
-
-        else:
-            response_dict = {
-                'in_timed_exam': False,
-                'is_proctored': False
-            }
-
-        return Response(data=response_dict, status=status.HTTP_200_OK)
-        
-        """
-        # TODO, maybe: Only allow authenticated users with the right role to view other's exam attempts
         try:
-            attempt = get_attempt_by_id(attempt_id)
-            # Try to just get: time remaining, accessibility string, and status
-            """ Pseudocode:
-            time_remaining
-            """
+            attempt = ExamAttempt.objects.all()
         except ObjectDoesNotExist:
-            response_status = status.HTTP_404_NOT_FOUND
-            return Response(status=response_status,
+            return Response(status=status.HTTP_404_NOT_FOUND,
                             data={"detail": "Exam attempt does not exist"})
 
-        response = self.get_response(attempt, request.user)
+        response = ExamAttemptSerializer(attempt, many=True)
 
-        return response
+        return Response(status=status.HTTP_200_OK,
+                        data=response.data)
 
-
+    
     def get(self, request, attempt_id='None'):
         """
         HTTP GET handler to fetch all exam attempt data
@@ -499,7 +472,7 @@ class ExamAttemptView(ExamsAPIView):
             
         return Response(status=status.HTTP_404_NOT_FOUND)
 
-    
+
     def put(self, request, attempt_id):
         """
         HTTP PUT handler to update exam attempt status based on a specified action
