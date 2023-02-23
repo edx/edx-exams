@@ -15,12 +15,14 @@ from rest_framework.response import Response
 from token_utils.api import sign_token_for
 
 from edx_exams.apps.api.permissions import StaffUserOrReadOnlyPermissions, StaffUserPermissions
-from edx_exams.apps.api.serializers import ExamSerializer, ProctoringProviderSerializer
+from edx_exams.apps.api.serializers import ExamSerializer, ProctoringProviderSerializer, StudentAttemptSerializer
 from edx_exams.apps.api.v1 import ExamsAPIView
 from edx_exams.apps.core.api import (
     create_exam_attempt,
     get_attempt_by_id,
+    get_current_exam_attempt,
     get_exam_attempt_time_remaining,
+    get_exam_by_content_id,
     update_attempt_status
 )
 from edx_exams.apps.core.exam_types import get_exam_type
@@ -443,10 +445,10 @@ class ExamAttemptView(ExamsAPIView):
             )
 
         # user should only be able to update their own attempt
-        if attempt['user']['id'] != request.user.id:
+        if attempt.user.id != request.user.id:
             error_msg = (
-                f"user_id={attempt['user']['id']} attempted to update attempt_id={attempt['id']} in "
-                f"course_id={attempt['exam']['course_id']} but does not have access to it. (action={action})"
+                f"user_id={attempt.user.id} attempted to update attempt_id={attempt.id} in "
+                f"course_id={attempt.exam.course_id} but does not have access to it. (action={action})"
             )
             error = {'detail': error_msg}
             return Response(status=status.HTTP_403_FORBIDDEN, data=error)
@@ -484,4 +486,52 @@ class ExamAttemptView(ExamsAPIView):
             update_attempt_status(exam_attempt_id, ExamAttemptStatus.started)
 
         data = {'exam_attempt_id': exam_attempt_id}
+        return Response(data)
+
+
+class CourseExamAttemptView(ExamsAPIView):
+    """
+    Endpoint for getting timed or proctored exam and its attempt data given the request user.
+    /exam/attempt/course_id/{course_id}/content_id/{content_id}
+    Supports:
+        HTTP GET:
+
+            Returns an existing exam (by course_id and content id) with a nested attempt object,
+            if any attempt for that exam exists.
+            {
+                'exam': {
+                    'attempt': {...}
+                    ...
+                },
+            }
+    """
+
+    def get(self, request, course_id, content_id):
+        """
+        HTTP GET handler. Returns exam and an attempt, if one exists for the exam
+        """
+        exam = get_exam_by_content_id(course_id, content_id)
+
+        if exam is None:
+            data = {'exam': {}}
+            return Response(data)
+
+        serialized_exam = ExamSerializer(exam).data
+
+        exam_type_class = get_exam_type(exam.exam_type)
+
+        # the following are additional fields that the frontend expects
+        serialized_exam['type'] = exam.exam_type
+        serialized_exam['is_proctored'] = exam_type_class.is_proctored
+        serialized_exam['is_practice_exam'] = exam_type_class.is_practice
+        serialized_exam['backend'] = exam.provider.verbose_name
+
+        exam_attempt = get_current_exam_attempt(request.user.id, exam.id)
+        if exam_attempt is not None:
+            student_attempt = StudentAttemptSerializer(exam_attempt).data
+            serialized_exam['attempt'] = student_attempt
+        else:
+            serialized_exam['attempt'] = {}
+
+        data = {'exam': serialized_exam}
         return Response(data)

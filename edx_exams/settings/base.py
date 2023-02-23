@@ -271,3 +271,5 @@ LOGGING = get_logger_config(debug=DEBUG)
 # Exam access token cookie config
 ACCESS_TOKEN_COOKIE_NAME = 'exam_access_token'
 ACCESS_TOKEN_COOKIE_DOMAIN = None
+
+LEARNING_MICROFRONTEND_URL = None

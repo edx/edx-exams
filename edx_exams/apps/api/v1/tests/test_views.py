@@ -13,8 +13,10 @@ from django.utils import timezone
 from freezegun import freeze_time
 from token_utils.api import unpack_token_for
 
+from edx_exams.apps.api.serializers import ExamSerializer, StudentAttemptSerializer
 from edx_exams.apps.api.test_utils import ExamsAPITestCase
 from edx_exams.apps.api.test_utils.factories import UserFactory
+from edx_exams.apps.core.exam_types import get_exam_type
 from edx_exams.apps.core.exceptions import ExamAttemptOnPastDueExam, ExamIllegalStatusTransition
 from edx_exams.apps.core.models import CourseExamConfiguration, Exam, ExamAttempt, ProctoringProvider
 from edx_exams.apps.core.statuses import ExamAttemptStatus
@@ -980,3 +982,91 @@ class ExamAttemptViewTest(ExamsAPITestCase):
 
         if start_immediately:
             mock_update_attempt.assert_called_once_with(mock_attempt_id, ExamAttemptStatus.started)
+
+
+class CourseExamAttemptViewTest(ExamsAPITestCase):
+    """
+    Tests CourseExamAttemptView
+    """
+
+    def setUp(self):
+        super().setUp()
+
+        self.course_id = 'course-v1:edx+test+f19'
+        self.content_id = 'block-v1:edX+test+2023+type@sequential+block@1111111111'
+
+        self.course_exam_config = CourseExamConfiguration.objects.create(
+            course_id=self.course_id,
+            provider=self.test_provider,
+            allow_opt_out=False
+        )
+
+        self.exam = Exam.objects.create(
+            resource_id=str(uuid.uuid4()),
+            course_id=self.course_id,
+            provider=self.test_provider,
+            content_id=self.content_id,
+            exam_name='test_exam',
+            exam_type='proctored',
+            time_limit_mins=30,
+            due_date='2040-07-01T00:00:00Z',
+            hide_after_due=False,
+            is_active=True
+        )
+
+    def get_api(self, user, course_id, content_id):
+        """
+        Helper function to make patch request to the API
+        """
+
+        headers = self.build_jwt_headers(user)
+        url = reverse(
+            'api:v1:student-course_exam_attempt',
+            kwargs={'course_id': course_id, 'content_id': content_id}
+        )
+
+        return self.client.get(url, **headers)
+
+    def test_no_exam(self):
+        """
+        Test endpoint for a content ID that doesn't exist
+        """
+        response = self.get_api(self.user, self.course_id, '1111111')
+        self.assertEqual(response.data['exam'], {})
+
+    def test_no_active_attempt(self):
+        """
+        Test endpoint for an existing exam, but no attempt for user
+        """
+        exam_type_class = get_exam_type(self.exam.exam_type)
+        expected_data = ExamSerializer(self.exam).data
+        expected_data['type'] = self.exam.exam_type
+        expected_data['is_proctored'] = exam_type_class.is_proctored
+        expected_data['is_practice_exam'] = exam_type_class.is_practice
+        expected_data['backend'] = self.exam.provider.verbose_name
+        expected_data['attempt'] = {}
+
+        response = self.get_api(self.user, self.course_id, self.content_id)
+        response_exam = response.data['exam']
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response_exam, expected_data)
+
+    def test_active_attempt(self):
+        """
+        Test that if attempt exists, it is returned as part of the exam object
+        """
+        attempt = ExamAttempt.objects.create(
+            user=self.user,
+            exam=self.exam,
+            attempt_number=1,
+            status=ExamAttemptStatus.created,
+        )
+        serialized_attempt = StudentAttemptSerializer(attempt).data
+
+        response = self.get_api(self.user, self.course_id, self.content_id)
+
+        self.assertEqual(response.status_code, 200)
+        response_exam = response.data['exam']
+
+        self.assertEqual(response_exam['attempt'], serialized_attempt)
