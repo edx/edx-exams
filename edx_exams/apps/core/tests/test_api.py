@@ -401,3 +401,98 @@ class TestCreateExamAttempt(ExamsAPITestCase):
         # check to ensure that only one attempt exists for exam and user
         filtered_attempts = ExamAttempt.objects.filter(user_id=user_id, exam_id=exam_id)
         self.assertEqual(len(filtered_attempts), 1)
+
+
+class TestGetStudentExamAttempt(ExamsAPITestCase):
+    def setUp(self):
+        super().setUp()
+
+        self.course_id = 'course-v1:edx+test+f19'
+        self.exam = Exam.objects.create(
+            resource_id=str(uuid.uuid4()),
+            course_id=self.course_id,
+            provider=self.test_provider,
+            content_id='abcd1234',
+            exam_name='test_exam',
+            exam_type='proctored',
+            time_limit_mins=30,
+        )
+
+    def test_get_attempt(self):
+        # check that fields match as expected (with only the needed keys)
+        return 0
+
+    def test_no_attempt(self):
+        # check that None is returned if no attempt exists
+        return 0
+
+
+class TestGetExamByContentId(ExamsAPITestCase):
+    def setUp(self):
+        super().setUp()
+
+        self.course_id = 'course-v1:edx+test+f19'
+        self.exam = Exam.objects.create(
+            resource_id=str(uuid.uuid4()),
+            course_id=self.course_id,
+            provider=self.test_provider,
+            content_id='abcd1234',
+            exam_name='test_exam',
+            exam_type='proctored',
+            time_limit_mins=30,
+        )
+
+    def test_get_exam(self):
+        # check that fields match
+        return 0
+
+    def test_no_exam(self):
+        # check that none is returned
+        return 0
+
+
+class TestGetCurrentExamAttempt(ExamsAPITestCase):
+    def setUp(self):
+        super().setUp()
+
+        self.course_id = 'course-v1:edx+test+f19'
+        self.exam = Exam.objects.create(
+            resource_id=str(uuid.uuid4()),
+            course_id=self.course_id,
+            provider=self.test_provider,
+            content_id='abcd1234',
+            exam_name='test_exam',
+            exam_type='proctored',
+            time_limit_mins=30,
+        )
+
+    def test_get_attempt(self):
+        # create two attempts
+        # check that most recent is returned
+
+        return 0
+
+    def test_no_attempt(self):
+        # check that none is returned
+        return 0
+
+
+class TestGetExamURLPath(ExamsAPITestCase):
+    def setUp(self):
+        super().setUp()
+
+        self.course_id = 'course-v1:edx+test+f19'
+        self.exam = Exam.objects.create(
+            resource_id=str(uuid.uuid4()),
+            course_id=self.course_id,
+            provider=self.test_provider,
+            content_id='abcd1234',
+            exam_name='test_exam',
+            exam_type='proctored',
+            time_limit_mins=30,
+        )
+
+    def test_get_exam_url(self):
+        # assert that url structure is as expected
+
+        return 0

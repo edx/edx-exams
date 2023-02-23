@@ -4,6 +4,7 @@ Serializers for the edx-exams API
 from rest_framework import serializers
 from rest_framework.fields import DateTimeField
 
+from edx_exams.apps.core.api import get_exam_url_path, get_exam_attempt_time_remaining
 from edx_exams.apps.core.exam_types import EXAM_TYPES
 from edx_exams.apps.core.models import Exam, ExamAttempt, ProctoringProvider, User
 
@@ -93,4 +94,48 @@ class ExamAttemptSerializer(serializers.ModelSerializer):
         fields = (
             "id", "created", "modified", "user", "start_time", "end_time",
             "status", "exam", "allowed_time_limit_mins", "attempt_number"
+        )
+
+
+class StudentAttemptSerializer(serializers.ModelSerializer):
+    """
+    Serializer for the ExamAttempt model containing additional fields needed for the frontend UI
+    """
+    # directly from the ExamAttempt Model
+    attempt_id = serializers.IntegerField(source='id')
+    attempt_status = serializers.CharField(source='status')
+
+    # custom fields based on the ExamAttemptModel
+    course_id = serializers.SerializerMethodField()
+    exam_type = serializers.SerializerMethodField()
+    exam_display_name = serializers.SerializerMethodField()
+    exam_url_path = serializers.SerializerMethodField()
+    time_remaining_seconds = serializers.SerializerMethodField()
+
+    def get_course_id(self, obj):
+        return obj.exam.course_id
+
+    def get_exam_type(self, obj):
+        return obj.exam.exam_type
+
+    def get_exam_display_name(self, obj):
+        return obj.exam.exam_name
+
+    def get_exam_url_path(self, obj):
+        course_id = obj.exam.course_id
+        content_id = obj.exam.content_id
+
+        return get_exam_url_path(course_id, content_id)
+
+    def get_time_remaining_seconds(self, obj):
+        return get_exam_attempt_time_remaining(obj)
+
+    class Meta:
+        """
+        Meta Class
+        """
+        model = ExamAttempt
+
+        fields = (
+            "id", "status"
         )

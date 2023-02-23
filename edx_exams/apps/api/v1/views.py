@@ -20,7 +20,10 @@ from edx_exams.apps.api.v1 import ExamsAPIView
 from edx_exams.apps.core.api import (
     create_exam_attempt,
     get_attempt_by_id,
+    get_current_exam_attempt,
     get_exam_attempt_time_remaining,
+    get_exam_by_content_id,
+    get_student_exam_attempt,
     update_attempt_status
 )
 from edx_exams.apps.core.exam_types import get_exam_type
@@ -484,4 +487,47 @@ class ExamAttemptView(ExamsAPIView):
             update_attempt_status(exam_attempt_id, ExamAttemptStatus.started)
 
         data = {'exam_attempt_id': exam_attempt_id}
+        return Response(data)
+
+
+class CourseExamAttemptView(ExamsAPIView):
+    """
+    Endpoint for getting timed or proctored exam and its attempt data given the request user.
+    /exam/attempt/course_id/{course_id}/content_id/{content_id}
+    Supports:
+        HTTP GET:
+
+            Returns an existing exam (by course_id and content id) with a nested attempt object,
+            if any attempt for that exam exists.
+            {
+                'exam': {
+                    'attempt': {...}
+                    ...
+                },
+            }
+    """
+
+    def get(self, request, course_id, content_id):
+        """
+        HTTP GET handler. Returns exam and an attempt, if one exists for the exam
+        """
+        exam = get_exam_by_content_id(course_id, content_id)
+
+        if exam is None:
+            data = {'exam': {}}
+            return Response(data)
+
+        exam_type_class = get_exam_type(exam['exam_type'])
+
+        # the following are additional fields that the frontend expects
+        exam['type'] = exam['exam_type']
+        exam['is_proctored'] = exam_type_class.is_proctored
+        exam['is_practice_exam'] = exam_type_class.is_practice
+        exam['backend'] = exam['provider']
+
+        exam_attempt = get_current_exam_attempt(request.user.id, exam['id'])
+        student_attempt = get_student_exam_attempt(exam_attempt['id'])
+
+        exam['attempt'] = student_attempt
+        data = {'exam': exam}
         return Response(data)

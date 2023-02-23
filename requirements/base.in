@@ -13,6 +13,7 @@ edx-auth-backends
 edx-django-utils
 edx-django-release-util
 edx-drf-extensions
+edx-opaque-keys
 edx-rest-api-client
 lti-consumer-xblock
 mysqlclient

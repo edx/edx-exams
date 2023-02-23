@@ -980,3 +980,51 @@ class ExamAttemptViewTest(ExamsAPITestCase):
 
         if start_immediately:
             mock_update_attempt.assert_called_once_with(mock_attempt_id, ExamAttemptStatus.started)
+
+
+class CourseExamAttemptViewTest(ExamsAPITestCase):
+    """
+    Test blah blah blah
+    """
+
+    def setUp(self):
+        super().setUp()
+
+        self.course_id = 'course-v1:edx+test+f19'
+        self.content_id = '11111111'
+
+        self.course_exam_config = CourseExamConfiguration.objects.create(
+            course_id=self.course_id,
+            provider=self.test_provider,
+            allow_opt_out=False
+        )
+
+        self.exam = Exam.objects.create(
+            resource_id=str(uuid.uuid4()),
+            course_id=self.course_id,
+            provider=self.test_provider,
+            content_id=self.content_id,
+            exam_name='test_exam',
+            exam_type='proctored',
+            time_limit_mins=30,
+            due_date='2040-07-01 00:00:00',
+            hide_after_due=False,
+            is_active=True
+        )
+
+    def test_no_exam(self):
+        # test with content id that doesn't exist
+        # assert that empty dict is returned
+        return 0
+
+    def test_no_active_attempt(self):
+        # check that attempt is {}
+
+        return 0
+
+    def test_active_attempt(self):
+        # create exam attempt
+        # call endpoint
+        # assert 200 response
+
+        return 0
