@@ -188,7 +188,7 @@ class ExamAttempt(TimeStampedModel):
     @classmethod
     def get_attempt_by_id(cls, attempt_id):
         """
-        Return ExamAttempt for a given id
+        Return ExamAttempt for a given attempt_id
         """
         try:
             attempt = cls.objects.get(id=attempt_id)

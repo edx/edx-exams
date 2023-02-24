@@ -3,6 +3,7 @@ V1 API Views
 """
 import logging
 import uuid
+import json
 
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
@@ -22,6 +23,7 @@ from edx_exams.apps.core.api import (
     get_attempt_by_id,
     get_attempts_in_progress,
     get_current_exam_attempt,
+    get_attempt_by_user_id,
     get_exam_attempt_time_remaining,
     get_exam_by_content_id,
     update_attempt_status
@@ -395,9 +397,7 @@ class ExamAccessTokensView(ExamsAPIView):
 class ExamAttemptView(ExamsAPIView):
     """
     Endpoint for the ExamAttempt
-
-    Given the id of the attmpt, this view will
-    /exams/attempt/<attempt_id>
+    /exams/attempt
 
     Supports:
         HTTP GET: Get an attempt's status.
@@ -405,8 +405,17 @@ class ExamAttemptView(ExamsAPIView):
 
     HTTP GET
     **Returns**
-    ExamAttempt = {
-        "id", "created", "modified", "user", "start_time", "end_time", "status", "exam", "allowed_time_limit_mins", "attempt_number"
+    {
+        'id': int (primary key),
+        'created': datetime,
+        'modified': datetime,
+        'user': User object,
+        'start_time': datetime,
+        'end_time': datetime,
+        'status': string,
+        'exam': Exam object,
+        'allowed_time_limit_mins': int,
+        'attempt_number': int,
     }
     **Exceptions**
         * HTTP_404_NOT_FOUND
@@ -440,19 +449,6 @@ class ExamAttemptView(ExamsAPIView):
 
     authentication_classes = (JwtAuthentication,)
 
-    def get(self, request, attempt_id):
-        try:
-            attempt = ExamAttempt.objects.all()
-        except ObjectDoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND,
-                            data={"detail": "Exam attempt does not exist"})
-
-        response = ExamAttemptSerializer(attempt, many=True)
-
-        return Response(status=status.HTTP_200_OK,
-                        data=response.data)
-
-    
     def get(self, request, attempt_id='None'):
         """
         HTTP GET handler to fetch all exam attempt data
@@ -464,14 +460,12 @@ class ExamAttemptView(ExamsAPIView):
             A Response object containing all `ExamAttempt` data.
         """
         user_id = request.user.id
-        attempt = get_attempts_in_progress(user_id)
+        attempt = get_attempt_by_user_id(user_id)
         
         if attempt != None:
-            serialized_attempt = ExamAttemptSerializer(attempt)
-            return Response(data=serialized_attempt.data)
+            return Response(data=attempt)
             
         return Response(status=status.HTTP_404_NOT_FOUND)
-
 
     def put(self, request, attempt_id):
         """

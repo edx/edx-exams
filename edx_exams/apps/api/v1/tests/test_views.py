@@ -17,8 +17,8 @@ from edx_exams.apps.api.serializers import ExamSerializer, StudentAttemptSeriali
 from edx_exams.apps.api.test_utils import ExamsAPITestCase
 from edx_exams.apps.api.test_utils.factories import UserFactory
 from edx_exams.apps.core.exam_types import get_exam_type
-from edx_exams.apps.core.exceptions import ExamAttemptOnPastDueExam, ExamIllegalStatusTransition
-from edx_exams.apps.core.models import CourseExamConfiguration, Exam, ExamAttempt, ProctoringProvider
+from edx_exams.apps.core.exceptions import ExamAttemptOnPastDueExam, ExamAttemptOnPastDueExam, ExamIllegalStatusTransition
+from edx_exams.apps.core.models import CourseExamConfiguration, Exam, ExamAttempt, ProctoringProvider, User
 from edx_exams.apps.core.statuses import ExamAttemptStatus
 
 
@@ -905,6 +905,89 @@ class ExamAttemptViewTest(ExamsAPITestCase):
         response = self.put_api(self.non_staff_user, attempt.id, {'action': action})
         self.assertEqual(response.status_code, 200)
         mock_update_attempt_status.assert_called_once_with(attempt.id, expected_status)
+
+    def test_get_all_exam_attempts(self):
+        """ 
+        Test that the GET function in the ExamAttempt view returns 
+        the latest in-progress exam attempt, given that one exists
+        
+        Note that "in-progress" attempts are defined as having a 
+        status of 'started' or 'ready_to_submit'
+        """
+
+        # Create a mock user (this should be discussed, move to helper???)
+        mock_user = User.objects.create(
+            id=3,
+            username="jerry",
+            email="jerry@example.com",
+            lms_user_id=2
+        )
+
+        # Create mock exam attempt data
+        ExamAttempt.objects.create(
+            user=mock_user,
+            exam=self.exam,
+            attempt_number=1,
+            status=ExamAttemptStatus.created,
+            start_time=None,
+            allowed_time_limit_mins=None,
+        )
+        expected_attempt = ExamAttempt.objects.create( # This attempt is what we expect the get function to return
+            user=mock_user,
+            exam=self.exam,
+            attempt_number=2,
+            status=ExamAttemptStatus.started,
+            start_time=datetime.now(), # Newest one (from now), which should be returned
+            allowed_time_limit_mins=None,
+        )
+        ExamAttempt.objects.create(
+            user=mock_user,
+            exam=self.exam,
+            attempt_number=3,
+            status=ExamAttemptStatus.started,
+            start_time=datetime.now() - timedelta(days = 1), # from yesterday
+            allowed_time_limit_mins=None,
+        )
+        ExamAttempt.objects.create(
+            user=mock_user,
+            exam=self.exam,
+            attempt_number=4,
+            status=ExamAttemptStatus.ready_to_submit,
+            start_time=datetime.now() - timedelta(hours = 1), # from one hour ago
+            allowed_time_limit_mins=None,
+        )
+        ExamAttempt.objects.create(
+            user=mock_user,
+            exam=self.exam,
+            attempt_number=5,
+            status=ExamAttemptStatus.ready_to_submit,
+            start_time=datetime.fromisoformat('2011-11-04'), # from yearo agi
+            allowed_time_limit_mins=None,
+        )
+        ExamAttempt.objects.create(
+            user=mock_user,
+            exam=self.exam,
+            attempt_number=6,
+            status=ExamAttemptStatus.submitted,
+            start_time=None,
+            allowed_time_limit_mins=None,
+        )
+        ExamAttempt.objects.create(
+            user=mock_user,
+            exam=self.exam,
+            attempt_number=7,
+            status=ExamAttemptStatus.rejected,
+            start_time=None,
+            allowed_time_limit_mins=None,
+        )
+
+        response = self.get_api(mock_user)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data.get('status'), expected_attempt.status)
+        self.assertEqual(response.data.get('attempt_number'), expected_attempt.attempt_number)
+        self.assertEqual(response.data.get('user').get('username'), expected_attempt.user.username)
+        self.assertEqual(response.data.get('exam').get('content_id'), expected_attempt.exam.content_id)
 
     @patch('edx_exams.apps.api.v1.views.update_attempt_status')
     def test_put_exception_raised(self, mock_update_attempt_status):

@@ -9,6 +9,7 @@ from django.conf import settings
 from django.utils import timezone
 from opaque_keys.edx.keys import CourseKey, UsageKey
 
+from edx_exams.apps.api.serializers import ExamAttemptSerializer
 from edx_exams.apps.core.exam_types import OnboardingExamType, PracticeExamType, get_exam_type
 from edx_exams.apps.core.exceptions import (
     ExamAttemptAlreadyExists,
