@@ -3,13 +3,14 @@
 from django.urls import path, re_path
 
 from edx_exams.apps.api.v1.views import (
+    CourseExamAttemptView,
     CourseExamConfigurationsView,
     CourseExamsView,
     ExamAccessTokensView,
     ExamAttemptView,
     ProctoringProvidersView
 )
-from edx_exams.apps.core.constants import COURSE_ID_PATTERN, EXAM_ID_PATTERN
+from edx_exams.apps.core.constants import CONTENT_ID_PATTERN, COURSE_ID_PATTERN, EXAM_ID_PATTERN
 
 app_name = 'v1'
 
@@ -32,4 +33,7 @@ urlpatterns = [
     path('exams/attempt',
          ExamAttemptView.as_view(),
          name='exams-attempt',),
+    re_path(fr'student/exam/attempt/course_id/{COURSE_ID_PATTERN}/content_id/{CONTENT_ID_PATTERN}',
+            CourseExamAttemptView.as_view(),
+            name='student-course_exam_attempt')
 ]

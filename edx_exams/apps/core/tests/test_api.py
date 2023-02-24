@@ -6,15 +6,19 @@ from datetime import datetime, timedelta
 from itertools import product
 
 import ddt
+from django.conf import settings
 from django.utils import timezone
 from freezegun import freeze_time
+from opaque_keys.edx.keys import CourseKey, UsageKey
 
-from edx_exams.apps.api.serializers import ExamAttemptSerializer
 from edx_exams.apps.api.test_utils import ExamsAPITestCase
 from edx_exams.apps.core.api import (
     create_exam_attempt,
     get_attempt_by_id,
+    get_current_exam_attempt,
     get_exam_attempt_time_remaining,
+    get_exam_by_content_id,
+    get_exam_url_path,
     update_attempt_status
 )
 from edx_exams.apps.core.exceptions import (
@@ -276,7 +280,7 @@ class TestGetAttemptById(ExamsAPITestCase):
         Test that a serialized attempt is returned
         """
         attempt = get_attempt_by_id(self.exam_attempt.id)
-        self.assertEqual(attempt, ExamAttemptSerializer(self.exam_attempt).data)
+        self.assertEqual(attempt, self.exam_attempt)
 
     def test_with_no_attempt(self):
         """
@@ -401,3 +405,89 @@ class TestCreateExamAttempt(ExamsAPITestCase):
         # check to ensure that only one attempt exists for exam and user
         filtered_attempts = ExamAttempt.objects.filter(user_id=user_id, exam_id=exam_id)
         self.assertEqual(len(filtered_attempts), 1)
+
+
+class TestGetExamByContentId(ExamsAPITestCase):
+    """
+    Tests for the API utility function `get_exam_by_content_id`
+    """
+    def setUp(self):
+        super().setUp()
+
+        self.course_id = 'course-v1:edx+test+f19'
+        self.exam = Exam.objects.create(
+            resource_id=str(uuid.uuid4()),
+            course_id=self.course_id,
+            provider=self.test_provider,
+            content_id='abcd1234',
+            exam_name='test_exam',
+            exam_type='proctored',
+            time_limit_mins=30,
+        )
+
+    def test_get_exam(self):
+        exam = get_exam_by_content_id(self.exam.course_id, self.exam.content_id)
+        self.assertEqual(self.exam, exam)
+
+    def test_no_exam(self):
+        data = get_exam_by_content_id(self.exam.course_id, 1111111)
+        self.assertIsNone(data)
+
+
+class TestGetCurrentExamAttempt(ExamsAPITestCase):
+    """
+    Tests for the API utility function `get_current_exam_attempt`
+    """
+    def setUp(self):
+        super().setUp()
+
+        self.course_id = 'course-v1:edx+test+f19'
+        self.exam = Exam.objects.create(
+            resource_id=str(uuid.uuid4()),
+            course_id=self.course_id,
+            provider=self.test_provider,
+            content_id='abcd1234',
+            exam_name='test_exam',
+            exam_type='proctored',
+            time_limit_mins=30,
+        )
+
+    def test_get_attempt(self):
+        # create two attempts
+        ExamAttempt.objects.create(
+            user=self.user,
+            exam=self.exam,
+            attempt_number=1,
+            status=ExamAttemptStatus.error,
+        )
+
+        most_recent_attempt = ExamAttempt.objects.create(
+            user=self.user,
+            exam=self.exam,
+            attempt_number=2,
+            status=ExamAttemptStatus.created,
+        )
+
+        # check that most recently created is returned
+        attempt = get_current_exam_attempt(self.user.id, self.exam.id)
+        self.assertEqual(most_recent_attempt, attempt)
+
+    def test_no_attempt(self):
+        data = get_current_exam_attempt(self.user.id, self.exam.id)
+        self.assertIsNone(data)
+
+
+class TestGetExamURLPath(ExamsAPITestCase):
+    """
+    Tests for the API utility function `get_exam_url_path`
+    """
+    def test_get_exam_url(self):
+        course_id = 'course-v1:edx+test+f19'
+        content_id = 'block-v1:edX+test+2023+type@sequential+block@1111111111'
+
+        usage_key = UsageKey.from_string(content_id)
+        course_key = CourseKey.from_string(course_id)
+        expected_string = f'{settings.LEARNING_MICROFRONTEND_URL}/course/{course_key}/{usage_key}'
+
+        url = get_exam_url_path(course_id, content_id)
+        self.assertEqual(expected_string, url)

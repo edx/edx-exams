@@ -5,9 +5,10 @@ import logging
 from datetime import datetime, timedelta
 
 import pytz
+from django.conf import settings
 from django.utils import timezone
+from opaque_keys.edx.keys import CourseKey, UsageKey
 
-from edx_exams.apps.api.serializers import ExamAttemptSerializer
 from edx_exams.apps.core.exam_types import OnboardingExamType, PracticeExamType, get_exam_type
 from edx_exams.apps.core.exceptions import (
     ExamAttemptAlreadyExists,
@@ -23,14 +24,11 @@ log = logging.getLogger(__name__)
 
 def get_attempt_by_id(attempt_id):
     """
-    Return a serialized attempt suitable for a view to handle
+    Return an attempt by id
     """
     attempt = ExamAttempt.get_attempt_by_id(attempt_id)
-    if attempt:
-        serialized_attempt = ExamAttemptSerializer(attempt).data
-        return serialized_attempt
 
-    return None
+    return attempt
 
 
 def update_attempt_status(attempt_id, to_status):
@@ -214,3 +212,32 @@ def create_exam_attempt(exam_id, user_id):
     )
 
     return attempt.id
+
+
+def get_exam_by_content_id(course_id, content_id):
+    """
+    Retrieve an exam filtered by a course_id and content_id
+    """
+    try:
+        exam = Exam.objects.get(course_id=course_id, content_id=content_id)
+        return exam
+    except Exam.DoesNotExist:
+        return None
+
+
+def get_current_exam_attempt(user_id, exam_id):
+    """
+    Retrieve the current attempt for a user given an exam
+    """
+    attempt = ExamAttempt.get_current_exam_attempt(user_id, exam_id)
+    return attempt
+
+
+def get_exam_url_path(course_id, content_id):
+    """
+    Return a path to an exam in the Learning MFE given a course and content id
+    """
+    course_key = CourseKey.from_string(course_id)
+    usage_key = UsageKey.from_string(content_id)
+    url = f'{settings.LEARNING_MICROFRONTEND_URL}/course/{course_key}/{usage_key}'
+    return url
