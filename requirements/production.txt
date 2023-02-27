@@ -83,7 +83,7 @@ django-config-models==2.3.0
     # via
     #   -r requirements/base.txt
     #   lti-consumer-xblock
-django-cors-headers==3.13.0
+django-cors-headers==3.14.0
     # via -r requirements/base.txt
 django-crum==0.7.9
     # via
@@ -98,6 +98,8 @@ django-filter==22.1
 django-model-utils==4.3.1
     # via -r requirements/base.txt
 django-rest-swagger==2.2.0
+    # via -r requirements/base.txt
+django-simple-history==3.0.0
     # via -r requirements/base.txt
 django-waffle==3.0.0
     # via

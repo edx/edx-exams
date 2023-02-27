@@ -62,7 +62,7 @@ coreschema==0.0.4
     #   -r requirements/base.txt
     #   coreapi
     #   drf-yasg
-coverage[toml]==7.2.0
+coverage[toml]==7.2.1
     # via
     #   -r requirements/test.in
     #   pytest-cov
@@ -107,7 +107,7 @@ django-config-models==2.3.0
     # via
     #   -r requirements/base.txt
     #   lti-consumer-xblock
-django-cors-headers==3.13.0
+django-cors-headers==3.14.0
     # via -r requirements/base.txt
 django-crum==0.7.9
     # via
@@ -125,6 +125,10 @@ django-model-utils==4.3.1
     # via -r requirements/base.txt
 django-rest-swagger==2.2.0
     # via -r requirements/base.txt
+django-simple-history==3.0.0
+    # via
+    #   -c https://raw.githubusercontent.com/edx/edx-lint/master/edx_lint/files/common_constraints.txt
+    #   -r requirements/base.txt
 django-waffle==3.0.0
     # via
     #   -r requirements/base.txt
@@ -176,7 +180,7 @@ exceptiongroup==1.1.0
     # via pytest
 factory-boy==3.2.1
     # via -r requirements/test.in
-faker==17.1.0
+faker==17.3.0
     # via factory-boy
 filelock==3.9.0
     # via
@@ -485,7 +489,7 @@ webob==1.8.7
     # via
     #   -r requirements/base.txt
     #   xblock
-wrapt==1.14.1
+wrapt==1.15.0
     # via astroid
 xblock==1.6.2
     # via

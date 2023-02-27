@@ -72,7 +72,7 @@ coreschema==0.0.4
     #   -r requirements/test.txt
     #   coreapi
     #   drf-yasg
-coverage[toml]==7.2.0
+coverage[toml]==7.2.1
     # via
     #   -r requirements/test.txt
     #   pytest-cov
@@ -80,7 +80,6 @@ cryptography==39.0.1
     # via
     #   -r requirements/test.txt
     #   pyjwt
-    #   secretstorage
     #   social-auth-core
 ddt==1.6.0
     # via -r requirements/test.txt
@@ -123,7 +122,7 @@ django-config-models==2.3.0
     # via
     #   -r requirements/test.txt
     #   lti-consumer-xblock
-django-cors-headers==3.13.0
+django-cors-headers==3.14.0
     # via -r requirements/test.txt
 django-crum==0.7.9
     # via
@@ -141,6 +140,10 @@ django-model-utils==4.3.1
     # via -r requirements/test.txt
 django-rest-swagger==2.2.0
     # via -r requirements/test.txt
+django-simple-history==3.0.0
+    # via
+    #   -c https://raw.githubusercontent.com/edx/edx-lint/master/edx_lint/files/common_constraints.txt
+    #   -r requirements/test.txt
 django-waffle==3.0.0
     # via
     #   -r requirements/test.txt
@@ -204,7 +207,7 @@ exceptiongroup==1.1.0
     #   pytest
 factory-boy==3.2.1
     # via -r requirements/test.txt
-faker==17.1.0
+faker==17.3.0
     # via
     #   -r requirements/test.txt
     #   factory-boy
@@ -234,8 +237,6 @@ importlib-metadata==6.0.0
     #   keyring
     #   sphinx
     #   twine
-importlib-resources==5.12.0
-    # via keyring
 inflection==0.5.1
     # via
     #   -r requirements/test.txt
@@ -254,10 +255,6 @@ itypes==1.2.0
     #   coreapi
 jaraco-classes==3.2.3
     # via keyring
-jeepney==0.8.0
-    # via
-    #   keyring
-    #   secretstorage
 jinja2==3.1.2
     # via
     #   -r requirements/test.txt
@@ -306,7 +303,7 @@ mdurl==0.1.2
     # via markdown-it-py
 mock==5.0.1
     # via -r requirements/test.txt
-more-itertools==9.0.0
+more-itertools==9.1.0
     # via jaraco-classes
 mysqlclient==2.1.1
     # via -r requirements/test.txt
@@ -495,8 +492,6 @@ ruamel-yaml-clib==0.2.7
     # via
     #   -r requirements/test.txt
     #   ruamel-yaml
-secretstorage==3.3.3
-    # via keyring
 semantic-version==2.10.0
     # via
     #   -r requirements/test.txt
@@ -600,7 +595,6 @@ typing-extensions==4.5.0
     #   -r requirements/test.txt
     #   astroid
     #   pylint
-    #   rich
 uritemplate==4.1.1
     # via
     #   -r requirements/test.txt
@@ -629,7 +623,7 @@ webob==1.8.7
     # via
     #   -r requirements/test.txt
     #   xblock
-wrapt==1.14.1
+wrapt==1.15.0
     # via
     #   -r requirements/test.txt
     #   astroid
@@ -642,10 +636,8 @@ xblock-utils==3.0.0
     # via
     #   -r requirements/test.txt
     #   lti-consumer-xblock
-zipp==3.14.0
-    # via
-    #   importlib-metadata
-    #   importlib-resources
+zipp==3.15.0
+    # via importlib-metadata
 
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools

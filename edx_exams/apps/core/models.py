@@ -7,6 +7,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db import models, transaction
 from django.utils.translation import gettext_lazy as _
 from model_utils.models import TimeStampedModel
+from simple_history.models import HistoricalRecords
 
 from edx_exams.apps.core.exam_types import EXAM_TYPES
 from edx_exams.apps.core.statuses import ExamAttemptStatus
@@ -108,6 +109,9 @@ class Exam(TimeStampedModel):
     # Whether this exam will be active.
     is_active = models.BooleanField(default=False)
 
+    # This is the reference to the SimpleHistory table
+    history = HistoricalRecords(table_name='exams_examhistory')
+
     class Meta:
         """ Meta class for this Django model """
         db_table = 'exams_exam'
@@ -161,6 +165,9 @@ class ExamAttempt(TimeStampedModel):
     end_time = models.DateTimeField(null=True)
 
     allowed_time_limit_mins = models.IntegerField(null=True)
+
+    # This is the reference to the SimpleHistory table
+    history = HistoricalRecords(table_name='exams_examattempthistory')
 
     class Meta:
         """ Meta class for this Django model """
