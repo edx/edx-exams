@@ -9,7 +9,6 @@ from django.conf import settings
 from django.utils import timezone
 from opaque_keys.edx.keys import CourseKey, UsageKey
 
-from edx_exams.apps.api.serializers import ExamAttemptSerializer
 from edx_exams.apps.core.exam_types import OnboardingExamType, PracticeExamType, get_exam_type
 from edx_exams.apps.core.exceptions import (
     ExamAttemptAlreadyExists,
@@ -28,11 +27,8 @@ def get_attempt_by_id(attempt_id):
     Return an attempt by id
     """
     attempt = ExamAttempt.get_attempt_by_id(attempt_id)
-    if attempt:
-        serialized_attempt = ExamAttemptSerializer(attempt).data
-        return serialized_attempt
-
-    return None
+   
+    return attempt
 
 def get_attempts_in_progress(user_id):
     """ 

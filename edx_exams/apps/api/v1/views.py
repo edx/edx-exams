@@ -23,7 +23,6 @@ from edx_exams.apps.core.api import (
     get_attempt_by_id,
     get_attempts_in_progress,
     get_current_exam_attempt,
-    get_attempt_by_user_id,
     get_exam_attempt_time_remaining,
     get_exam_by_content_id,
     update_attempt_status
@@ -400,8 +399,9 @@ class ExamAttemptView(ExamsAPIView):
     /exams/attempt
 
     Supports:
-        HTTP GET: Get an attempt's status.
-        HTTP PUT: Update an attempt's status.
+        HTTP GET: Get the data for a user's latest in-progress exam attempt.
+        HTTP PUT: Update an exam attempt's status.
+        HTTP POST: Create an exam attempt.
 
     HTTP GET
     **Returns**
@@ -460,10 +460,11 @@ class ExamAttemptView(ExamsAPIView):
             A Response object containing all `ExamAttempt` data.
         """
         user_id = request.user.id
-        attempt = get_attempt_by_user_id(user_id)
+        attempt = get_attempts_in_progress(user_id)
         
         if attempt != None:
-            return Response(data=attempt)
+            serialized_attempt = ExamAttemptSerializer(attempt)
+            return Response(data=serialized_attempt.data)
             
         return Response(status=status.HTTP_404_NOT_FOUND)
 
