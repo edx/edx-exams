@@ -63,7 +63,7 @@ django==3.2.18
     #   openedx-filters
 django-config-models==2.3.0
     # via lti-consumer-xblock
-django-cors-headers==3.13.0
+django-cors-headers==3.14.0
     # via -r requirements/base.in
 django-crum==0.7.9
     # via edx-django-utils
@@ -75,6 +75,10 @@ django-model-utils==4.3.1
     # via -r requirements/base.in
 django-rest-swagger==2.2.0
     # via -r requirements/base.in
+django-simple-history==3.0.0
+    # via
+    #   -c https://raw.githubusercontent.com/edx/edx-lint/master/edx_lint/files/common_constraints.txt
+    #   -r requirements/base.in
 django-waffle==3.0.0
     # via
     #   -r requirements/base.in
