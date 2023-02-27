@@ -27,9 +27,21 @@ def get_attempt_by_id(attempt_id):
     Return an attempt by id
     """
     attempt = ExamAttempt.get_attempt_by_id(attempt_id)
+    if attempt:
+        serialized_attempt = ExamAttemptSerializer(attempt).data
+        return serialized_attempt
 
-    return attempt
+    return None
 
+def get_attempts_in_progress(user_id):
+    """ 
+    Function to fetch a user's latest exam attempt
+    that has a status of 'started' or 'ready_to_submit'.
+    """
+
+    latest_attempt = ExamAttempt.get_latest_attempt_for_user(user_id)   
+     
+    return latest_attempt
 
 def update_attempt_status(attempt_id, to_status):
     """

@@ -20,6 +20,7 @@ from edx_exams.apps.api.v1 import ExamsAPIView
 from edx_exams.apps.core.api import (
     create_exam_attempt,
     get_attempt_by_id,
+    get_attempts_in_progress,
     get_current_exam_attempt,
     get_exam_attempt_time_remaining,
     get_exam_by_content_id,
@@ -420,6 +421,25 @@ class ExamAttemptView(ExamsAPIView):
     """
 
     authentication_classes = (JwtAuthentication,)
+
+    def get(self, request, attempt_id='None'):
+        """
+        HTTP GET handler to fetch all exam attempt data
+
+        Parameters:
+            None
+            
+        Returns:
+            A Response object containing all `ExamAttempt` data.
+        """
+        user_id = request.user.id
+        attempt = get_attempts_in_progress(user_id)
+        
+        if attempt != None:
+            serialized_attempt = ExamAttemptSerializer(attempt)
+            return Response(data=serialized_attempt.data)
+            
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
     def put(self, request, attempt_id):
         """

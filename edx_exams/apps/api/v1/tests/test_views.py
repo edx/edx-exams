@@ -821,6 +821,15 @@ class ExamAttemptViewTest(ExamsAPITestCase):
 
         self.non_staff_user = UserFactory()
 
+    def get_api(self, user):
+        """ 
+        Helper function to make get request to the API
+        """
+
+        headers = self.build_jwt_headers(user)
+        url = reverse('api:v1:exams-attempt')
+        return self.client.get(url, **headers, content_type="application/json")
+
     def put_api(self, user, attempt_id, data):
         """
         Helper function to make patch request to the API

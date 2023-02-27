@@ -196,6 +196,16 @@ class ExamAttempt(TimeStampedModel):
             attempt = None
         return attempt
 
+    @classmethod
+    def get_latest_attempt_for_user(cls, user_id):
+        """
+        Return latest in-progress ExamAttempt associated with a given user_id
+        """
+        try:
+            attempt = cls.objects.filter(user_id=user_id, status__in=[ExamAttemptStatus.started, ExamAttemptStatus.ready_to_submit]).latest('start_time')
+        except cls.DoesNotExist:
+            attempt = None
+        return attempt
 
 class CourseExamConfiguration(TimeStampedModel):
     """
