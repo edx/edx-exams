@@ -25,10 +25,10 @@ from edx_exams.apps.api.v1 import ExamsAPIView
 from edx_exams.apps.core.api import (
     create_exam_attempt,
     get_attempt_by_id,
-    get_attempts_in_progress,
     get_current_exam_attempt,
     get_exam_attempt_time_remaining,
     get_exam_by_content_id,
+    get_latest_attempt_for_user,
     update_attempt_status
 )
 from edx_exams.apps.core.exam_types import get_exam_type
@@ -464,7 +464,7 @@ class ExamAttemptView(ExamsAPIView):
             A Response object containing all `ExamAttempt` data.
         """
         user_id = request.user.id
-        attempt = get_attempts_in_progress(user_id)
+        attempt = get_latest_attempt_for_user(user_id)
 
         if attempt is not None:
             serialized_attempt = ExamAttemptSerializer(attempt)

@@ -19,6 +19,7 @@ from edx_exams.apps.core.api import (
     get_exam_attempt_time_remaining,
     get_exam_by_content_id,
     get_exam_url_path,
+    get_latest_attempt_for_user,
     update_attempt_status
 )
 from edx_exams.apps.core.exceptions import (
@@ -27,7 +28,7 @@ from edx_exams.apps.core.exceptions import (
     ExamDoesNotExist,
     ExamIllegalStatusTransition
 )
-from edx_exams.apps.core.models import Exam, ExamAttempt
+from edx_exams.apps.core.models import Exam, ExamAttempt, User
 from edx_exams.apps.core.statuses import ExamAttemptStatus
 
 test_start_time = datetime(2023, 11, 4, 11, 5, 23)
@@ -287,6 +288,102 @@ class TestGetAttemptById(ExamsAPITestCase):
         Test that if the attempt does not exist, None is returned
         """
         self.assertIsNone(get_attempt_by_id(111111111))
+
+
+@ddt.ddt
+class TestGetAttemptsInProgress(ExamsAPITestCase):
+    """
+    Test for the API utility function `get_latest_attempt_for_user`
+    """
+    def setUp(self):
+        super().setUp()
+
+        self.course_id = 'course-v1:edx+test+f19'
+        self.content_id = '11111111'
+
+        self.exam = Exam.objects.create(
+            resource_id=str(uuid.uuid4()),
+            course_id=self.course_id,
+            provider=self.test_provider,
+            content_id=self.content_id,
+            exam_name='test_exam',
+            exam_type='proctored',
+            time_limit_mins=30,
+            due_date='2040-07-01 00:00:00',
+            hide_after_due=False,
+            is_active=True
+        )
+
+        self.user = User.objects.create(
+            id=3,
+            username="jerry",
+            email="jerry@example.com",
+            lms_user_id=2
+        )
+
+        # Create mock exam attempt data
+        self.expected_attempt = ExamAttempt.objects.create(  # This attempt is what we expect the get function to return
+            user=self.user,
+            exam=self.exam,
+            attempt_number=2,
+            status=ExamAttemptStatus.started,
+            start_time=datetime.now(),  # Newest one (from now), which should be returned
+            allowed_time_limit_mins=None,
+        )
+        ExamAttempt.objects.create(
+            user=self.user,
+            exam=self.exam,
+            attempt_number=3,
+            status=ExamAttemptStatus.started,
+            start_time=datetime.now() - timedelta(days=1),  # yesterday
+            allowed_time_limit_mins=None,
+        )
+        ExamAttempt.objects.create(
+            user=self.user,
+            exam=self.exam,
+            attempt_number=4,
+            status=ExamAttemptStatus.ready_to_submit,
+            start_time=datetime.now() - timedelta(hours=1),  # one hour ago
+            allowed_time_limit_mins=None,
+        )
+        ExamAttempt.objects.create(
+            user=self.user,
+            exam=self.exam,
+            attempt_number=5,
+            status=ExamAttemptStatus.ready_to_submit,
+            start_time=datetime.fromisoformat('2011-11-04'),  # one year ago
+            allowed_time_limit_mins=None,
+        )
+        ExamAttempt.objects.create(
+            user=self.user,
+            exam=self.exam,
+            attempt_number=6,
+            status=ExamAttemptStatus.created,
+            start_time=None,
+            allowed_time_limit_mins=None,
+        )
+        ExamAttempt.objects.create(
+            user=self.user,
+            exam=self.exam,
+            attempt_number=7,
+            status=ExamAttemptStatus.submitted,
+            start_time=None,
+            allowed_time_limit_mins=None,
+        )
+        ExamAttempt.objects.create(
+            user=self.user,
+            exam=self.exam,
+            attempt_number=7,
+            status=ExamAttemptStatus.rejected,
+            start_time=None,
+            allowed_time_limit_mins=None,
+        )
+
+    def test_get_latest_attempt_for_user(self):
+        self.assertEqual(get_latest_attempt_for_user(self.user.id), self.expected_attempt)
+
+    def test_no_get_latest_attempt_for_user(self):
+        self.assertIsNone(get_latest_attempt_for_user(99999999))
 
 
 @ddt.ddt

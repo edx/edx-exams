@@ -31,7 +31,7 @@ def get_attempt_by_id(attempt_id):
     return attempt
 
 
-def get_attempts_in_progress(user_id):
+def get_latest_attempt_for_user(user_id):
     """
     Function to fetch a user's latest exam attempt
     that has a status of 'started' or 'ready_to_submit'.
