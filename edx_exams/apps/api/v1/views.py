@@ -15,7 +15,12 @@ from rest_framework.response import Response
 from token_utils.api import sign_token_for
 
 from edx_exams.apps.api.permissions import StaffUserOrReadOnlyPermissions, StaffUserPermissions
-from edx_exams.apps.api.serializers import ExamSerializer, ProctoringProviderSerializer, StudentAttemptSerializer
+from edx_exams.apps.api.serializers import (
+    ExamAttemptSerializer,
+    ExamSerializer,
+    ProctoringProviderSerializer,
+    StudentAttemptSerializer
+)
 from edx_exams.apps.api.v1 import ExamsAPIView
 from edx_exams.apps.core.api import (
     create_exam_attempt,
@@ -23,6 +28,7 @@ from edx_exams.apps.core.api import (
     get_current_exam_attempt,
     get_exam_attempt_time_remaining,
     get_exam_by_content_id,
+    get_latest_attempt_for_user,
     update_attempt_status
 )
 from edx_exams.apps.core.exam_types import get_exam_type
@@ -394,7 +400,26 @@ class ExamAttemptView(ExamsAPIView):
     /exams/attempt
 
     Supports:
-        HTTP PUT: Update an attempt's status.
+        HTTP GET: Get the data for a user's latest in-progress exam attempt.
+        HTTP PUT: Update an exam attempt's status.
+        HTTP POST: Create an exam attempt.
+
+    HTTP GET
+    **Returns**
+    {
+        'id': int (primary key),
+        'created': datetime,
+        'modified': datetime,
+        'user': User object,
+        'start_time': datetime,
+        'end_time': datetime,
+        'status': string,
+        'exam': Exam object,
+        'allowed_time_limit_mins': int,
+        'attempt_number': int,
+    }
+    **Exceptions**
+        * HTTP_404_NOT_FOUND
 
     HTTP PUT
     Updates the attempt status based on a provided action
@@ -408,6 +433,10 @@ class ExamAttemptView(ExamsAPIView):
     PUT Response Values
         {'exam_attempt_id': <attempt_id>}: The attempt id of the attempt being updated
 
+    **Exceptions**
+        * HTTP_400_BAD_REQUEST
+        * HTTP_403_FORBIDDEN
+
     HTTP POST
     Creates a new attempt based on a provided exam_id
 
@@ -420,6 +449,25 @@ class ExamAttemptView(ExamsAPIView):
     """
 
     authentication_classes = (JwtAuthentication,)
+
+    def get(self, request):
+        """
+        HTTP GET handler to fetch all exam attempt data
+
+        Parameters:
+            None
+
+        Returns:
+            A Response object containing all `ExamAttempt` data.
+        """
+        user_id = request.user.id
+        attempt = get_latest_attempt_for_user(user_id)
+
+        if attempt is not None:
+            serialized_attempt = ExamAttemptSerializer(attempt)
+            return Response(data=serialized_attempt.data)
+
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
     def put(self, request, attempt_id):
         """
