@@ -3,7 +3,6 @@ V1 API Views
 """
 import logging
 import uuid
-import json
 
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
@@ -16,7 +15,12 @@ from rest_framework.response import Response
 from token_utils.api import sign_token_for
 
 from edx_exams.apps.api.permissions import StaffUserOrReadOnlyPermissions, StaffUserPermissions
-from edx_exams.apps.api.serializers import ExamSerializer, ExamAttemptSerializer, ProctoringProviderSerializer, StudentAttemptSerializer
+from edx_exams.apps.api.serializers import (
+    ExamAttemptSerializer,
+    ExamSerializer,
+    ProctoringProviderSerializer,
+    StudentAttemptSerializer
+)
 from edx_exams.apps.api.v1 import ExamsAPIView
 from edx_exams.apps.core.api import (
     create_exam_attempt,
@@ -431,7 +435,7 @@ class ExamAttemptView(ExamsAPIView):
 
     PUT Response Values
         {'exam_attempt_id': <attempt_id>}: The attempt id of the attempt being updated
-        
+
     **Exceptions**
         * HTTP_400_BAD_REQUEST
         * HTTP_403_FORBIDDEN
@@ -449,23 +453,23 @@ class ExamAttemptView(ExamsAPIView):
 
     authentication_classes = (JwtAuthentication,)
 
-    def get(self, request, attempt_id='None'):
+    def get(self, request):
         """
         HTTP GET handler to fetch all exam attempt data
 
         Parameters:
             None
-            
+
         Returns:
             A Response object containing all `ExamAttempt` data.
         """
         user_id = request.user.id
         attempt = get_attempts_in_progress(user_id)
-        
-        if attempt != None:
+
+        if attempt is not None:
             serialized_attempt = ExamAttemptSerializer(attempt)
             return Response(data=serialized_attempt.data)
-            
+
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     def put(self, request, attempt_id):

@@ -15,7 +15,6 @@ from edx_exams.apps.core.constants import CONTENT_ID_PATTERN, COURSE_ID_PATTERN,
 app_name = 'v1'
 
 urlpatterns = [
-        # PATH 
     re_path(fr'exams/course_id/{COURSE_ID_PATTERN}',
             CourseExamsView.as_view(),
             name='exams-course_exams'),

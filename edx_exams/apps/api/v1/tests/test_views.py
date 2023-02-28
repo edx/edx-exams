@@ -17,7 +17,7 @@ from edx_exams.apps.api.serializers import ExamSerializer, StudentAttemptSeriali
 from edx_exams.apps.api.test_utils import ExamsAPITestCase
 from edx_exams.apps.api.test_utils.factories import UserFactory
 from edx_exams.apps.core.exam_types import get_exam_type
-from edx_exams.apps.core.exceptions import ExamAttemptOnPastDueExam, ExamAttemptOnPastDueExam, ExamIllegalStatusTransition
+from edx_exams.apps.core.exceptions import ExamAttemptOnPastDueExam, ExamIllegalStatusTransition
 from edx_exams.apps.core.models import CourseExamConfiguration, Exam, ExamAttempt, ProctoringProvider, User
 from edx_exams.apps.core.statuses import ExamAttemptStatus
 
@@ -822,7 +822,7 @@ class ExamAttemptViewTest(ExamsAPITestCase):
         self.non_staff_user = UserFactory()
 
     def get_api(self, user):
-        """ 
+        """
         Helper function to make get request to the API
         """
 
@@ -907,11 +907,11 @@ class ExamAttemptViewTest(ExamsAPITestCase):
         mock_update_attempt_status.assert_called_once_with(attempt.id, expected_status)
 
     def test_get_all_exam_attempts(self):
-        """ 
-        Test that the GET function in the ExamAttempt view returns 
+        """
+        Test that the GET function in the ExamAttempt view returns
         the latest in-progress exam attempt, given that one exists
-        
-        Note that "in-progress" attempts are defined as having a 
+
+        Note that "in-progress" attempts are defined as having a
         status of 'started' or 'ready_to_submit'
         """
 
@@ -932,12 +932,12 @@ class ExamAttemptViewTest(ExamsAPITestCase):
             start_time=None,
             allowed_time_limit_mins=None,
         )
-        expected_attempt = ExamAttempt.objects.create( # This attempt is what we expect the get function to return
+        expected_attempt = ExamAttempt.objects.create(  # This attempt is what we expect the get function to return
             user=mock_user,
             exam=self.exam,
             attempt_number=2,
             status=ExamAttemptStatus.started,
-            start_time=datetime.now(), # Newest one (from now), which should be returned
+            start_time=datetime.now(),  # Newest one (from now), which should be returned
             allowed_time_limit_mins=None,
         )
         ExamAttempt.objects.create(
@@ -945,7 +945,7 @@ class ExamAttemptViewTest(ExamsAPITestCase):
             exam=self.exam,
             attempt_number=3,
             status=ExamAttemptStatus.started,
-            start_time=datetime.now() - timedelta(days = 1), # from yesterday
+            start_time=datetime.now() - timedelta(days=1),  # from yesterday
             allowed_time_limit_mins=None,
         )
         ExamAttempt.objects.create(
@@ -953,7 +953,7 @@ class ExamAttemptViewTest(ExamsAPITestCase):
             exam=self.exam,
             attempt_number=4,
             status=ExamAttemptStatus.ready_to_submit,
-            start_time=datetime.now() - timedelta(hours = 1), # from one hour ago
+            start_time=datetime.now() - timedelta(hours=1),  # from one hour ago
             allowed_time_limit_mins=None,
         )
         ExamAttempt.objects.create(
@@ -961,7 +961,7 @@ class ExamAttemptViewTest(ExamsAPITestCase):
             exam=self.exam,
             attempt_number=5,
             status=ExamAttemptStatus.ready_to_submit,
-            start_time=datetime.fromisoformat('2011-11-04'), # from yearo agi
+            start_time=datetime.fromisoformat('2011-11-04'),  # from yearo agi
             allowed_time_limit_mins=None,
         )
         ExamAttempt.objects.create(
