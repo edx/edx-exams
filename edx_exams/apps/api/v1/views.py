@@ -394,17 +394,20 @@ class ExamAccessTokensView(ExamsAPIView):
         return response
 
 
-class ExamAttemptView(ExamsAPIView):
+class LatestExamAttemptView(ExamsAPIView):
     """
-    Endpoint for the ExamAttempt
+    Endpoint for the fetching a user's latest exam attempt.
     /exams/attempt
 
     Supports:
-        HTTP GET: Get the data for a user's latest in-progress exam attempt.
-        HTTP PUT: Update an exam attempt's status.
-        HTTP POST: Create an exam attempt.
+        HTTP GET: Get the data for a user's latest exam attempt.
 
     HTTP GET
+    Fetches a user's latest exam attempt.
+
+    **GET data Parameters**
+        'user': The data of the user whose latest attempt we want to fetch.
+
     **Returns**
     {
         'id': int (primary key),
@@ -418,8 +421,35 @@ class ExamAttemptView(ExamsAPIView):
         'allowed_time_limit_mins': int,
         'attempt_number': int,
     }
-    **Exceptions**
-        * HTTP_404_NOT_FOUND
+    """
+
+    def get(self, request):
+        """
+        HTTP GET handler to fetch all exam attempt data
+
+        Parameters:
+            None
+
+        Returns:
+            A Response object containing all `ExamAttempt` data.
+        """
+        user_id = request.user.id
+        attempt = get_latest_attempt_for_user(user_id)
+
+        if attempt is not None:
+            serialized_attempt = ExamAttemptSerializer(attempt)
+            return Response(status=status.HTTP_200_OK, data=serialized_attempt.data)
+        return Response(status=status.HTTP_200_OK, data=attempt)
+
+
+class ExamAttemptView(ExamsAPIView):
+    """
+    Endpoint for the ExamAttempt
+    /exams/attempt
+
+    Supports:
+        HTTP PUT: Update an exam attempt's status.
+        HTTP POST: Create an exam attempt.
 
     HTTP PUT
     Updates the attempt status based on a provided action
@@ -449,25 +479,6 @@ class ExamAttemptView(ExamsAPIView):
     """
 
     authentication_classes = (JwtAuthentication,)
-
-    def get(self, request):
-        """
-        HTTP GET handler to fetch all exam attempt data
-
-        Parameters:
-            None
-
-        Returns:
-            A Response object containing all `ExamAttempt` data.
-        """
-        user_id = request.user.id
-        attempt = get_latest_attempt_for_user(user_id)
-
-        if attempt is not None:
-            serialized_attempt = ExamAttemptSerializer(attempt)
-            return Response(data=serialized_attempt.data)
-
-        return Response(status=status.HTTP_404_NOT_FOUND)
 
     def put(self, request, attempt_id):
         """

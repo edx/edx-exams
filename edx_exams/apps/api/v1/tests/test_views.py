@@ -788,10 +788,9 @@ class ExamAccessTokensViewsTests(ExamsAPITestCase):
         self.assert_valid_exam_access_token(response, self.user, self.past_due_exam)
 
 
-@ddt.ddt
-class ExamAttemptViewTest(ExamsAPITestCase):
+class LatestExamAttemptViewTest(ExamsAPITestCase):
     """
-    Tests ExamAttemptView
+    Tests LatestExampAttemptView
     """
 
     def setUp(self):
@@ -827,8 +826,106 @@ class ExamAttemptViewTest(ExamsAPITestCase):
         """
 
         headers = self.build_jwt_headers(user)
-        url = reverse('api:v1:exams-attempt')
+        url = reverse('api:v1:exams-attempt-latest')
         return self.client.get(url, **headers, content_type="application/json")
+
+    def create_mock_exam_attempt(self, user, attempt_number, status, start_time):
+        return ExamAttempt.objects.create(
+            user=user,
+            exam=self.exam,
+            attempt_number=attempt_number,
+            status=status,
+            start_time=start_time,
+            allowed_time_limit_mins=None
+        )
+
+    @patch('edx_exams.apps.api.v1.views.get_latest_attempt_for_user')
+    def test_get_latest_exam_attempt_for_user(self, mock_get_latest_attempt_for_user):
+        """
+        Test that the GET function in the ExamAttempt view returns
+        the expected exam attempt for a user with status 200
+        """
+
+        mock_attempt = self.create_mock_exam_attempt(self.user, 1, ExamAttemptStatus.started, datetime.now())
+
+        mock_get_latest_attempt_for_user.return_value = mock_attempt
+        response = self.get_api(self.user)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data.get('user').get('id'), mock_attempt.user.id)
+        self.assertEqual(response.data.get('exam').get('exam_name'), mock_attempt.exam.exam_name)
+        self.assertEqual(response.data.get('status'), mock_attempt.status)
+        mock_get_latest_attempt_for_user.assert_called_once_with(self.user.id)
+
+    @patch('edx_exams.apps.api.v1.views.get_latest_attempt_for_user')
+    def test_cannot_get_attempts_for_other_user(self, mock_get_latest_attempt_for_user):
+        """
+        Test that a user cannot view the exam attempts of another user
+        """
+        other_user = User.objects.create(
+            id=3,
+            username="jerry",
+            email="jerry@example.com",
+            lms_user_id=2
+        )
+
+        current_users_attempt = self.create_mock_exam_attempt(self.user, 1, ExamAttemptStatus.started, datetime.now())
+        other_users_attempt = self.create_mock_exam_attempt(other_user, 9, ExamAttemptStatus.submitted, datetime.now())
+
+        mock_get_latest_attempt_for_user.return_value = current_users_attempt
+        response = self.get_api(self.user)
+
+        self.assertEqual(response.data.get('user').get('id'), current_users_attempt.user.id)
+        self.assertEqual(response.data.get('attempt_number'), current_users_attempt.attempt_number)
+        self.assertEqual(response.data.get('status'), current_users_attempt.status)
+
+        self.assertNotEqual(response.data.get('user').get('id'), other_users_attempt.user.id)
+        self.assertNotEqual(response.data.get('attempt_number'), other_users_attempt.attempt_number)
+        self.assertNotEqual(response.data.get('status'), other_users_attempt.status)
+
+        mock_get_latest_attempt_for_user.assert_called_once_with(self.user.id)
+
+    def test_no_attempts_for_user(self):
+        """
+        Test that if the user has no exam attempts, that the endpoint returns None
+        """
+
+        response = self.get_api(self.user)
+        self.assertEqual(response.status_code, 200)
+        self.assertIsNone(response.data)
+
+
+@ddt.ddt
+class ExamAttemptViewTest(ExamsAPITestCase):
+    """
+    Tests ExamAttemptView
+    """
+
+    def setUp(self):
+        super().setUp()
+
+        self.course_id = 'course-v1:edx+test+f19'
+        self.content_id = '11111111'
+
+        self.course_exam_config = CourseExamConfiguration.objects.create(
+            course_id=self.course_id,
+            provider=self.test_provider,
+            allow_opt_out=False
+        )
+
+        self.exam = Exam.objects.create(
+            resource_id=str(uuid.uuid4()),
+            course_id=self.course_id,
+            provider=self.test_provider,
+            content_id=self.content_id,
+            exam_name='test_exam',
+            exam_type='proctored',
+            time_limit_mins=30,
+            due_date='2040-07-01 00:00:00',
+            hide_after_due=False,
+            is_active=True
+        )
+
+        self.non_staff_user = UserFactory()
 
     def put_api(self, user, attempt_id, data):
         """
@@ -890,7 +987,7 @@ class ExamAttemptViewTest(ExamsAPITestCase):
         """
         Test that an exam can be updated
         """
-        # create exam attempt for user
+
         attempt = ExamAttempt.objects.create(
             user=self.non_staff_user,
             exam=self.exam,
@@ -905,115 +1002,6 @@ class ExamAttemptViewTest(ExamsAPITestCase):
         response = self.put_api(self.non_staff_user, attempt.id, {'action': action})
         self.assertEqual(response.status_code, 200)
         mock_update_attempt_status.assert_called_once_with(attempt.id, expected_status)
-
-    def test_get_all_exam_attempts(self):
-        """
-        Test that the GET function in the ExamAttempt view returns
-        the latest in-progress exam attempt, given that one exists
-
-        Note that "in-progress" attempts are defined as having a
-        status of 'started' or 'ready_to_submit'
-        """
-
-        # Create a mock user
-        mock_user = User.objects.create(
-            id=3,
-            username="jerry",
-            email="jerry@example.com",
-            lms_user_id=2
-        )
-
-        # Create mock exam attempt data containing in-progress attempts
-        expected_attempt = ExamAttempt.objects.create(  # This attempt is what we expect the get function to return
-            user=mock_user,
-            exam=self.exam,
-            attempt_number=1,
-            status=ExamAttemptStatus.started,
-            start_time=datetime.now(),  # Newest one (from now), which should be returned
-            allowed_time_limit_mins=None,
-        )
-        ExamAttempt.objects.create(
-            user=mock_user,
-            exam=self.exam,
-            attempt_number=2,
-            status=ExamAttemptStatus.started,
-            start_time=datetime.now() - timedelta(days=1),  # yesterday
-            allowed_time_limit_mins=None,
-        )
-        ExamAttempt.objects.create(
-            user=mock_user,
-            exam=self.exam,
-            attempt_number=3,
-            status=ExamAttemptStatus.ready_to_submit,
-            start_time=datetime.now() - timedelta(hours=1),  # one hour ago
-            allowed_time_limit_mins=None,
-        )
-        ExamAttempt.objects.create(
-            user=mock_user,
-            exam=self.exam,
-            attempt_number=4,
-            status=ExamAttemptStatus.created,
-            start_time=None,
-            allowed_time_limit_mins=None,
-        )
-        ExamAttempt.objects.create(
-            user=mock_user,
-            exam=self.exam,
-            attempt_number=5,
-            status=ExamAttemptStatus.submitted,
-            start_time=None,
-            allowed_time_limit_mins=None,
-        )
-        ExamAttempt.objects.create(
-            user=mock_user,
-            exam=self.exam,
-            attempt_number=6,
-            status=ExamAttemptStatus.rejected,
-            start_time=None,
-            allowed_time_limit_mins=None,
-        )
-
-        response = self.get_api(mock_user)
-
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data.get('status'), expected_attempt.status)
-        self.assertEqual(response.data.get('attempt_number'), expected_attempt.attempt_number)
-        self.assertEqual(response.data.get('user').get('username'), expected_attempt.user.username)
-        self.assertEqual(response.data.get('exam').get('content_id'), expected_attempt.exam.content_id)
-
-    def test_get_no_data(self):
-        """
-        Test that if the user has no in progress exams, that the endpoint returns 404 status
-        """
-
-        # Create mock exam attempt data with no in-progress attempts
-        ExamAttempt.objects.create(
-            user=self.non_staff_user,
-            exam=self.exam,
-            attempt_number=1,
-            status=ExamAttemptStatus.created,
-            start_time=datetime.now(),
-            allowed_time_limit_mins=None,
-        )
-        ExamAttempt.objects.create(
-            user=self.non_staff_user,
-            exam=self.exam,
-            attempt_number=2,
-            status=ExamAttemptStatus.submitted,
-            start_time=datetime.now() - timedelta(days=1),
-            allowed_time_limit_mins=None,
-        )
-        ExamAttempt.objects.create(
-            user=self.non_staff_user,
-            exam=self.exam,
-            attempt_number=3,
-            status=ExamAttemptStatus.rejected,
-            start_time=datetime.now() - timedelta(hours=1),
-            allowed_time_limit_mins=None,
-        )
-
-        response = self.get_api(self.user)
-        self.assertEqual(response.status_code, 404)
 
     @patch('edx_exams.apps.api.v1.views.update_attempt_status')
     def test_put_exception_raised(self, mock_update_attempt_status):

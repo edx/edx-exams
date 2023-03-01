@@ -291,7 +291,7 @@ class TestGetAttemptById(ExamsAPITestCase):
 
 
 @ddt.ddt
-class TestGetAttemptsInProgress(ExamsAPITestCase):
+class TestGetLatestAttemptForUser(ExamsAPITestCase):
     """
     Test for the API utility function `get_latest_attempt_for_user`
     """
@@ -379,11 +379,47 @@ class TestGetAttemptsInProgress(ExamsAPITestCase):
             allowed_time_limit_mins=None,
         )
 
-    def test_get_latest_attempt_for_user(self):
-        self.assertEqual(get_latest_attempt_for_user(self.user.id), self.expected_attempt)
+    def create_mock_exam_attempt(self, user, attempt_number, status, start_time):
+        return ExamAttempt.objects.create(
+            user=user,
+            exam=self.exam,
+            attempt_number=attempt_number,
+            status=status,
+            start_time=start_time,
+            allowed_time_limit_mins=None
+        )
 
-    def test_no_get_latest_attempt_for_user(self):
-        self.assertIsNone(get_latest_attempt_for_user(99999999))
+    def test_get_latest_exam_attempt_for_user(self):
+        """
+        Test that the GET function in the ExamAttempt view returns
+        the latest exam attempt for a user
+        """
+
+        one_hour_ago = datetime.now() - timedelta(hours=1)
+        expected_attempt = self.create_mock_exam_attempt(self.user, 1, ExamAttemptStatus.started, datetime.now())
+        self.create_mock_exam_attempt(self.user, 2, ExamAttemptStatus.started, one_hour_ago)
+        self.create_mock_exam_attempt(self.user, 3, ExamAttemptStatus.ready_to_submit, one_hour_ago)
+        self.create_mock_exam_attempt(self.user, 4, ExamAttemptStatus.created, None)
+        self.create_mock_exam_attempt(self.user, 5, ExamAttemptStatus.submitted, None)
+        self.create_mock_exam_attempt(self.user, 6, ExamAttemptStatus.rejected, None)
+        latest_attempt = get_latest_attempt_for_user(self.user.id)
+
+        self.assertEqual(latest_attempt.status, expected_attempt.status)
+        self.assertEqual(latest_attempt.attempt_number, expected_attempt.attempt_number)
+        self.assertEqual(latest_attempt.user.username, expected_attempt.user.username)
+        self.assertEqual(latest_attempt.exam.content_id, expected_attempt.exam.content_id)
+
+    def test_no_attempt_for_user(self):
+        """
+        Test that if the user has no exam attempts, that the endpoint returns None
+        """
+
+        one_hour_ago = datetime.now() - timedelta(hours=1)
+        self.create_mock_exam_attempt(self.user, 1, ExamAttemptStatus.created, datetime.now())
+        self.create_mock_exam_attempt(self.user, 2, ExamAttemptStatus.submitted, one_hour_ago)
+        self.create_mock_exam_attempt(self.user, 3, ExamAttemptStatus.rejected, one_hour_ago)
+
+        self.assertIsNone(get_latest_attempt_for_user(9999999999))
 
 
 @ddt.ddt
