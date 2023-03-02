@@ -18,7 +18,7 @@ from edx_exams.apps.api.test_utils import ExamsAPITestCase
 from edx_exams.apps.api.test_utils.factories import UserFactory
 from edx_exams.apps.core.exam_types import get_exam_type
 from edx_exams.apps.core.exceptions import ExamAttemptOnPastDueExam, ExamIllegalStatusTransition
-from edx_exams.apps.core.models import CourseExamConfiguration, Exam, ExamAttempt, ProctoringProvider, User
+from edx_exams.apps.core.models import CourseExamConfiguration, Exam, ExamAttempt, ProctoringProvider
 from edx_exams.apps.core.statuses import ExamAttemptStatus
 
 
@@ -790,7 +790,7 @@ class ExamAccessTokensViewsTests(ExamsAPITestCase):
 
 class LatestExamAttemptViewTest(ExamsAPITestCase):
     """
-    Tests LatestExampAttemptView
+    Tests LatestExamAttemptView
     """
 
     def setUp(self):
@@ -818,7 +818,7 @@ class LatestExamAttemptViewTest(ExamsAPITestCase):
             is_active=True
         )
 
-        self.non_staff_user = UserFactory()
+        self.other_user = UserFactory()
 
     def get_api(self, user):
         """
@@ -829,11 +829,11 @@ class LatestExamAttemptViewTest(ExamsAPITestCase):
         url = reverse('api:v1:exams-attempt-latest')
         return self.client.get(url, **headers, content_type="application/json")
 
-    def create_mock_exam_attempt(self, user, attempt_number, status, start_time):
+    def create_mock_attempt(self, user, status, start_time):
         return ExamAttempt.objects.create(
             user=user,
             exam=self.exam,
-            attempt_number=attempt_number,
+            attempt_number=1,
             status=status,
             start_time=start_time,
             allowed_time_limit_mins=None
@@ -846,7 +846,7 @@ class LatestExamAttemptViewTest(ExamsAPITestCase):
         the expected exam attempt for a user with status 200
         """
 
-        mock_attempt = self.create_mock_exam_attempt(self.user, 1, ExamAttemptStatus.started, datetime.now())
+        mock_attempt = self.create_mock_attempt(self.user, ExamAttemptStatus.started, datetime.now())
 
         mock_get_latest_attempt_for_user.return_value = mock_attempt
         response = self.get_api(self.user)
@@ -860,15 +860,9 @@ class LatestExamAttemptViewTest(ExamsAPITestCase):
         """
         Test that a user cannot view the exam attempts of another user
         """
-        other_user = User.objects.create(
-            id=3,
-            username="jerry",
-            email="jerry@example.com",
-            lms_user_id=2
-        )
 
-        current_users_attempt = self.create_mock_exam_attempt(self.user, 1, ExamAttemptStatus.started, datetime.now())
-        other_users_attempt = self.create_mock_exam_attempt(other_user, 9, ExamAttemptStatus.submitted, datetime.now())
+        current_users_attempt = self.create_mock_attempt(self.user, ExamAttemptStatus.started, datetime.now())
+        other_users_attempt = self.create_mock_attempt(self.other_user, ExamAttemptStatus.submitted, datetime.now())
 
         mock_get_latest_attempt_for_user.return_value = current_users_attempt
         response = self.get_api(self.user)
@@ -981,7 +975,7 @@ class ExamAttemptViewTest(ExamsAPITestCase):
         """
         Test that an exam can be updated
         """
-
+        # create exam attempt for user
         attempt = ExamAttempt.objects.create(
             user=self.non_staff_user,
             exam=self.exam,

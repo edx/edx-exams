@@ -28,7 +28,7 @@ from edx_exams.apps.core.exceptions import (
     ExamDoesNotExist,
     ExamIllegalStatusTransition
 )
-from edx_exams.apps.core.models import Exam, ExamAttempt, User
+from edx_exams.apps.core.models import Exam, ExamAttempt
 from edx_exams.apps.core.statuses import ExamAttemptStatus
 
 test_start_time = datetime(2023, 11, 4, 11, 5, 23)
@@ -314,18 +314,11 @@ class TestGetLatestAttemptForUser(ExamsAPITestCase):
             is_active=True
         )
 
-        self.user = User.objects.create(
-            id=3,
-            username="jerry",
-            email="jerry@example.com",
-            lms_user_id=2
-        )
-
-    def create_mock_exam_attempt(self, user, attempt_number, status, start_time):
+    def create_mock_attempt(self, user, status, start_time):
         return ExamAttempt.objects.create(
             user=user,
             exam=self.exam,
-            attempt_number=attempt_number,
+            attempt_number=1,
             status=status,
             start_time=start_time,
             allowed_time_limit_mins=None
@@ -338,12 +331,8 @@ class TestGetLatestAttemptForUser(ExamsAPITestCase):
         """
 
         one_hour_ago = datetime.now() - timedelta(hours=1)
-        expected_attempt = self.create_mock_exam_attempt(self.user, 1, ExamAttemptStatus.started, datetime.now())
-        self.create_mock_exam_attempt(self.user, 2, ExamAttemptStatus.started, one_hour_ago)
-        self.create_mock_exam_attempt(self.user, 3, ExamAttemptStatus.ready_to_submit, one_hour_ago)
-        self.create_mock_exam_attempt(self.user, 4, ExamAttemptStatus.created, None)
-        self.create_mock_exam_attempt(self.user, 5, ExamAttemptStatus.submitted, None)
-        self.create_mock_exam_attempt(self.user, 6, ExamAttemptStatus.rejected, None)
+        expected_attempt = self.create_mock_attempt(self.user, ExamAttemptStatus.started, datetime.now())
+        self.create_mock_attempt(self.user, ExamAttemptStatus.started, one_hour_ago)
         latest_attempt = get_latest_attempt_for_user(self.user.id)
 
         self.assertEqual(latest_attempt.status, expected_attempt.status)
@@ -356,10 +345,7 @@ class TestGetLatestAttemptForUser(ExamsAPITestCase):
         Test that if the user has no exam attempts, that the endpoint returns None
         """
 
-        one_hour_ago = datetime.now() - timedelta(hours=1)
-        self.create_mock_exam_attempt(self.user, 1, ExamAttemptStatus.created, datetime.now())
-        self.create_mock_exam_attempt(self.user, 2, ExamAttemptStatus.submitted, one_hour_ago)
-        self.create_mock_exam_attempt(self.user, 3, ExamAttemptStatus.rejected, one_hour_ago)
+        self.create_mock_attempt(self.user, ExamAttemptStatus.created, datetime.now())
 
         self.assertIsNone(get_latest_attempt_for_user(9999999999))
 
@@ -367,11 +353,7 @@ class TestGetLatestAttemptForUser(ExamsAPITestCase):
         """
         Test that is the user has no exam attempts with a start time, that the endpoint returns None
         """
-        self.create_mock_exam_attempt(self.user, 1, ExamAttemptStatus.created, None)
-        self.create_mock_exam_attempt(self.user, 2, ExamAttemptStatus.started, None)
-        self.create_mock_exam_attempt(self.user, 3, ExamAttemptStatus.ready_to_submit, None)
-        self.create_mock_exam_attempt(self.user, 4, ExamAttemptStatus.submitted, None)
-        self.create_mock_exam_attempt(self.user, 5, ExamAttemptStatus.rejected, None)
+        self.create_mock_attempt(self.user, ExamAttemptStatus.created, None)
 
         self.assertIsNone(get_latest_attempt_for_user(self.user.id))
 

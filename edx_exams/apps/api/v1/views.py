@@ -418,6 +418,8 @@ class LatestExamAttemptView(ExamsAPIView):
     }
     """
 
+    authentication_classes = (JwtAuthentication,)
+
     def get(self, request):
         """
         HTTP GET handler to fetch all exam attempt data
