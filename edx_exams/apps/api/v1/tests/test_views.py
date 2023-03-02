@@ -797,7 +797,7 @@ class LatestExamAttemptViewTest(ExamsAPITestCase):
         super().setUp()
 
         self.course_id = 'course-v1:edx+test+f19'
-        self.content_id = '11111111'
+        self.content_id = 'block-v1:edX+test+2023+type@sequential+block@1111111111'
 
         self.course_exam_config = CourseExamConfiguration.objects.create(
             course_id=self.course_id,
@@ -850,10 +850,9 @@ class LatestExamAttemptViewTest(ExamsAPITestCase):
 
         mock_get_latest_attempt_for_user.return_value = mock_attempt
         response = self.get_api(self.user)
+
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data.get('user').get('id'), mock_attempt.user.id)
-        self.assertEqual(response.data.get('exam').get('exam_name'), mock_attempt.exam.exam_name)
-        self.assertEqual(response.data.get('status'), mock_attempt.status)
+        self.assertEqual(response.data, StudentAttemptSerializer(mock_attempt).data)
         mock_get_latest_attempt_for_user.assert_called_once_with(self.user.id)
 
     @patch('edx_exams.apps.api.v1.views.get_latest_attempt_for_user')
@@ -874,14 +873,9 @@ class LatestExamAttemptViewTest(ExamsAPITestCase):
         mock_get_latest_attempt_for_user.return_value = current_users_attempt
         response = self.get_api(self.user)
 
-        self.assertEqual(response.data.get('user').get('id'), current_users_attempt.user.id)
-        self.assertEqual(response.data.get('attempt_number'), current_users_attempt.attempt_number)
-        self.assertEqual(response.data.get('status'), current_users_attempt.status)
-
-        self.assertNotEqual(response.data.get('user').get('id'), other_users_attempt.user.id)
-        self.assertNotEqual(response.data.get('attempt_number'), other_users_attempt.attempt_number)
-        self.assertNotEqual(response.data.get('status'), other_users_attempt.status)
-
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data, StudentAttemptSerializer(current_users_attempt).data)
+        self.assertNotEqual(response.data, StudentAttemptSerializer(other_users_attempt).data)
         mock_get_latest_attempt_for_user.assert_called_once_with(self.user.id)
 
     def test_no_attempts_for_user(self):

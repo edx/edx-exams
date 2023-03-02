@@ -15,12 +15,7 @@ from rest_framework.response import Response
 from token_utils.api import sign_token_for
 
 from edx_exams.apps.api.permissions import StaffUserOrReadOnlyPermissions, StaffUserPermissions
-from edx_exams.apps.api.serializers import (
-    ExamAttemptSerializer,
-    ExamSerializer,
-    ProctoringProviderSerializer,
-    StudentAttemptSerializer
-)
+from edx_exams.apps.api.serializers import ExamSerializer, ProctoringProviderSerializer, StudentAttemptSerializer
 from edx_exams.apps.api.v1 import ExamsAPIView
 from edx_exams.apps.core.api import (
     create_exam_attempt,
@@ -397,7 +392,7 @@ class ExamAccessTokensView(ExamsAPIView):
 class LatestExamAttemptView(ExamsAPIView):
     """
     Endpoint for the fetching a user's latest exam attempt.
-    /exams/attempt
+    /exams/attempt/latest
 
     Supports:
         HTTP GET: Get the data for a user's latest exam attempt.
@@ -434,12 +429,12 @@ class LatestExamAttemptView(ExamsAPIView):
             A Response object containing all `ExamAttempt` data.
         """
         user_id = request.user.id
-        attempt = get_latest_attempt_for_user(user_id)
+        latest_attempt = get_latest_attempt_for_user(user_id)
 
-        if attempt is not None:
-            serialized_attempt = ExamAttemptSerializer(attempt)
+        if latest_attempt is not None:
+            serialized_attempt = StudentAttemptSerializer(latest_attempt)
             return Response(status=status.HTTP_200_OK, data=serialized_attempt.data)
-        return Response(status=status.HTTP_200_OK, data=attempt)
+        return Response(status=status.HTTP_200_OK, data=latest_attempt)
 
 
 class ExamAttemptView(ExamsAPIView):

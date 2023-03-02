@@ -321,64 +321,6 @@ class TestGetLatestAttemptForUser(ExamsAPITestCase):
             lms_user_id=2
         )
 
-        # Create mock exam attempt data
-        self.expected_attempt = ExamAttempt.objects.create(  # This attempt is what we expect the get function to return
-            user=self.user,
-            exam=self.exam,
-            attempt_number=2,
-            status=ExamAttemptStatus.started,
-            start_time=datetime.now(),  # Newest one (from now), which should be returned
-            allowed_time_limit_mins=None,
-        )
-        ExamAttempt.objects.create(
-            user=self.user,
-            exam=self.exam,
-            attempt_number=3,
-            status=ExamAttemptStatus.started,
-            start_time=datetime.now() - timedelta(days=1),  # yesterday
-            allowed_time_limit_mins=None,
-        )
-        ExamAttempt.objects.create(
-            user=self.user,
-            exam=self.exam,
-            attempt_number=4,
-            status=ExamAttemptStatus.ready_to_submit,
-            start_time=datetime.now() - timedelta(hours=1),  # one hour ago
-            allowed_time_limit_mins=None,
-        )
-        ExamAttempt.objects.create(
-            user=self.user,
-            exam=self.exam,
-            attempt_number=5,
-            status=ExamAttemptStatus.ready_to_submit,
-            start_time=datetime.fromisoformat('2011-11-04'),  # one year ago
-            allowed_time_limit_mins=None,
-        )
-        ExamAttempt.objects.create(
-            user=self.user,
-            exam=self.exam,
-            attempt_number=6,
-            status=ExamAttemptStatus.created,
-            start_time=None,
-            allowed_time_limit_mins=None,
-        )
-        ExamAttempt.objects.create(
-            user=self.user,
-            exam=self.exam,
-            attempt_number=7,
-            status=ExamAttemptStatus.submitted,
-            start_time=None,
-            allowed_time_limit_mins=None,
-        )
-        ExamAttempt.objects.create(
-            user=self.user,
-            exam=self.exam,
-            attempt_number=7,
-            status=ExamAttemptStatus.rejected,
-            start_time=None,
-            allowed_time_limit_mins=None,
-        )
-
     def create_mock_exam_attempt(self, user, attempt_number, status, start_time):
         return ExamAttempt.objects.create(
             user=user,
@@ -420,6 +362,18 @@ class TestGetLatestAttemptForUser(ExamsAPITestCase):
         self.create_mock_exam_attempt(self.user, 3, ExamAttemptStatus.rejected, one_hour_ago)
 
         self.assertIsNone(get_latest_attempt_for_user(9999999999))
+
+    def test_no_attempts_have_start_time(self):
+        """
+        Test that is the user has no exam attempts with a start time, that the endpoint returns None
+        """
+        self.create_mock_exam_attempt(self.user, 1, ExamAttemptStatus.created, None)
+        self.create_mock_exam_attempt(self.user, 2, ExamAttemptStatus.started, None)
+        self.create_mock_exam_attempt(self.user, 3, ExamAttemptStatus.ready_to_submit, None)
+        self.create_mock_exam_attempt(self.user, 4, ExamAttemptStatus.submitted, None)
+        self.create_mock_exam_attempt(self.user, 5, ExamAttemptStatus.rejected, None)
+
+        self.assertIsNone(get_latest_attempt_for_user(self.user.id))
 
 
 @ddt.ddt
