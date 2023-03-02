@@ -196,6 +196,21 @@ class ExamAttempt(TimeStampedModel):
             attempt = None
         return attempt
 
+    @classmethod
+    def get_latest_attempt_for_user(cls, user_id):
+        """
+        Return latest ExamAttempt (based on start time) associated with a given user_id
+
+        If start_time does not exist for any attempt, return None
+        """
+        try:
+            attempt = cls.objects.filter(user_id=user_id).latest('start_time')
+            if attempt.start_time is None:
+                return None
+        except cls.DoesNotExist:
+            attempt = None
+        return attempt
+
 
 class CourseExamConfiguration(TimeStampedModel):
     """

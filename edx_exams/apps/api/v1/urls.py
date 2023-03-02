@@ -8,6 +8,7 @@ from edx_exams.apps.api.v1.views import (
     CourseExamsView,
     ExamAccessTokensView,
     ExamAttemptView,
+    LatestExamAttemptView,
     ProctoringProvidersView
 )
 from edx_exams.apps.core.constants import CONTENT_ID_PATTERN, COURSE_ID_PATTERN, EXAM_ID_PATTERN
@@ -33,6 +34,9 @@ urlpatterns = [
     path('exams/attempt',
          ExamAttemptView.as_view(),
          name='exams-attempt',),
+    path('exams/attempt/latest',
+         LatestExamAttemptView.as_view(),
+         name='exams-attempt-latest',),
     re_path(fr'student/exam/attempt/course_id/{COURSE_ID_PATTERN}/content_id/{CONTENT_ID_PATTERN}',
             CourseExamAttemptView.as_view(),
             name='student-course_exam_attempt')

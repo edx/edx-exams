@@ -23,6 +23,7 @@ from edx_exams.apps.core.api import (
     get_current_exam_attempt,
     get_exam_attempt_time_remaining,
     get_exam_by_content_id,
+    get_latest_attempt_for_user,
     update_attempt_status
 )
 from edx_exams.apps.core.exam_types import get_exam_type
@@ -388,13 +389,64 @@ class ExamAccessTokensView(ExamsAPIView):
         return response
 
 
+class LatestExamAttemptView(ExamsAPIView):
+    """
+    Endpoint for the fetching a user's latest exam attempt.
+    /exams/attempt/latest
+
+    Supports:
+        HTTP GET: Get the data for a user's latest exam attempt.
+
+    HTTP GET
+    Fetches a user's latest exam attempt.
+
+    **GET data Parameters**
+        'user': The data of the user whose latest attempt we want to fetch.
+
+    **Returns**
+    {
+        'id': int (primary key),
+        'created': datetime,
+        'modified': datetime,
+        'user': User object,
+        'start_time': datetime,
+        'end_time': datetime,
+        'status': string,
+        'exam': Exam object,
+        'allowed_time_limit_mins': int,
+        'attempt_number': int,
+    }
+    """
+
+    authentication_classes = (JwtAuthentication,)
+
+    def get(self, request):
+        """
+        HTTP GET handler to fetch all exam attempt data
+
+        Parameters:
+            None
+
+        Returns:
+            A Response object containing all `ExamAttempt` data.
+        """
+        user_id = request.user.id
+        latest_attempt = get_latest_attempt_for_user(user_id)
+
+        if latest_attempt is not None:
+            serialized_attempt = StudentAttemptSerializer(latest_attempt)
+            return Response(status=status.HTTP_200_OK, data=serialized_attempt.data)
+        return Response(status=status.HTTP_200_OK, data=latest_attempt)
+
+
 class ExamAttemptView(ExamsAPIView):
     """
     Endpoint for the ExamAttempt
     /exams/attempt
 
     Supports:
-        HTTP PUT: Update an attempt's status.
+        HTTP PUT: Update an exam attempt's status.
+        HTTP POST: Create an exam attempt.
 
     HTTP PUT
     Updates the attempt status based on a provided action
@@ -407,6 +459,10 @@ class ExamAttemptView(ExamsAPIView):
 
     PUT Response Values
         {'exam_attempt_id': <attempt_id>}: The attempt id of the attempt being updated
+
+    **Exceptions**
+        * HTTP_400_BAD_REQUEST
+        * HTTP_403_FORBIDDEN
 
     HTTP POST
     Creates a new attempt based on a provided exam_id

@@ -31,6 +31,16 @@ def get_attempt_by_id(attempt_id):
     return attempt
 
 
+def get_latest_attempt_for_user(user_id):
+    """
+    Function to fetch a user's latest exam attempt
+    """
+
+    latest_attempt = ExamAttempt.get_latest_attempt_for_user(user_id)
+
+    return latest_attempt
+
+
 def update_attempt_status(attempt_id, to_status):
     """
     Function to handle state transition of attempt status. Checks that status transition
