@@ -548,14 +548,15 @@ class ExamAccessTokensViewsTests(ExamsAPITestCase):
             is_active=True
         )
         self.exam_id = self.exam.id
-        self.url = reverse('api:v1:exam-access-tokens', kwargs={'exam_id': self.exam_id})
+        self.url = reverse('api:v1:exam-access-tokens',
+                           kwargs={'exam_id': self.exam_id})
 
         self.past_due_date = timezone.now() - timedelta(minutes=5)
         self.past_due_exam = Exam.objects.create(
             resource_id=str(uuid.uuid4()),
             course_id=self.course_id,
             provider=self.test_provider,
-            content_id='abcd1234',
+            content_id='past1234',
             exam_name='test_exam',
             exam_type='proctored',
             time_limit_mins=30,
@@ -575,7 +576,7 @@ class ExamAccessTokensViewsTests(ExamsAPITestCase):
         return self.client.get(url, **headers)
 
     def assert_valid_exam_access_token(self, response, user, exam):
-        token = response.cookies["exam_access_token"].value
+        token = response.data.get("exam_access_token")
         self.assertEqual(unpack_token_for(token, user.lms_user_id).get('course_id'), exam.course_id)
         self.assertEqual(unpack_token_for(token, user.lms_user_id).get('content_id'), exam.content_id)
 
@@ -591,7 +592,7 @@ class ExamAccessTokensViewsTests(ExamsAPITestCase):
         """
         Verify the endpoint returns 404 if exam is not found
         """
-        url = reverse('api:v1:exam-access-tokens', kwargs={'exam_id': 674})
+        url = reverse('api:v1:exam-access-tokens', kwargs={'exam_id': 86})
 
         headers = self.build_jwt_headers(self.user)
         response = self.client.get(url, **headers)
@@ -668,7 +669,7 @@ class ExamAccessTokensViewsTests(ExamsAPITestCase):
             resource_id=str(uuid.uuid4()),
             course_id=self.course_id,
             provider=self.test_provider,
-            content_id='abcd1234',
+            content_id='noduedate234',
             exam_name='test_exam',
             exam_type='proctored',
             time_limit_mins=30,
@@ -676,8 +677,7 @@ class ExamAccessTokensViewsTests(ExamsAPITestCase):
             is_active=True
         )
 
-        no_due_date_exam_id = no_due_date_exam.id
-        no_due_date_url = reverse('api:v1:exam-access-tokens', kwargs={'exam_id': no_due_date_exam_id})
+        no_due_date_url = reverse('api:v1:exam-access-tokens', kwargs={'exam_id': no_due_date_exam.id})
 
         allowed_time_limit_mins = no_due_date_exam.time_limit_mins
         start_time = timezone.now() - timedelta(minutes=allowed_time_limit_mins/2)
@@ -704,7 +704,7 @@ class ExamAccessTokensViewsTests(ExamsAPITestCase):
             resource_id=str(uuid.uuid4()),
             course_id=self.course_id,
             provider=self.test_provider,
-            content_id='abcd1234',
+            content_id='hideafterdue1234',
             exam_name='test_exam',
             exam_type='proctored',
             time_limit_mins=30,
@@ -713,8 +713,7 @@ class ExamAccessTokensViewsTests(ExamsAPITestCase):
             is_active=True
         )
 
-        past_due_exam_id = past_due_exam_hide.id
-        past_due_url = reverse('api:v1:exam-access-tokens', kwargs={'exam_id': past_due_exam_id})
+        past_due_url = reverse('api:v1:exam-access-tokens', kwargs={'exam_id': past_due_exam_hide.id})
 
         start_time = self.past_due_date - timedelta(minutes=60)
         allowed_time_limit_mins = past_due_exam_hide.time_limit_mins
@@ -786,6 +785,43 @@ class ExamAccessTokensViewsTests(ExamsAPITestCase):
         response = self.get_exam_access(self.user, self.past_due_url)
         self.assertEqual(200, response.status_code)
         self.assert_valid_exam_access_token(response, self.user, self.past_due_exam)
+
+    @ddt.data(
+        (timedelta(minutes=20), timedelta(minutes=0), 200, True),  # exam attempt time remaining more than default exp
+        (timedelta(minutes=34.5), timedelta(minutes=0), 200, False),  # exam attempt time remaining less than default
+    )
+    @ddt.unpack
+    def test_expiration_started_exam_attempt_various_times(self, start_delta, current_time_delta,
+                                                           response_status, is_default):
+        """
+        Verify the endpoint grants access for an exam
+        with an existing exam attempt and that the exp
+        window is correct.
+        """
+
+        # freeze time adding the delta to the due_date, this way we can manipulate if the due date has actually passed
+        with freeze_time(timezone.now() + current_time_delta):
+            start_time = self.due_date - start_delta
+            allowed_time_limit_mins = self.exam.time_limit_mins
+            ExamAttempt.objects.create(
+                user=self.user,
+                exam=self.exam,
+                attempt_number=1,
+                status='started',
+                start_time=start_time,
+                allowed_time_limit_mins=allowed_time_limit_mins
+            )
+
+            response = self.get_exam_access(self.user, self.url)
+        self.assertEqual(response_status, response.status_code)
+
+        self.assert_valid_exam_access_token(response, self.user, self.exam)
+        expiration = response.data.get("exam_access_token_expiration")
+        default_secs = 60
+        if is_default:
+            self.assertEqual(expiration, default_secs)
+        else:
+            self.assertNotEqual(expiration, default_secs)
 
 
 class LatestExamAttemptViewTest(ExamsAPITestCase):
