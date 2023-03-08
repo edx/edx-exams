@@ -125,6 +125,7 @@ ACCESS_TOKEN_COOKIE_DOMAIN = 'localhost'
 
 CORS_ORIGIN_WHITELIST = (
     'http://localhost:2001',
+    LEARNING_MICROFRONTEND_URL,
 )
 
 #####################################################################
