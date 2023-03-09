@@ -812,7 +812,7 @@ class LatestExamAttemptViewTest(ExamsAPITestCase):
             content_id=self.content_id,
             exam_name='test_exam',
             exam_type='proctored',
-            time_limit_mins=30,
+            time_limit_mins=60,
             due_date='2040-07-01 00:00:00',
             hide_after_due=False,
             is_active=True
@@ -829,31 +829,42 @@ class LatestExamAttemptViewTest(ExamsAPITestCase):
         url = reverse('api:v1:exams-attempt-latest')
         return self.client.get(url, **headers, content_type="application/json")
 
-    def create_mock_attempt(self, user, status, start_time):
+    def create_mock_attempt(self, user, status, start_time, allowed_time_limit_mins):
         return ExamAttempt.objects.create(
             user=user,
             exam=self.exam,
             attempt_number=1,
             status=status,
             start_time=start_time,
-            allowed_time_limit_mins=None
+            allowed_time_limit_mins=allowed_time_limit_mins
         )
 
     @patch('edx_exams.apps.api.v1.views.get_latest_attempt_for_user')
-    def test_get_latest_exam_attempt_for_user(self, mock_get_latest_attempt_for_user):
+    @patch('edx_exams.apps.api.v1.views.check_if_exam_timed_out')
+    @patch('edx_exams.apps.api.v1.views.get_attempt_by_id')
+    def test_get_latest_exam_attempt_for_user(self, mock_get_latest_attempt_for_user, mock_check_if_exam_timed_out, mock_get_attempt_by_id):
         """
         Test that the GET function in the ExamAttempt view returns
         the expected exam attempt for a user with status 200
         """
 
-        mock_attempt = self.create_mock_attempt(self.user, ExamAttemptStatus.started, datetime.now())
+        mock_attempt = self.create_mock_attempt(self.user, ExamAttemptStatus.started, datetime.now(), None)
 
         mock_get_latest_attempt_for_user.return_value = mock_attempt
+
+        # MOCK: check_if_exam_timed_out to return the id of a mock desired attempt
+        mock_check_if_exam_timed_out.return_value = mock_attempt.id
+
+        # MOCK: get_attempt_by_id to return the desired attempt based on its id
+        mock_get_attempt_by_id.return_value = mock_attempt.id
+
         response = self.get_api(self.user)
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data, StudentAttemptSerializer(mock_attempt).data)
         mock_get_latest_attempt_for_user.assert_called_once_with(self.user.id)
+        # mock_check_if_exam_timed_out.assert_called_once_with(mock_attempt)
+        mock_get_attempt_by_id.assert_called_once_with(mock_attempt.id)
 
     @patch('edx_exams.apps.api.v1.views.get_latest_attempt_for_user')
     def test_cannot_get_attempts_for_other_user(self, mock_get_latest_attempt_for_user):
@@ -861,8 +872,8 @@ class LatestExamAttemptViewTest(ExamsAPITestCase):
         Test that a user cannot view the exam attempts of another user
         """
 
-        current_users_attempt = self.create_mock_attempt(self.user, ExamAttemptStatus.started, datetime.now())
-        other_users_attempt = self.create_mock_attempt(self.other_user, ExamAttemptStatus.submitted, datetime.now())
+        current_users_attempt = self.create_mock_attempt(self.user, ExamAttemptStatus.started, datetime.now(), None)
+        other_users_attempt = self.create_mock_attempt(self.other_user, ExamAttemptStatus.submitted, datetime.now(), None)
 
         mock_get_latest_attempt_for_user.return_value = current_users_attempt
         response = self.get_api(self.user)
@@ -880,6 +891,47 @@ class LatestExamAttemptViewTest(ExamsAPITestCase):
         response = self.get_api(self.user)
         self.assertEqual(response.status_code, 200)
         self.assertIsNone(response.data)
+
+    @patch('edx_exams.apps.api.v1.views.get_latest_attempt_for_user')
+    @patch('edx_exams.apps.api.v1.views.check_if_exam_timed_out')
+    @patch('edx_exams.apps.api.v1.views.get_attempt_by_id')
+    def test_submit_on_timeout(self, mock_get_latest_attempt_for_user, mock_check_if_exam_timed_out, mock_get_attempt_by_id):
+        # Test if an exam is set to submitted or not
+        # Start with a list of exam attempts for a user
+        # PARAMS:
+        # start_time, end_time, time_limit, status
+
+        # CURRENT EXAM - timed out but not submitted
+        one_hour_ago = datetime.now() - timedelta(hours=1)
+        current_attempt = self.create_mock_attempt(self.user, ExamAttemptStatus.started, one_hour_ago, None)
+
+        # PREVIOUS EXAM - timed out AND already submitted
+        three_days_ago = datetime.now() - timedelta(days=3)
+        self.create_mock_attempt(self.user, ExamAttemptStatus.started, three_days_ago, None)
+
+        # MOCK: the latest attempt, returned
+        mock_get_latest_attempt_for_user.return_value = current_attempt # NOTE: copy here to var before modifying
+
+        # MOCK: check_if_exam_timed_out to return the id of a mock desired attempt
+        mock_check_if_exam_timed_out.return_value = current_attempt
+
+        # Update attempt to be submitted
+        ExamAttempt.objects.update_or_create(start_time=one_hour_ago, defaults={'status': ExamAttemptStatus.submitted})
+
+        # MOCK: get_attempt_by_id to return the desired attempt based on its id
+        mock_get_attempt_by_id.return_value = current_attempt.id
+
+        response = self.get_api(self.user)
+
+        # Assert that the expected result was returned
+        print("DATA: ", response.data)
+
+        # Assert api function calls
+        mock_get_latest_attempt_for_user.assert_called_once_with(self.user.id)
+        # mock_check_if_exam_timed_out.assert_called_once_with(current_attempt)
+        mock_get_attempt_by_id.assert_called_once_with(current_attempt.id)
+
+        # NOTE: Focus on test here since the other endpoint will be split up later anyhow
 
 
 @ddt.ddt

@@ -13,6 +13,7 @@ from opaque_keys.edx.keys import CourseKey, UsageKey
 
 from edx_exams.apps.api.test_utils import ExamsAPITestCase
 from edx_exams.apps.core.api import (
+    check_if_exam_timed_out,
     create_exam_attempt,
     get_attempt_by_id,
     get_current_exam_attempt,
@@ -39,6 +40,7 @@ class TestExamAttemptTimeRemaining(ExamsAPITestCase):
     """
     Tests for the API utility function `get_exam_attempt_time_remaining`
     """
+
     def setUp(self):
         super().setUp()
 
@@ -117,6 +119,89 @@ class TestExamAttemptTimeRemaining(ExamsAPITestCase):
 
         time_left = get_exam_attempt_time_remaining(exam_attempt, test_now)
         self.assertEqual(0, time_left)
+
+
+class TestCheckIfExamTimedOut(ExamsAPITestCase):
+    """
+    Tests for API utility function `check_if_exam_timed_out`
+    """
+    # setup:
+
+    def setUp(self):
+        super().setUp()
+
+        self.course_id = 'course-v1:edx+test+f19'
+        self.content_id = 'block-v1:edX+test+2023+type@sequential+block@1111111111'
+
+        self.exam = Exam.objects.create(
+            resource_id=str(uuid.uuid4()),
+            course_id=self.course_id,
+            provider=self.test_provider,
+            content_id=self.content_id,
+            exam_name='test_exam',
+            exam_type='proctored',
+            time_limit_mins=60,
+            due_date='3000-07-01 00:00:00',
+            hide_after_due=False,
+            is_active=True
+        )
+
+        self.one_hour_ago = timezone.now() - timedelta(hours=1)
+
+    def create_mock_attempt(self, status, start_time, allowed_time_limit_mins):
+        return ExamAttempt.objects.create(
+            user=self.user,
+            exam=self.exam,
+            attempt_number=1,
+            status=status,
+            start_time=start_time,
+            allowed_time_limit_mins=allowed_time_limit_mins
+        )
+
+    def test_submit_on_timeout(self):
+        """
+        Test that an attempt id is returned when an in-progress exam times out
+        """
+        exam_attempt_started = self.create_mock_attempt(ExamAttemptStatus.started, self.one_hour_ago, 60)
+        exam_attempt_ready_to_submit = self.create_mock_attempt(ExamAttemptStatus.ready_to_submit, self.one_hour_ago, 60)
+
+        self.assertEqual(check_if_exam_timed_out(exam_attempt_started), 1)
+        self.assertEqual(check_if_exam_timed_out(exam_attempt_ready_to_submit), 2)
+
+    def test_dont_submit(self):
+        """
+        Test that None is returned when an exam is not in-progress or not timed out
+        """
+        # not in progress, but timed out
+        exam_attempt_created = self.create_mock_attempt(ExamAttemptStatus.created, self.one_hour_ago, 60)
+        exam_attempt_submitted = self.create_mock_attempt(ExamAttemptStatus.submitted, self.one_hour_ago, 60)
+
+        # in progress, but not timed out
+        exam_attempt_started_now = self.create_mock_attempt(ExamAttemptStatus.started, timezone.now(), 60)
+        exam_attempt_one_minute_left = self.create_mock_attempt(ExamAttemptStatus.ready_to_submit, timezone.now() - timedelta(minutes=59), 60)
+
+        # neither in progress, nor timed out
+        exam_attempt_verified_and_thirty_minutes_left = self.create_mock_attempt(ExamAttemptStatus.verified, timezone.now() - timedelta(minutes=30), 60)
+
+        self.assertIsNone(check_if_exam_timed_out(exam_attempt_created))
+        self.assertIsNone(check_if_exam_timed_out(exam_attempt_submitted))
+        self.assertIsNone(check_if_exam_timed_out(exam_attempt_started_now))
+        self.assertIsNone(check_if_exam_timed_out(exam_attempt_one_minute_left))
+        self.assertIsNone(check_if_exam_timed_out(exam_attempt_verified_and_thirty_minutes_left))
+
+    def test_missing_data(self):
+        """
+        Test that an exam attempt without a start time or
+        time limit returns None
+        """
+        # Has missing start_time (should return None, status is not in progress)
+        exam_attempt_no_start_time = self.create_mock_attempt(ExamAttemptStatus.verified, None, 60)
+
+        # Has missing time_remaining_mins (should return None, status is not in progress)
+        exam_attempt_no_allowed_time_limit_mins = self.create_mock_attempt(ExamAttemptStatus.verified, timezone.now(), None)
+
+        self.assertIsNone(check_if_exam_timed_out(exam_attempt_no_start_time))
+        self.assertIsNone(check_if_exam_timed_out(exam_attempt_no_allowed_time_limit_mins))
 
 
 @ddt.ddt
@@ -295,6 +380,7 @@ class TestGetLatestAttemptForUser(ExamsAPITestCase):
     """
     Test for the API utility function `get_latest_attempt_for_user`
     """
+
     def setUp(self):
         super().setUp()
 
@@ -480,6 +566,7 @@ class TestGetExamByContentId(ExamsAPITestCase):
     """
     Tests for the API utility function `get_exam_by_content_id`
     """
+
     def setUp(self):
         super().setUp()
 
@@ -507,6 +594,7 @@ class TestGetCurrentExamAttempt(ExamsAPITestCase):
     """
     Tests for the API utility function `get_current_exam_attempt`
     """
+
     def setUp(self):
         super().setUp()
 
@@ -550,6 +638,7 @@ class TestGetExamURLPath(ExamsAPITestCase):
     """
     Tests for the API utility function `get_exam_url_path`
     """
+
     def test_get_exam_url(self):
         course_id = 'course-v1:edx+test+f19'
         content_id = 'block-v1:edX+test+2023+type@sequential+block@1111111111'
