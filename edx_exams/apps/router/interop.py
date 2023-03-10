@@ -1,6 +1,8 @@
 """
 Module for writing data to edx-proctoring
 """
+import logging
+
 from posixpath import join as urljoin
 from urllib.parse import quote_plus
 
@@ -17,6 +19,7 @@ LMS_PROCTORED_EXAM_ACTIVE_ATTEMPT_API_TPL = 'proctored_exam/attempt/course_id/co
 LMS_PROCTORED_EXAM_ATTEMPT_DATA_API_TPL = 'proctored_exam/attempt/course_id/{}?content_id={}&user_id={}'
 LMS_PROCTORED_EXAM_ATTEMPT_API = 'proctored_exam/attempt'
 
+log = logging.getLogger(__name__)
 
 def register_exams(course_id, exam_list):
     """

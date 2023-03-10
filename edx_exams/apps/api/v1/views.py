@@ -432,7 +432,7 @@ class LatestExamAttemptView(ExamsAPIView):
         user = request.user
         latest_attempt = get_latest_attempt_for_user(user.id)
 
-        if latest_attempt.status not in (ExamAttemptStatus.started, ExamAttemptStatus.ready_to_submit):
+        if latest_attempt and latest_attempt.status not in (ExamAttemptStatus.started, ExamAttemptStatus.ready_to_submit):
             latest_attempt_legacy = get_active_exam_attempt(user.lms_user_id)
             if latest_attempt_legacy is not None:
                 return Response(status=status.HTTP_200_OK, data=latest_attempt_legacy)

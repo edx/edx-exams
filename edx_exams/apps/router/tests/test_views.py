@@ -94,7 +94,7 @@ class CourseExamsLegacyViewTest(ExamsAPITestCase):
             },
         ]
 
-        mock_register_exams.return_value = self.build_mock_response()
+        mock_register_exams.return_value = ({}, 200)
         response = self.patch_api(self.user, data)
         self.assertEqual(response.status_code, 200)
 
@@ -129,7 +129,7 @@ class CourseExamsLegacyViewTest(ExamsAPITestCase):
         Request is forwarded to the LMS and the api/v1 view is not called
         (no exams in this service should be removed)
         """
-        mock_register_exams.return_value = self.build_mock_response()
+        mock_register_exams.return_value = ({}, 200)
 
         response = self.patch_api(self.user, [])
         self.assertEqual(response.status_code, 200)
@@ -155,7 +155,7 @@ class CourseExamsLegacyViewTest(ExamsAPITestCase):
             }
         ]
 
-        mock_register_exams.return_value = self.build_mock_response()
+        mock_register_exams.return_value = ({}, 200)
         response = self.patch_api(self.user, data)
         self.assertEqual(response.status_code, 200)
 
@@ -178,7 +178,7 @@ class CourseExamsLegacyViewTest(ExamsAPITestCase):
         If the configured provider for this course is null this view should
         be called instead of api/v1
         """
-        mock_register_exams.return_value = self.build_mock_response()
+        mock_register_exams.return_value = ({}, 200)
 
         CourseExamConfiguration.objects.create(
             course_id=self.course_id,
@@ -201,10 +201,7 @@ class CourseExamsLegacyViewTest(ExamsAPITestCase):
         And error response from the LMS should be returned with
         the same code
         """
-        mock_response = Mock(spec=Response)
-        mock_response.json.return_value = "some error"
-        mock_response.status_code = 422
-        mock_register_exams.return_value = mock_response
+        mock_register_exams.return_value = ("some error", 422)
 
         response = self.patch_api(self.user, [])
         self.assertEqual(response.status_code, 422)

@@ -927,7 +927,7 @@ class LatestExamAttemptViewTest(ExamsAPITestCase):
 
         response = self.get_api(self.user)
         self.assertEqual(response.status_code, 200)
-        self.assertIsNone(response.data)
+        self.assertEqual(response.data, {})
 
     @patch('edx_exams.apps.api.v1.views.check_if_exam_timed_out')
     @patch('edx_exams.apps.api.v1.views.get_latest_attempt_for_user')

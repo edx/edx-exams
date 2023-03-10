@@ -55,6 +55,6 @@ class RegisterExamsTest(TestCase):
             status=response_status,
             json={"foo": "bar"},
         )
-        response = register_exams(self.course_id, [])
-        self.assertEqual(response.status_code, response_status)
-        self.assertEqual(response.json(), {"foo": "bar"})
+        response_data, status = register_exams(self.course_id, [])
+        self.assertEqual(status, response_status)
+        self.assertEqual(response_data, {"foo": "bar"})
