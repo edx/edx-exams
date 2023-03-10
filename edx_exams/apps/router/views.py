@@ -5,15 +5,14 @@ at https://github.com/openedx/edx-proctoring
 import json
 import logging
 
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
 from edx_rest_framework_extensions.auth.jwt.authentication import JwtAuthentication
-from rest_framework import status
 from rest_framework.views import APIView
 from simplejson import JSONDecodeError
 
 from edx_exams.apps.api.permissions import StaffUserPermissions
 from edx_exams.apps.core.exam_types import get_exam_type
-from edx_exams.apps.router.interop import register_exams
+from edx_exams.apps.router.interop import get_student_exam_attempt_data, register_exams
 
 log = logging.getLogger(__name__)
 
@@ -41,21 +40,29 @@ class CourseExamsLegacyView(APIView):
                 exam['is_proctored'] = exam_type.is_proctored
                 exam['is_practice_exam'] = exam_type.is_practice
 
-        response = register_exams(course_id, exam_list)
-
-        try:
-            response_data = response.json()
-        except JSONDecodeError:      # pragma: no cover
-            response_data = 'Invalid JSON response received from edx-proctoring'
-
-        if response.status_code != status.HTTP_200_OK:
-            log.error(
-                f'Failed to publish exams for course_id {course_id} '
-                f'got status={response.status_code} content={response.content}'
-            )
+        response_data, status = register_exams(course_id, exam_list)
 
         return JsonResponse(
             data=response_data,
-            status=response.status_code,
+            status=status,
+            safe=False,
+        )
+
+class CourseExamAttemptLegacyView(APIView):
+    """
+    View to handle attempts for exams managed by edx-proctoring.
+    """
+    authentication_classes = (JwtAuthentication,)
+
+    def get(self, request, course_id, content_id):
+        """
+        Get exam and attempt data for user in a given section. Pass through
+        the response from edx-proctoring directly.
+        """
+        response_data, status = get_student_exam_attempt_data(course_id, content_id, request.user.lms_user_id)
+
+        return JsonResponse(
+            data=response_data,
+            status=status,
             safe=False,
         )
