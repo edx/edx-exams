@@ -29,6 +29,7 @@ from edx_exams.apps.core.api import (
 from edx_exams.apps.core.exam_types import get_exam_type
 from edx_exams.apps.core.models import CourseExamConfiguration, Exam, ExamAttempt, ProctoringProvider
 from edx_exams.apps.core.statuses import ExamAttemptStatus
+from edx_exams.apps.router.interop import get_active_exam_attempt
 
 log = logging.getLogger(__name__)
 
@@ -428,16 +429,22 @@ class LatestExamAttemptView(ExamsAPIView):
         Returns:
             A Response object containing all `ExamAttempt` data.
         """
-        user_id = request.user.id
-        latest_attempt = get_latest_attempt_for_user(user_id)
+        user = request.user
+        latest_attempt = get_latest_attempt_for_user(user.id)
 
+        if latest_attempt.status not in (ExamAttemptStatus.started, ExamAttemptStatus.ready_to_submit):
+            latest_attempt_legacy = get_active_exam_attempt(user.lms_user_id)
+            if latest_attempt_legacy is not None:
+                return Response(status=status.HTTP_200_OK, data=latest_attempt_legacy)
+    
         if latest_attempt is not None:
             latest_attempt = check_if_exam_timed_out(latest_attempt)
 
             serialized_attempt = StudentAttemptSerializer(latest_attempt)
             return Response(status=status.HTTP_200_OK, data=serialized_attempt.data)
-
-        return Response(status=status.HTTP_200_OK, data=latest_attempt)
+        
+        # no active attempt in either service
+        return Response(status=status.HTTP_200_OK, data={})
 
 
 class ExamAttemptView(ExamsAPIView):
@@ -477,6 +484,19 @@ class ExamAttemptView(ExamsAPIView):
     """
 
     authentication_classes = (JwtAuthentication,)
+
+    # @staticmethod
+    # def course_id_for_request(request, view_args, view_kwargs):
+    #     """
+    #     Determine if the request should be forwarded to the legacy proctoring service based
+    #     on the exam_id provided in the request body.
+    #     """
+    #     exam_id = request.data.get('exam_id')
+    #     if exam_id:
+    #         exam = get_exam_by_id(exam_id)
+    #         course_id = exam.course_id
+        
+
 
     def put(self, request, attempt_id):
         """

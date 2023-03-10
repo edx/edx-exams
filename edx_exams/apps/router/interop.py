@@ -14,6 +14,7 @@ from edx_exams.apps.core.rest_utils import get_client, make_request
 LMS_PROCTORING_PLUGIN_BASE_PATH = 'api/edx_proctoring/v1/'
 LMS_REGISTER_PROCTORED_EXAMS_API_TPL = 'proctored_exam/exam_registration/course_id/{}'
 LMS_PROCTORED_EXAM_ACTIVE_ATTEMPT_API_TPL = 'proctored_exam/attempt/course_id/course-v1:NULL+NULL+NULL?user_id={}'
+LMS_PROCTORED_EXAM_ATTEMPT_DATA_API_TPL = 'proctored_exam/attempt/course_id/{}?content_id={}&user_id={}'
 LMS_PROCTORED_EXAM_ATTEMPT_API = 'proctored_exam/attempt'
 
 
@@ -57,7 +58,23 @@ def get_student_exam_attempt_data(course_id, content_id, user_id):
 
     return response_data, response.status_code
 
-    return response
+def get_active_exam_attempt(user_id):
+    """
+    Get the active exam attempt for a user
+    """
+    path = LMS_PROCTORED_EXAM_ACTIVE_ATTEMPT_API_TPL.format(user_id)
+    url = _proctoring_api_url(path)
+    client = get_client(settings.LMS_ROOT_URL)
+    try:
+        response = make_request('GET', url, client)
+    except HTTPError as e:
+        response = e.response
+
+    response_data = _get_json_data(response)
+    if response.status_code != status.HTTP_200_OK:
+        log.error(f'Failed to get active exam attempt, response was {response.content}')
+
+    return response_data.get('active_attempt', {})
 
 def _proctoring_api_url(path):
     """ Get proctoring plugin API url """
