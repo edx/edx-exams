@@ -12,7 +12,7 @@ asgiref==3.6.0
     # via
     #   -r requirements/validation.txt
     #   django
-astroid==2.14.2
+astroid==2.15.0
     # via
     #   -r requirements/validation.txt
     #   pylint
@@ -42,7 +42,7 @@ cffi==1.15.1
     #   pynacl
 chardet==5.1.0
     # via diff-cover
-charset-normalizer==3.0.1
+charset-normalizer==3.1.0
     # via
     #   -r requirements/validation.txt
     #   requests
@@ -78,10 +78,11 @@ coverage[toml]==7.2.1
     # via
     #   -r requirements/validation.txt
     #   pytest-cov
-cryptography==39.0.1
+cryptography==39.0.2
     # via
     #   -r requirements/validation.txt
     #   pyjwt
+    #   secretstorage
     #   social-auth-core
 ddt==1.6.0
     # via -r requirements/validation.txt
@@ -208,7 +209,7 @@ exceptiongroup==1.1.0
     #   pytest
 factory-boy==3.2.1
     # via -r requirements/validation.txt
-faker==17.3.0
+faker==17.6.0
     # via
     #   -r requirements/validation.txt
     #   factory-boy
@@ -236,6 +237,10 @@ importlib-metadata==6.0.0
     #   -r requirements/validation.txt
     #   keyring
     #   twine
+importlib-resources==5.12.0
+    # via
+    #   -r requirements/validation.txt
+    #   keyring
 inflection==0.5.1
     # via
     #   -r requirements/validation.txt
@@ -256,6 +261,11 @@ jaraco-classes==3.2.3
     # via
     #   -r requirements/validation.txt
     #   keyring
+jeepney==0.8.0
+    # via
+    #   -r requirements/validation.txt
+    #   keyring
+    #   secretstorage
 jinja2==3.1.2
     # via
     #   -r requirements/validation.txt
@@ -278,7 +288,7 @@ lazy-object-proxy==1.9.0
     # via
     #   -r requirements/validation.txt
     #   astroid
-lti-consumer-xblock==8.0.1
+lti-consumer-xblock==9.0.0
     # via -r requirements/validation.txt
 lxml==4.9.2
     # via
@@ -330,7 +340,7 @@ openapi-codec==1.3.2
     # via
     #   -r requirements/validation.txt
     #   django-rest-swagger
-openedx-filters==1.1.0
+openedx-filters==1.2.0
     # via
     #   -r requirements/validation.txt
     #   lti-consumer-xblock
@@ -348,13 +358,13 @@ pbr==5.11.1
     # via
     #   -r requirements/validation.txt
     #   stevedore
-pip-tools==6.12.2
+pip-tools==6.12.3
     # via -r requirements/pip-tools.txt
 pkginfo==1.9.6
     # via
     #   -r requirements/validation.txt
     #   twine
-platformdirs==3.0.0
+platformdirs==3.1.0
     # via
     #   -r requirements/validation.txt
     #   pylint
@@ -408,7 +418,7 @@ pyjwt[crypto]==2.6.0
     #   edx-drf-extensions
     #   edx-rest-api-client
     #   social-auth-core
-pylint==2.16.2
+pylint==2.17.0
     # via
     #   -r requirements/validation.txt
     #   edx-lint
@@ -440,7 +450,7 @@ pyproject-hooks==1.0.0
     # via
     #   -r requirements/pip-tools.txt
     #   build
-pytest==7.2.1
+pytest==7.2.2
     # via
     #   -r requirements/validation.txt
     #   pytest-cov
@@ -509,7 +519,7 @@ rfc3986==2.0.0
     # via
     #   -r requirements/validation.txt
     #   twine
-rich==13.3.1
+rich==13.3.2
     # via
     #   -r requirements/validation.txt
     #   twine
@@ -521,6 +531,10 @@ ruamel-yaml-clib==0.2.7
     # via
     #   -r requirements/validation.txt
     #   ruamel-yaml
+secretstorage==3.3.3
+    # via
+    #   -r requirements/validation.txt
+    #   keyring
 semantic-version==2.10.0
     # via
     #   -r requirements/validation.txt
@@ -606,6 +620,7 @@ typing-extensions==4.5.0
     #   -r requirements/validation.txt
     #   astroid
     #   pylint
+    #   rich
 uritemplate==4.1.1
     # via
     #   -r requirements/validation.txt
@@ -617,7 +632,7 @@ urllib3==1.26.14
     #   requests
     #   responses
     #   twine
-virtualenv==20.19.0
+virtualenv==20.20.0
     # via
     #   -r requirements/validation.txt
     #   tox
@@ -655,6 +670,7 @@ zipp==3.15.0
     # via
     #   -r requirements/validation.txt
     #   importlib-metadata
+    #   importlib-resources
 
 # The following packages are considered to be unsafe in a requirements file:
 # pip
