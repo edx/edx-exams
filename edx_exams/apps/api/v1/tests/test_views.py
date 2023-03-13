@@ -117,8 +117,8 @@ class CourseExamsViewTests(ExamsAPITestCase):
             }
         ]
         response = self.get_response(self.user, data, 400)
-        self.assertIn("hide_after_due", response.data.get("errors")[0])
-        self.assertIn("is_active", response.data.get("errors")[0])
+        self.assertIn("hide_after_due", response.data["errors"][0])
+        self.assertIn("is_active", response.data["errors"][0])
 
     def test_invalid_exam_type(self):
         """
@@ -136,7 +136,7 @@ class CourseExamsViewTests(ExamsAPITestCase):
             }
         ]
         response = self.get_response(self.user, data, 400)
-        self.assertIn("exam_type", response.data.get("errors")[0])
+        self.assertIn("exam_type", response.data["errors"][0])
 
     def test_existing_exam_update(self):
         """
@@ -1071,7 +1071,7 @@ class ExamAttemptViewTest(ExamsAPITestCase):
         response = self.put_api(self.non_staff_user, attempt.id, {'action': 'junk'})
         self.assertEqual(response.status_code, 400)
         # check that error message is specific to starting an attempt
-        self.assertIn('Unrecognized action', response.data.get('detail'))
+        self.assertIn('Unrecognized action', response.data['detail'])
 
     @patch('edx_exams.apps.api.v1.views.create_exam_attempt')
     def test_post_exception_raised(self, mock_create_attempt):
@@ -1088,7 +1088,7 @@ class ExamAttemptViewTest(ExamsAPITestCase):
         response = self.post_api(self.non_staff_user, data)
 
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(error_msg, response.data.get('detail'))
+        self.assertEqual(error_msg, response.data['detail'])
 
     @ddt.data(
         True,
@@ -1111,7 +1111,7 @@ class ExamAttemptViewTest(ExamsAPITestCase):
 
         response = self.post_api(self.non_staff_user, data)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data.get('exam_attempt_id'), mock_attempt_id)
+        self.assertEqual(response.data['exam_attempt_id'], mock_attempt_id)
 
         mock_create_attempt.assert_called_once_with(self.exam.id, self.non_staff_user.id)
 
@@ -1180,7 +1180,7 @@ class CourseExamAttemptViewTest(ExamsAPITestCase):
         Test endpoint for a content ID that doesn't exist
         """
         response = self.get_api(self.user, self.course_id, '1111111')
-        self.assertEqual(response.data.get('exam'), {})
+        self.assertEqual(response.data['exam'], {})
 
     def test_no_active_attempt(self):
         """
@@ -1195,7 +1195,7 @@ class CourseExamAttemptViewTest(ExamsAPITestCase):
         expected_data['attempt'] = {}
 
         response = self.get_api(self.user, self.course_id, self.content_id)
-        response_exam = response.data.get('exam')
+        response_exam = response.data['exam']
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response_exam, expected_data)

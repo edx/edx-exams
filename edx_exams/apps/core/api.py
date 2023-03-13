@@ -169,6 +169,17 @@ def check_if_exam_timed_out(exam_attempt):
         ExamAttemptStatus.ready_to_submit,
     ]
     if exam_attempt.status in IN_PROGRESS_STATUSES and get_exam_attempt_time_remaining(exam_attempt) == 0:
+        log.info(
+            ('Exam attempt with attempt_id=%(attempt_id)s for exam_id=%(exam_id)s for user_id=%(user_id)s '
+             'in course_id=%(course_id)s has timed out.'),
+            {
+                'attempt_id': exam_attempt.id,
+                'exam_id': exam_attempt.exam.id,
+                'user_id': exam_attempt.user.id,
+                'course_id': exam_attempt.exam.course_id
+            }
+        )
+
         updated_attempt_id = update_attempt_status(exam_attempt.id, ExamAttemptStatus.submitted)
 
         # Return latest attempt data if it was updated
