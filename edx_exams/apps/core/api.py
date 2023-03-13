@@ -259,7 +259,7 @@ def get_exam_by_content_id(course_id, content_id):
     Retrieve an exam filtered by a course_id and content_id
     """
     try:
-        exam = Exam.objects.get(course_id=course_id, content_id=content_id)
+        exam = Exam.objects.get(course_id=course_id, content_id=content_id, is_active=True)
         return exam
     except Exam.DoesNotExist:
         return None

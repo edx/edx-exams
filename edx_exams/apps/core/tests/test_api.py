@@ -569,6 +569,7 @@ class TestGetExamByContentId(ExamsAPITestCase):
             exam_name='test_exam',
             exam_type='proctored',
             time_limit_mins=30,
+            is_active=True,
         )
 
     def test_get_exam(self):
