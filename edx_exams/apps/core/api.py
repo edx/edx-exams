@@ -158,6 +158,36 @@ def get_exam_attempt_time_remaining(exam_attempt, now=None):
     return secs_to_end
 
 
+def check_if_exam_timed_out(exam_attempt):
+    """
+    If an exam attempt's time remaining = 0 AND is in-progress/not submitted,
+    change the status of an exam attempt to 'submitted', then return attempt_id.
+    Return None otherwise.
+    """
+    IN_PROGRESS_STATUSES = [
+        ExamAttemptStatus.started,
+        ExamAttemptStatus.ready_to_submit,
+    ]
+    if exam_attempt.status in IN_PROGRESS_STATUSES and get_exam_attempt_time_remaining(exam_attempt) == 0:
+        log.info(
+            ('Exam attempt with attempt_id=%(attempt_id)s for exam_id=%(exam_id)s for user_id=%(user_id)s '
+             'in course_id=%(course_id)s has timed out.'),
+            {
+                'attempt_id': exam_attempt.id,
+                'exam_id': exam_attempt.exam.id,
+                'user_id': exam_attempt.user.id,
+                'course_id': exam_attempt.exam.course_id
+            }
+        )
+
+        updated_attempt_id = update_attempt_status(exam_attempt.id, ExamAttemptStatus.submitted)
+
+        # Return latest attempt data if it was updated
+        return get_attempt_by_id(updated_attempt_id)
+
+    return exam_attempt
+
+
 def create_exam_attempt(exam_id, user_id):
     """
     Creates an exam attempt for user_id against exam_id. There should only

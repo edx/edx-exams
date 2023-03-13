@@ -17,6 +17,7 @@ from edx_exams.apps.api.permissions import StaffUserOrReadOnlyPermissions, Staff
 from edx_exams.apps.api.serializers import ExamSerializer, ProctoringProviderSerializer, StudentAttemptSerializer
 from edx_exams.apps.api.v1 import ExamsAPIView
 from edx_exams.apps.core.api import (
+    check_if_exam_timed_out,
     create_exam_attempt,
     get_attempt_by_id,
     get_current_exam_attempt,
@@ -395,6 +396,7 @@ class LatestExamAttemptView(ExamsAPIView):
 
     HTTP GET
     Fetches a user's latest exam attempt.
+    Status changes to 'submitted' if time remaining is zero.
 
     **GET data Parameters**
         'user': The data of the user whose latest attempt we want to fetch.
@@ -430,8 +432,11 @@ class LatestExamAttemptView(ExamsAPIView):
         latest_attempt = get_latest_attempt_for_user(user_id)
 
         if latest_attempt is not None:
+            latest_attempt = check_if_exam_timed_out(latest_attempt)
+
             serialized_attempt = StudentAttemptSerializer(latest_attempt)
             return Response(status=status.HTTP_200_OK, data=serialized_attempt.data)
+
         return Response(status=status.HTTP_200_OK, data=latest_attempt)
 
 
@@ -550,6 +555,8 @@ class CourseExamAttemptView(ExamsAPIView):
 
             Returns an existing exam (by course_id and content id) with a nested attempt object,
             if any attempt for that exam exists.
+
+            Status changes to 'submitted' if time remaining is zero.
             {
                 'exam': {
                     'attempt': {...}
@@ -577,9 +584,10 @@ class CourseExamAttemptView(ExamsAPIView):
         serialized_exam['is_proctored'] = exam_type_class.is_proctored
         serialized_exam['is_practice_exam'] = exam_type_class.is_practice
         serialized_exam['backend'] = exam.provider.verbose_name
-
         exam_attempt = get_current_exam_attempt(request.user.id, exam.id)
         if exam_attempt is not None:
+            exam_attempt = check_if_exam_timed_out(exam_attempt)
+
             student_attempt = StudentAttemptSerializer(exam_attempt).data
             serialized_exam['attempt'] = student_attempt
         else:
