@@ -117,6 +117,13 @@ class Exam(TimeStampedModel):
         db_table = 'exams_exam'
         verbose_name = 'exam'
 
+        # Uniqueness constraint to only have one active exam per (course_id, content_id) pair
+        constraints = [
+            models.UniqueConstraint(fields=['course_id', 'content_id'],
+                                    condition=models.Q(is_active=True),
+                                    name='only one exam instance active')
+        ]
+
     def __str__(self):      # pragma: no cover
         return self.exam_name
 
