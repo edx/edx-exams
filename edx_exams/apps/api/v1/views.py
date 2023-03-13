@@ -432,22 +432,24 @@ class LatestExamAttemptView(ExamsAPIView):
         user = request.user
         latest_attempt = get_latest_attempt_for_user(user.id)
 
-        if (
-            latest_attempt and
-            latest_attempt.status not in (ExamAttemptStatus.started, ExamAttemptStatus.ready_to_submit)
-        ):
-            latest_attempt_legacy, response_status = get_active_exam_attempt(user.lms_user_id)
-            if latest_attempt_legacy is not None:
-                return Response(status=status.HTTP_200_OK, data=latest_attempt_legacy)
-
+        # if there is an active attempt in this service, return it
         if latest_attempt is not None:
             latest_attempt = check_if_exam_timed_out(latest_attempt)
-
             serialized_attempt = StudentAttemptSerializer(latest_attempt)
-            return Response(status=status.HTTP_200_OK, data=serialized_attempt.data)
 
-        # no active attempt in either service
-        return Response(status=status.HTTP_200_OK, data={})
+            if latest_attempt.status in (ExamAttemptStatus.started, ExamAttemptStatus.ready_to_submit):
+                return Response(status=status.HTTP_200_OK, data=serialized_attempt.data)
+
+        # if edx-proctoring has an active attempt, return it
+        latest_attempt_legacy, response_status = get_active_exam_attempt(user.lms_user_id)
+        if latest_attempt_legacy is not None and response_status == status.HTTP_200_OK:
+            return Response(status=status.HTTP_200_OK, data=latest_attempt_legacy)
+
+        # otherwise return the latest attempt here regardless of status
+        return Response(
+            status=status.HTTP_200_OK,
+            data=serialized_attempt.data if latest_attempt is not None else {}
+        )
 
 
 class ExamAttemptView(ExamsAPIView):

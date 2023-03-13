@@ -920,11 +920,13 @@ class LatestExamAttemptViewTest(ExamsAPITestCase):
         self.assertNotEqual(response.data.get('attempt_id'), other_users_attempt.id)
         mock_get_latest_attempt_for_user.assert_called_once_with(self.user.id)
 
-    def test_no_attempts_for_user(self):
+    @patch('edx_exams.apps.api.v1.views.get_active_exam_attempt')
+    def test_no_attempts_for_user(self, mock_get_legacy_active_exam_attempt):
         """
         Test that if the user has no exam attempts, that the endpoint returns None
         """
 
+        mock_get_legacy_active_exam_attempt.return_value = {}, 200
         response = self.get_api(self.user)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data, {})
@@ -957,6 +959,46 @@ class LatestExamAttemptViewTest(ExamsAPITestCase):
         self.assertEqual(response.data, StudentAttemptSerializer(current_attempt).data)
         mock_get_latest_attempt_for_user.assert_called_once_with(self.user.id)
         mock_check_if_exam_timed_out.assert_called_once_with(current_attempt)
+
+    @patch('edx_exams.apps.api.v1.views.check_if_exam_timed_out')
+    @patch('edx_exams.apps.api.v1.views.get_latest_attempt_for_user')
+    @patch('edx_exams.apps.api.v1.views.get_active_exam_attempt')
+    def test_active_legacy_service_attempt(self, mock_get_legacy_active_exam_attempt,
+                                           mock_get_latest_attempt_for_user, mock_check_if_exam_timed_out):
+        """
+        Test that if the user has an active edx-proctoring attempt, the endpoint returns it
+        """
+
+        mock_attempt = self.create_mock_attempt(self.user, ExamAttemptStatus.created, None, 60)
+        mock_get_latest_attempt_for_user.return_value = mock_attempt
+        mock_check_if_exam_timed_out.return_value = mock_attempt
+
+        mock_get_legacy_active_exam_attempt.return_value = ({'attempt_id': 123}, 200)
+
+        response = self.get_api(self.user)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data.get('attempt_id'), 123)
+
+    @patch('edx_exams.apps.api.v1.views.check_if_exam_timed_out')
+    @patch('edx_exams.apps.api.v1.views.get_latest_attempt_for_user')
+    @patch('edx_exams.apps.api.v1.views.get_active_exam_attempt')
+    def test_ignore_legacy_service_errors(self, mock_get_legacy_active_exam_attempt,
+                                          mock_get_latest_attempt_for_user, mock_check_if_exam_timed_out):
+        """
+        Test that if edx-proctoring returns an error we ignore the response and return latest attempt
+        """
+
+        mock_attempt = self.create_mock_attempt(self.user, ExamAttemptStatus.submitted, None, 60)
+        mock_get_latest_attempt_for_user.return_value = mock_attempt
+        mock_check_if_exam_timed_out.return_value = mock_attempt
+
+        mock_get_legacy_active_exam_attempt.return_value = ('bad things', 500)
+
+        response = self.get_api(self.user)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data.get('attempt_id'), mock_attempt.id)
 
 
 @ddt.ddt
