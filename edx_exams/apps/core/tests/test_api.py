@@ -569,6 +569,17 @@ class TestGetExamByContentId(ExamsAPITestCase):
             exam_name='test_exam',
             exam_type='proctored',
             time_limit_mins=30,
+            is_active=True,
+        )
+        Exam.objects.create(  # Inactive exam
+            resource_id=str(uuid.uuid4()),
+            course_id=self.course_id,
+            provider=self.test_provider,
+            content_id='abcd1234',
+            exam_name='test_exam',
+            exam_type='proctored',
+            time_limit_mins=30,
+            is_active=False,
         )
 
     def test_get_exam(self):
