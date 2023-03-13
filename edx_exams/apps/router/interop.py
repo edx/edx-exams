@@ -14,7 +14,7 @@ from edx_exams.apps.core.rest_utils import get_client, make_request
 
 LMS_PROCTORING_PLUGIN_BASE_PATH = 'api/edx_proctoring/v1/'
 LMS_REGISTER_PROCTORED_EXAMS_API_TPL = 'proctored_exam/exam_registration/course_id/{}'
-LMS_PROCTORED_EXAM_ACTIVE_ATTEMPT_API_TPL = 'proctored_exam/attempt/course_id/course-v1:NULL+NULL+NULL?user_id={}'
+LMS_PROCTORED_EXAM_ACTIVE_ATTEMPT_API_TPL = 'proctored_exam/active_attempt?user_id={}'
 LMS_PROCTORED_EXAM_ATTEMPT_DATA_API_TPL = 'proctored_exam/attempt/course_id/{}?content_id={}&user_id={}'
 LMS_PROCTORED_EXAM_ATTEMPT_API = 'proctored_exam/attempt'
 
