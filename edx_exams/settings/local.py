@@ -121,8 +121,6 @@ ROOT_URL = 'http://localhost:8740'
 LMS_ROOT_URL = 'http://localhost:18000'
 LEARNING_MICROFRONTEND_URL = 'http://localhost:2000'
 
-ACCESS_TOKEN_COOKIE_DOMAIN = 'localhost'
-
 CORS_ORIGIN_WHITELIST = (
     'http://localhost:2001',
     LEARNING_MICROFRONTEND_URL,

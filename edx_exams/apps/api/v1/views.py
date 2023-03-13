@@ -4,7 +4,6 @@ V1 API Views
 import logging
 import uuid
 
-from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
 from edx_api_doc_tools import path_parameter, schema
@@ -346,28 +345,25 @@ class ExamAccessTokensView(ExamsAPIView):
                 if exam_attempt.status == ExamAttemptStatus.started:
                     expiration_window = cls.get_expiration_window(exam_attempt, expiration_window)
                     if expiration_window != 0:
-                        data, grant_access, response_status = {}, True, status.HTTP_200_OK
+                        grant_access, response_status = True, status.HTTP_200_OK
             # Else (at or after due date),
             # grant access if attempt is submitted or verified
             else:
                 if exam_attempt.status in (ExamAttemptStatus.submitted, ExamAttemptStatus.verified) and \
                         not exam.hide_after_due:
-                    data, grant_access, response_status = {}, True, status.HTTP_200_OK
+                    grant_access, response_status = True, status.HTTP_200_OK
 
         # If exam is past the due date, then grant exam access
         elif exam.due_date is not None and timezone.now() >= exam.due_date:
-            data, grant_access, response_status = {}, True, status.HTTP_200_OK
-
-        response = Response(status=response_status,
-                            data=data)
+            grant_access, response_status = True, status.HTTP_200_OK
 
         if grant_access:
             log.info("Creating exam access token")
             access_token = sign_token_for(user.lms_user_id, expiration_window, claims)
-            response.set_cookie(
-                settings.ACCESS_TOKEN_COOKIE_NAME, access_token,
-                domain=settings.ACCESS_TOKEN_COOKIE_DOMAIN
-            )
+            data = {"exam_access_token": access_token, "exam_access_token_expiration": expiration_window}
+
+        response = Response(status=response_status,
+                            data=data)
 
         return response
 
