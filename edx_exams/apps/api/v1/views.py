@@ -436,7 +436,7 @@ class LatestExamAttemptView(ExamsAPIView):
         latest_attempt = get_latest_attempt_for_user(user_id)
 
         if latest_attempt is not None:
-            latest_attempt = _update_attempt_if_timed_out(latest_attempt)
+            latest_attempt = check_if_exam_timed_out(latest_attempt)
 
             serialized_attempt = StudentAttemptSerializer(latest_attempt)
             return Response(status=status.HTTP_200_OK, data=serialized_attempt.data)
@@ -590,7 +590,7 @@ class CourseExamAttemptView(ExamsAPIView):
         serialized_exam['backend'] = exam.provider.verbose_name
         exam_attempt = get_current_exam_attempt(request.user.id, exam.id)
         if exam_attempt is not None:
-            exam_attempt = _update_attempt_if_timed_out(exam_attempt)
+            exam_attempt = check_if_exam_timed_out(exam_attempt)
 
             student_attempt = StudentAttemptSerializer(exam_attempt).data
             serialized_exam['attempt'] = student_attempt
@@ -599,17 +599,3 @@ class CourseExamAttemptView(ExamsAPIView):
 
         data = {'exam': serialized_exam}
         return Response(data)
-
-
-def _update_attempt_if_timed_out(exam_attempt):
-    """
-    Helper function that checks if exam is timed out
-    Returns updated data if so
-    """
-    updated_attempt_id = check_if_exam_timed_out(exam_attempt)
-
-    # Return latest attempt data if it was updated
-    if updated_attempt_id is not None:
-        return get_attempt_by_id(updated_attempt_id)
-
-    return exam_attempt

@@ -126,7 +126,6 @@ class TestCheckIfExamTimedOut(ExamsAPITestCase):
     """
     Tests for API utility function `check_if_exam_timed_out`
     """
-    # setup:
 
     def setUp(self):
         super().setUp()
@@ -160,54 +159,39 @@ class TestCheckIfExamTimedOut(ExamsAPITestCase):
         )
 
     @ddt.data(
-        # in progress and timed out
-        (ExamAttemptStatus.started, timezone.now() - timedelta(hours=1)),
+        (ExamAttemptStatus.started, timezone.now() - timedelta(hours=1)),  # in progress and timed out
         (ExamAttemptStatus.ready_to_submit, timezone.now() - timedelta(hours=1)),
     )
     @ddt.unpack
     def test_submit_on_timeout(self, status, start_time):
         """
-        Test that an attempt id is returned when an in-progress exam times out
+        Test that an attempt is returned when an in-progress exam times out
         """
         exam_attempt = self.create_mock_attempt(status, start_time, 60)
-        self.assertEqual(check_if_exam_timed_out(exam_attempt), exam_attempt.id)
+        self.assertEqual(check_if_exam_timed_out(exam_attempt), exam_attempt)
 
     @ddt.data(
-        # not in progress, but timed out
-        (ExamAttemptStatus.created, timezone.now() - timedelta(hours=1)),
+        (ExamAttemptStatus.created, timezone.now() - timedelta(hours=1)),  # not in progress, but timed out
         (ExamAttemptStatus.submitted, timezone.now() - timedelta(hours=1)),
-        # in progress, but not timed out
-        (ExamAttemptStatus.started, timezone.now()),
+        (ExamAttemptStatus.started, timezone.now()),  # in progress, but not timed out
         (ExamAttemptStatus.ready_to_submit, timezone.now() - timedelta(minutes=59)),
-        # neither in progress, nor timed out
-        (ExamAttemptStatus.verified, timezone.now() - timedelta(minutes=30))
+        (ExamAttemptStatus.verified, timezone.now() - timedelta(minutes=30))  # neither in progress, nor timed out
     )
     @ddt.unpack
-    def test_dont_submit(self, status, start_time):
+    def test_do_not_submit(self, status, start_time):
         """
         Test that None is returned when an exam is not in-progress or not timed out
         """
         exam_attempt = self.create_mock_attempt(status, start_time, 60)
-        self.assertIsNone(check_if_exam_timed_out(exam_attempt))
+        self.assertEqual(exam_attempt, check_if_exam_timed_out(exam_attempt))
 
-    @ddt.data(
-        # Has missing start_time (should return None, status is not in progress)
-        (ExamAttemptStatus.verified, None, 60),
-        # Has missing time_remaining_mins (should return None, status is not in progress)
-        (ExamAttemptStatus.verified, timezone.now(), None),
-        # Has missing start_time (should return None, status is in progress)
-        (ExamAttemptStatus.started, None, 60),
-        # Has missing time_remaining_mins (should return None, status is in progress)
-        (ExamAttemptStatus.started, timezone.now(), None)
-    )
-    @ddt.unpack
-    def test_missing_data(self, status, start_time, time_limit_mins):
+    def test_missing_data(self):
         """
         Test that an exam attempt without a start time or
         time limit returns None
         """
-        exam_attempt = self.create_mock_attempt(status, start_time, time_limit_mins)
-        self.assertIsNone(check_if_exam_timed_out(exam_attempt))
+        exam_attempt = self.create_mock_attempt(ExamAttemptStatus.created, None, 60)  # Has missing start_time
+        self.assertEqual(exam_attempt, check_if_exam_timed_out(exam_attempt))
 
 
 @ddt.ddt

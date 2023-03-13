@@ -168,13 +168,13 @@ def check_if_exam_timed_out(exam_attempt):
         ExamAttemptStatus.started,
         ExamAttemptStatus.ready_to_submit,
     ]
-    # NOTE: This first conditional is a dirty workaround to `get_exam_attempt_time_remaining`
-    # returning 0 when start_time or time_limit_mins is None.
-    if exam_attempt.start_time is not None and exam_attempt.allowed_time_limit_mins is not None:
-        if get_exam_attempt_time_remaining(exam_attempt) == 0 and exam_attempt.status in IN_PROGRESS_STATUSES:
-            return update_attempt_status(exam_attempt.id, ExamAttemptStatus.submitted)
+    if exam_attempt.status in IN_PROGRESS_STATUSES and get_exam_attempt_time_remaining(exam_attempt) == 0:
+        updated_attempt_id = update_attempt_status(exam_attempt.id, ExamAttemptStatus.submitted)
 
-    return None
+        # Return latest attempt data if it was updated
+        return get_attempt_by_id(updated_attempt_id)
+
+    return exam_attempt
 
 
 def create_exam_attempt(exam_id, user_id):
