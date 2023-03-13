@@ -78,7 +78,7 @@ isort: ## run isort to sort imports in all Python files
 	isort --recursive --atomic edx_exams/
 
 style: ## run Python style checker
-	pylint --rcfile=pylintrc edx_exams *.py
+	pycodestyle edx_exams manage.py
 
 lint: ## run Python code linting
 	pylint --rcfile=pylintrc edx_exams *.py

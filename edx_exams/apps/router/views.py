@@ -5,10 +5,9 @@ at https://github.com/openedx/edx-proctoring
 import json
 import logging
 
-from django.http import HttpResponse, JsonResponse
+from django.http import JsonResponse
 from edx_rest_framework_extensions.auth.jwt.authentication import JwtAuthentication
 from rest_framework.views import APIView
-from simplejson import JSONDecodeError
 
 from edx_exams.apps.api.permissions import StaffUserPermissions
 from edx_exams.apps.core.exam_types import get_exam_type
@@ -47,6 +46,7 @@ class CourseExamsLegacyView(APIView):
             status=status,
             safe=False,
         )
+
 
 class CourseExamAttemptLegacyView(APIView):
     """

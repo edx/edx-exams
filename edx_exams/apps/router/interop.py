@@ -2,7 +2,6 @@
 Module for writing data to edx-proctoring
 """
 import logging
-
 from posixpath import join as urljoin
 from urllib.parse import quote_plus
 
@@ -20,6 +19,7 @@ LMS_PROCTORED_EXAM_ATTEMPT_DATA_API_TPL = 'proctored_exam/attempt/course_id/{}?c
 LMS_PROCTORED_EXAM_ATTEMPT_API = 'proctored_exam/attempt'
 
 log = logging.getLogger(__name__)
+
 
 def register_exams(course_id, exam_list):
     """
@@ -42,6 +42,7 @@ def register_exams(course_id, exam_list):
 
     return response_data, response.status_code
 
+
 def get_student_exam_attempt_data(course_id, content_id, user_id):
     """
     Get student exam attempt data from the legacy proctoring service
@@ -61,6 +62,7 @@ def get_student_exam_attempt_data(course_id, content_id, user_id):
 
     return response_data, response.status_code
 
+
 def get_active_exam_attempt(user_id):
     """
     Get the active exam attempt for a user
@@ -79,10 +81,12 @@ def get_active_exam_attempt(user_id):
 
     return response_data.get('active_attempt', {})
 
+
 def _proctoring_api_url(path):
     """ Get proctoring plugin API url """
     full_path = LMS_PROCTORING_PLUGIN_BASE_PATH + path
     return urljoin(settings.LMS_ROOT_URL, full_path)
+
 
 def _get_json_data(response):
     """
@@ -91,4 +95,4 @@ def _get_json_data(response):
     try:
         return response.json()
     except JSONDecodeError:      # pragma: no cover
-        return {data: 'Invalid JSON response received from edx-proctoring'}
+        return {'data': 'Invalid JSON response received from edx-proctoring'}
