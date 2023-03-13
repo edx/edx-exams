@@ -43,12 +43,12 @@ def register_exams(course_id, exam_list):
     return response_data, response.status_code
 
 
-def get_student_exam_attempt_data(course_id, content_id, user_id):
+def get_student_exam_attempt_data(course_id, content_id, lms_user_id):
     """
     Get student exam attempt data from the legacy proctoring service
     """
     content_id_url_safe = quote_plus(content_id)    # because this goes in the query string
-    path = LMS_PROCTORED_EXAM_ATTEMPT_DATA_API_TPL.format(course_id, content_id_url_safe, user_id)
+    path = LMS_PROCTORED_EXAM_ATTEMPT_DATA_API_TPL.format(course_id, content_id_url_safe, lms_user_id)
     url = _proctoring_api_url(path)
     client = get_client(settings.LMS_ROOT_URL)
     try:
@@ -63,11 +63,11 @@ def get_student_exam_attempt_data(course_id, content_id, user_id):
     return response_data, response.status_code
 
 
-def get_active_exam_attempt(user_id):
+def get_active_exam_attempt(lms_user_id):
     """
     Get the active exam attempt for a user
     """
-    path = LMS_PROCTORED_EXAM_ACTIVE_ATTEMPT_API_TPL.format(user_id)
+    path = LMS_PROCTORED_EXAM_ACTIVE_ATTEMPT_API_TPL.format(lms_user_id)
     url = _proctoring_api_url(path)
     client = get_client(settings.LMS_ROOT_URL)
     try:
@@ -79,7 +79,7 @@ def get_active_exam_attempt(user_id):
     if response.status_code != status.HTTP_200_OK:
         log.error(f'Failed to get active exam attempt, response was {response.content}')
 
-    return response_data.get('active_attempt', {})
+    return response_data, response.status_code
 
 
 def _proctoring_api_url(path):

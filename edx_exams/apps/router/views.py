@@ -9,7 +9,7 @@ from django.http import JsonResponse
 from edx_rest_framework_extensions.auth.jwt.authentication import JwtAuthentication
 from rest_framework.views import APIView
 
-from edx_exams.apps.api.permissions import StaffUserPermissions
+from edx_exams.apps.api.permissions import StaffUserOrReadOnlyPermissions, StaffUserPermissions
 from edx_exams.apps.core.exam_types import get_exam_type
 from edx_exams.apps.router.interop import get_student_exam_attempt_data, register_exams
 
@@ -53,6 +53,7 @@ class CourseExamAttemptLegacyView(APIView):
     View to handle attempts for exams managed by edx-proctoring.
     """
     authentication_classes = (JwtAuthentication,)
+    permission_classes = (StaffUserOrReadOnlyPermissions,)
 
     def get(self, request, course_id, content_id):
         """
@@ -62,7 +63,7 @@ class CourseExamAttemptLegacyView(APIView):
         response_data, status = get_student_exam_attempt_data(course_id, content_id, request.user.lms_user_id)
 
         return JsonResponse(
-            data=response_data,
+            data=response_data.get('exam', response_data),
             status=status,
             safe=False,
         )
