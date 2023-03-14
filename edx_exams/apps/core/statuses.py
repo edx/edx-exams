@@ -44,6 +44,9 @@ class ExamAttemptStatus:
     # the exam has errored
     error = 'error'
 
+    # list of all statuses for active/in-progress exam attempts
+    in_progress_statuses = [started, ready_to_submit]
+
     # list of all statuses considered completed
     completed_statuses = [timed_out, submitted, verified, rejected, error,]
 

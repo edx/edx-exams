@@ -218,6 +218,18 @@ class ExamAttempt(TimeStampedModel):
             attempt = None
         return attempt
 
+    @classmethod
+    def check_no_other_active_attempts_for_user(cls, user_id, attempt_id):
+        """
+        Return true if no active exam attempts exist for the user
+        Return false otherwise
+        """
+        try:
+            cls.objects.exclude(id=attempt_id).get(user_id=user_id, status__in=ExamAttemptStatus.in_progress_statuses)
+            return False
+        except cls.DoesNotExist:
+            return True
+
 
 class CourseExamConfiguration(TimeStampedModel):
     """
