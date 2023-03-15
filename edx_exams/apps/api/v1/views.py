@@ -549,7 +549,7 @@ class ExamAttemptView(ExamsAPIView):
 class CourseExamAttemptView(ExamsAPIView):
     """
     Endpoint for getting timed or proctored exam and its attempt data given the request user.
-    /exam/attempt/course_id/{course_id}/content_id/{content_id}
+    /student/exam/attempt/course_id/{course_id}/content_id/{content_id}
     Supports:
         HTTP GET:
 
@@ -564,6 +564,8 @@ class CourseExamAttemptView(ExamsAPIView):
                 },
             }
     """
+
+    authentication_classes = (JwtAuthentication,)
 
     def get(self, request, course_id, content_id):
         """
@@ -583,7 +585,8 @@ class CourseExamAttemptView(ExamsAPIView):
         serialized_exam['type'] = exam.exam_type
         serialized_exam['is_proctored'] = exam_type_class.is_proctored
         serialized_exam['is_practice_exam'] = exam_type_class.is_practice
-        serialized_exam['backend'] = exam.provider.verbose_name
+        # timed exams will have None as a backend
+        serialized_exam['backend'] = exam.provider.verbose_name if exam.provider is not None else None
         exam_attempt = get_current_exam_attempt(request.user.id, exam.id)
         if exam_attempt is not None:
             exam_attempt = check_if_exam_timed_out(exam_attempt)

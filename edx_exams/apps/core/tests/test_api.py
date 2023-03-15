@@ -529,7 +529,7 @@ class TestCreateExamAttempt(ExamsAPITestCase):
 
     def test_bad_exam_id(self):
         """
-        Test that a non existant exam raises an error
+        Test that a non existent exam raises an error
         """
         fake_exam_id = 11111111
 
@@ -565,6 +565,16 @@ class TestCreateExamAttempt(ExamsAPITestCase):
         # check to ensure that only one attempt exists for exam and user
         filtered_attempts = ExamAttempt.objects.filter(user_id=user_id, exam_id=exam_id)
         self.assertEqual(len(filtered_attempts), 1)
+
+    def test_exam_with_no_due_date(self):
+        """
+        Test that you can create an attempt for an exam with no due date
+        """
+        exam_id = self.exam.id
+        user_id = self.user.id
+
+        create_exam_attempt(exam_id, user_id)
+        self.assertIsNotNone(ExamAttempt.objects.get(user_id=user_id, exam_id=exam_id))
 
 
 class TestGetExamByContentId(ExamsAPITestCase):

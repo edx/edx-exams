@@ -126,6 +126,8 @@ CORS_ORIGIN_WHITELIST = (
     LEARNING_MICROFRONTEND_URL,
 )
 
+ALLOWED_HOSTS = ['*']
+
 #####################################################################
 # Lastly, see if the developer has any local overrides.
 if os.path.isfile(join(dirname(abspath(__file__)), 'private.py')):
