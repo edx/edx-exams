@@ -65,12 +65,6 @@ class CourseExamsLegacyViewTest(ExamsAPITestCase):
         headers = self.build_jwt_headers(user)
         return self.client.patch(self.url, data, **headers, content_type="application/json")
 
-    def build_mock_response(self):
-        mock_response = Mock(spec=Response)
-        mock_response.json.return_value = {}
-        mock_response.status_code = 200
-        return mock_response
-
     @mock.patch('edx_exams.apps.router.views.register_exams')
     def test_patch_exams(self, mock_register_exams):
         """
