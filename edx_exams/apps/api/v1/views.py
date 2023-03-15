@@ -10,6 +10,7 @@ from edx_api_doc_tools import path_parameter, schema
 from edx_rest_framework_extensions.auth.jwt.authentication import JwtAuthentication
 from rest_framework import status
 from rest_framework.generics import ListAPIView
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from token_utils.api import sign_token_for
 
@@ -417,6 +418,7 @@ class LatestExamAttemptView(ExamsAPIView):
     """
 
     authentication_classes = (JwtAuthentication,)
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request):
         """
@@ -477,6 +479,7 @@ class ExamAttemptView(ExamsAPIView):
     """
 
     authentication_classes = (JwtAuthentication,)
+    permission_classes = (IsAuthenticated,)
 
     def put(self, request, attempt_id):
         """
@@ -566,6 +569,7 @@ class CourseExamAttemptView(ExamsAPIView):
     """
 
     authentication_classes = (JwtAuthentication,)
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request, course_id, content_id):
         """
