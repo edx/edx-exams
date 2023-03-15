@@ -324,6 +324,21 @@ class TestUpdateAttemptStatus(ExamsAPITestCase):
             update_attempt_status(attempt.id, to_status)
         self.assertIn('A status transition from', str(exc.exception))
 
+    def test_cannot_start_if_other_attempts_active(self):
+        """
+        Test that you cannot start another exam attempt if one is already active
+        """
+        # Already active exam attempt
+        ExamAttempt.objects.create(
+            user=self.user,
+            exam=self.exam,
+            attempt_number=1,
+            status=ExamAttemptStatus.started,
+        )
+        with self.assertRaises(ExamIllegalStatusTransition) as exc:
+            update_attempt_status(self.exam_attempt.id, ExamAttemptStatus.started)
+        self.assertIn('another exam attempt is currently active!', str(exc.exception))
+
 
 class TestGetAttemptById(ExamsAPITestCase):
     """

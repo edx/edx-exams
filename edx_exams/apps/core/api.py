@@ -69,14 +69,18 @@ def update_attempt_status(attempt_id, to_status):
     if not is_allowed_transition:
         raise ExamIllegalStatusTransition(error_msg)
 
-    attempt_obj.status = to_status
-
     if to_status == ExamAttemptStatus.started:
+        allowed_to_start, error_msg = _check_exam_is_allowed_to_start(attempt_obj, user_id)
+        if not allowed_to_start:
+            raise ExamIllegalStatusTransition(error_msg)
+
         attempt_obj.start_time = datetime.now(pytz.UTC)
         attempt_obj.allowed_time_limit_mins = _calculate_allowed_mins(attempt_obj.exam)
+
     if to_status == ExamAttemptStatus.submitted:
         attempt_obj.end_time = datetime.now(pytz.UTC)
 
+    attempt_obj.status = to_status
     attempt_obj.save()
 
     return attempt_id
@@ -86,33 +90,41 @@ def _allow_status_transition(attempt_obj, to_status):
     """
     Helper method to assert that a given status transition is allowed
     """
-    allowed = True
-    error_message = ''
-
     # check that status is legal
     is_transition_legal = ExamAttemptStatus.is_status_transition_legal(attempt_obj.status, to_status)
-    allowed = allowed and is_transition_legal
+    if not is_transition_legal:
+        illegal_status_transition_msg = (
+            f'A status transition from "{attempt_obj.status}" to "{to_status}" was attempted '
+            f'on exam_id={attempt_obj.exam.id} for user_id={attempt_obj.user.id}. This is not '
+            f"allowed! (course_id={attempt_obj.exam.course_id})"
+        )
+        return False, illegal_status_transition_msg
+    return True, ''
 
-    illegal_status_transition_msg = (
-        f'A status transition from "{attempt_obj.status}" to "{to_status}" was attempted '
-        f'on exam_id={attempt_obj.exam.id} for user_id={attempt_obj.user.id}. This is not '
-        f"allowed! (course_id={attempt_obj.exam.course_id})"
-    )
-    error_message = error_message if is_transition_legal else illegal_status_transition_msg
 
-    # check that exam is allowed to start
-    if to_status == ExamAttemptStatus.started:
-        is_start_allowed = not (attempt_obj.status == ExamAttemptStatus.started and attempt_obj.start_time)
-        allowed = allowed and is_start_allowed
-
+def _check_exam_is_allowed_to_start(attempt_obj, user_id):
+    """
+    Helper method to assert if an exam is allowed to start
+    """
+    # Check the attempt not already "started" and no start time exists
+    exam_already_started = attempt_obj.status == ExamAttemptStatus.started and attempt_obj.start_time
+    if exam_already_started:
         illegal_start_msg = (
             f'Cannot start exam attempt for exam_id={attempt_obj.exam.id} '
             f'and user_id={attempt_obj.user.id} because it has already started!'
         )
+        return False, illegal_start_msg
 
-        error_message = error_message if is_start_allowed else illegal_start_msg
-
-    return allowed, error_message
+    # Check that there are no other active exam attempts for the user
+    no_other_active_attempts = ExamAttempt.check_no_other_active_attempts_for_user(user_id, attempt_obj.id)
+    if not no_other_active_attempts:
+        only_one_active_attempt_msg = (
+            f'Cannot start exam attempt for exam_id={attempt_obj.exam.id} '
+            f'and user_id={attempt_obj.user.id} because another exam attempt '
+            f'is currently active!'
+        )
+        return False, only_one_active_attempt_msg
+    return True, ''
 
 
 def _calculate_allowed_mins(exam):
@@ -164,11 +176,10 @@ def check_if_exam_timed_out(exam_attempt):
     change the status of an exam attempt to 'submitted', then return attempt_id.
     Return None otherwise.
     """
-    IN_PROGRESS_STATUSES = [
-        ExamAttemptStatus.started,
-        ExamAttemptStatus.ready_to_submit,
-    ]
-    if exam_attempt.status in IN_PROGRESS_STATUSES and get_exam_attempt_time_remaining(exam_attempt) == 0:
+
+    exam_in_progress = exam_attempt.status in ExamAttemptStatus.in_progress_statuses
+    exam_timed_out = get_exam_attempt_time_remaining(exam_attempt) == 0
+    if exam_in_progress and exam_timed_out:
         log.info(
             ('Exam attempt with attempt_id=%(attempt_id)s for exam_id=%(exam_id)s for user_id=%(user_id)s '
              'in course_id=%(course_id)s has timed out.'),
