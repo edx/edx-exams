@@ -7,9 +7,10 @@ import logging
 
 from django.http import JsonResponse
 from edx_rest_framework_extensions.auth.jwt.authentication import JwtAuthentication
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 
-from edx_exams.apps.api.permissions import StaffUserOrReadOnlyPermissions, StaffUserPermissions
+from edx_exams.apps.api.permissions import StaffUserPermissions
 from edx_exams.apps.core.exam_types import get_exam_type
 from edx_exams.apps.router.interop import get_student_exam_attempt_data, register_exams
 
@@ -53,7 +54,7 @@ class CourseExamAttemptLegacyView(APIView):
     View to handle attempts for exams managed by edx-proctoring.
     """
     authentication_classes = (JwtAuthentication,)
-    permission_classes = (StaffUserOrReadOnlyPermissions,)
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request, course_id, content_id):
         """

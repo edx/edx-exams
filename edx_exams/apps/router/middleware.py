@@ -15,7 +15,6 @@ log = logging.getLogger(__name__)
 LEGACY_VIEW_MAP = {
     CourseExamsView: CourseExamsLegacyView,
     CourseExamAttemptView: CourseExamAttemptLegacyView,
-    # ExamAttemptView: ExamAttemptLegacyView,
 }
 
 
