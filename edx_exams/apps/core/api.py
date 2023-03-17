@@ -233,7 +233,11 @@ def create_exam_attempt(exam_id, user_id):
     practice_exam_types = [PracticeExamType, OnboardingExamType]
 
     # if exam is past the due date, and it is a non-practice exam, raise error
-    if get_exam_type(exam_obj.exam_type) not in practice_exam_types and timezone.now() > exam_obj.due_date:
+    if (
+        get_exam_type(exam_obj.exam_type) not in practice_exam_types
+        and exam_obj.due_date
+        and timezone.now() > exam_obj.due_date
+    ):
         err_msg = (
             f'user_id={user_id} trying to create exam attempt for past due non-practice exam '
             f'exam_id={exam_id} in course_id={exam_obj.course_id}. Do not register an exam attempt!'

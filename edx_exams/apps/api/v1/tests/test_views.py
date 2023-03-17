@@ -1320,3 +1320,27 @@ class CourseExamAttemptViewTest(ExamsAPITestCase):
 
         self.assertEqual(response_exam['attempt'], StudentAttemptSerializer(current_attempt).data)
         mock_check_if_exam_timed_out.assert_called_once_with(current_attempt)
+
+    def test_timed_exam(self):
+        """
+        Test that None is returned as the backend for a timed attempt
+        """
+        timed_content_id = 'block-v1:edX+test+2023+type@sequential+block@22222222'
+
+        Exam.objects.create(
+            resource_id=str(uuid.uuid4()),
+            course_id=self.course_id,
+            content_id=timed_content_id,
+            exam_name='test_exam',
+            exam_type='timed',
+            time_limit_mins=30,
+            due_date='2040-07-01T00:00:00Z',
+            hide_after_due=False,
+            is_active=True
+        )
+
+        response = self.get_api(self.user, self.course_id, timed_content_id)
+        response_exam = response.data['exam']
+
+        self.assertEqual(response.status_code, 200)
+        self.assertIsNone(response_exam['backend'])
