@@ -7,12 +7,12 @@ import logging
 
 from django.http import JsonResponse
 from edx_rest_framework_extensions.auth.jwt.authentication import JwtAuthentication
-from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 
 from edx_exams.apps.api.permissions import StaffUserPermissions
 from edx_exams.apps.core.exam_types import get_exam_type
-from edx_exams.apps.router.interop import register_exams
+from edx_exams.apps.router.interop import get_student_exam_attempt_data, register_exams
 
 log = logging.getLogger(__name__)
 
@@ -40,14 +40,31 @@ class CourseExamsLegacyView(APIView):
                 exam['is_proctored'] = exam_type.is_proctored
                 exam['is_practice_exam'] = exam_type.is_practice
 
-        response = register_exams(course_id, exam_list)
-        response_data = response.json()
-
-        if response.status_code != status.HTTP_200_OK:
-            log.error(f'Failed to publish exams for course_id {course_id} response was {response_data}')
+        response_data, status = register_exams(course_id, exam_list)
 
         return JsonResponse(
-            data=response.json(),
-            status=response.status_code,
+            data=response_data,
+            status=status,
+            safe=False,
+        )
+
+
+class CourseExamAttemptLegacyView(APIView):
+    """
+    View to handle attempts for exams managed by edx-proctoring.
+    """
+    authentication_classes = (JwtAuthentication,)
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request, course_id, content_id):
+        """
+        Get exam and attempt data for user in a given section. Pass through
+        the response from edx-proctoring directly.
+        """
+        response_data, status = get_student_exam_attempt_data(course_id, content_id, request.user.lms_user_id)
+
+        return JsonResponse(
+            data=response_data.get('exam', response_data),
+            status=status,
             safe=False,
         )

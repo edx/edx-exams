@@ -65,12 +65,6 @@ class CourseExamsLegacyViewTest(ExamsAPITestCase):
         headers = self.build_jwt_headers(user)
         return self.client.patch(self.url, data, **headers, content_type="application/json")
 
-    def build_mock_response(self):
-        mock_response = Mock(spec=Response)
-        mock_response.json.return_value = {}
-        mock_response.status_code = 200
-        return mock_response
-
     @mock.patch('edx_exams.apps.router.views.register_exams')
     def test_patch_exams(self, mock_register_exams):
         """
@@ -94,7 +88,7 @@ class CourseExamsLegacyViewTest(ExamsAPITestCase):
             },
         ]
 
-        mock_register_exams.return_value = self.build_mock_response()
+        mock_register_exams.return_value = ({}, 200)
         response = self.patch_api(self.user, data)
         self.assertEqual(response.status_code, 200)
 
@@ -129,7 +123,7 @@ class CourseExamsLegacyViewTest(ExamsAPITestCase):
         Request is forwarded to the LMS and the api/v1 view is not called
         (no exams in this service should be removed)
         """
-        mock_register_exams.return_value = self.build_mock_response()
+        mock_register_exams.return_value = ({}, 200)
 
         response = self.patch_api(self.user, [])
         self.assertEqual(response.status_code, 200)
@@ -155,7 +149,7 @@ class CourseExamsLegacyViewTest(ExamsAPITestCase):
             }
         ]
 
-        mock_register_exams.return_value = self.build_mock_response()
+        mock_register_exams.return_value = ({}, 200)
         response = self.patch_api(self.user, data)
         self.assertEqual(response.status_code, 200)
 
@@ -178,7 +172,7 @@ class CourseExamsLegacyViewTest(ExamsAPITestCase):
         If the configured provider for this course is null this view should
         be called instead of api/v1
         """
-        mock_register_exams.return_value = self.build_mock_response()
+        mock_register_exams.return_value = ({}, 200)
 
         CourseExamConfiguration.objects.create(
             course_id=self.course_id,
@@ -201,11 +195,63 @@ class CourseExamsLegacyViewTest(ExamsAPITestCase):
         And error response from the LMS should be returned with
         the same code
         """
-        mock_response = Mock(spec=Response)
-        mock_response.json.return_value = "some error"
-        mock_response.status_code = 422
-        mock_register_exams.return_value = mock_response
+        mock_register_exams.return_value = ("some error", 422)
 
         response = self.patch_api(self.user, [])
         self.assertEqual(response.status_code, 422)
         self.assertEqual(response.json(), "some error")
+
+
+@ddt.ddt
+class CourseExamAttemptLegacyViewTest(ExamsAPITestCase):
+    """
+    Tests for the legacy course exam attempt endpoints
+    """
+
+    def setUp(self):
+        super().setUp()
+
+        self.course_id = 'course-v1:edx+test+f19'
+        self.content_id = 'block-v1:edx+test+f19+type@problem+block@abcd1234'
+        self.url = reverse(
+            'api:v1:student-course_exam_attempt',
+            kwargs={'course_id': self.course_id, 'content_id': self.content_id}
+        )
+
+    def get_api(self, user, data):
+        """
+        Helper function to make a patch request to the API
+        """
+        data = json.dumps(data)
+        headers = self.build_jwt_headers(user)
+        return self.client.get(self.url, **headers)
+
+    def test_auth_failures(self):
+        """
+        Verify the endpoint validates permissions
+        """
+        # Test unauthenticated
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 401)
+
+    @mock.patch('edx_exams.apps.router.views.get_student_exam_attempt_data')
+    def test_get_lms_exam_data(self, mock_get_student_exam_attempt_data):
+        """
+        The exam data should be returned from the LMS
+        """
+        mock_get_student_exam_attempt_data.return_value = ({
+            'exam': {
+                "in_timed_exam": True,
+                "taking_as_proctored": True,
+                "exam_type": "a proctored exam",
+                "exam_display_name": "Test Exam",
+                "use_legacy_attempt_api": True,
+            }
+        }, 200)
+
+        response = self.get_api(self.user, self.url)
+        mock_get_student_exam_attempt_data.assert_called_once_with(
+            self.course_id, self.content_id, self.user.lms_user_id
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json().get('exam_display_name'), 'Test Exam')

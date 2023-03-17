@@ -29,6 +29,7 @@ from edx_exams.apps.core.api import (
 from edx_exams.apps.core.exam_types import get_exam_type
 from edx_exams.apps.core.models import CourseExamConfiguration, Exam, ExamAttempt, ProctoringProvider
 from edx_exams.apps.core.statuses import ExamAttemptStatus
+from edx_exams.apps.router.interop import get_active_exam_attempt
 
 log = logging.getLogger(__name__)
 
@@ -428,16 +429,27 @@ class LatestExamAttemptView(ExamsAPIView):
         Returns:
             A Response object containing all `ExamAttempt` data.
         """
-        user_id = request.user.id
-        latest_attempt = get_latest_attempt_for_user(user_id)
+        user = request.user
+        latest_attempt = get_latest_attempt_for_user(user.id)
 
+        # if there is an active attempt in this service, return it
         if latest_attempt is not None:
             latest_attempt = check_if_exam_timed_out(latest_attempt)
-
             serialized_attempt = StudentAttemptSerializer(latest_attempt)
-            return Response(status=status.HTTP_200_OK, data=serialized_attempt.data)
 
-        return Response(status=status.HTTP_200_OK, data=latest_attempt)
+            if latest_attempt.status in (ExamAttemptStatus.started, ExamAttemptStatus.ready_to_submit):
+                return Response(status=status.HTTP_200_OK, data=serialized_attempt.data)
+
+        # if edx-proctoring has an active attempt, return it
+        latest_attempt_legacy, response_status = get_active_exam_attempt(user.lms_user_id)
+        if latest_attempt_legacy is not None and response_status == status.HTTP_200_OK:
+            return Response(status=status.HTTP_200_OK, data=latest_attempt_legacy)
+
+        # otherwise return the latest attempt here regardless of status
+        return Response(
+            status=status.HTTP_200_OK,
+            data=serialized_attempt.data if latest_attempt is not None else {}
+        )
 
 
 class ExamAttemptView(ExamsAPIView):

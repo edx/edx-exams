@@ -2,14 +2,19 @@
 Middleware that checks if in incoming request should be
 routed to the legacy proctoring service (edx-proctoring)
 """
+import logging
+
 from django.utils.deprecation import MiddlewareMixin
 
-from edx_exams.apps.api.v1.views import CourseExamsView
+from edx_exams.apps.api.v1.views import CourseExamAttemptView, CourseExamsView
 from edx_exams.apps.core.models import CourseExamConfiguration
-from edx_exams.apps.router.views import CourseExamsLegacyView
+from edx_exams.apps.router.views import CourseExamAttemptLegacyView, CourseExamsLegacyView
+
+log = logging.getLogger(__name__)
 
 LEGACY_VIEW_MAP = {
-    CourseExamsView: CourseExamsLegacyView
+    CourseExamsView: CourseExamsLegacyView,
+    CourseExamAttemptView: CourseExamAttemptLegacyView,
 }
 
 
@@ -30,6 +35,7 @@ class ExamRequestMiddleware(MiddlewareMixin):
             course_id = view_kwargs.get('course_id')
             course_configuration = CourseExamConfiguration.get_configuration_for_course(course_id)
             if not course_configuration or course_configuration.provider is None:
+                log.info('Forwarding request to legacy edx-proctoring service for course %s', course_id)
                 return legacy_view.as_view()(request=request, *view_args, **view_kwargs)
 
         return None

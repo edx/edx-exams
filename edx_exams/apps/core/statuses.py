@@ -48,10 +48,10 @@ class ExamAttemptStatus:
     in_progress_statuses = [started, ready_to_submit]
 
     # list of all statuses considered completed
-    completed_statuses = [timed_out, submitted, verified, rejected, error,]
+    completed_statuses = [timed_out, submitted, verified, rejected, error]
 
     # list of all statuses considered incomplete
-    incomplete_statuses = [created, download_software_clicked, ready_to_start, started, ready_to_submit,]
+    incomplete_statuses = [created, download_software_clicked, ready_to_start, started, ready_to_submit]
 
     @classmethod
     def is_completed_status(cls, status):
