@@ -14,3 +14,4 @@ Test Courses in Stage
 Features
 --------
 `Exam Configuration <./exam_configuration.rst>`_
+`Timed Exams <./timed_exam.rst>`_
