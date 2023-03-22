@@ -246,6 +246,9 @@ class CourseExamAttemptLegacyViewTest(ExamsAPITestCase):
                 "exam_type": "a proctored exam",
                 "exam_display_name": "Test Exam",
                 "use_legacy_attempt_api": True,
+            },
+            'active_attempt': {
+                "foo": "bar"
             }
         }, 200)
 
@@ -254,4 +257,5 @@ class CourseExamAttemptLegacyViewTest(ExamsAPITestCase):
             self.course_id, self.content_id, self.user.lms_user_id
         )
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json().get('exam_display_name'), 'Test Exam')
+        self.assertEqual(response.json()['exam']['exam_display_name'], 'Test Exam')
+        self.assertEqual(response.json().get('active_attempt'), None)
