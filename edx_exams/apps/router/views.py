@@ -63,8 +63,12 @@ class CourseExamAttemptLegacyView(APIView):
         """
         response_data, status = get_student_exam_attempt_data(course_id, content_id, request.user.lms_user_id)
 
+        # remove active_attempt to keep response consistent with CourseExamAttemptView
+        if 'active_attempt' in response_data:
+            del response_data['active_attempt']
+
         return JsonResponse(
-            data=response_data.get('exam', response_data),
+            data=response_data,
             status=status,
             safe=False,
         )
