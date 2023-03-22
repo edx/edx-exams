@@ -235,6 +235,19 @@ class CourseExamAttemptLegacyViewTest(ExamsAPITestCase):
         self.assertEqual(response.status_code, 401)
 
     @mock.patch('edx_exams.apps.router.views.get_student_exam_attempt_data')
+    def test_get_lms_exam_data_failed(self, mock_get_student_exam_attempt_data):
+        """
+        The exam data should be returned from the LMS
+        """
+        mock_get_student_exam_attempt_data.return_value = ('some error', 500)
+
+        response = self.get_api(self.user, self.url)
+        mock_get_student_exam_attempt_data.assert_called_once_with(
+            self.course_id, self.content_id, self.user.lms_user_id
+        )
+        self.assertEqual(response.status_code, 500)
+
+    @mock.patch('edx_exams.apps.router.views.get_student_exam_attempt_data')
     def test_get_lms_exam_data(self, mock_get_student_exam_attempt_data):
         """
         The exam data should be returned from the LMS
