@@ -10,6 +10,7 @@ Prerequisite steps:
     #. Find or create a test course with proctoring enabled and an LTI proctoring provider chosen
     #. Find or create a test course without an LTI proctoring provider chosen
     #. Find or create an exam section with a type of 'timed exam' in each course
+    #. Have a non-staff learner account enrolled in the verified track for both courses
 
 Timed Exam Access
 -----------------
@@ -36,6 +37,21 @@ A paid track learner is not able to enter an expired exam (Instuctor paced cours
     #. In studio, set the due date for the exam in the past
     #. Log in as a verified learner and navigate to the timed exam section
     #. An interstitial is shown stating that the due date for this exam has passed
+
+A paid track learner is not able to view exam content outside of the exam
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    #. Log in as a staff user and navigate to the exam section
+    #. View the first unit in the exam
+    #. Using devtools, find and copy the iframe url for the current unit
+    #. Logout and log back in as a verified learner
+    #. Open the copied url in a browser tab, keep this window open
+    #. The unit should not render
+    #. Navigate to the exam section and start the exam
+    #. Refresh your window containing the unit iframe url
+    #. The unit should render
+    #. Submit the exam and wait at least 2 minutes
+    #. Refresh your window containing the unit iframe url
+    #. The unit should not render
 
 Exam Timer
 ----------
@@ -70,7 +86,7 @@ If the exam timer reaches zero the exam is automatically submitted
     #. An interstitial is shown notifying the learner their exam time has expired and answers have been automatically submitted.
     #. If you modified `time allotted` please reset it to the initial value
 
-A learner is given limted time if starting a exam that is nearly due
+A learner is given limited time if starting a exam that is nearly due
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     #. In studio, verify `time allotted` for the exam is greater than 5 minutes
     #. In studio, set the due date for the exam to 5 minutes from now
