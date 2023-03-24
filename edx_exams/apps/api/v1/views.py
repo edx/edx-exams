@@ -21,6 +21,7 @@ from edx_exams.apps.core.api import (
     check_if_exam_timed_out,
     create_exam_attempt,
     get_attempt_by_id,
+    get_course_exams,
     get_current_exam_attempt,
     get_exam_attempt_time_remaining,
     get_exam_by_content_id,
@@ -101,28 +102,17 @@ class CourseExamsView(ExamsAPIView):
     @classmethod
     def handle_exams(cls, request_exams_list, course_exams_qs, course_id):
         """
-        Decide how exams should be updated or created
+        Given a list of exams for the course, determine if we can update in place or
+        if we need to create a new exam.
         """
-        exams_by_content_id = {}
-        for exam in course_exams_qs:
-            type_dict = exams_by_content_id.get(exam.content_id)
-            if not type_dict:
-                exams_by_content_id[exam.content_id] = {}
-
-            exams_by_content_id[exam.content_id][exam.exam_type] = exam
+        exams_by_content_id = {exam.content_id: exam for exam in course_exams_qs}
 
         for exam in request_exams_list:
             # should only be one object per exam type per content_id
+            existing_exam = exams_by_content_id.get(exam['content_id'])
 
-            existing_type_exam = exams_by_content_id.get(exam['content_id'], {}).get(exam['exam_type'])
-
-            if existing_type_exam:
-                # if the existing exam of the same type is not active,
-                # mark all other exams for this content id as inactive
-                if not existing_type_exam.is_active:
-                    course_exams_qs.filter(content_id=exam['content_id']).update(is_active=False)
-
-                # then update the existing exam
+            if existing_exam and exam['exam_type'] == existing_exam.exam_type:
+                # if the exam type is the same, update the existing exam
                 update_fields = {
                     'exam_name': exam['exam_name'],
                     'time_limit_mins': exam['time_limit_mins'],
@@ -130,10 +120,12 @@ class CourseExamsView(ExamsAPIView):
                     'hide_after_due': exam['hide_after_due'],
                     'is_active': exam['is_active'],
                 }
-                cls.update_exam(existing_type_exam, update_fields)
+                cls.update_exam(existing_exam, update_fields)
             else:
-                # if existing exam with the type we receive does not exist, mark all other exams inactive
-                course_exams_qs.filter(content_id=exam['content_id']).update(is_active=False)
+                # if the exam type is different, mark the existing exam as inactive
+                # and create a new exam
+                if existing_exam:
+                    cls.update_exam(existing_exam, {'is_active': False})
 
                 provider = None
                 # get exam type class, which has specific attributes like is_proctored, is_timed, etc.
@@ -180,7 +172,7 @@ class CourseExamsView(ExamsAPIView):
         serializer = ExamSerializer(data=request_exams, many=True)
 
         if serializer.is_valid():
-            course_exams = Exam.objects.filter(course_id=course_id)
+            course_exams = get_course_exams(course_id)
 
             # decide how to update or create exams based on the request and already existing exams
             self.handle_exams(request_exams, course_exams, course_id)

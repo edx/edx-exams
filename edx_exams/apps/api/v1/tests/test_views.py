@@ -209,22 +209,24 @@ class CourseExamsViewTests(ExamsAPITestCase):
         ]
         self.get_response(self.user, data, 200)
 
-        # check that only two exams still exist (should not create a third)
+        # a new exam should have been created for proctored
         exams = Exam.objects.filter(course_id=self.course_id, content_id=self.content_id)
-        self.assertEqual(len(exams), 2)
+        self.assertEqual(len(exams), 3)
 
-        # check that timed exam is marked inactive
-        timed_exam = Exam.objects.get(course_id=self.course_id, content_id=self.content_id, exam_type='timed')
+        # check that the old proctored and timed exams are marked inactive
+        timed_exam.refresh_from_db()
+        proctored_exam.refresh_from_db()
         self.assertFalse(timed_exam.is_active)
+        self.assertFalse(proctored_exam.is_active)
 
-        # check that proctored exam data is correct
-        proctored_exam = Exam.objects.get(course_id=self.course_id, content_id=self.content_id, exam_type='proctored')
-        self.assertEqual(proctored_exam.exam_name, self.exam.exam_name)
-        self.assertEqual(proctored_exam.provider, self.exam.provider)
-        self.assertEqual(proctored_exam.time_limit_mins, 30)
-        self.assertEqual(proctored_exam.due_date, pytz.utc.localize(datetime.fromisoformat(self.exam.due_date)))
-        self.assertEqual(proctored_exam.hide_after_due, self.exam.hide_after_due)
-        self.assertEqual(proctored_exam.is_active, True)
+        # check that the new active exam data is correct
+        proctored_exam_new = Exam.objects.get(course_id=self.course_id, content_id=self.content_id, is_active=True)
+        self.assertEqual(proctored_exam_new.exam_name, self.exam.exam_name)
+        self.assertEqual(proctored_exam_new.provider, self.exam.provider)
+        self.assertEqual(proctored_exam_new.time_limit_mins, 30)
+        self.assertEqual(proctored_exam_new.due_date, pytz.utc.localize(datetime.fromisoformat(self.exam.due_date)))
+        self.assertEqual(proctored_exam_new.hide_after_due, self.exam.hide_after_due)
+        self.assertEqual(proctored_exam_new.is_active, True)
 
     @ddt.data(
         (False, 'proctored', False),  # test case for a proctored exam with a course config

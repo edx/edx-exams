@@ -280,6 +280,13 @@ def get_exam_by_content_id(course_id, content_id):
         return None
 
 
+def get_course_exams(course_id):
+    """
+    Retrieve all active exams for a course
+    """
+    return Exam.objects.filter(course_id=course_id, is_active=True)
+
+
 def get_current_exam_attempt(user_id, exam_id):
     """
     Retrieve the current attempt for a user given an exam
