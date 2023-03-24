@@ -31,7 +31,7 @@ coreschema==0.0.4
     # via
     #   coreapi
     #   drf-yasg
-cryptography==39.0.2
+cryptography==40.0.0
     # via
     #   pyjwt
     #   social-auth-core
@@ -103,7 +103,7 @@ edx-auth-backends==4.1.0
     # via -r requirements/base.in
 edx-django-release-util==1.2.0
     # via -r requirements/base.in
-edx-django-utils==5.2.0
+edx-django-utils==5.3.0
     # via
     #   -r requirements/base.in
     #   django-config-models
@@ -153,7 +153,7 @@ markupsafe==2.1.2
     #   xblock
 mysqlclient==2.1.1
     # via -r requirements/base.in
-newrelic==8.7.0
+newrelic==8.7.1
     # via edx-django-utils
 oauthlib==3.2.2
     # via
@@ -226,7 +226,7 @@ ruamel-yaml-clib==0.2.7
     # via ruamel-yaml
 semantic-version==2.10.0
     # via edx-drf-extensions
-simplejson==3.18.3
+simplejson==3.18.4
     # via
     #   django-rest-swagger
     #   xblock-utils
@@ -241,9 +241,9 @@ six==1.16.0
     #   python-dateutil
 slumber==0.7.1
     # via edx-rest-api-client
-social-auth-app-django==5.0.0
+social-auth-app-django==5.1.0
     # via edx-auth-backends
-social-auth-core==4.3.0
+social-auth-core==4.4.0
     # via
     #   edx-auth-backends
     #   social-auth-app-django
@@ -257,7 +257,7 @@ uritemplate==4.1.1
     # via
     #   coreapi
     #   drf-yasg
-urllib3==1.26.14
+urllib3==1.26.15
     # via requests
 web-fragments==2.0.0
     # via
