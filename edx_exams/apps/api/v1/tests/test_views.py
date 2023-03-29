@@ -3,15 +3,23 @@ Tests for the exams API views
 """
 import json
 import uuid
-from datetime import datetime
+from datetime import datetime, timedelta
+from unittest.mock import patch
 
 import ddt
 import pytz
 from django.urls import reverse
+from django.utils import timezone
+from freezegun import freeze_time
+from token_utils.api import unpack_token_for
 
+from edx_exams.apps.api.serializers import ExamSerializer, StudentAttemptSerializer
 from edx_exams.apps.api.test_utils import ExamsAPITestCase
 from edx_exams.apps.api.test_utils.factories import UserFactory
-from edx_exams.apps.core.models import CourseExamConfiguration, Exam, ProctoringProvider
+from edx_exams.apps.core.exam_types import get_exam_type
+from edx_exams.apps.core.exceptions import ExamAttemptOnPastDueExam, ExamIllegalStatusTransition
+from edx_exams.apps.core.models import CourseExamConfiguration, Exam, ExamAttempt, ProctoringProvider
+from edx_exams.apps.core.statuses import ExamAttemptStatus
 
 
 @ddt.ddt
@@ -201,22 +209,24 @@ class CourseExamsViewTests(ExamsAPITestCase):
         ]
         self.get_response(self.user, data, 200)
 
-        # check that only two exams still exist (should not create a third)
+        # a new exam should have been created for proctored
         exams = Exam.objects.filter(course_id=self.course_id, content_id=self.content_id)
-        self.assertEqual(len(exams), 2)
+        self.assertEqual(len(exams), 3)
 
-        # check that timed exam is marked inactive
-        timed_exam = Exam.objects.get(course_id=self.course_id, content_id=self.content_id, exam_type='timed')
+        # check that the old proctored and timed exams are marked inactive
+        timed_exam.refresh_from_db()
+        proctored_exam.refresh_from_db()
         self.assertFalse(timed_exam.is_active)
+        self.assertFalse(proctored_exam.is_active)
 
-        # check that proctored exam data is correct
-        proctored_exam = Exam.objects.get(course_id=self.course_id, content_id=self.content_id, exam_type='proctored')
-        self.assertEqual(proctored_exam.exam_name, self.exam.exam_name)
-        self.assertEqual(proctored_exam.provider, self.exam.provider)
-        self.assertEqual(proctored_exam.time_limit_mins, 30)
-        self.assertEqual(proctored_exam.due_date, pytz.utc.localize(datetime.fromisoformat(self.exam.due_date)))
-        self.assertEqual(proctored_exam.hide_after_due, self.exam.hide_after_due)
-        self.assertEqual(proctored_exam.is_active, True)
+        # check that the new active exam data is correct
+        proctored_exam_new = Exam.objects.get(course_id=self.course_id, content_id=self.content_id, is_active=True)
+        self.assertEqual(proctored_exam_new.exam_name, self.exam.exam_name)
+        self.assertEqual(proctored_exam_new.provider, self.exam.provider)
+        self.assertEqual(proctored_exam_new.time_limit_mins, 30)
+        self.assertEqual(proctored_exam_new.due_date, pytz.utc.localize(datetime.fromisoformat(self.exam.due_date)))
+        self.assertEqual(proctored_exam_new.hide_after_due, self.exam.hide_after_due)
+        self.assertEqual(proctored_exam_new.is_active, True)
 
     @ddt.data(
         (False, 'proctored', False),  # test case for a proctored exam with a course config
@@ -513,3 +523,826 @@ class ProctoringProvidersViewTest(ExamsAPITestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.data), 0)
+
+
+@ddt.ddt
+class ExamAccessTokensViewsTests(ExamsAPITestCase):
+    """
+    Tests for Exam Access Token Views.
+    """
+
+    def setUp(self):
+        super().setUp()
+
+        self.course_id = 'course-v1:edx+test+f19'
+
+        self.due_date = timezone.now() + timedelta(minutes=5)
+        self.exam = Exam.objects.create(
+            resource_id=str(uuid.uuid4()),
+            course_id=self.course_id,
+            provider=self.test_provider,
+            content_id='abcd1234',
+            exam_name='test_exam',
+            exam_type='proctored',
+            time_limit_mins=30,
+            due_date=self.due_date,
+            hide_after_due=False,
+            is_active=True
+        )
+        self.exam_id = self.exam.id
+        self.url = reverse('api:v1:exam-access-tokens',
+                           kwargs={'exam_id': self.exam_id})
+
+        self.past_due_date = timezone.now() - timedelta(minutes=5)
+        self.past_due_exam = Exam.objects.create(
+            resource_id=str(uuid.uuid4()),
+            course_id=self.course_id,
+            provider=self.test_provider,
+            content_id='past1234',
+            exam_name='test_exam',
+            exam_type='proctored',
+            time_limit_mins=30,
+            due_date=self.past_due_date,
+            hide_after_due=False,
+            is_active=True
+        )
+
+        self.past_due_exam_id = self.past_due_exam.id
+        self.past_due_url = reverse('api:v1:exam-access-tokens', kwargs={'exam_id': self.past_due_exam_id})
+
+    def get_exam_access(self, user, url):
+        """
+        Helper function to make a get request
+        """
+        headers = self.build_jwt_headers(user)
+        return self.client.get(url, **headers)
+
+    def assert_valid_exam_access_token(self, response, user, exam):
+        token = response.data.get("exam_access_token")
+        self.assertEqual(unpack_token_for(token, user.lms_user_id).get('course_id'), exam.course_id)
+        self.assertEqual(unpack_token_for(token, user.lms_user_id).get('content_id'), exam.content_id)
+
+    def test_auth_failures(self):
+        """
+        Verify the endpoint validates permissions
+        """
+        # Test unauthenticated
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 401)
+
+    def test_exam_not_found(self):
+        """
+        Verify the endpoint returns 404 if exam is not found
+        """
+        url = reverse('api:v1:exam-access-tokens', kwargs={'exam_id': 86})
+
+        headers = self.build_jwt_headers(self.user)
+        response = self.client.get(url, **headers)
+        self.assertEqual(response.status_code, 404)
+
+    def test_access_not_granted(self):
+        """
+        Verify the endpoint doesn't grant access for an exam
+        without an existing exam attempt or past due date.
+        """
+        response = self.get_exam_access(self.user, self.url)
+        self.assertEqual(403, response.status_code)
+
+    @ddt.data(
+        (False, 'started', 200),
+        (False, 'created', 403),
+        (True, 'verified', 200),
+        (True, 'created', 403),
+    )
+    @ddt.unpack
+    def test_access_granted_started_exam_attempt(self, exam_past_due, attempt_status, response_status):
+        """
+        Verify the endpoint grants/doesn't grant access for an exam
+        based on the status of the exam attempt.
+        """
+        exam = self.past_due_exam if exam_past_due else self.exam
+        due_date = self.past_due_date if exam_past_due else self.due_date
+
+        allowed_time_limit_mins = exam.time_limit_mins
+        start_time = due_date - timedelta(minutes=allowed_time_limit_mins/2)
+        ExamAttempt.objects.create(
+            user=self.user,
+            exam=exam,
+            attempt_number=1,
+            status=attempt_status,
+            start_time=start_time,
+            allowed_time_limit_mins=allowed_time_limit_mins
+        )
+
+        url = reverse('api:v1:exam-access-tokens', kwargs={'exam_id': exam.id})
+        response = self.get_exam_access(self.user, url)
+        self.assertEqual(response_status, response.status_code)
+        if response_status == 200:
+            self.assert_valid_exam_access_token(response, self.user, exam)
+
+    def test_access_not_granted_started_exam_attempt_missing_start_time(self):
+        """
+        Verify the endpoint does not grant access for an exam
+        with an existing, started exam attempt that is missing start_time.
+        """
+        allowed_time_limit_mins = self.exam.time_limit_mins
+        ExamAttempt.objects.create(
+            user=self.user,
+            exam=self.exam,
+            attempt_number=1,
+            status='started',
+            allowed_time_limit_mins=allowed_time_limit_mins
+        )
+
+        response = self.get_exam_access(self.user, self.url)
+        self.assertEqual(403, response.status_code)
+
+    @ddt.data(
+        ('started', 200),
+        ('created', 403),
+    )
+    @ddt.unpack
+    def test_access_no_due_date(self, attempt_status, response_status):
+        """
+        Verify the endpoint grants access for an exam
+        with no due date, if started exam attempt.
+        """
+        no_due_date_exam = Exam.objects.create(
+            resource_id=str(uuid.uuid4()),
+            course_id=self.course_id,
+            provider=self.test_provider,
+            content_id='noduedate234',
+            exam_name='test_exam',
+            exam_type='proctored',
+            time_limit_mins=30,
+            hide_after_due=False,
+            is_active=True
+        )
+
+        no_due_date_url = reverse('api:v1:exam-access-tokens', kwargs={'exam_id': no_due_date_exam.id})
+
+        allowed_time_limit_mins = no_due_date_exam.time_limit_mins
+        start_time = timezone.now() - timedelta(minutes=allowed_time_limit_mins/2)
+        ExamAttempt.objects.create(
+            user=self.user,
+            exam=no_due_date_exam,
+            attempt_number=1,
+            status=attempt_status,
+            start_time=start_time,
+            allowed_time_limit_mins=allowed_time_limit_mins
+        )
+
+        response = self.get_exam_access(self.user, no_due_date_url)
+        self.assertEqual(response_status, response.status_code)
+        if response_status == 200:
+            self.assert_valid_exam_access_token(response, self.user, no_due_date_exam)
+
+    def test_access_not_granted_if_hide_after_due(self):
+        """
+        Verify the endpoint does not grant access for past-due exam
+        when the exam is set to hide after due.
+        """
+        past_due_exam_hide = Exam.objects.create(
+            resource_id=str(uuid.uuid4()),
+            course_id=self.course_id,
+            provider=self.test_provider,
+            content_id='hideafterdue1234',
+            exam_name='test_exam',
+            exam_type='proctored',
+            time_limit_mins=30,
+            due_date=self.past_due_date,
+            hide_after_due=True,
+            is_active=True
+        )
+
+        past_due_url = reverse('api:v1:exam-access-tokens', kwargs={'exam_id': past_due_exam_hide.id})
+
+        start_time = self.past_due_date - timedelta(minutes=60)
+        allowed_time_limit_mins = past_due_exam_hide.time_limit_mins
+        ExamAttempt.objects.create(
+            user=self.user,
+            exam=past_due_exam_hide,
+            attempt_number=1,
+            status='verified',
+            start_time=start_time,
+            allowed_time_limit_mins=allowed_time_limit_mins
+        )
+
+        response = self.get_exam_access(self.user, past_due_url)
+        self.assertEqual(403, response.status_code)
+
+    def test_access_not_granted_no_status_exam_attempt(self):
+        """
+        Verify the endpoint does not grant access for an exam
+        with an existing exam attempt that is not started.
+        """
+        start_time = self.due_date - timedelta(minutes=60)
+        allowed_time_limit_mins = self.exam.time_limit_mins
+        ExamAttempt.objects.create(
+            user=self.user,
+            exam=self.exam,
+            attempt_number=1,
+            start_time=start_time,
+            allowed_time_limit_mins=allowed_time_limit_mins
+        )
+
+        response = self.get_exam_access(self.user, self.url)
+        self.assertEqual(403, response.status_code)
+
+    @ddt.data(
+        (timedelta(minutes=35), timedelta(minutes=0), 403),  # exam attempt with zero time remaining
+        (timedelta(minutes=10), timedelta(minutes=10), 403),  # exam attempt that is past due date
+        (timedelta(minutes=20), timedelta(minutes=0), 200),  # exam attempt time remaining less than due date
+    )
+    @ddt.unpack
+    def test_access_granted_started_exam_attempt_various_times(self, start_delta, current_time_delta, response_status):
+        """
+        Verify the endpoint grants access for an exam
+        with an existing exam attempt.
+        """
+
+        # freeze time adding the delta to the due_date, this way we can manipulate if the due date has actually passed
+        with freeze_time(timezone.now() + current_time_delta):
+            start_time = self.due_date - start_delta
+            allowed_time_limit_mins = self.exam.time_limit_mins
+            ExamAttempt.objects.create(
+                user=self.user,
+                exam=self.exam,
+                attempt_number=1,
+                status='started',
+                start_time=start_time,
+                allowed_time_limit_mins=allowed_time_limit_mins
+            )
+
+            response = self.get_exam_access(self.user, self.url)
+        self.assertEqual(response_status, response.status_code)
+        if response_status == 200:
+            self.assert_valid_exam_access_token(response, self.user, self.exam)
+
+    def test_access_granted_past_due_exam_no_attempt(self):
+        """
+        Verify the endpoint grants access for an exam
+        with no existing attempt that is past due.
+        """
+        response = self.get_exam_access(self.user, self.past_due_url)
+        self.assertEqual(200, response.status_code)
+        self.assert_valid_exam_access_token(response, self.user, self.past_due_exam)
+
+    @ddt.data(
+        (timedelta(minutes=20), timedelta(minutes=0), 200, True),  # exam attempt time remaining more than default exp
+        (timedelta(minutes=34.5), timedelta(minutes=0), 200, False),  # exam attempt time remaining less than default
+    )
+    @ddt.unpack
+    def test_expiration_started_exam_attempt_various_times(self, start_delta, current_time_delta,
+                                                           response_status, is_default):
+        """
+        Verify the endpoint grants access for an exam
+        with an existing exam attempt and that the exp
+        window is correct.
+        """
+
+        # freeze time adding the delta to the due_date, this way we can manipulate if the due date has actually passed
+        with freeze_time(timezone.now() + current_time_delta):
+            start_time = self.due_date - start_delta
+            allowed_time_limit_mins = self.exam.time_limit_mins
+            ExamAttempt.objects.create(
+                user=self.user,
+                exam=self.exam,
+                attempt_number=1,
+                status='started',
+                start_time=start_time,
+                allowed_time_limit_mins=allowed_time_limit_mins
+            )
+
+            response = self.get_exam_access(self.user, self.url)
+        self.assertEqual(response_status, response.status_code)
+
+        self.assert_valid_exam_access_token(response, self.user, self.exam)
+        expiration = response.data.get("exam_access_token_expiration")
+        default_secs = 60
+        if is_default:
+            self.assertEqual(expiration, default_secs)
+        else:
+            self.assertNotEqual(expiration, default_secs)
+
+
+class LatestExamAttemptViewTest(ExamsAPITestCase):
+    """
+    Tests LatestExamAttemptView
+    """
+
+    def setUp(self):
+        super().setUp()
+
+        self.course_id = 'course-v1:edx+test+f19'
+        self.content_id = 'block-v1:edX+test+2023+type@sequential+block@1111111111'
+
+        self.course_exam_config = CourseExamConfiguration.objects.create(
+            course_id=self.course_id,
+            provider=self.test_provider,
+            allow_opt_out=False
+        )
+
+        self.exam = Exam.objects.create(
+            resource_id=str(uuid.uuid4()),
+            course_id=self.course_id,
+            provider=self.test_provider,
+            content_id=self.content_id,
+            exam_name='test_exam',
+            exam_type='proctored',
+            time_limit_mins=30,
+            due_date='2040-07-01 00:00:00',
+            hide_after_due=False,
+            is_active=True
+        )
+
+        self.other_user = UserFactory()
+        self.now = timezone.now()
+
+    def get_api(self, user):
+        """
+        Helper function to make get request to the API
+        """
+
+        headers = self.build_jwt_headers(user)
+        url = reverse('api:v1:exams-attempt-latest')
+        return self.client.get(url, **headers, content_type="application/json")
+
+    def create_mock_attempt(self, user, status, start_time, allowed_time_limit_mins):
+        """
+        Helper function to create exam attempt objects
+        """
+        return ExamAttempt.objects.create(
+            user=user,
+            exam=self.exam,
+            attempt_number=1,
+            status=status,
+            start_time=start_time,
+            allowed_time_limit_mins=allowed_time_limit_mins
+        )
+
+    @patch('edx_exams.apps.api.v1.views.check_if_exam_timed_out')
+    @patch('edx_exams.apps.api.v1.views.get_latest_attempt_for_user')
+    def test_get_latest_exam_attempt_for_user(self, mock_get_latest_attempt_for_user, mock_check_if_exam_timed_out):
+        """
+        Test that the GET function in the ExamAttempt view returns
+        the expected exam attempt for a user with status 200
+        """
+
+        mock_attempt = self.create_mock_attempt(self.user, ExamAttemptStatus.started, self.now, 60)
+
+        mock_get_latest_attempt_for_user.return_value = mock_attempt
+        mock_check_if_exam_timed_out.return_value = mock_attempt
+
+        response = self.get_api(self.user)
+
+        self.assertEqual(response.status_code, 200)
+
+        # Assert attempt id's are the same, as time_remaining_seconds will differ
+        self.assertEqual(response.data.get('attempt_id'), mock_attempt.id)
+        mock_get_latest_attempt_for_user.assert_called_once_with(mock_attempt.user.id)
+        mock_check_if_exam_timed_out.assert_called_once_with(mock_attempt)
+
+    @patch('edx_exams.apps.api.v1.views.check_if_exam_timed_out')
+    @patch('edx_exams.apps.api.v1.views.get_latest_attempt_for_user')
+    def test_cannot_get_attempts_for_other_user(self, mock_get_latest_attempt_for_user, mock_check_if_exam_timed_out):
+        """
+        Test that a user cannot view the exam attempts of another user
+        """
+
+        current_users_attempt = self.create_mock_attempt(self.user, ExamAttemptStatus.started, self.now, 60)
+        other_users_attempt = self.create_mock_attempt(self.other_user, ExamAttemptStatus.submitted, self.now, 60)
+
+        mock_get_latest_attempt_for_user.return_value = current_users_attempt
+        mock_check_if_exam_timed_out.return_value = current_users_attempt
+        response = self.get_api(self.user)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data.get('attempt_id'), current_users_attempt.id)
+        self.assertNotEqual(response.data.get('attempt_id'), other_users_attempt.id)
+        mock_get_latest_attempt_for_user.assert_called_once_with(self.user.id)
+
+    @patch('edx_exams.apps.api.v1.views.get_active_exam_attempt')
+    def test_no_attempts_for_user(self, mock_get_legacy_active_exam_attempt):
+        """
+        Test that if the user has no exam attempts, that the endpoint returns None
+        """
+
+        mock_get_legacy_active_exam_attempt.return_value = {}, 200
+        response = self.get_api(self.user)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data, {})
+
+    @patch('edx_exams.apps.api.v1.views.check_if_exam_timed_out')
+    @patch('edx_exams.apps.api.v1.views.get_latest_attempt_for_user')
+    def test_submit_on_timeout(self, mock_get_latest_attempt_for_user, mock_check_if_exam_timed_out):
+        """
+        Test if the view returns an exam whose status is changed to be submitted
+        """
+
+        one_hour_ago = timezone.now() - timedelta(hours=1)
+        three_days_ago = timezone.now() - timedelta(days=3)
+
+        # Expected return value
+        current_attempt = self.create_mock_attempt(self.user, ExamAttemptStatus.started, one_hour_ago, None)
+
+        # Other value, which should not be returned
+        self.create_mock_attempt(self.user, ExamAttemptStatus.started, three_days_ago, None)
+
+        # Mock return of attempt data before it is updated
+        mock_get_latest_attempt_for_user.return_value = current_attempt
+        # Update attempt to 'submitted'
+        ExamAttempt.objects.update_or_create(start_time=one_hour_ago, defaults={'status': ExamAttemptStatus.submitted})
+        # Mock return attempt data after it is updated
+        mock_check_if_exam_timed_out.return_value = current_attempt
+
+        response = self.get_api(self.user)
+
+        self.assertEqual(response.data, StudentAttemptSerializer(current_attempt).data)
+        mock_get_latest_attempt_for_user.assert_called_once_with(self.user.id)
+        mock_check_if_exam_timed_out.assert_called_once_with(current_attempt)
+
+    @patch('edx_exams.apps.api.v1.views.check_if_exam_timed_out')
+    @patch('edx_exams.apps.api.v1.views.get_latest_attempt_for_user')
+    @patch('edx_exams.apps.api.v1.views.get_active_exam_attempt')
+    def test_active_legacy_service_attempt(self, mock_get_legacy_active_exam_attempt,
+                                           mock_get_latest_attempt_for_user, mock_check_if_exam_timed_out):
+        """
+        Test that if the user has an active edx-proctoring attempt, the endpoint returns it
+        """
+
+        mock_attempt = self.create_mock_attempt(self.user, ExamAttemptStatus.created, None, 60)
+        mock_get_latest_attempt_for_user.return_value = mock_attempt
+        mock_check_if_exam_timed_out.return_value = mock_attempt
+
+        mock_get_legacy_active_exam_attempt.return_value = ({'attempt_id': 123}, 200)
+
+        response = self.get_api(self.user)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data.get('attempt_id'), 123)
+
+    @patch('edx_exams.apps.api.v1.views.check_if_exam_timed_out')
+    @patch('edx_exams.apps.api.v1.views.get_latest_attempt_for_user')
+    @patch('edx_exams.apps.api.v1.views.get_active_exam_attempt')
+    def test_ignore_legacy_service_errors(self, mock_get_legacy_active_exam_attempt,
+                                          mock_get_latest_attempt_for_user, mock_check_if_exam_timed_out):
+        """
+        Test that if edx-proctoring returns an error we ignore the response and return latest attempt
+        """
+
+        mock_attempt = self.create_mock_attempt(self.user, ExamAttemptStatus.submitted, None, 60)
+        mock_get_latest_attempt_for_user.return_value = mock_attempt
+        mock_check_if_exam_timed_out.return_value = mock_attempt
+
+        mock_get_legacy_active_exam_attempt.return_value = ('bad things', 500)
+
+        response = self.get_api(self.user)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data.get('attempt_id'), mock_attempt.id)
+
+
+@ddt.ddt
+class ExamAttemptViewTest(ExamsAPITestCase):
+    """
+    Tests ExamAttemptView
+    """
+
+    def setUp(self):
+        super().setUp()
+
+        self.course_id = 'course-v1:edx+test+f19'
+        self.content_id = '11111111'
+
+        self.course_exam_config = CourseExamConfiguration.objects.create(
+            course_id=self.course_id,
+            provider=self.test_provider,
+            allow_opt_out=False
+        )
+
+        self.exam = Exam.objects.create(
+            resource_id=str(uuid.uuid4()),
+            course_id=self.course_id,
+            provider=self.test_provider,
+            content_id=self.content_id,
+            exam_name='test_exam',
+            exam_type='proctored',
+            time_limit_mins=30,
+            due_date='2040-07-01 00:00:00',
+            hide_after_due=False,
+            is_active=True
+        )
+
+        self.non_staff_user = UserFactory()
+
+    def put_api(self, user, attempt_id, data):
+        """
+        Helper function to make patch request to the API
+        """
+
+        data = json.dumps(data)
+        headers = self.build_jwt_headers(user)
+        url = reverse('api:v1:exams-attempt', args=[attempt_id])
+
+        return self.client.put(url, data, **headers, content_type="application/json")
+
+    def post_api(self, user, data):
+        """
+        Helper function to make post request to the API
+        """
+        data = json.dumps(data)
+        headers = self.build_jwt_headers(user)
+        url = reverse('api:v1:exams-attempt')
+
+        return self.client.post(url, data, **headers, content_type="application/json")
+
+    def test_put_user_update_permissions(self):
+        """
+        Test that non-staff users cannot update the attempt of another user
+        """
+        # create non-staff user with attempt
+        other_user = UserFactory()
+        attempt = ExamAttempt.objects.create(
+            user=other_user,
+            exam=self.exam,
+            attempt_number=1111111,
+            status=ExamAttemptStatus.created,
+            start_time=None,
+            allowed_time_limit_mins=None,
+        )
+
+        # try to update other user's attempt
+        response = self.put_api(self.non_staff_user, attempt.id, {'action': 'start'})
+        self.assertEqual(response.status_code, 403)
+
+    def test_put_attempt_does_not_exist(self):
+        """
+        Test that updating an attempt that does not exist fails
+        """
+        response = self.put_api(self.non_staff_user, 111111111, {'action': 'start'})
+        self.assertEqual(response.status_code, 400)
+
+    @ddt.data(
+        ('start', ExamAttemptStatus.started),
+        ('stop', ExamAttemptStatus.ready_to_submit),
+        ('submit', ExamAttemptStatus.submitted),
+        ('click_download_software', ExamAttemptStatus.download_software_clicked),
+        ('error', ExamAttemptStatus.error),
+    )
+    @ddt.unpack
+    @patch('edx_exams.apps.api.v1.views.update_attempt_status')
+    def test_put_update_exam_attempt(self, action, expected_status, mock_update_attempt_status):
+        """
+        Test that an exam can be updated
+        """
+        # create exam attempt for user
+        attempt = ExamAttempt.objects.create(
+            user=self.non_staff_user,
+            exam=self.exam,
+            attempt_number=1111111,
+            status=ExamAttemptStatus.created,
+            start_time=None,
+            allowed_time_limit_mins=None,
+        )
+
+        mock_update_attempt_status.return_value = attempt.id
+
+        response = self.put_api(self.non_staff_user, attempt.id, {'action': action})
+        self.assertEqual(response.status_code, 200)
+        mock_update_attempt_status.assert_called_once_with(attempt.id, expected_status)
+
+    @patch('edx_exams.apps.api.v1.views.update_attempt_status')
+    def test_put_exception_raised(self, mock_update_attempt_status):
+        """
+        Test that if an exception is raised, endpoint returns 400 with error message
+        """
+        error_msg = 'Something bad happened'
+        mock_update_attempt_status.side_effect = ExamIllegalStatusTransition(error_msg)
+
+        attempt = ExamAttempt.objects.create(
+            user=self.non_staff_user,
+            exam=self.exam,
+            attempt_number=1111111,
+            status=ExamAttemptStatus.created,
+            start_time=None,
+            allowed_time_limit_mins=None,
+        )
+
+        response = self.put_api(self.non_staff_user, attempt.id, {'action': 'start'})
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(error_msg, response.data.get('detail'))
+
+    def test_put_invalid_action(self):
+        """
+        Test that an unrecognized action fails
+        """
+
+        attempt = ExamAttempt.objects.create(
+            user=self.non_staff_user,
+            exam=self.exam,
+            attempt_number=1111111,
+            status=ExamAttemptStatus.started,
+            start_time='2020-07-01 00:00:00',
+            allowed_time_limit_mins=None,
+        )
+
+        # try to update other user's attempt
+        response = self.put_api(self.non_staff_user, attempt.id, {'action': 'junk'})
+        self.assertEqual(response.status_code, 400)
+        # check that error message is specific to starting an attempt
+        self.assertIn('Unrecognized action', response.data['detail'])
+
+    @patch('edx_exams.apps.api.v1.views.create_exam_attempt')
+    def test_post_exception_raised(self, mock_create_attempt):
+        """
+        Test that endpoint returns 400 if exception is raised
+        """
+        error_msg = 'Something bad happened'
+        mock_create_attempt.side_effect = ExamAttemptOnPastDueExam(error_msg)
+
+        data = {
+            'start_clock': 'false',
+            'exam_id': self.exam.id,
+        }
+        response = self.post_api(self.non_staff_user, data)
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(error_msg, response.data['detail'])
+
+    @ddt.data(
+        True,
+        False,
+    )
+    @patch('edx_exams.apps.api.v1.views.create_exam_attempt')
+    @patch('edx_exams.apps.api.v1.views.update_attempt_status')
+    def test_post_create_attempt(self, start_immediately, mock_update_attempt, mock_create_attempt):
+        """
+        Test that an exam attempt can be created
+        """
+        mock_attempt_id = 1111111
+        mock_create_attempt.return_value = mock_attempt_id
+        mock_update_attempt.return_value = mock_attempt_id
+
+        data = {
+            'start_clock': str(start_immediately).lower(),
+            'exam_id': self.exam.id,
+        }
+
+        response = self.post_api(self.non_staff_user, data)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data['exam_attempt_id'], mock_attempt_id)
+
+        mock_create_attempt.assert_called_once_with(self.exam.id, self.non_staff_user.id)
+
+        if start_immediately:
+            mock_update_attempt.assert_called_once_with(mock_attempt_id, ExamAttemptStatus.started)
+
+
+class CourseExamAttemptViewTest(ExamsAPITestCase):
+    """
+    Tests CourseExamAttemptView
+    """
+
+    def setUp(self):
+        super().setUp()
+
+        self.course_id = 'course-v1:edx+test+f19'
+        self.content_id = 'block-v1:edX+test+2023+type@sequential+block@1111111111'
+
+        self.course_exam_config = CourseExamConfiguration.objects.create(
+            course_id=self.course_id,
+            provider=self.test_provider,
+            allow_opt_out=False
+        )
+
+        self.exam = Exam.objects.create(
+            resource_id=str(uuid.uuid4()),
+            course_id=self.course_id,
+            provider=self.test_provider,
+            content_id=self.content_id,
+            exam_name='test_exam',
+            exam_type='proctored',
+            time_limit_mins=30,
+            due_date='2040-07-01T00:00:00Z',
+            hide_after_due=False,
+            is_active=True
+        )
+
+    def get_api(self, user, course_id, content_id):
+        """
+        Helper function to make patch request to the API
+        """
+
+        headers = self.build_jwt_headers(user)
+        url = reverse(
+            'api:v1:student-course_exam_attempt',
+            kwargs={'course_id': course_id, 'content_id': content_id}
+        )
+
+        return self.client.get(url, **headers)
+
+    def create_mock_attempt(self, user, status, start_time, allowed_time_limit_mins):
+        """
+        Helper function to create exam attempt objects
+        """
+        return ExamAttempt.objects.create(
+            user=user,
+            exam=self.exam,
+            attempt_number=1,
+            status=status,
+            start_time=start_time,
+            allowed_time_limit_mins=allowed_time_limit_mins
+        )
+
+    def test_no_exam(self):
+        """
+        Test endpoint for a content ID that doesn't exist
+        """
+        response = self.get_api(self.user, self.course_id, '1111111')
+        self.assertEqual(response.data['exam'], {})
+
+    def test_no_active_attempt(self):
+        """
+        Test endpoint for an existing exam, but no attempt for user
+        """
+        exam_type_class = get_exam_type(self.exam.exam_type)
+        expected_data = ExamSerializer(self.exam).data
+        expected_data['type'] = self.exam.exam_type
+        expected_data['is_proctored'] = exam_type_class.is_proctored
+        expected_data['is_practice_exam'] = exam_type_class.is_practice
+        expected_data['backend'] = self.exam.provider.verbose_name
+        expected_data['attempt'] = {}
+
+        response = self.get_api(self.user, self.course_id, self.content_id)
+        response_exam = response.data['exam']
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response_exam, expected_data)
+
+    def test_active_attempt(self):
+        """
+        Test that if attempt exists, it is returned as part of the exam object
+        """
+        attempt = ExamAttempt.objects.create(
+            user=self.user,
+            exam=self.exam,
+            attempt_number=1,
+            status=ExamAttemptStatus.created,
+        )
+        serialized_attempt = StudentAttemptSerializer(attempt).data
+
+        response = self.get_api(self.user, self.course_id, self.content_id)
+
+        self.assertEqual(response.status_code, 200)
+        response_exam = response.data.get('exam')
+
+        self.assertEqual(response_exam['attempt'], serialized_attempt)
+
+    @patch('edx_exams.apps.api.v1.views.check_if_exam_timed_out')
+    def test_submit_on_timeout(self, mock_check_if_exam_timed_out):
+        """
+        Test if the view returns an exam whose status is changed to be submitted
+        """
+
+        one_hour_ago = timezone.now() - timedelta(hours=1)
+
+        current_attempt = self.create_mock_attempt(self.user, ExamAttemptStatus.started, one_hour_ago, 60)
+
+        # Mock attempt with status 'submitted' returned by API function `check_if_exam_timed_out`
+        mock_return_attempt = current_attempt
+        mock_return_attempt.status = ExamAttemptStatus.submitted
+        mock_check_if_exam_timed_out.return_value = mock_return_attempt
+
+        response = self.get_api(self.user, self.course_id, self.content_id)
+        response_exam = response.data.get('exam')
+
+        # Update current_attempt status to 'submitted'
+        ExamAttempt.objects.update_or_create(start_time=one_hour_ago, defaults={'status': ExamAttemptStatus.submitted})
+
+        self.assertEqual(response_exam['attempt'], StudentAttemptSerializer(current_attempt).data)
+        mock_check_if_exam_timed_out.assert_called_once_with(current_attempt)
+
+    def test_timed_exam(self):
+        """
+        Test that None is returned as the backend for a timed attempt
+        """
+        timed_content_id = 'block-v1:edX+test+2023+type@sequential+block@22222222'
+
+        Exam.objects.create(
+            resource_id=str(uuid.uuid4()),
+            course_id=self.course_id,
+            content_id=timed_content_id,
+            exam_name='test_exam',
+            exam_type='timed',
+            time_limit_mins=30,
+            due_date='2040-07-01T00:00:00Z',
+            hide_after_due=False,
+            is_active=True
+        )
+
+        response = self.get_api(self.user, self.course_id, timed_content_id)
+        response_exam = response.data['exam']
+
+        self.assertEqual(response.status_code, 200)
+        self.assertIsNone(response_exam['backend'])

@@ -6,11 +6,11 @@
 #
 appdirs==1.4.4
     # via fs
-asgiref==3.5.2
+asgiref==3.6.0
     # via django
-attrs==22.1.0
+attrs==22.2.0
     # via lti-consumer-xblock
-bleach==5.0.1
+bleach==6.0.0
     # via lti-consumer-xblock
 certifi==2022.12.7
     # via requests
@@ -18,7 +18,7 @@ cffi==1.15.1
     # via
     #   cryptography
     #   pynacl
-charset-normalizer==2.1.1
+charset-normalizer==3.1.0
     # via requests
 click==8.1.3
     # via edx-django-utils
@@ -31,7 +31,7 @@ coreschema==0.0.4
     # via
     #   coreapi
     #   drf-yasg
-cryptography==38.0.4
+cryptography==40.0.0
     # via
     #   pyjwt
     #   social-auth-core
@@ -39,7 +39,7 @@ defusedxml==0.7.1
     # via
     #   python3-openid
     #   social-auth-core
-django==3.2.16
+django==3.2.18
     # via
     #   -c https://raw.githubusercontent.com/edx/edx-lint/master/edx_lint/files/common_constraints.txt
     #   -r requirements/base.in
@@ -57,12 +57,13 @@ django==3.2.16
     #   edx-django-release-util
     #   edx-django-utils
     #   edx-drf-extensions
+    #   edx-token-utils
     #   jsonfield
     #   lti-consumer-xblock
     #   openedx-filters
 django-config-models==2.3.0
     # via lti-consumer-xblock
-django-cors-headers==3.13.0
+django-cors-headers==3.14.0
     # via -r requirements/base.in
 django-crum==0.7.9
     # via edx-django-utils
@@ -74,6 +75,10 @@ django-model-utils==4.3.1
     # via -r requirements/base.in
 django-rest-swagger==2.2.0
     # via -r requirements/base.in
+django-simple-history==3.0.0
+    # via
+    #   -c https://raw.githubusercontent.com/edx/edx-lint/master/edx_lint/files/common_constraints.txt
+    #   -r requirements/base.in
 django-waffle==3.0.0
     # via
     #   -r requirements/base.in
@@ -90,7 +95,7 @@ djangorestframework==3.14.0
     #   edx-drf-extensions
 drf-jwt==1.19.2
     # via edx-drf-extensions
-drf-yasg==1.21.4
+drf-yasg==1.21.5
     # via edx-api-doc-tools
 edx-api-doc-tools==1.6.0
     # via -r requirements/base.in
@@ -98,23 +103,26 @@ edx-auth-backends==4.1.0
     # via -r requirements/base.in
 edx-django-release-util==1.2.0
     # via -r requirements/base.in
-edx-django-utils==5.2.0
+edx-django-utils==5.3.0
     # via
     #   -r requirements/base.in
     #   django-config-models
     #   edx-drf-extensions
     #   edx-rest-api-client
-edx-drf-extensions==8.3.1
+edx-drf-extensions==8.4.1
     # via -r requirements/base.in
 edx-opaque-keys==2.3.0
     # via
+    #   -r requirements/base.in
     #   edx-drf-extensions
     #   lti-consumer-xblock
 edx-rest-api-client==5.5.0
     # via -r requirements/base.in
+edx-token-utils==0.2.1
+    # via -r requirements/base.in
 fs==2.4.16
     # via xblock
-future==0.18.2
+future==0.18.3
     # via pyjwkest
 idna==3.4
     # via requests
@@ -128,9 +136,9 @@ jsonfield==3.1.0
     # via lti-consumer-xblock
 lazy==1.5
     # via lti-consumer-xblock
-lti-consumer-xblock==7.0.3
+lti-consumer-xblock==9.0.0
     # via -r requirements/base.in
-lxml==4.9.1
+lxml==4.9.2
     # via
     #   lti-consumer-xblock
     #   xblock
@@ -138,14 +146,14 @@ mako==1.2.4
     # via
     #   lti-consumer-xblock
     #   xblock-utils
-markupsafe==2.1.1
+markupsafe==2.1.2
     # via
     #   jinja2
     #   mako
     #   xblock
 mysqlclient==2.1.1
     # via -r requirements/base.in
-newrelic==8.5.0
+newrelic==8.7.1
     # via edx-django-utils
 oauthlib==3.2.2
     # via
@@ -154,23 +162,24 @@ oauthlib==3.2.2
     #   social-auth-core
 openapi-codec==1.3.2
     # via django-rest-swagger
-openedx-filters==0.8.0
+openedx-filters==1.2.0
     # via lti-consumer-xblock
-packaging==22.0
+packaging==23.0
     # via drf-yasg
-pbr==5.11.0
+pbr==5.11.1
     # via stevedore
 psutil==5.9.4
     # via edx-django-utils
 pycparser==2.21
     # via cffi
-pycryptodomex==3.16.0
+pycryptodomex==3.17
     # via
     #   lti-consumer-xblock
     #   pyjwkest
 pyjwkest==1.4.2
     # via
     #   edx-drf-extensions
+    #   edx-token-utils
     #   lti-consumer-xblock
 pyjwt[crypto]==2.6.0
     # via
@@ -189,7 +198,7 @@ python-dateutil==2.8.2
     #   xblock
 python3-openid==3.2.0
     # via social-auth-core
-pytz==2022.6
+pytz==2022.7.1
     # via
     #   -r requirements/base.in
     #   django
@@ -200,7 +209,7 @@ pyyaml==6.0
     # via
     #   edx-django-release-util
     #   xblock
-requests==2.28.1
+requests==2.28.2
     # via
     #   coreapi
     #   edx-drf-extensions
@@ -217,7 +226,7 @@ ruamel-yaml-clib==0.2.7
     # via ruamel-yaml
 semantic-version==2.10.0
     # via edx-drf-extensions
-simplejson==3.18.0
+simplejson==3.18.4
     # via
     #   django-rest-swagger
     #   xblock-utils
@@ -232,15 +241,15 @@ six==1.16.0
     #   python-dateutil
 slumber==0.7.1
     # via edx-rest-api-client
-social-auth-app-django==5.0.0
+social-auth-app-django==5.1.0
     # via edx-auth-backends
-social-auth-core==4.3.0
+social-auth-core==4.4.0
     # via
     #   edx-auth-backends
     #   social-auth-app-django
 sqlparse==0.4.3
     # via django
-stevedore==4.1.1
+stevedore==5.0.0
     # via
     #   edx-django-utils
     #   edx-opaque-keys
@@ -248,7 +257,7 @@ uritemplate==4.1.1
     # via
     #   coreapi
     #   drf-yasg
-urllib3==1.26.13
+urllib3==1.26.15
     # via requests
 web-fragments==2.0.0
     # via
@@ -258,7 +267,7 @@ webencodings==0.5.1
     # via bleach
 webob==1.8.7
     # via xblock
-xblock==1.6.1
+xblock==1.6.2
     # via
     #   lti-consumer-xblock
     #   xblock-utils

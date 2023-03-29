@@ -3,11 +3,14 @@ import logging
 import uuid
 
 from django.contrib.auth.models import AbstractUser
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import models, transaction
 from django.utils.translation import gettext_lazy as _
 from model_utils.models import TimeStampedModel
+from simple_history.models import HistoricalRecords
 
 from edx_exams.apps.core.exam_types import EXAM_TYPES
+from edx_exams.apps.core.statuses import ExamAttemptStatus
 
 log = logging.getLogger(__name__)
 
@@ -44,9 +47,6 @@ class User(AbstractUser):
     def get_full_name(self):
         return self.full_name or super().get_full_name()
 
-    def __str__(self):
-        return str(self.get_full_name())
-
 
 class ProctoringProvider(TimeStampedModel):
     """
@@ -66,6 +66,9 @@ class ProctoringProvider(TimeStampedModel):
         db_table = 'exams_proctoringprovider'
         verbose_name = 'proctoring provider'
 
+    def __str__(self):      # pragma: no cover
+        return self.verbose_name
+
 
 class Exam(TimeStampedModel):
     """
@@ -75,7 +78,7 @@ class Exam(TimeStampedModel):
     """
 
     EXAM_CHOICES = (
-        (exam_type.name, exam_type.description)
+        (exam_type.name, exam_type.name)
         for exam_type in EXAM_TYPES
     )
 
@@ -106,10 +109,34 @@ class Exam(TimeStampedModel):
     # Whether this exam will be active.
     is_active = models.BooleanField(default=False)
 
+    # This is the reference to the SimpleHistory table
+    history = HistoricalRecords(table_name='exams_examhistory')
+
     class Meta:
         """ Meta class for this Django model """
         db_table = 'exams_exam'
         verbose_name = 'exam'
+
+        # Uniqueness constraint to only have one active exam per (course_id, content_id) pair
+        constraints = [
+            models.UniqueConstraint(fields=['course_id', 'content_id'],
+                                    condition=models.Q(is_active=True),
+                                    name='only one exam instance active')
+        ]
+
+    def __str__(self):      # pragma: no cover
+        return self.exam_name
+
+    @classmethod
+    def get_exam_by_id(cls, exam_id):
+        """
+        Return Exam for a given id
+        """
+        try:
+            exam = cls.objects.get(id=exam_id)
+        except cls.DoesNotExist:
+            exam = None
+        return exam
 
 
 class ExamAttempt(TimeStampedModel):
@@ -119,22 +146,89 @@ class ExamAttempt(TimeStampedModel):
     .. no_pii:
     """
 
+    STATUS_CHOICES = [
+        ExamAttemptStatus.created,
+        ExamAttemptStatus.download_software_clicked,
+        ExamAttemptStatus.ready_to_start,
+        ExamAttemptStatus.started,
+        ExamAttemptStatus.ready_to_submit,
+        ExamAttemptStatus.timed_out,
+        ExamAttemptStatus.submitted,
+        ExamAttemptStatus.verified,
+        ExamAttemptStatus.rejected,
+        ExamAttemptStatus.expired,
+    ]
+
     user = models.ForeignKey(User, db_index=True, on_delete=models.CASCADE)
 
     exam = models.ForeignKey(Exam, on_delete=models.CASCADE)
 
     attempt_number = models.PositiveIntegerField()
 
-    status = models.CharField(max_length=64)
+    status = models.CharField(max_length=64, choices=[(status, status) for status in STATUS_CHOICES])
 
     start_time = models.DateTimeField(null=True)
 
+    end_time = models.DateTimeField(null=True)
+
     allowed_time_limit_mins = models.IntegerField(null=True)
+
+    # This is the reference to the SimpleHistory table
+    history = HistoricalRecords(table_name='exams_examattempthistory')
 
     class Meta:
         """ Meta class for this Django model """
         db_table = 'exams_examattempt'
         verbose_name = 'exam attempt'
+
+    @classmethod
+    def get_current_exam_attempt(cls, user_id, exam_id):
+        """
+        Given a user and exam, get the user's latest exam attempt, if exists.
+        """
+        try:
+            exam_attempt = cls.objects.filter(user_id=user_id, exam=exam_id).latest('created')
+        except ObjectDoesNotExist:
+            exam_attempt = None
+        return exam_attempt
+
+    @classmethod
+    def get_attempt_by_id(cls, attempt_id):
+        """
+        Return ExamAttempt for a given id
+        """
+        try:
+            attempt = cls.objects.get(id=attempt_id)
+        except cls.DoesNotExist:
+            attempt = None
+        return attempt
+
+    @classmethod
+    def get_latest_attempt_for_user(cls, user_id):
+        """
+        Return latest ExamAttempt (based on start time) associated with a given user_id
+
+        If start_time does not exist for any attempt, return None
+        """
+        try:
+            attempt = cls.objects.filter(user_id=user_id).latest('start_time')
+            if attempt.start_time is None:
+                return None
+        except cls.DoesNotExist:
+            attempt = None
+        return attempt
+
+    @classmethod
+    def check_no_other_active_attempts_for_user(cls, user_id, attempt_id):
+        """
+        Return true if no active exam attempts exist for the user
+        Return false otherwise
+        """
+        try:
+            cls.objects.exclude(id=attempt_id).get(user_id=user_id, status__in=ExamAttemptStatus.in_progress_statuses)
+            return False
+        except cls.DoesNotExist:
+            return True
 
 
 class CourseExamConfiguration(TimeStampedModel):

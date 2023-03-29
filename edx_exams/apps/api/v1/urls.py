@@ -1,9 +1,17 @@
 """ API v1 URLs. """
 
-from django.urls import re_path
+from django.urls import path, re_path
 
-from edx_exams.apps.api.v1.views import CourseExamConfigurationsView, CourseExamsView, ProctoringProvidersView
-from edx_exams.apps.core.constants import COURSE_ID_PATTERN
+from edx_exams.apps.api.v1.views import (
+    CourseExamAttemptView,
+    CourseExamConfigurationsView,
+    CourseExamsView,
+    ExamAccessTokensView,
+    ExamAttemptView,
+    LatestExamAttemptView,
+    ProctoringProvidersView
+)
+from edx_exams.apps.core.constants import CONTENT_ID_PATTERN, COURSE_ID_PATTERN, EXAM_ID_PATTERN
 
 app_name = 'v1'
 
@@ -17,5 +25,19 @@ urlpatterns = [
     re_path(r"^providers?$",
             ProctoringProvidersView.as_view(),
             name="proctoring-providers-list",),
-
+    re_path(fr'access_tokens/exam_id/{EXAM_ID_PATTERN}',
+            ExamAccessTokensView.as_view(),
+            name="exam-access-tokens"),
+    path('exams/attempt/<int:attempt_id>',
+         ExamAttemptView.as_view(),
+         name='exams-attempt',),
+    path('exams/attempt',
+         ExamAttemptView.as_view(),
+         name='exams-attempt',),
+    path('exams/attempt/latest',
+         LatestExamAttemptView.as_view(),
+         name='exams-attempt-latest',),
+    re_path(fr'student/exam/attempt/course_id/{COURSE_ID_PATTERN}/content_id/{CONTENT_ID_PATTERN}',
+            CourseExamAttemptView.as_view(),
+            name='student-course_exam_attempt')
 ]

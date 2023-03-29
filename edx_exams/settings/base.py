@@ -32,6 +32,7 @@ INSTALLED_APPS = (
     'drf_yasg',
     'edx_api_doc_tools',
     'lti_consumer.apps.LTIConsumerApp',
+    'token_utils',
 )
 
 THIRD_PARTY_APPS = (
@@ -61,6 +62,8 @@ MIDDLEWARE = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
+    # Forces JWT auth if edx JWT cookie exists
+    'edx_exams.apps.core.middleware.ForceJWTAuthMiddleware',
     'edx_rest_framework_extensions.auth.jwt.middleware.JwtAuthCookieMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -229,6 +232,13 @@ JWT_AUTH = {
     'JWT_AUTH_REFRESH_COOKIE': 'edx-jwt-refresh-cookie',
 }
 
+TOKEN_SIGNING = {
+    'JWT_ISSUER': 'http://127.0.0.1:8740/',
+    'JWT_SIGNING_ALGORITHM': 'RS512',
+    'JWT_SUPPORTED_VERSION': '1.2.0',
+    'JWT_PRIVATE_SIGNING_JWK': 'replace-me',
+}
+
 # Carry fields from the JWT token and LMS user into the local user
 EDX_DRF_EXTENSIONS = {
     "JWT_PAYLOAD_USER_ATTRIBUTE_MAPPING": {
@@ -257,3 +267,5 @@ PLATFORM_NAME = 'Your Platform Name Here'
 
 # Set up logging for development use (logging to stdout)
 LOGGING = get_logger_config(debug=DEBUG)
+
+LEARNING_MICROFRONTEND_URL = None
