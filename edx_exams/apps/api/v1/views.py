@@ -26,6 +26,7 @@ from edx_exams.apps.core.api import (
     get_exam_attempt_time_remaining,
     get_exam_by_content_id,
     get_latest_attempt_for_user,
+    get_provider_by_exam_id,
     update_attempt_status
 )
 from edx_exams.apps.core.exam_types import get_exam_type
@@ -606,3 +607,38 @@ class CourseExamAttemptView(ExamsAPIView):
 
         data = {'exam': serialized_exam}
         return Response(data)
+
+
+class CourseProviderSettings(ExamsAPIView):
+    """
+    Endpoint for getting provider related settings.
+
+    exam/provider_settings/course_id/{course_id}/exam_id/{exam_id}
+
+    Supports:
+        HTTP GET:
+            Returns provider specific information given an exam_id
+
+            {
+                provider_tech_support_email: '',
+                provider_tech_support_phone: '',
+                provider_name: 'test provider',
+            }
+    """
+
+    authentication_classes = (JwtAuthentication,)
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request, course_id, exam_id):  # pylint: disable=unused-argument
+        """
+        HTTP GET handler. Returns provider specific information given an exam_id
+        """
+        provider = get_provider_by_exam_id(exam_id)
+
+        if provider:
+            return Response({
+                'provider_tech_support_email': provider.tech_support_email,
+                'provider_tech_support_phone': provider.tech_support_phone,
+                'provider_name': provider.verbose_name,
+            })
+        return Response({})

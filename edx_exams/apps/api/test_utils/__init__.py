@@ -29,8 +29,10 @@ class ExamsAPITestCase(JwtMixin, APITestCase):
 
         self.test_provider = ProctoringProvider.objects.create(
             name='test_provider',
-            verbose_name='testing_provider',
-            lti_configuration_id='123456789'
+            verbose_name='testing provider',
+            lti_configuration_id='123456789',
+            tech_support_phone='1118976309',
+            tech_support_email='test@example.com',
         )
 
     def tearDown(self):

@@ -303,3 +303,14 @@ def get_exam_url_path(course_id, content_id):
     usage_key = UsageKey.from_string(content_id)
     url = f'{settings.LEARNING_MICROFRONTEND_URL}/course/{course_key}/{usage_key}'
     return url
+
+
+def get_provider_by_exam_id(exam_id):
+    """
+    Return an exam configuration object
+    """
+    try:
+        exam = Exam.objects.select_related('provider').get(id=exam_id)
+        return exam.provider
+    except Exam.DoesNotExist:
+        return None
