@@ -39,8 +39,8 @@ class Health(APIView):
     @schema(
         parameters=[],
         responses={
-            200: "OK",
-            503: "Service unavailable"
+            200: 'OK',
+            503: 'Service unavailable'
         },
         summary='Allows a load balancer to verify this service is up.',
         description='Checks the status of the database connection on which this service relies.'
@@ -54,7 +54,7 @@ class Health(APIView):
 
         try:
             cursor = connection.cursor()
-            cursor.execute("SELECT 1")
+            cursor.execute('SELECT 1')
             cursor.fetchone()
             cursor.close()
             database_status = Status.OK

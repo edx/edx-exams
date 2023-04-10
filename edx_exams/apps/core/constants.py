@@ -3,8 +3,8 @@
 
 class Status:
     """Health statuses."""
-    OK = "OK"
-    UNAVAILABLE = "UNAVAILABLE"
+    OK = 'OK'
+    UNAVAILABLE = 'UNAVAILABLE'
 
 
 # Pulled from edx-platform. Will correctly capture both old- and new-style

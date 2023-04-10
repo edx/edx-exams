@@ -5,6 +5,7 @@ source=edx_exams
 omit =
     edx_exams/settings/*
     edx_exams/conf*
+    edx_exams/docker_gunicorn_configuration.py
     *wsgi.py
     *migrations*
     *admin.py

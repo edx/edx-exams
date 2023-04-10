@@ -57,5 +57,5 @@ class ExamsAPITestCase(JwtMixin, APITestCase):
         """
         jwt_payload = self.default_payload(user)
         jwt_token = self.generate_token(jwt_payload)
-        headers = {"HTTP_AUTHORIZATION": "JWT " + jwt_token}
+        headers = {'HTTP_AUTHORIZATION': 'JWT ' + jwt_token}
         return headers

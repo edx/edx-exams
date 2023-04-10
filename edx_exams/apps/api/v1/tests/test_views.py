@@ -63,7 +63,7 @@ class CourseExamsViewTests(ExamsAPITestCase):
         data = json.dumps(data)
         headers = self.build_jwt_headers(user)
 
-        return self.client.patch(self.url, data, **headers, content_type="application/json")
+        return self.client.patch(self.url, data, **headers, content_type='application/json')
 
     def get_response(self, user, data, expected_response):
         """
@@ -117,8 +117,8 @@ class CourseExamsViewTests(ExamsAPITestCase):
             }
         ]
         response = self.get_response(self.user, data, 400)
-        self.assertIn("hide_after_due", response.data["errors"][0])
-        self.assertIn("is_active", response.data["errors"][0])
+        self.assertIn('hide_after_due', response.data['errors'][0])
+        self.assertIn('is_active', response.data['errors'][0])
 
     def test_invalid_exam_type(self):
         """
@@ -136,7 +136,7 @@ class CourseExamsViewTests(ExamsAPITestCase):
             }
         ]
         response = self.get_response(self.user, data, 400)
-        self.assertIn("exam_type", response.data["errors"][0])
+        self.assertIn('exam_type', response.data['errors'][0])
 
     def test_existing_exam_update(self):
         """
@@ -287,7 +287,7 @@ class CourseExamConfigurationsViewTests(ExamsAPITestCase):
         data = json.dumps(data)
         headers = self.build_jwt_headers(user)
 
-        return self.client.patch(self.url, data, **headers, content_type="application/json")
+        return self.client.patch(self.url, data, **headers, content_type='application/json')
 
     def test_patch_auth_failures(self):
         """
@@ -493,7 +493,7 @@ class ProctoringProvidersViewTest(ExamsAPITestCase):
         """
         Helper function to make a get request
         """
-        url = reverse("api:v1:proctoring-providers-list")
+        url = reverse('api:v1:proctoring-providers-list')
         response = self.client.get(url)
         return response
 
@@ -578,7 +578,7 @@ class ExamAccessTokensViewsTests(ExamsAPITestCase):
         return self.client.get(url, **headers)
 
     def assert_valid_exam_access_token(self, response, user, exam):
-        token = response.data.get("exam_access_token")
+        token = response.data.get('exam_access_token')
         self.assertEqual(unpack_token_for(token, user.lms_user_id).get('course_id'), exam.course_id)
         self.assertEqual(unpack_token_for(token, user.lms_user_id).get('content_id'), exam.content_id)
 
@@ -818,7 +818,7 @@ class ExamAccessTokensViewsTests(ExamsAPITestCase):
         self.assertEqual(response_status, response.status_code)
 
         self.assert_valid_exam_access_token(response, self.user, self.exam)
-        expiration = response.data.get("exam_access_token_expiration")
+        expiration = response.data.get('exam_access_token_expiration')
         default_secs = 60
         if is_default:
             self.assertEqual(expiration, default_secs)
@@ -866,7 +866,7 @@ class LatestExamAttemptViewTest(ExamsAPITestCase):
 
         headers = self.build_jwt_headers(user)
         url = reverse('api:v1:exams-attempt-latest')
-        return self.client.get(url, **headers, content_type="application/json")
+        return self.client.get(url, **headers, content_type='application/json')
 
     def create_mock_attempt(self, user, status, start_time, allowed_time_limit_mins):
         """
@@ -1045,7 +1045,7 @@ class ExamAttemptViewTest(ExamsAPITestCase):
         headers = self.build_jwt_headers(user)
         url = reverse('api:v1:exams-attempt', args=[attempt_id])
 
-        return self.client.put(url, data, **headers, content_type="application/json")
+        return self.client.put(url, data, **headers, content_type='application/json')
 
     def post_api(self, user, data):
         """
@@ -1055,7 +1055,7 @@ class ExamAttemptViewTest(ExamsAPITestCase):
         headers = self.build_jwt_headers(user)
         url = reverse('api:v1:exams-attempt')
 
-        return self.client.post(url, data, **headers, content_type="application/json")
+        return self.client.post(url, data, **headers, content_type='application/json')
 
     def test_put_user_update_permissions(self):
         """

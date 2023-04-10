@@ -278,14 +278,14 @@ class CourseExamConfiguration(TimeStampedModel):
         if existing_config:
             if existing_config.provider == provider:
                 # nothing to be done
-                log.info(f"Course exam configuration course_id={course_id} already has provider={provider_name}")
+                log.info(f'Course exam configuration course_id={course_id} already has provider={provider_name}')
                 return
             count = cls.update_course_config_provider(existing_config, provider)
-            log.info(f"Updated course exam configuration course_id={course_id} "
-                     + f"to provider={provider_name} and recreated {count} exams")
+            log.info(f'Updated course exam configuration course_id={course_id} '
+                     + f'to provider={provider_name} and recreated {count} exams')
         else:
             CourseExamConfiguration.objects.create(course_id=course_id, provider=provider)
-            log.info(f"Created course exam configuration course_id={course_id}, provider={provider_name}")
+            log.info(f'Created course exam configuration course_id={course_id}, provider={provider_name}')
 
     @classmethod
     def update_course_config_provider(cls, existing_config, new_provider):
