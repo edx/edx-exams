@@ -1346,3 +1346,70 @@ class CourseExamAttemptViewTest(ExamsAPITestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertIsNone(response_exam['backend'])
+
+
+class CourseProviderSettingsViewTest(ExamsAPITestCase):
+    """
+    Tests CourseProviderSettings View
+    """
+
+    def setUp(self):
+        super().setUp()
+
+        self.course_id = 'course-v1:edx+test+f19'
+        self.content_id = 'block-v1:edX+test+2023+type@sequential+block@1111111111'
+
+        self.course_exam_config = CourseExamConfiguration.objects.create(
+            course_id=self.course_id,
+            provider=self.test_provider,
+            allow_opt_out=False
+        )
+
+        self.exam = Exam.objects.create(
+            resource_id=str(uuid.uuid4()),
+            course_id=self.course_id,
+            provider=self.test_provider,
+            content_id=self.content_id,
+            exam_name='test_exam',
+            exam_type='proctored',
+            time_limit_mins=30,
+            due_date='2040-07-01T00:00:00Z',
+            hide_after_due=False,
+            is_active=True
+        )
+
+    def get_api(self, user, course_id, exam_id):
+        """
+        Helper function to make patch request to the API
+        """
+
+        headers = self.build_jwt_headers(user)
+        url = reverse(
+            'api:v1:exam-provider-settings',
+            kwargs={'course_id': course_id, 'exam_id': exam_id}
+        )
+
+        return self.client.get(url, **headers)
+
+    def test_no_exam(self):
+        """
+        Test that the endpoint returns for an invalid exam ID
+        """
+        response = self.get_api(self.user, self.course_id, 12345)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data, {})
+
+    def test_exam_provider(self):
+        """
+        Test that the exam provider info is returned
+        """
+        response = self.get_api(self.user, self.course_id, self.exam.id)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            response.data,
+            {
+                'provider_tech_support_email': self.test_provider.tech_support_email,
+                'provider_tech_support_phone': self.test_provider.tech_support_phone,
+                'provider_name': self.test_provider.verbose_name,
+            }
+        )

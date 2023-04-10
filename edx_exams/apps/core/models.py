@@ -61,6 +61,10 @@ class ProctoringProvider(TimeStampedModel):
 
     lti_configuration_id = models.CharField(max_length=255, db_index=True)
 
+    tech_support_phone = models.CharField(max_length=255, null=True)
+
+    tech_support_email = models.CharField(max_length=255, null=True)
+
     class Meta:
         """ Meta class for this Django model """
         db_table = 'exams_proctoringprovider'
