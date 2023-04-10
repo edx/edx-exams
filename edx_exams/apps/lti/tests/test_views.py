@@ -18,7 +18,7 @@ from edx_exams.apps.lti.utils import get_lti_root
 @patch('edx_exams.apps.lti.views.get_lti_1p3_launch_start_url', return_value='https://www.example.com')
 class LtiStartProctoringTestCase(ExamsAPITestCase):
     """
-    Tests start_proctoring view
+    Test start_proctoring view
     """
 
     def setUp(self):
@@ -66,7 +66,7 @@ class LtiStartProctoringTestCase(ExamsAPITestCase):
 
     def get_start_proctoring_url(self, attempt_id):
         """
-        Returns the URL to the start_proctoring view.
+        Return the URL to the start_proctoring view.
 
         Parameters:
             * attempt_id: the id field of the attempt object
@@ -75,7 +75,7 @@ class LtiStartProctoringTestCase(ExamsAPITestCase):
 
     def test_start_proctoring_launch_data(self, mock_get_lti_launch_url):
         """
-        Tests that the instance of Lti1p3LaunchData sent as an argument to get_lti_1p3_launch_start_url
+        Test that the instance of Lti1p3LaunchData sent as an argument to get_lti_1p3_launch_start_url
         contains the correct data.
         """
         headers = self.build_jwt_headers(self.user)
@@ -104,7 +104,7 @@ class LtiStartProctoringTestCase(ExamsAPITestCase):
 
     def test_start_proctoring_updated_attempt(self, mock_get_lti_launch_url):  # pylint: disable=unused-argument
         """
-        Tests that calling the start_proctoring view updates the appropriate attempt to the
+        Test that calling the start_proctoring view updates the appropriate attempt to the
         'download software clicked' status.
         """
         headers = self.build_jwt_headers(self.user)
@@ -117,7 +117,7 @@ class LtiStartProctoringTestCase(ExamsAPITestCase):
 
     def test_start_proctoring_no_attempt(self, mock_get_lti_launch_url):  # pylint: disable=unused-argument
         """
-        Tests that a 400 response is returned when calling the start_proctoring view with an attempt_id
+        Test that a 400 response is returned when calling the start_proctoring view with an attempt_id
         that does not exist.
         """
         url = self.get_start_proctoring_url(1000)
@@ -129,7 +129,7 @@ class LtiStartProctoringTestCase(ExamsAPITestCase):
 
     def test_start_proctoring_illegal_transition(self, mock_get_lti_launch_url):  # pylint: disable=unused-argument
         """
-        Tests that a 403 response is returned when calling the start_proctoring view requests an illegal status
+        Test that a 403 response is returned when calling the start_proctoring view requests an illegal status
         transition for the attempt_id.
         """
         self.attempt.status = ExamAttemptStatus.submitted
@@ -142,7 +142,7 @@ class LtiStartProctoringTestCase(ExamsAPITestCase):
 
     def test_start_proctoring_unauthorized_user(self, mock_get_lti_launch_url):  # pylint: disable=unused-argument
         """
-        Tests that a 403 response is returned when calling the start_proctoring view with an attempt_id
+        Test that a 403 response is returned when calling the start_proctoring view with an attempt_id
         that does not belong to the calling user.
         """
         other_user = UserFactory()
