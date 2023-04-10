@@ -80,7 +80,7 @@ class CourseExamsView(ExamsAPIView):
         exam_object.save()
 
         log.info(
-            'Updated existing exam=%(exam_id)s',
+            "Updated existing exam=%(exam_id)s",
             {
                 'exam_id': exam_object.id,
             }
@@ -94,7 +94,7 @@ class CourseExamsView(ExamsAPIView):
         exam = Exam.objects.create(resource_id=str(uuid.uuid4()), **fields)
 
         log.info(
-            'Created new exam=%(exam_id)s',
+            "Created new exam=%(exam_id)s",
             {
                 'exam_id': exam.id,
             }
@@ -157,8 +157,8 @@ class CourseExamsView(ExamsAPIView):
             path_parameter('course_id', str, 'edX course run ID or external course key'),
         ],
         responses={
-            200: 'OK',
-            400: 'Invalid request. See message.'
+            200: "OK",
+            400: "Invalid request. See message."
         },
         summary='Modify exams',
         description='This endpoint should create new exams, update existing exams, '
@@ -186,7 +186,7 @@ class CourseExamsView(ExamsAPIView):
             data = {}
         else:
             response_status = status.HTTP_400_BAD_REQUEST
-            data = {'detail': 'Invalid data', 'errors': serializer.errors}
+            data = {"detail": "Invalid data", "errors": serializer.errors}
 
         return Response(status=response_status, data=data)
 
@@ -243,7 +243,7 @@ class CourseExamConfigurationsView(ExamsAPIView):
 
         # check that proctoring provider is in request
         if 'provider' not in request.data:
-            error = {'detail': 'No proctoring provider name in request.'}
+            error = {"detail": "No proctoring provider name in request."}
         elif request.data.get('provider') is None:
             provider = None
         else:
@@ -251,7 +251,7 @@ class CourseExamConfigurationsView(ExamsAPIView):
                 provider = ProctoringProvider.objects.get(name=request.data['provider'])
             # return 400 if proctoring provider does not exist
             except ObjectDoesNotExist:
-                error = {'detail': 'Proctoring provider does not exist.'}
+                error = {"detail": "Proctoring provider does not exist."}
 
         if not error:
             CourseExamConfiguration.create_or_update(provider, course_id)
@@ -325,11 +325,11 @@ class ExamAccessTokensView(ExamsAPIView):
 
         403 error if access is not granted.
         """
-        claims = {'course_id': exam.course_id, 'content_id': exam.content_id}
+        claims = {"course_id": exam.course_id, "content_id": exam.content_id}
         expiration_window = 60
         exam_attempt = ExamAttempt.get_current_exam_attempt(user.id, exam.id)
 
-        data = {'detail': 'Exam access token not granted'}
+        data = {"detail": "Exam access token not granted"}
         grant_access = False
         response_status = status.HTTP_403_FORBIDDEN
 
@@ -354,9 +354,9 @@ class ExamAccessTokensView(ExamsAPIView):
             grant_access, response_status = True, status.HTTP_200_OK
 
         if grant_access:
-            log.info('Creating exam access token')
+            log.info("Creating exam access token")
             access_token = sign_token_for(user.lms_user_id, expiration_window, claims)
-            data = {'exam_access_token': access_token, 'exam_access_token_expiration': expiration_window}
+            data = {"exam_access_token": access_token, "exam_access_token_expiration": expiration_window}
 
         response = Response(status=response_status,
                             data=data)
@@ -374,7 +374,7 @@ class ExamAccessTokensView(ExamsAPIView):
         except ObjectDoesNotExist:
             response_status = status.HTTP_404_NOT_FOUND
             return Response(status=response_status,
-                            data={'detail': 'Exam does not exist'})
+                            data={"detail": "Exam does not exist"})
 
         response = self.get_response(exam, request.user)
 
@@ -512,8 +512,8 @@ class ExamAttemptView(ExamsAPIView):
         # user should only be able to update their own attempt
         if attempt.user.id != request.user.id:
             error_msg = (
-                f'user_id={attempt.user.id} attempted to update attempt_id={attempt.id} in '
-                f'course_id={attempt.exam.course_id} but does not have access to it. (action={action})'
+                f"user_id={attempt.user.id} attempted to update attempt_id={attempt.id} in "
+                f"course_id={attempt.exam.course_id} but does not have access to it. (action={action})"
             )
             error = {'detail': error_msg}
             return Response(status=status.HTTP_403_FORBIDDEN, data=error)
@@ -529,7 +529,7 @@ class ExamAttemptView(ExamsAPIView):
         to_status = action_mapping.get(action)
         if to_status:
             attempt_id = update_attempt_status(attempt_id, to_status)
-            data = {'exam_attempt_id': attempt_id}
+            data = {"exam_attempt_id": attempt_id}
             return Response(data)
 
         return Response(
@@ -609,7 +609,46 @@ class CourseExamAttemptView(ExamsAPIView):
         return Response(data)
 
 
-class CourseProviderSettingsView(ExamsAPIView):
+class CoolNewView(ExamsAPIView):
+    """_summary_
+
+    Args:
+        ExamsAPIView (_type_): _description_
+    """
+    def get(self, request, course_id, content_id):
+        """
+        HTTP GET handler. Returns exam and an attempt, if one exists for the exam
+        """
+        exam = get_exam_by_content_id(course_id, content_id)
+
+        if exam is None:
+            data = {'exam': {}}
+            return Response(data)
+
+        serialized_exam = ExamSerializer(exam).data
+
+        exam_type_class = get_exam_type(exam.exam_type)
+
+        # the following are additional fields that the frontend expects
+        serialized_exam['type'] = exam.exam_type
+        serialized_exam['is_proctored'] = exam_type_class.is_proctored
+        serialized_exam['is_practice_exam'] = exam_type_class.is_practice
+        # timed exams will have None as a backend
+        serialized_exam['backend'] = exam.provider.verbose_name if exam.provider is not None else None
+        exam_attempt = get_current_exam_attempt(request.user.id, exam.id)
+        if exam_attempt is not None:
+            exam_attempt = check_if_exam_timed_out(exam_attempt)
+
+            student_attempt = StudentAttemptSerializer(exam_attempt).data
+            serialized_exam['attempt'] = student_attempt
+        else:
+            serialized_exam['attempt'] = {}
+
+        data = {'exam': serialized_exam}
+        return Response(data)
+
+
+class CourseProviderSettings(ExamsAPIView):
     """
     Endpoint for getting provider related settings.
 
@@ -632,8 +671,6 @@ class CourseProviderSettingsView(ExamsAPIView):
     def get(self, request, course_id, exam_id):  # pylint: disable=unused-argument
         """
         HTTP GET handler. Returns provider specific information given an exam_id
-
-        The course_id is provided as a path parameter to account for the exams middleware
         """
         provider = get_provider_by_exam_id(exam_id)
 
