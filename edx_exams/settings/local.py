@@ -117,7 +117,7 @@ SESSION_COOKIE_SAMESITE = None
 SESSION_COOKIE_SECURE = None
 SESSION_COOKIE_DOMAIN = 'localhost'
 
-ROOT_URL = 'http://localhost:8740'
+ROOT_URL = 'http://localhost:18740'
 LMS_ROOT_URL = 'http://localhost:18000'
 LEARNING_MICROFRONTEND_URL = 'http://localhost:2000'
 
