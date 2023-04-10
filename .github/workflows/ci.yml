@@ -44,8 +44,12 @@ jobs:
         flags: unittests
         fail_ci_if_error: true
 
+    - name: Generate lcov
+      if: matrix.python-version == '3.8' && matrix.toxenv == 'django40'
+      run: coverage lcov
+
     - name: Coveralls
-      if: matrix.python-version == '3.8' && matrix.toxenv == 'django32'
+      if: matrix.python-version == '3.8' && matrix.toxenv == 'django40'
       uses: coverallsapp/github-action@v1
       with:
-        path-to-lcov: coverage.xml
+        path-to-lcov: coverage.lcov
