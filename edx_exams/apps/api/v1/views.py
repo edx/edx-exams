@@ -80,7 +80,7 @@ class CourseExamsView(ExamsAPIView):
         exam_object.save()
 
         log.info(
-            "Updated existing exam=%(exam_id)s",
+            'Updated existing exam=%(exam_id)s',
             {
                 'exam_id': exam_object.id,
             }
@@ -94,7 +94,7 @@ class CourseExamsView(ExamsAPIView):
         exam = Exam.objects.create(resource_id=str(uuid.uuid4()), **fields)
 
         log.info(
-            "Created new exam=%(exam_id)s",
+            'Created new exam=%(exam_id)s',
             {
                 'exam_id': exam.id,
             }
@@ -157,8 +157,8 @@ class CourseExamsView(ExamsAPIView):
             path_parameter('course_id', str, 'edX course run ID or external course key'),
         ],
         responses={
-            200: "OK",
-            400: "Invalid request. See message."
+            200: 'OK',
+            400: 'Invalid request. See message.'
         },
         summary='Modify exams',
         description='This endpoint should create new exams, update existing exams, '
@@ -281,6 +281,7 @@ class ProctoringProvidersView(ListAPIView):
     queryset = ProctoringProvider.objects.all()
 
 
+# wow
 class ExamAccessTokensView(ExamsAPIView):
     """
     View to create signed exam access tokens for a specific user and exam.
