@@ -3,3 +3,4 @@
 
 codecov                   # Code coverage reporting
 tox                       # Virtualenv management for tests
+coverage
