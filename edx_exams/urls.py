@@ -46,9 +46,9 @@ if settings.DEBUG and os.environ.get('ENABLE_DJANGO_TOOLBAR', False):  # pragma:
     urlpatterns.append(path('__debug__/', include(debug_toolbar.urls)))
 
 api_info = make_api_info(
-    title="edX Exams API",
-    version="v0",
-    description="A REST API for interacting with the edX exams service."
+    title='edX Exams API',
+    version='v0',
+    description='A REST API for interacting with the edX exams service.'
 )
 
 urlpatterns += make_docs_urls(

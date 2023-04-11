@@ -20,4 +20,4 @@ class ForceJWTAuthMiddleware(MiddlewareMixin):  # pragma: no cover
             return
 
         if request.COOKIES.get(jwt_cookie_header_payload_name(), None):
-            request.META[USE_JWT_COOKIE_HEADER] = "true"
+            request.META[USE_JWT_COOKIE_HEADER] = 'true'

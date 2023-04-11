@@ -25,7 +25,7 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
 
         fields = (
-            "id", "username", "email", "lms_user_id"
+            'id', 'username', 'email', 'lms_user_id'
         )
 
 
@@ -36,7 +36,7 @@ class ProctoringProviderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ProctoringProvider
-        fields = ["name", "verbose_name", "lti_configuration_id"]
+        fields = ['name', 'verbose_name', 'lti_configuration_id']
 
 
 class ExamSerializer(serializers.ModelSerializer):
@@ -61,8 +61,8 @@ class ExamSerializer(serializers.ModelSerializer):
         model = Exam
 
         fields = (
-            "id", "exam_name", "course_id", "content_id", "time_limit_mins", "due_date", "exam_type",
-            "hide_after_due", "is_active"
+            'id', 'exam_name', 'course_id', 'content_id', 'time_limit_mins', 'due_date', 'exam_type',
+            'hide_after_due', 'is_active'
         )
 
     def validate_exam_type(self, value):
@@ -71,7 +71,7 @@ class ExamSerializer(serializers.ModelSerializer):
         """
         valid_exam_types = [exam_type.name for exam_type in EXAM_TYPES]
         if value not in valid_exam_types:
-            raise serializers.ValidationError("Must be a valid exam type.")
+            raise serializers.ValidationError('Must be a valid exam type.')
         return value
 
 
@@ -92,8 +92,8 @@ class ExamAttemptSerializer(serializers.ModelSerializer):
         model = ExamAttempt
 
         fields = (
-            "id", "created", "modified", "user", "start_time", "end_time",
-            "status", "exam", "allowed_time_limit_mins", "attempt_number"
+            'id', 'created', 'modified', 'user', 'start_time', 'end_time',
+            'status', 'exam', 'allowed_time_limit_mins', 'attempt_number'
         )
 
 
@@ -135,6 +135,6 @@ class StudentAttemptSerializer(serializers.ModelSerializer):
         model = ExamAttempt
 
         fields = (
-            "attempt_id", "attempt_status", "course_id", "exam_type",
-            "exam_display_name", "exam_url_path", "time_remaining_seconds"
+            'attempt_id', 'attempt_status', 'course_id', 'exam_type',
+            'exam_display_name', 'exam_url_path', 'time_remaining_seconds'
         )

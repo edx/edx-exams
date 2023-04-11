@@ -9,6 +9,8 @@ import sys
 PWD = os.path.abspath(os.path.dirname(__file__))
 
 if __name__ == '__main__':
+    # pylint: disable=inconsistent-quotes
+
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'edx_exams.settings.local')
     sys.path.append(PWD)
     try:

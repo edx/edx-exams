@@ -5,14 +5,15 @@ import multiprocessing  # pylint: disable=unused-import
 
 preload_app = True
 timeout = 300
-bind = "0.0.0.0:18740"
+bind = '0.0.0.0:18740'
 
 workers = 2
 
 
 def pre_request(worker, req):
+    # pragma: no cover
     """Log requests before they are processed."""
-    worker.log.info("%s %s" % (req.method, req.path))
+    worker.log.info('%s %s' % (req.method, req.path))
 
 
 def close_all_caches():
@@ -51,7 +52,8 @@ def post_fork(server, worker):  # pylint: disable=unused-argument
 
 def when_ready(server):  # pylint: disable=unused-argument
     """When running in debug mode, run Django's `check` to better match what `manage.py runserver` does."""
+    # pragma: no cover
     from django.conf import settings  # lint-amnesty, pylint: disable=import-outside-toplevel
     from django.core.management import call_command  # lint-amnesty, pylint: disable=import-outside-toplevel
     if settings.DEBUG:
-        call_command("check")
+        call_command('check')

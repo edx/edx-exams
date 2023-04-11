@@ -96,7 +96,7 @@ def _allow_status_transition(attempt_obj, to_status):
         illegal_status_transition_msg = (
             f'A status transition from "{attempt_obj.status}" to "{to_status}" was attempted '
             f'on exam_id={attempt_obj.exam.id} for user_id={attempt_obj.user.id}. This is not '
-            f"allowed! (course_id={attempt_obj.exam.course_id})"
+            f'allowed! (course_id={attempt_obj.exam.course_id})'
         )
         return False, illegal_status_transition_msg
     return True, ''
