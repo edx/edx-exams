@@ -610,7 +610,7 @@ class CourseExamAttemptView(ExamsAPIView):
 
 
 
-class CourseProviderSettings(ExamsAPIView):
+class CourseProviderSettingsView(ExamsAPIView):
     """
     Endpoint for getting provider related settings.
 
