@@ -37,6 +37,7 @@ htmlcov
 .tox
 nosetests.xml
 unittests.xml
+diff-cover.md
 
 # PII annotation reports
 pii_report
