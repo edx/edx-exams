@@ -20,7 +20,11 @@ jobs:
         toxenv: [django32, django40, quality, pii_check]
 
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout repo
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: "0"
+
     - name: setup python
       uses: actions/setup-python@v2
       with:
