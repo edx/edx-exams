@@ -2,6 +2,7 @@
 branch = True
 data_file = .coverage
 source=edx_exams
+relative_files = True
 omit =
     edx_exams/settings/*
     edx_exams/conf*

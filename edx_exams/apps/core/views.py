@@ -18,6 +18,11 @@ logger = logging.getLogger(__name__)
 User = get_user_model()
 
 
+def uncovered_code():
+    """ See how this gets reported by action. """
+    print('This code is not covered.')
+
+
 @transaction.non_atomic_requests
 class Health(APIView):
     """Allows a load balancer to verify this service is up.

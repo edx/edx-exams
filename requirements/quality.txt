@@ -12,7 +12,7 @@ asgiref==3.6.0
     # via
     #   -r requirements/test.txt
     #   django
-astroid==2.15.0
+astroid==2.15.2
     # via
     #   -r requirements/test.txt
     #   pylint
@@ -21,7 +21,6 @@ attrs==22.2.0
     # via
     #   -r requirements/test.txt
     #   lti-consumer-xblock
-    #   pytest
 bleach==6.0.0
     # via
     #   -r requirements/test.txt
@@ -66,11 +65,11 @@ coreschema==0.0.4
     #   -r requirements/test.txt
     #   coreapi
     #   drf-yasg
-coverage[toml]==7.2.2
+coverage[toml]==7.2.3
     # via
     #   -r requirements/test.txt
     #   pytest-cov
-cryptography==40.0.0
+cryptography==40.0.1
     # via
     #   -r requirements/test.txt
     #   pyjwt
@@ -113,6 +112,7 @@ django==3.2.18
     #   jsonfield
     #   lti-consumer-xblock
     #   openedx-filters
+    #   social-auth-app-django
 django-config-models==2.3.0
     # via
     #   -r requirements/test.txt
@@ -127,7 +127,7 @@ django-dynamic-fixture==3.1.2
     # via -r requirements/test.txt
 django-extensions==3.2.1
     # via -r requirements/test.txt
-django-filter==22.1
+django-filter==23.1
     # via
     #   -r requirements/test.txt
     #   lti-consumer-xblock
@@ -196,11 +196,11 @@ exceptiongroup==1.1.1
     #   pytest
 factory-boy==3.2.1
     # via -r requirements/test.txt
-faker==18.3.1
+faker==18.4.0
     # via
     #   -r requirements/test.txt
     #   factory-boy
-filelock==3.10.4
+filelock==3.11.0
     # via
     #   -r requirements/test.txt
     #   tox
@@ -219,7 +219,7 @@ idna==3.4
     # via
     #   -r requirements/test.txt
     #   requests
-importlib-metadata==6.1.0
+importlib-metadata==6.3.0
     # via
     #   keyring
     #   twine
@@ -267,7 +267,7 @@ lazy-object-proxy==1.9.0
     # via
     #   -r requirements/test.txt
     #   astroid
-lti-consumer-xblock==9.0.0
+lti-consumer-xblock==9.0.1
     # via -r requirements/test.txt
 lxml==4.9.2
     # via
@@ -299,7 +299,7 @@ more-itertools==9.1.0
     # via jaraco-classes
 mysqlclient==2.1.1
     # via -r requirements/test.txt
-newrelic==8.7.1
+newrelic==8.8.0
     # via
     #   -r requirements/test.txt
     #   edx-django-utils
@@ -329,7 +329,7 @@ pbr==5.11.1
     #   stevedore
 pkginfo==1.9.6
     # via twine
-platformdirs==3.1.1
+platformdirs==3.2.0
     # via
     #   -r requirements/test.txt
     #   pylint
@@ -360,7 +360,7 @@ pycryptodomex==3.17
     #   pyjwkest
 pydocstyle==6.3.0
     # via -r requirements/quality.in
-pygments==2.14.0
+pygments==2.15.0
     # via
     #   readme-renderer
     #   rich
@@ -378,7 +378,7 @@ pyjwt[crypto]==2.6.0
     #   edx-drf-extensions
     #   edx-rest-api-client
     #   social-auth-core
-pylint==2.17.1
+pylint==2.17.2
     # via
     #   -r requirements/test.txt
     #   edx-lint
@@ -406,7 +406,7 @@ pynacl==1.5.0
     # via
     #   -r requirements/test.txt
     #   edx-django-utils
-pytest==7.2.2
+pytest==7.3.0
     # via
     #   -r requirements/test.txt
     #   pytest-cov
@@ -430,7 +430,7 @@ python3-openid==3.2.0
     # via
     #   -r requirements/test.txt
     #   social-auth-core
-pytz==2022.7.1
+pytz==2023.3
     # via
     #   -r requirements/test.txt
     #   django
@@ -469,7 +469,7 @@ responses==0.23.1
     # via -r requirements/test.txt
 rfc3986==2.0.0
     # via twine
-rich==13.3.2
+rich==13.3.3
     # via twine
 ruamel-yaml==0.17.21
     # via
@@ -485,7 +485,7 @@ semantic-version==2.10.0
     # via
     #   -r requirements/test.txt
     #   edx-drf-extensions
-simplejson==3.18.4
+simplejson==3.19.1
     # via
     #   -r requirements/test.txt
     #   django-rest-swagger
@@ -509,11 +509,11 @@ slumber==0.7.1
     #   edx-rest-api-client
 snowballstemmer==2.2.0
     # via pydocstyle
-social-auth-app-django==5.1.0
+social-auth-app-django==5.2.0
     # via
     #   -r requirements/test.txt
     #   edx-auth-backends
-social-auth-core==4.4.0
+social-auth-core==4.4.1
     # via
     #   -r requirements/test.txt
     #   edx-auth-backends
@@ -539,7 +539,7 @@ tomli==2.0.1
     #   pylint
     #   pytest
     #   tox
-tomlkit==0.11.6
+tomlkit==0.11.7
     # via
     #   -r requirements/test.txt
     #   pylint
@@ -549,7 +549,7 @@ tox==3.28.0
     #   -r requirements/test.txt
 twine==4.0.2
     # via -r requirements/quality.in
-types-pyyaml==6.0.12.8
+types-pyyaml==6.0.12.9
     # via
     #   -r requirements/test.txt
     #   responses
