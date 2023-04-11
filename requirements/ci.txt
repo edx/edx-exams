@@ -4,6 +4,10 @@
 #
 #    make upgrade
 #
+coverage==7.2.3
+    # via
+    #   -r requirements/ci.in
+    #   codecov
 distlib==0.3.6
     # via virtualenv
 filelock==3.11.0
