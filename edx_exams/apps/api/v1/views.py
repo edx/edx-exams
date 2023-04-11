@@ -609,7 +609,7 @@ class CourseExamAttemptView(ExamsAPIView):
         return Response(data)
 
 
-# wow
+# wow so cool
 class CoolNewView(ExamsAPIView):
     """_summary_
 
