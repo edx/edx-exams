@@ -609,45 +609,6 @@ class CourseExamAttemptView(ExamsAPIView):
         return Response(data)
 
 
-# wow so cool
-class CoolNewView(ExamsAPIView):
-    """_summary_
-
-    Args:
-        ExamsAPIView (_type_): _description_
-    """
-    def get(self, request, course_id, content_id):
-        """
-        HTTP GET handler. Returns exam and an attempt, if one exists for the exam
-        """
-        exam = get_exam_by_content_id(course_id, content_id)
-
-        if exam is None:
-            data = {'exam': {}}
-            return Response(data)
-
-        serialized_exam = ExamSerializer(exam).data
-
-        exam_type_class = get_exam_type(exam.exam_type)
-
-        # the following are additional fields that the frontend expects
-        serialized_exam['type'] = exam.exam_type
-        serialized_exam['is_proctored'] = exam_type_class.is_proctored
-        serialized_exam['is_practice_exam'] = exam_type_class.is_practice
-        # timed exams will have None as a backend
-        serialized_exam['backend'] = exam.provider.verbose_name if exam.provider is not None else None
-        exam_attempt = get_current_exam_attempt(request.user.id, exam.id)
-        if exam_attempt is not None:
-            exam_attempt = check_if_exam_timed_out(exam_attempt)
-
-            student_attempt = StudentAttemptSerializer(exam_attempt).data
-            serialized_exam['attempt'] = student_attempt
-        else:
-            serialized_exam['attempt'] = {}
-
-        data = {'exam': serialized_exam}
-        return Response(data)
-
 
 class CourseProviderSettings(ExamsAPIView):
     """
