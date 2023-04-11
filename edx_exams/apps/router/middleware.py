@@ -6,15 +6,20 @@ import logging
 
 from django.utils.deprecation import MiddlewareMixin
 
-from edx_exams.apps.api.v1.views import CourseExamAttemptView, CourseExamsView
+from edx_exams.apps.api.v1.views import CourseExamAttemptView, CourseExamsView, CourseProviderSettingsView
 from edx_exams.apps.core.models import CourseExamConfiguration
-from edx_exams.apps.router.views import CourseExamAttemptLegacyView, CourseExamsLegacyView
+from edx_exams.apps.router.views import (
+    CourseExamAttemptLegacyView,
+    CourseExamsLegacyView,
+    CourseProviderSettingsLegacyView
+)
 
 log = logging.getLogger(__name__)
 
 LEGACY_VIEW_MAP = {
     CourseExamsView: CourseExamsLegacyView,
     CourseExamAttemptView: CourseExamAttemptLegacyView,
+    CourseProviderSettingsView: CourseProviderSettingsLegacyView,
 }
 
 

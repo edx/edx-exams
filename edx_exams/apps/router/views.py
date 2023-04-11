@@ -12,7 +12,7 @@ from rest_framework.views import APIView
 
 from edx_exams.apps.api.permissions import StaffUserPermissions
 from edx_exams.apps.core.exam_types import get_exam_type
-from edx_exams.apps.router.interop import get_student_exam_attempt_data, register_exams
+from edx_exams.apps.router.interop import get_provider_settings, get_student_exam_attempt_data, register_exams
 
 log = logging.getLogger(__name__)
 
@@ -71,4 +71,24 @@ class CourseExamAttemptLegacyView(APIView):
             data=response_data,
             status=status,
             safe=False,
+        )
+
+
+class CourseProviderSettingsLegacyView(APIView):
+    """
+    View to handle provider settings for exams managed by edx-proctoring
+    """
+    authentication_classes = (JwtAuthentication,)
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request, course_id, exam_id):  # pylint: disable=unused-argument
+        """
+        Get provider settings given an exam ID. Pass through the response from edx-proctoring directly
+        """
+        response_data, status = get_provider_settings(exam_id)
+
+        return JsonResponse(
+            data=response_data,
+            status=status,
+            safe=False
         )

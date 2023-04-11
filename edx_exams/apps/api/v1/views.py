@@ -609,7 +609,7 @@ class CourseExamAttemptView(ExamsAPIView):
         return Response(data)
 
 
-class CourseProviderSettings(ExamsAPIView):
+class CourseProviderSettingsView(ExamsAPIView):
     """
     Endpoint for getting provider related settings.
 
@@ -632,6 +632,8 @@ class CourseProviderSettings(ExamsAPIView):
     def get(self, request, course_id, exam_id):  # pylint: disable=unused-argument
         """
         HTTP GET handler. Returns provider specific information given an exam_id
+
+        The course_id is provided as a path parameter to account for the exams middleware
         """
         provider = get_provider_by_exam_id(exam_id)
 
