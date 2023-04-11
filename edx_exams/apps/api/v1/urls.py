@@ -6,7 +6,7 @@ from edx_exams.apps.api.v1.views import (
     CourseExamAttemptView,
     CourseExamConfigurationsView,
     CourseExamsView,
-    CourseProviderSettings,
+    CourseProviderSettingsView,
     ExamAccessTokensView,
     ExamAttemptView,
     LatestExamAttemptView,
@@ -42,6 +42,6 @@ urlpatterns = [
             CourseExamAttemptView.as_view(),
             name='student-course_exam_attempt'),
     re_path(fr'exam/provider_settings/course_id/{COURSE_ID_PATTERN}/exam_id/{EXAM_ID_PATTERN}',
-            CourseProviderSettings.as_view(),
+            CourseProviderSettingsView.as_view(),
             name='exam-provider-settings'),
 ]

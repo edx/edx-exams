@@ -10,7 +10,12 @@ from django.test import TestCase
 from requests.exceptions import HTTPError
 from rest_framework.exceptions import ValidationError
 
-from edx_exams.apps.router.interop import get_active_exam_attempt, get_student_exam_attempt_data, register_exams
+from edx_exams.apps.router.interop import (
+    get_active_exam_attempt,
+    get_provider_settings,
+    get_student_exam_attempt_data,
+    register_exams
+)
 
 
 @ddt.ddt
@@ -22,6 +27,7 @@ class LegacyInteropTest(TestCase):
         self.course_id = 'course-v1:edx+test+f19'
         self.content_id = 'abcd/1234'
         self.lms_user_id = 1
+        self.exam_id = 2222
 
     def mock_oauth_login(fn):
         """
@@ -126,3 +132,25 @@ class LegacyInteropTest(TestCase):
         response_data, status = get_active_exam_attempt(self.lms_user_id)
         self.assertEqual(status, 500)
         self.assertEqual(response_data, {'data': 'Invalid JSON response received from edx-proctoring'})
+
+    @ddt.data(200, 422)
+    @mock_oauth_login
+    @responses.activate
+    def test_get_provider_settings(self, response_status):
+        """
+        Request is authenticated and forwarded to the LMS.
+        HTTP exceptions are handled and response is returned for
+        non-200 states codes
+        """
+        self.lms_url = (
+            f'{settings.LMS_ROOT_URL}/api/edx_proctoring/v1/proctored_exam/settings/exam_id/{self.exam_id}/'
+        )
+        responder = responses.add(
+            responses.GET,
+            self.lms_url,
+            status=response_status,
+            json={"foo": "bar"},
+        )
+        response_data, status = get_provider_settings(self.exam_id)
+        self.assertEqual(status, response_status)
+        self.assertEqual(response_data, {"foo": "bar"})
