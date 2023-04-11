@@ -106,3 +106,7 @@ class AutoAuth(View):
         login(request, user)
 
         return redirect('/')
+
+
+def more_unused():
+    print('A dark unused corner')
