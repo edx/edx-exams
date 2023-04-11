@@ -18,6 +18,10 @@ logger = logging.getLogger(__name__)
 User = get_user_model()
 
 
+def never_called():
+    print('This function is never called')
+
+
 @transaction.non_atomic_requests
 class Health(APIView):
     """Allows a load balancer to verify this service is up.
