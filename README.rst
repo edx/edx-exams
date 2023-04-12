@@ -1,7 +1,7 @@
 edx_exams
 =============================
 
-|pypi-badge| |ci-badge| |codecov-badge| |doc-badge| |pyversions-badge|
+|pypi-badge| |ci-badge| |doc-badge| |pyversions-badge|
 |license-badge|
 
 Service providing access to exam information
@@ -133,10 +133,6 @@ For more information about these options, see the `Getting Help`_ page.
 .. |ci-badge| image:: https://github.com/edx/edx-exams/workflows/Python%20CI/badge.svg?branch=main
     :target: https://github.com/edx/edx-exams/actions
     :alt: CI
-
-.. |codecov-badge| image:: https://codecov.io/github/edx/edx-exams/coverage.svg?branch=main
-    :target: https://codecov.io/github/edx/edx-exams?branch=main
-    :alt: Codecov
 
 .. |doc-badge| image:: https://readthedocs.org/projects/edx-exams/badge/?version=latest
     :target: https://edx-exams.readthedocs.io/en/latest/
