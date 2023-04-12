@@ -104,13 +104,13 @@ edx-auth-backends==4.1.0
     # via -r requirements/base.in
 edx-django-release-util==1.2.0
     # via -r requirements/base.in
-edx-django-utils==5.3.0
+edx-django-utils==5.4.0
     # via
     #   -r requirements/base.in
     #   django-config-models
     #   edx-drf-extensions
     #   edx-rest-api-client
-edx-drf-extensions==8.4.1
+edx-drf-extensions==8.5.3
     # via -r requirements/base.in
 edx-opaque-keys==2.3.0
     # via
