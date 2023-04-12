@@ -38,9 +38,11 @@ jobs:
       run: tox
 
     - name: Generate lcov
+      if: matrix.toxenv == 'django32' || matrix.toxenv == 'django40'
       run: coverage lcov
 
     - name: Coveralls
+      if: matrix.toxenv == 'django32' || matrix.toxenv == 'django40'
       uses: coverallsapp/github-action@v1
       with:
         path-to-lcov: coverage.lcov

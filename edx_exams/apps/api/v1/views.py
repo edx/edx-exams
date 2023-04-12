@@ -186,7 +186,7 @@ class CourseExamsView(ExamsAPIView):
             data = {}
         else:
             response_status = status.HTTP_400_BAD_REQUEST
-            data = {"detail": "Invalid data", "errors": serializer.errors}
+            data = {'detail': 'Invalid data', 'errors': serializer.errors}
 
         return Response(status=response_status, data=data)
 
@@ -243,7 +243,7 @@ class CourseExamConfigurationsView(ExamsAPIView):
 
         # check that proctoring provider is in request
         if 'provider' not in request.data:
-            error = {"detail": "No proctoring provider name in request."}
+            error = {'detail': 'No proctoring provider name in request.'}
         elif request.data.get('provider') is None:
             provider = None
         else:
@@ -251,7 +251,7 @@ class CourseExamConfigurationsView(ExamsAPIView):
                 provider = ProctoringProvider.objects.get(name=request.data['provider'])
             # return 400 if proctoring provider does not exist
             except ObjectDoesNotExist:
-                error = {"detail": "Proctoring provider does not exist."}
+                error = {'detail': 'Proctoring provider does not exist.'}
 
         if not error:
             CourseExamConfiguration.create_or_update(provider, course_id)
@@ -326,11 +326,11 @@ class ExamAccessTokensView(ExamsAPIView):
 
         403 error if access is not granted.
         """
-        claims = {"course_id": exam.course_id, "content_id": exam.content_id}
+        claims = {'course_id': exam.course_id, 'content_id': exam.content_id}
         expiration_window = 60
         exam_attempt = ExamAttempt.get_current_exam_attempt(user.id, exam.id)
 
-        data = {"detail": "Exam access token not granted"}
+        data = {'detail': 'Exam access token not granted'}
         grant_access = False
         response_status = status.HTTP_403_FORBIDDEN
 
@@ -355,9 +355,9 @@ class ExamAccessTokensView(ExamsAPIView):
             grant_access, response_status = True, status.HTTP_200_OK
 
         if grant_access:
-            log.info("Creating exam access token")
+            log.info('Creating exam access token')
             access_token = sign_token_for(user.lms_user_id, expiration_window, claims)
-            data = {"exam_access_token": access_token, "exam_access_token_expiration": expiration_window}
+            data = {'exam_access_token': access_token, 'exam_access_token_expiration': expiration_window}
 
         response = Response(status=response_status,
                             data=data)
@@ -375,7 +375,7 @@ class ExamAccessTokensView(ExamsAPIView):
         except ObjectDoesNotExist:
             response_status = status.HTTP_404_NOT_FOUND
             return Response(status=response_status,
-                            data={"detail": "Exam does not exist"})
+                            data={'detail': 'Exam does not exist'})
 
         response = self.get_response(exam, request.user)
 
@@ -513,8 +513,8 @@ class ExamAttemptView(ExamsAPIView):
         # user should only be able to update their own attempt
         if attempt.user.id != request.user.id:
             error_msg = (
-                f"user_id={attempt.user.id} attempted to update attempt_id={attempt.id} in "
-                f"course_id={attempt.exam.course_id} but does not have access to it. (action={action})"
+                f'user_id={attempt.user.id} attempted to update attempt_id={attempt.id} in '
+                f'course_id={attempt.exam.course_id} but does not have access to it. (action={action})'
             )
             error = {'detail': error_msg}
             return Response(status=status.HTTP_403_FORBIDDEN, data=error)
@@ -530,12 +530,12 @@ class ExamAttemptView(ExamsAPIView):
         to_status = action_mapping.get(action)
         if to_status:
             attempt_id = update_attempt_status(attempt_id, to_status)
-            data = {"exam_attempt_id": attempt_id}
+            data = {'exam_attempt_id': attempt_id}
             return Response(data)
 
         return Response(
             status=status.HTTP_400_BAD_REQUEST,
-            data={'detail': f'Unrecognized action "{action}"'}
+            data={'detail': f"Unrecognized action '{action}'"}
         )
 
     def post(self, request):
@@ -608,7 +608,6 @@ class CourseExamAttemptView(ExamsAPIView):
 
         data = {'exam': serialized_exam}
         return Response(data)
-
 
 
 class CourseProviderSettingsView(ExamsAPIView):
