@@ -12,12 +12,12 @@ asgiref==3.6.0
     # via
     #   -r requirements/test.txt
     #   django
-astroid==2.15.2
+astroid==2.15.3
     # via
     #   -r requirements/test.txt
     #   pylint
     #   pylint-celery
-attrs==22.2.0
+attrs==23.1.0
     # via
     #   -r requirements/test.txt
     #   lti-consumer-xblock
@@ -69,7 +69,7 @@ coverage[toml]==7.2.3
     # via
     #   -r requirements/test.txt
     #   pytest-cov
-cryptography==40.0.1
+cryptography==40.0.2
     # via
     #   -r requirements/test.txt
     #   pyjwt
@@ -175,7 +175,7 @@ edx-django-utils==5.4.0
     #   django-config-models
     #   edx-drf-extensions
     #   edx-rest-api-client
-edx-drf-extensions==8.5.3
+edx-drf-extensions==8.6.0
     # via -r requirements/test.txt
 edx-lint==5.3.4
     # via
@@ -219,7 +219,7 @@ idna==3.4
     # via
     #   -r requirements/test.txt
     #   requests
-importlib-metadata==6.3.0
+importlib-metadata==6.5.0
     # via
     #   keyring
     #   twine
@@ -267,7 +267,7 @@ lazy-object-proxy==1.9.0
     # via
     #   -r requirements/test.txt
     #   astroid
-lti-consumer-xblock==9.0.1
+lti-consumer-xblock==9.0.2
     # via -r requirements/test.txt
 lxml==4.9.2
     # via
@@ -293,7 +293,7 @@ mccabe==0.7.0
     #   pylint
 mdurl==0.1.2
     # via markdown-it-py
-mock==5.0.1
+mock==5.0.2
     # via -r requirements/test.txt
 more-itertools==9.1.0
     # via jaraco-classes
@@ -317,7 +317,7 @@ openedx-filters==1.2.0
     # via
     #   -r requirements/test.txt
     #   lti-consumer-xblock
-packaging==23.0
+packaging==23.1
     # via
     #   -r requirements/test.txt
     #   drf-yasg
@@ -339,7 +339,7 @@ pluggy==1.0.0
     #   -r requirements/test.txt
     #   pytest
     #   tox
-psutil==5.9.4
+psutil==5.9.5
     # via
     #   -r requirements/test.txt
     #   edx-django-utils
@@ -406,7 +406,7 @@ pynacl==1.5.0
     # via
     #   -r requirements/test.txt
     #   edx-django-utils
-pytest==7.3.0
+pytest==7.3.1
     # via
     #   -r requirements/test.txt
     #   pytest-cov
@@ -469,7 +469,7 @@ responses==0.23.1
     # via -r requirements/test.txt
 rfc3986==2.0.0
     # via twine
-rich==13.3.3
+rich==13.3.4
     # via twine
 ruamel-yaml==0.17.21
     # via
@@ -518,7 +518,7 @@ social-auth-core==4.4.1
     #   -r requirements/test.txt
     #   edx-auth-backends
     #   social-auth-app-django
-sqlparse==0.4.3
+sqlparse==0.4.4
     # via
     #   -r requirements/test.txt
     #   django
