@@ -1271,6 +1271,7 @@ class CourseExamAttemptViewTest(ExamsAPITestCase):
         expected_data['type'] = self.exam.exam_type
         expected_data['is_proctored'] = exam_type_class.is_proctored
         expected_data['is_practice_exam'] = exam_type_class.is_practice
+        expected_data['total_time'] = self.exam.time_limit_mins
         expected_data['backend'] = self.exam.provider.verbose_name
         expected_data['attempt'] = {}
 
