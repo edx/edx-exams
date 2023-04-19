@@ -102,17 +102,17 @@ class LtiStartProctoringTestCase(ExamsAPITestCase):
 
         mock_get_lti_launch_url.assert_called_with(expected_launch_data)
 
-    def test_start_proctoring_updated_attempt(self, mock_get_lti_launch_url):  # pylint: disable=unused-argument
+    def test_start_proctoring_updated_attempt(self, mock_get_lti_launch_url):
         """
         Test that calling the start_proctoring view updates the appropriate attempt to the
-        'download software clicked' status.
+        'download_software_clicked' status.
         """
         headers = self.build_jwt_headers(self.user)
         response = self.client.get(self.url, **headers)
 
         self.attempt.refresh_from_db()
 
-        self.assertRedirects(response, 'https://www.example.com', fetch_redirect_response=False)
+        self.assertRedirects(response, mock_get_lti_launch_url.return_value, fetch_redirect_response=False)
         self.assertEqual(self.attempt.status, ExamAttemptStatus.download_software_clicked)
 
     def test_start_proctoring_no_attempt(self, mock_get_lti_launch_url):  # pylint: disable=unused-argument
@@ -143,6 +143,140 @@ class LtiStartProctoringTestCase(ExamsAPITestCase):
     def test_start_proctoring_unauthorized_user(self, mock_get_lti_launch_url):  # pylint: disable=unused-argument
         """
         Test that a 403 response is returned when calling the start_proctoring view with an attempt_id
+        that does not belong to the calling user.
+        """
+        other_user = UserFactory()
+
+        headers = self.build_jwt_headers(other_user)
+        response = self.client.get(self.url, **headers)
+
+        self.assertEqual(response.status_code, 403)
+
+
+@patch('edx_exams.apps.lti.views.get_lti_1p3_launch_start_url', return_value='https://www.example.com')
+class LtiEndAssessmentTestCase(ExamsAPITestCase):
+    """
+    Test end_assessment view
+    """
+
+    def setUp(self):
+        super().setUp()
+
+        self.course_id = 'course-v1:edx+test+f19'
+        self.content_id = '11111111'
+
+        self.course_exam_config = CourseExamConfiguration.objects.create(
+            course_id=self.course_id,
+            provider=self.test_provider,
+            allow_opt_out=False
+        )
+
+        self.exam = Exam.objects.create(
+            resource_id=str(uuid.uuid4()),
+            course_id=self.course_id,
+            provider=self.test_provider,
+            content_id=self.content_id,
+            exam_name='test_exam',
+            exam_type='proctored',
+            time_limit_mins=30,
+            due_date='2021-07-01 00:00:00',
+            hide_after_due=False,
+            is_active=True
+        )
+
+        self.attempt = ExamAttempt.objects.create(
+            user=self.user,
+            exam=self.exam,
+            attempt_number=1111111,
+            status=ExamAttemptStatus.created,
+            start_time=None,
+            allowed_time_limit_mins=None,
+        )
+
+        # Create an LtiConfiguration instance so that the config_id can be included in the Lti1p3LaunchData.
+        self.lti_configuration = LtiConfiguration.objects.create()
+
+        # Update the test provider to refer to the correct LtiConfiguration instance.
+        self.test_provider.lti_configuration_id = self.lti_configuration.id
+        self.test_provider.save()
+
+        self.url = self.get_end_assessment_url(self.attempt.id)
+
+    def get_end_assessment_url(self, attempt_id):
+        """
+        Return the URL to the start_proctoring view.
+
+        Parameters:
+            * attempt_id: the id field of the attempt object
+        """
+        return reverse('lti:end_assessment', kwargs={'attempt_id': attempt_id})
+
+    def test_get_end_assessment_url_launch_data(self, mock_get_lti_launch_url):
+        """
+        Test that the instance of Lti1p3LaunchData sent as an argument to get_lti_1p3_launch_start_url
+        contains the correct data.
+        """
+        with patch('edx_exams.apps.lti.views.get_end_assessment_return', return_value=True):
+            headers = self.build_jwt_headers(self.user)
+            self.client.get(self.url, **headers)
+
+        expected_proctoring_launch_data = Lti1p3ProctoringLaunchData(
+            attempt_number=self.attempt.attempt_number,
+        )
+
+        expected_launch_data = Lti1p3LaunchData(
+            user_id=self.user.id,
+            user_role=None,
+            config_id=self.lti_configuration.config_id,
+            resource_link_id=self.exam.resource_id,
+            external_user_id=str(self.user.anonymous_user_id),
+            message_type='LtiEndAssessment',
+            proctoring_launch_data=expected_proctoring_launch_data
+        )
+
+        mock_get_lti_launch_url.assert_called_with(expected_launch_data)
+
+    def test_end_assessment_redirect(self, mock_get_lti_launch_url):
+        with patch('edx_exams.apps.lti.views.get_end_assessment_return', return_value=True):
+            headers = self.build_jwt_headers(self.user)
+            response = self.client.get(self.url, **headers)
+
+        self.assertRedirects(response, mock_get_lti_launch_url.return_value, fetch_redirect_response=False)
+
+    def test_end_assessment_no_redirect(self, mock_get_lti_launch_url):  # pylint: disable=unused-argument
+        with patch('edx_exams.apps.lti.views.get_end_assessment_return', return_value=False):
+            headers = self.build_jwt_headers(self.user)
+            response = self.client.get(self.url, **headers)
+
+        self.assertEqual(response.status_code, 200)
+
+    def test_end_assessment_updated_attempt(self, mock_get_lti_launch_url):  # pylint: disable=unused-argument
+        """
+        Test that calling the end_asessment view updates the appropriate attempt to the
+        'submitted' status.
+        """
+        headers = self.build_jwt_headers(self.user)
+        self.client.get(self.url, **headers)
+
+        self.attempt.refresh_from_db()
+
+        self.assertEqual(self.attempt.status, ExamAttemptStatus.submitted)
+
+    def test_end_assessment_no_attempt(self, mock_get_lti_launch_url):  # pylint: disable=unused-argument
+        """
+        Test that a 400 response is returned when calling the end_assessment view with an attempt_id
+        that does not exist.
+        """
+        url = self.get_end_assessment_url(1000)
+
+        headers = self.build_jwt_headers(self.user)
+        response = self.client.get(url, **headers)
+
+        self.assertEqual(response.status_code, 400)
+
+    def test_end_assessment_unauthorized_user(self, mock_get_lti_launch_url):  # pylint: disable=unused-argument
+        """
+        Test that a 403 response is returned when calling the end_assessment view with an attempt_id
         that does not belong to the calling user.
         """
         other_user = UserFactory()

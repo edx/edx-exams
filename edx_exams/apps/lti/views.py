@@ -20,7 +20,6 @@ from rest_framework.response import Response
 
 from edx_exams.apps.core.api import get_attempt_by_id, update_attempt_status
 from edx_exams.apps.core.exceptions import ExamIllegalStatusTransition
-from edx_exams.apps.core.models import ExamAttempt
 from edx_exams.apps.core.statuses import ExamAttemptStatus
 from edx_exams.apps.lti.utils import get_lti_root
 
@@ -40,7 +39,7 @@ def start_proctoring(request, attempt_id):
     if not attempt:
         return Response(
             status=status.HTTP_400_BAD_REQUEST,
-            data={'detail': f'Attempt with attempt_id={attempt_id} does not exit.'}
+            data={'detail': f'Attempt with attempt_id={attempt_id} does not exist.'}
         )
 
     # Verify that that the requesting user is authorized to modify the attempt.
@@ -97,12 +96,39 @@ def start_proctoring(request, attempt_id):
     return redirect(get_lti_1p3_launch_start_url(launch_data))
 
 
-def end_assessment(request, attempt_id):  # pragma: no cover
+@api_view(['GET'])
+@require_http_methods(['GET'])
+@authentication_classes((JwtAuthentication,))
+@permission_classes((IsAuthenticated,))
+def end_assessment(request, attempt_id):
     """
     LTI End Assessment
     """
-    # TODO: Here we'd do all the end of assessment things.
-    attempt = ExamAttempt.objects.get(pk=attempt_id)
+    # Verify that the attempt associated with attempt_id exists.
+    attempt = get_attempt_by_id(attempt_id)
+    if not attempt:
+        return Response(
+            status=status.HTTP_400_BAD_REQUEST,
+            data={'detail': f'Attempt with attempt_id={attempt_id} does not exist.'}
+        )
+
+    # Verify that that the requesting user is authorized to modify the attempt.
+    user = request.user
+    if attempt.user.id != user.id:
+        error_msg = (
+            f'user_id={attempt.user.id} attempted to update attempt_id={attempt.id} in '
+            f'course_id={attempt.exam.course_id} when starting an LTI launch but does not have access to it.'
+        )
+        error = {'detail': error_msg}
+        return Response(status=status.HTTP_403_FORBIDDEN, data=error)
+
+    update_attempt_status(attempt_id, ExamAttemptStatus.submitted)
+
+    # user is authenticated via JWT so use that to create a
+    # session with this service's authentication backend
+    request.user.backend = EDX_OAUTH_BACKEND
+    login(request, user)
+
     exam = attempt.exam
     resource_link_id = exam.resource_id
     end_assessment_return = get_end_assessment_return(request.user.anonymous_user_id, resource_link_id)
