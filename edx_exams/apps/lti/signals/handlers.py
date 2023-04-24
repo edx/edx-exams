@@ -20,7 +20,7 @@ def assessment_started(sender, **kwargs):  # pylint: disable=unused-argument
     """
     user_id = kwargs.get('user_id')
     attempt_number = kwargs.get('attempt_number')
-    resource_id = kwargs.get('resource_id')
+    resource_id = kwargs.get('resource_link', {}).get('id')
 
     if not user_id or not attempt_number or not resource_id:
         log.info(

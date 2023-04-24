@@ -68,7 +68,7 @@ class TestAssessmentStarted(TestCase):
         kwargs = {
             'user_id': self.user.id,
             'attempt_number': self.attempt.attempt_number,
-            'resource_id': self.exam.resource_id,
+            'resource_link': {'id': self.exam.resource_id},
         }
 
         assessment_started(None, **kwargs)
@@ -88,7 +88,7 @@ class TestAssessmentStarted(TestCase):
         kwargs = {
             'user_id': user_id,
             'attempt_number': attempt_number,
-            'resource_id': resource_id,
+            'resource_link': {'id': resource_id},
         }
 
         assessment_started(None, **kwargs)
@@ -104,7 +104,7 @@ class TestAssessmentStarted(TestCase):
         kwargs = {
             'user_id': self.user.id,
             'attempt_number': 100,
-            'resource_id': self.exam.resource_id,
+            'resource_link': {'id': self.exam.resource_id},
         }
 
         assessment_started(None, **kwargs)
@@ -129,7 +129,7 @@ class TestAssessmentStarted(TestCase):
         kwargs = {
             'user_id': self.user.id,
             'attempt_number': self.attempt.attempt_number,
-            'resource_id': str(uuid.uuid4()),
+            'resource_link': {'id': str(uuid.uuid4())},
         }
 
         assessment_started(None, **kwargs)
@@ -152,7 +152,7 @@ class TestAssessmentStarted(TestCase):
         kwargs = {
             'user_id': self.user.id,
             'attempt_number': self.attempt.attempt_number,
-            'resource_id': self.exam.resource_id,
+            'resource_link': {'id': self.exam.resource_id},
         }
 
         assessment_started(None, **kwargs)
