@@ -13,6 +13,7 @@ from edx_rest_framework_extensions.auth.jwt.authentication import JwtAuthenticat
 from lti_consumer.api import get_end_assessment_return, get_lti_1p3_launch_start_url
 from lti_consumer.data import Lti1p3LaunchData, Lti1p3ProctoringLaunchData
 from lti_consumer.models import LtiConfiguration
+from lti_consumer.lti_1p3.extensions.rest_framework.authentication import Lti1p3ApiAuthentication
 from rest_framework import status
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.permissions import IsAuthenticated
@@ -25,6 +26,18 @@ from edx_exams.apps.lti.utils import get_lti_root
 
 EDX_OAUTH_BACKEND = 'auth_backends.backends.EdXOAuth2'
 
+
+@api_view(['GET'])
+@require_http_methods(['GET'])
+# Custom permission classes for LTI APIs
+# authentication_classes = [Lti1p3ApiAuthentication]
+@authentication_classes((Lti1p3ApiAuthentication,))
+# @permission_classes((IsAuthenticated,))
+def acs_endpoint(request):
+    """
+    Endpoint for ACS actions
+    """
+    return Response(data={})
 
 @api_view(['GET'])
 @require_http_methods(['GET'])
