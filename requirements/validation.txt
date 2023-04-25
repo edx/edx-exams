@@ -14,7 +14,7 @@ asgiref==3.6.0
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   django
-astroid==2.15.3
+astroid==2.15.4
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -221,7 +221,7 @@ edx-django-utils==5.4.0
     #   django-config-models
     #   edx-drf-extensions
     #   edx-rest-api-client
-edx-drf-extensions==8.6.0
+edx-drf-extensions==8.7.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -252,12 +252,12 @@ factory-boy==3.2.1
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
-faker==18.4.0
+faker==18.5.1
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   factory-boy
-filelock==3.11.0
+filelock==3.12.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -282,7 +282,7 @@ idna==3.4
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   requests
-importlib-metadata==6.5.0
+importlib-metadata==6.6.0
     # via
     #   -r requirements/quality.txt
     #   keyring
@@ -345,7 +345,7 @@ lazy-object-proxy==1.9.0
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   astroid
-lti-consumer-xblock==9.0.2
+lti-consumer-xblock==9.0.3
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -431,7 +431,7 @@ pkginfo==1.9.6
     # via
     #   -r requirements/quality.txt
     #   twine
-platformdirs==3.2.0
+platformdirs==3.3.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -468,7 +468,7 @@ pycryptodomex==3.17
     #   pyjwkest
 pydocstyle==6.3.0
     # via -r requirements/quality.txt
-pygments==2.15.0
+pygments==2.15.1
     # via
     #   -r requirements/quality.txt
     #   readme-renderer
@@ -489,7 +489,7 @@ pyjwt[crypto]==2.6.0
     #   edx-drf-extensions
     #   edx-rest-api-client
     #   social-auth-core
-pylint==2.17.2
+pylint==2.17.3
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -663,7 +663,7 @@ social-auth-app-django==5.2.0
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   edx-auth-backends
-social-auth-core==4.4.1
+social-auth-core==4.4.2
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -730,7 +730,7 @@ urllib3==1.26.15
     #   requests
     #   responses
     #   twine
-virtualenv==20.21.0
+virtualenv==20.22.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
