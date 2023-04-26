@@ -14,6 +14,7 @@ from lti_consumer.api import get_end_assessment_return, get_lti_1p3_launch_start
 from lti_consumer.data import Lti1p3LaunchData, Lti1p3ProctoringLaunchData
 from lti_consumer.models import LtiConfiguration
 from lti_consumer.lti_1p3.extensions.rest_framework.authentication import Lti1p3ApiAuthentication
+from lti_consumer.lti_1p3.extensions.rest_framework.permissions import LtiProctoringAcsPermissions
 from rest_framework import status
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.permissions import IsAuthenticated
@@ -26,17 +27,18 @@ from edx_exams.apps.lti.utils import get_lti_root
 
 EDX_OAUTH_BACKEND = 'auth_backends.backends.EdXOAuth2'
 
-
-@api_view(['GET'])
-@require_http_methods(['GET'])
-# Custom permission classes for LTI APIs
-# authentication_classes = [Lti1p3ApiAuthentication]
+############ TODO: Put in a comporable permissions class to check scopes, then finish the ADR for the ticket, etc.
+############ MAYBE_TODO: Send a "fully formed" ACS request (don't need to modify attempt data, just see if it works)
+############ TODO: finish the ADR for the ticket, etc.
+@api_view(['POST'])
+@require_http_methods(['POST'])
 @authentication_classes((Lti1p3ApiAuthentication,))
-# @permission_classes((IsAuthenticated,))
-def acs_endpoint(request):
+@permission_classes((LtiProctoringAcsPermissions,))
+def acs_endpoint(request, lti_config_id):
     """
     Endpoint for ACS actions
     """
+    print("USER:",request.user)
     return Response(data={})
 
 @api_view(['GET'])
