@@ -110,7 +110,7 @@ edx-django-utils==5.4.0
     #   django-config-models
     #   edx-drf-extensions
     #   edx-rest-api-client
-edx-drf-extensions==8.6.0
+edx-drf-extensions==8.7.0
     # via -r requirements/base.in
 edx-opaque-keys==2.3.0
     # via
@@ -137,7 +137,7 @@ jsonfield==3.1.0
     # via lti-consumer-xblock
 lazy==1.5
     # via lti-consumer-xblock
-lti-consumer-xblock==9.0.2
+lti-consumer-xblock==9.0.3
     # via -r requirements/base.in
 lxml==4.9.2
     # via
@@ -244,7 +244,7 @@ slumber==0.7.1
     # via edx-rest-api-client
 social-auth-app-django==5.2.0
     # via edx-auth-backends
-social-auth-core==4.4.1
+social-auth-core==4.4.2
     # via
     #   edx-auth-backends
     #   social-auth-app-django
