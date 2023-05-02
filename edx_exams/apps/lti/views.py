@@ -4,6 +4,9 @@ LTI Views
 
 from urllib.parse import urljoin
 
+import json
+import logging
+
 from django.contrib.auth import login
 from django.http import JsonResponse
 from django.shortcuts import redirect
@@ -25,11 +28,18 @@ from edx_exams.apps.core.exceptions import ExamIllegalStatusTransition
 from edx_exams.apps.core.statuses import ExamAttemptStatus
 from edx_exams.apps.lti.utils import get_lti_root
 
+log = logging.getLogger(__name__)
+
 EDX_OAUTH_BACKEND = 'auth_backends.backends.EdXOAuth2'
 
-############ TODO: Put in a comporable permissions class to check scopes, then finish the ADR for the ticket, etc.
-############ MAYBE_TODO: Send a "fully formed" ACS request (don't need to modify attempt data, just see if it works)
-############ TODO: finish the ADR for the ticket, etc.
+LTI_PROCTORING_ASSESSMENT_CONTROL_ACTIONS = [
+    'pauseRequest',
+    'resumeRequest',
+    'terminateRequest',
+    'update',
+    'flagRequest',
+]
+
 @api_view(['POST'])
 @require_http_methods(['POST'])
 @authentication_classes((Lti1p3ApiAuthentication,))
@@ -37,9 +47,34 @@ EDX_OAUTH_BACKEND = 'auth_backends.backends.EdXOAuth2'
 def acs_endpoint(request, lti_config_id):
     """
     Endpoint for ACS actions
+
+    NOTE: for now just have the actions LOG what the actions is doing.
+    We can implement proper functionality and tests later once we
+    hear back from our third party proctoring service vendors
+    (i.e. Verificient and Proctortrack).
     """
-    print("USER:",request.user)
-    return Response(data={})
+    # TODO:
+    # First, have access_token in lti-consumer add actions to the access token
+    data = json.loads(request.body)
+    action = data['action']
+
+    if action == 'flag':
+        log.info('Flagging exam attempt')
+
+    elif action == 'pause':
+        log.info('Pausing exam attempt')
+
+    elif action == 'resume':
+        log.info('Resuming exam attempt')
+
+    elif action == 'terminate':
+        log.info('Terminating exam attempt')
+
+    elif action == 'update':
+        log.info('Updating exam attempt (Adding more time)')
+
+    return Response(action, 200)
+
 
 @api_view(['GET'])
 @require_http_methods(['GET'])
@@ -92,10 +127,18 @@ def start_proctoring(request, attempt_id):
         get_lti_root(),
         reverse('lti_consumer:lti_consumer.start_proctoring_assessment_endpoint')
     )
+    
+    assessment_control_url = urljoin(
+        get_lti_root(),
+        reverse('lti:acs_endpoint', kwargs={'lti_config_id': lti_config_id}), #if the url actually existed
+    )
 
     proctoring_launch_data = Lti1p3ProctoringLaunchData(
         attempt_number=attempt.attempt_number,
         start_assessment_url=proctoring_start_assessment_url,
+        # TODO: Add these fields (and extract them) to the proctoring launch data
+        assessment_control_url= assessment_control_url,
+        assessment_control_actions= ['flagRequest'],  # This needs to be a list because LTI specified so
     )
 
     launch_data = Lti1p3LaunchData(
