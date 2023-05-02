@@ -61,7 +61,7 @@ coreschema==0.0.4
     #   -r requirements/base.txt
     #   coreapi
     #   drf-yasg
-coverage[toml]==7.2.3
+coverage[toml]==7.2.5
     # via
     #   -r requirements/test.in
     #   pytest-cov
@@ -84,12 +84,14 @@ distlib==0.3.6
     # via
     #   -c https://raw.githubusercontent.com/edx/edx-lint/master/edx_lint/files/common_constraints.txt
     #   -r requirements/base.txt
+    #   django-appconf
     #   django-config-models
     #   django-cors-headers
     #   django-crum
     #   django-extensions
     #   django-filter
     #   django-model-utils
+    #   django-statici18n
     #   djangorestframework
     #   drf-jwt
     #   drf-yasg
@@ -103,6 +105,10 @@ distlib==0.3.6
     #   lti-consumer-xblock
     #   openedx-filters
     #   social-auth-app-django
+django-appconf==1.0.5
+    # via
+    #   -r requirements/base.txt
+    #   django-statici18n
 django-config-models==2.3.0
     # via
     #   -r requirements/base.txt
@@ -117,7 +123,7 @@ django-dynamic-fixture==3.1.2
     # via -r requirements/test.in
 django-extensions==3.2.1
     # via -r requirements/base.txt
-django-filter==23.1
+django-filter==23.2
     # via
     #   -r requirements/base.txt
     #   lti-consumer-xblock
@@ -129,6 +135,10 @@ django-simple-history==3.0.0
     # via
     #   -c https://raw.githubusercontent.com/edx/edx-lint/master/edx_lint/files/common_constraints.txt
     #   -r requirements/base.txt
+django-statici18n==2.3.1
+    # via
+    #   -r requirements/base.txt
+    #   lti-consumer-xblock
 django-waffle==3.0.0
     # via
     #   -r requirements/base.txt
@@ -180,7 +190,7 @@ exceptiongroup==1.1.1
     # via pytest
 factory-boy==3.2.1
     # via -r requirements/test.in
-faker==18.5.1
+faker==18.6.1
     # via factory-boy
 filelock==3.12.0
     # via
@@ -227,7 +237,7 @@ lazy==1.5
     #   lti-consumer-xblock
 lazy-object-proxy==1.9.0
     # via astroid
-lti-consumer-xblock==9.0.3
+lti-consumer-xblock==9.2.0
     # via -r requirements/base.txt
 lxml==4.9.2
     # via
@@ -279,7 +289,7 @@ pbr==5.11.1
     # via
     #   -r requirements/base.txt
     #   stevedore
-platformdirs==3.3.0
+platformdirs==3.5.0
     # via
     #   pylint
     #   virtualenv
@@ -373,7 +383,7 @@ pyyaml==6.0
     #   edx-django-release-util
     #   responses
     #   xblock
-requests==2.28.2
+requests==2.29.0
     # via
     #   -r requirements/base.txt
     #   coreapi
@@ -390,7 +400,7 @@ requests-oauthlib==1.3.1
     #   social-auth-core
 responses==0.23.1
     # via -r requirements/test.in
-ruamel-yaml==0.17.21
+ruamel-yaml==0.17.22
     # via
     #   -r requirements/base.txt
     #   drf-yasg
@@ -451,7 +461,7 @@ tomli==2.0.1
     #   pylint
     #   pytest
     #   tox
-tomlkit==0.11.7
+tomlkit==0.11.8
     # via pylint
 tox==3.28.0
     # via
@@ -473,7 +483,7 @@ urllib3==1.26.15
     #   -r requirements/base.txt
     #   requests
     #   responses
-virtualenv==20.22.0
+virtualenv==20.23.0
     # via tox
 web-fragments==2.0.0
     # via
