@@ -78,9 +78,17 @@ def start_proctoring(request, attempt_id):
         reverse('lti_consumer:lti_consumer.start_proctoring_assessment_endpoint')
     )
 
+    assessment_control_url = urljoin(
+        get_lti_root(),
+        f'{lti_config_id}/assessment_control',
+        # reverse('lti:assessment_control') if the url actually existed
+    )
+
     proctoring_launch_data = Lti1p3ProctoringLaunchData(
         attempt_number=attempt.attempt_number,
         start_assessment_url=proctoring_start_assessment_url,
+        assessment_control_url=assessment_control_url,
+        assessment_control_actions=['flagRequest'],
     )
 
     launch_data = Lti1p3LaunchData(
