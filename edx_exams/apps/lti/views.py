@@ -127,7 +127,7 @@ def start_proctoring(request, attempt_id):
         get_lti_root(),
         reverse('lti_consumer:lti_consumer.start_proctoring_assessment_endpoint')
     )
-    
+
     assessment_control_url = urljoin(
         get_lti_root(),
         reverse('lti:acs_endpoint', kwargs={'lti_config_id': lti_config_id}), #if the url actually existed

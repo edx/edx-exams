@@ -55,4 +55,3 @@ def assessment_started(sender, **kwargs):  # pylint: disable=unused-argument
 # Match LTI specifications here:
 # http://www.imsglobal.org/spec/proctoring/v1p0#h.awao2i3cnvsy
 # Use lti library to ensure response matches shape
-
