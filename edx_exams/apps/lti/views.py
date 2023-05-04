@@ -23,7 +23,7 @@ from rest_framework.decorators import api_view, authentication_classes, permissi
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from edx_exams.apps.core.api import get_attempt_by_id, update_attempt_status
+from edx_exams.apps.core.api import get_attempt_by_id, update_attempt_status, get_attempt_by_attempt_number_and_resource_id
 from edx_exams.apps.core.exceptions import ExamIllegalStatusTransition
 from edx_exams.apps.core.statuses import ExamAttemptStatus
 from edx_exams.apps.lti.utils import get_lti_root
@@ -40,11 +40,12 @@ LTI_PROCTORING_ASSESSMENT_CONTROL_ACTIONS = [
     'flagRequest',
 ]
 
+
 @api_view(['POST'])
 @require_http_methods(['POST'])
 @authentication_classes((Lti1p3ApiAuthentication,))
 @permission_classes((LtiProctoringAcsPermissions,))
-def acs_endpoint(request, lti_config_id):
+def acs(request, lti_config_id):
     """
     Endpoint for ACS actions
 
@@ -52,26 +53,56 @@ def acs_endpoint(request, lti_config_id):
     We can implement proper functionality and tests later once we
     hear back from our third party proctoring service vendors
     (i.e. Verificient and Proctortrack).
+
+    Currently, we only support flagging of exam attempts.
+    Other ACS actions (pause, resume, terminate, update) could be implemented
+    in the future if desired.
     """
-    # TODO:
-    # First, have access_token in lti-consumer add actions to the access token
     data = json.loads(request.body)
+
+    # This identifies the proctoring tool the request is coming from.
+    user = data['user']
+
+    # The link to exam the user is attempting
+    resource_link = data['resource_link']
+
+    # Exam attempt number (Note: ACS does not differentiate between launches)
+    # i.e, if a launch fails and multiple subsequent launches occur for
+    # the same resource_link + attempt_number combo, the ACS only perceives
+    # this as one singular attempt.
+    attempt_number = data['attempt_number']
+
+    # ACS action to be performed
     action = data['action']
+
+    # Debug code, delete later
+    print("user:", user)
+    print("resource_link:", resource_link)
+    print("attempt_number:", attempt_number)
+
+    # Data validation: Make sure that the exam attempt is either ongoing or completed.
+    # But not verified, rejected, or expired (no need to flag in these cases)
+    # Therefore, any attempt with status from 'started' to 'submitted' can be flagged
+    VALID_STATUSES = [
+        ExamAttemptStatus.started,
+        ExamAttemptStatus.ready_to_submit,
+        ExamAttemptStatus.timed_out,
+        ExamAttemptStatus.submitted,
+    ]
+
+    attempt = get_attempt_by_attempt_number_and_resource_id(attempt_number, resource_link['id'])
+    if attempt.status not in VALID_STATUSES:
+        # TODO: improve this msg with fields and stuff
+        log.info(
+            f'Attempt cannot be flagged',
+            f'Attempt not in progress or completed'
+        )
+        # NOTE: Do we want to create a new exception in exceptions.py just for this case?
+        return
+
 
     if action == 'flag':
         log.info('Flagging exam attempt')
-
-    elif action == 'pause':
-        log.info('Pausing exam attempt')
-
-    elif action == 'resume':
-        log.info('Resuming exam attempt')
-
-    elif action == 'terminate':
-        log.info('Terminating exam attempt')
-
-    elif action == 'update':
-        log.info('Updating exam attempt (Adding more time)')
 
     return Response(action, 200)
 
@@ -130,15 +161,15 @@ def start_proctoring(request, attempt_id):
 
     assessment_control_url = urljoin(
         get_lti_root(),
-        reverse('lti:acs_endpoint', kwargs={'lti_config_id': lti_config_id}), #if the url actually existed
+        reverse('lti:acs', kwargs={'lti_config_id': lti_config_id}),  # if the url actually existed
     )
 
     proctoring_launch_data = Lti1p3ProctoringLaunchData(
         attempt_number=attempt.attempt_number,
         start_assessment_url=proctoring_start_assessment_url,
         # TODO: Add these fields (and extract them) to the proctoring launch data
-        assessment_control_url= assessment_control_url,
-        assessment_control_actions= ['flagRequest'],  # This needs to be a list because LTI specified so
+        assessment_control_url=assessment_control_url,
+        assessment_control_actions=['flagRequest'],  # This needs to be a list because LTI specified so
     )
 
     launch_data = Lti1p3LaunchData(
