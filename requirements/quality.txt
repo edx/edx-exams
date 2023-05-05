@@ -267,7 +267,7 @@ lazy-object-proxy==1.9.0
     # via
     #   -r requirements/test.txt
     #   astroid
-lti-consumer-xblock==9.0.3
+lti-consumer-xblock==9.3.0
     # via -r requirements/test.txt
 lxml==4.9.2
     # via
