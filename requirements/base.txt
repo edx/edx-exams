@@ -43,12 +43,14 @@ django==3.2.18
     # via
     #   -c https://raw.githubusercontent.com/edx/edx-lint/master/edx_lint/files/common_constraints.txt
     #   -r requirements/base.in
+    #   django-appconf
     #   django-config-models
     #   django-cors-headers
     #   django-crum
     #   django-extensions
     #   django-filter
     #   django-model-utils
+    #   django-statici18n
     #   djangorestframework
     #   drf-jwt
     #   drf-yasg
@@ -62,6 +64,8 @@ django==3.2.18
     #   lti-consumer-xblock
     #   openedx-filters
     #   social-auth-app-django
+django-appconf==1.0.5
+    # via django-statici18n
 django-config-models==2.3.0
     # via lti-consumer-xblock
 django-cors-headers==3.14.0
@@ -70,7 +74,7 @@ django-crum==0.7.9
     # via edx-django-utils
 django-extensions==3.2.1
     # via -r requirements/base.in
-django-filter==23.1
+django-filter==23.2
     # via lti-consumer-xblock
 django-model-utils==4.3.1
     # via -r requirements/base.in
@@ -80,6 +84,8 @@ django-simple-history==3.0.0
     # via
     #   -c https://raw.githubusercontent.com/edx/edx-lint/master/edx_lint/files/common_constraints.txt
     #   -r requirements/base.in
+django-statici18n==2.3.1
+    # via lti-consumer-xblock
 django-waffle==3.0.0
     # via
     #   -r requirements/base.in
@@ -137,7 +143,7 @@ jsonfield==3.1.0
     # via lti-consumer-xblock
 lazy==1.5
     # via lti-consumer-xblock
-lti-consumer-xblock==9.0.3
+lti-consumer-xblock==9.2.0
     # via -r requirements/base.in
 lxml==4.9.2
     # via
@@ -210,7 +216,7 @@ pyyaml==6.0
     # via
     #   edx-django-release-util
     #   xblock
-requests==2.28.2
+requests==2.29.0
     # via
     #   coreapi
     #   edx-drf-extensions
@@ -221,7 +227,7 @@ requests==2.28.2
     #   social-auth-core
 requests-oauthlib==1.3.1
     # via social-auth-core
-ruamel-yaml==0.17.21
+ruamel-yaml==0.17.22
     # via drf-yasg
 ruamel-yaml-clib==0.2.7
     # via ruamel-yaml
