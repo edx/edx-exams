@@ -2,10 +2,10 @@
 LTI Views
 """
 
-from urllib.parse import urljoin
 
 import json
 import logging
+from urllib.parse import urljoin
 
 from django.contrib.auth import login
 from django.http import JsonResponse
@@ -15,18 +15,18 @@ from django.views.decorators.http import require_http_methods
 from edx_rest_framework_extensions.auth.jwt.authentication import JwtAuthentication
 from lti_consumer.api import get_end_assessment_return, get_lti_1p3_launch_start_url
 from lti_consumer.data import Lti1p3LaunchData, Lti1p3ProctoringLaunchData
-from lti_consumer.models import LtiConfiguration
 from lti_consumer.lti_1p3.extensions.rest_framework.authentication import Lti1p3ApiAuthentication
 from lti_consumer.lti_1p3.extensions.rest_framework.permissions import LtiProctoringAcsPermissions
+from lti_consumer.models import LtiConfiguration
 from rest_framework import status
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from edx_exams.apps.core.api import (
-    get_attempt_by_id,
-    update_attempt_status,
     get_attempt_by_attempt_number_and_resource_id,
+    get_attempt_by_id,
+    update_attempt_status
 )
 from edx_exams.apps.core.exceptions import ExamIllegalStatusTransition
 from edx_exams.apps.core.statuses import ExamAttemptStatus
