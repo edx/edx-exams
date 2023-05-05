@@ -87,7 +87,9 @@ class LtiStartProctoringTestCase(ExamsAPITestCase):
         )
         expected_proctoring_launch_data = Lti1p3ProctoringLaunchData(
             attempt_number=self.attempt.attempt_number,
-            start_assessment_url=expected_proctoring_start_assessment_url
+            start_assessment_url=expected_proctoring_start_assessment_url,
+            assessment_control_url='http://test.exams:18740/lti/1/acs',
+            assessment_control_actions=['flagRequest'],
         )
 
         expected_launch_data = Lti1p3LaunchData(

@@ -23,7 +23,11 @@ from rest_framework.decorators import api_view, authentication_classes, permissi
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from edx_exams.apps.core.api import get_attempt_by_id, update_attempt_status, get_attempt_by_attempt_number_and_resource_id
+from edx_exams.apps.core.api import (
+    get_attempt_by_id,
+    update_attempt_status,
+    get_attempt_by_attempt_number_and_resource_id,
+)
 from edx_exams.apps.core.exceptions import ExamIllegalStatusTransition
 from edx_exams.apps.core.statuses import ExamAttemptStatus
 from edx_exams.apps.lti.utils import get_lti_root
@@ -45,7 +49,7 @@ LTI_PROCTORING_ASSESSMENT_CONTROL_ACTIONS = [
 @require_http_methods(['POST'])
 @authentication_classes((Lti1p3ApiAuthentication,))
 @permission_classes((LtiProctoringAcsPermissions,))
-def acs(request, lti_config_id):
+def acs(request):
     """
     Endpoint for ACS actions
 
@@ -64,7 +68,7 @@ def acs(request, lti_config_id):
     user = data['user']
 
     # The link to exam the user is attempting
-    resource_link = data['resource_link']
+    resource_id = data['resource_link']['id']
 
     # Exam attempt number (Note: ACS does not differentiate between launches)
     # i.e, if a launch fails and multiple subsequent launches occur for
@@ -85,15 +89,16 @@ def acs(request, lti_config_id):
         ExamAttemptStatus.submitted,
     ]
 
-    attempt = get_attempt_by_attempt_number_and_resource_id(attempt_number, resource_link['id'])
+    attempt = get_attempt_by_attempt_number_and_resource_id(attempt_number, resource_id)
     if attempt.status not in VALID_STATUSES:
         # TODO: improve this msg with fields and stuff
         log.info(
-            f'Attempt cannot be flagged',
-            f'Attempt not in progress or completed'
+            f'Attempt cannot be flagged for user {user} in',
+            f'with resource id {resource_id} and attempt',
+            f'number {attempt_number}.'
         )
         # NOTE: Do we want to create a new exception in exceptions.py just for this case?
-        return
+        return Response(status=400)
 
     if action == 'flag':
         log.info('Flagging exam attempt')
