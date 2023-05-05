@@ -75,11 +75,6 @@ def acs(request, lti_config_id):
     # ACS action to be performed
     action = data['action']
 
-    # Debug code, delete later
-    print("user:", user)
-    print("resource_link:", resource_link)
-    print("attempt_number:", attempt_number)
-
     # Data validation: Make sure that the exam attempt is either ongoing or completed.
     # But not verified, rejected, or expired (no need to flag in these cases)
     # Therefore, any attempt with status from 'started' to 'submitted' can be flagged
@@ -99,7 +94,6 @@ def acs(request, lti_config_id):
         )
         # NOTE: Do we want to create a new exception in exceptions.py just for this case?
         return
-
 
     if action == 'flag':
         log.info('Flagging exam attempt')
