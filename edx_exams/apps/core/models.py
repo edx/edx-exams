@@ -232,7 +232,6 @@ class ExamAttempt(TimeStampedModel):
         except cls.DoesNotExist:
             return True
 
-
     @classmethod
     def get_attempt_for_user_with_attempt_number_and_resource_id(cls, user_id, attempt_number, resource_id):
         """
@@ -240,7 +239,6 @@ class ExamAttempt(TimeStampedModel):
         attempt number described by attempt_number.
         """
         try:
-            print("User ID is int is:", isinstance(user_id, int))
             # If user_id is an integer, use our internal database ID
             if isinstance(user_id, int):
                 attempt = ExamAttempt.objects.get(

@@ -31,7 +31,6 @@ from edx_exams.apps.core.api import (
 from edx_exams.apps.core.exceptions import ExamIllegalStatusTransition
 from edx_exams.apps.core.statuses import ExamAttemptStatus
 from edx_exams.apps.lti.utils import get_lti_root
-from edx_exams.apps.core.models import User
 
 log = logging.getLogger(__name__)
 
@@ -67,7 +66,6 @@ def acs(request, lti_config_id):
 
     # This identifies the proctoring tool the request is coming from.
     user_id = data['user']['sub']
-    print("USER ID TYPE:", type(user_id))
 
     # The link to exam the user is attempting
     resource_id = data['resource_link']['id']
@@ -91,9 +89,6 @@ def acs(request, lti_config_id):
         ExamAttemptStatus.submitted,
     ]
 
-    # TODO: "sub" is actually the "anonymous_user_id"
-    # Therefore, we need to get the user's "id" from the "anonymous_user_id"
-    # We can do this either within this API function, or via another api.py function.
     attempt = get_attempt_for_user_with_attempt_number_and_resource_id(user_id, attempt_number, resource_id)
     if attempt is None:
         log.info(
