@@ -232,26 +232,6 @@ class ExamAttempt(TimeStampedModel):
         except cls.DoesNotExist:
             return True
 
-    @classmethod
-    def get_attempt_by_attempt_number_and_resource_id(cls, attempt_number, resource_id):
-        """
-        Retrieve an attempt in an exam described by resource_id with a particular attempt
-        number described by attempt_number.
-        """
-        try:
-            attempt = ExamAttempt.objects.get(
-                attempt_number=attempt_number,
-                exam__resource_id=resource_id
-            )
-            return attempt
-        except cls.DoesNotExist:
-            return None
-        except cls.MultipleObjectsReturned:
-            log.warning(
-                f'attempt_number={attempt_number} in exam with resource_id={resource_id} is '
-                'associated with multiple attempts.'
-            )
-            return None
 
     @classmethod
     def get_attempt_for_user_with_attempt_number_and_resource_id(cls, user_id, attempt_number, resource_id):

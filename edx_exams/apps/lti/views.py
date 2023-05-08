@@ -24,7 +24,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from edx_exams.apps.core.api import (
-    get_attempt_by_attempt_number_and_resource_id,
+    get_attempt_for_user_with_attempt_number_and_resource_id,
     get_attempt_by_id,
     update_attempt_status
 )
@@ -49,7 +49,7 @@ LTI_PROCTORING_ASSESSMENT_CONTROL_ACTIONS = [
 @require_http_methods(['POST'])
 @authentication_classes((Lti1p3ApiAuthentication,))
 @permission_classes((LtiProctoringAcsPermissions,))
-def acs(request):
+def acs(request, lti_config_id):
     """
     Endpoint for ACS actions
 
@@ -65,7 +65,7 @@ def acs(request):
     data = json.loads(request.body)
 
     # This identifies the proctoring tool the request is coming from.
-    user = data['user']
+    user_id = data['user']['sub']
 
     # The link to exam the user is attempting
     resource_id = data['resource_link']['id']
@@ -89,19 +89,31 @@ def acs(request):
         ExamAttemptStatus.submitted,
     ]
 
-    attempt = get_attempt_by_attempt_number_and_resource_id(attempt_number, resource_id)
-    if attempt.status not in VALID_STATUSES:
-        # TODO: improve this msg with fields and stuff
+    attempt = get_attempt_for_user_with_attempt_number_and_resource_id(user_id, attempt_number, resource_id)
+    if attempt is None:
         log.info(
-            f'Attempt cannot be flagged for user {user} in',
-            f'with resource id {resource_id} and attempt',
-            f'number {attempt_number}.'
+            f'No attempt found for user with id {user_id}'
+            f'with resource id {resource_id} and attempt number {attempt_number}.'
+            f'for lti config id {lti_config_id}.'
+        )
+    if attempt.status not in VALID_STATUSES:
+        log.info(
+            f'Attempt cannot be flagged for user with id {user_id}'
+            f'with resource id {resource_id} and attempt number {attempt_number}.'
+            f'for lti config id {lti_config_id}. It has either not started yet, '
+            'been rejcected, expired, or already verified.'
         )
         # NOTE: Do we want to create a new exception in exceptions.py just for this case?
         return Response(status=400)
 
     if action == 'flag':
-        log.info('Flagging exam attempt')
+        log.info(
+            f'Flagging exam for user with id {user_id}'
+            f'with resource id {resource_id} and attempt number {attempt_number}.'
+            f'for lti config id {lti_config_id}. '
+            f'Exam id {attempt.exam.id} '
+            f'Attempt id {attempt.id}'
+        )
 
     return Response(action, 200)
 

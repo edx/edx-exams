@@ -48,17 +48,6 @@ def get_latest_attempt_for_user(user_id):
     return latest_attempt
 
 
-def get_attempt_by_attempt_number_and_resource_id(attempt_number, resource_id):
-    """
-    Retrieve an attempt in an exam described by resource_id with a particular attempt
-    number described by attempt_number.
-    """
-    return ExamAttempt.get_attempt_by_attempt_number_and_resource_id(
-        attempt_number,
-        resource_id,
-    )
-
-
 def get_attempt_for_user_with_attempt_number_and_resource_id(user_id, attempt_number, resource_id):
     """
     Retrieve an attempt in an exam described by resource_id for a user described by user_id with a particular attempt
