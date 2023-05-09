@@ -416,6 +416,18 @@ class TestGetLatestAttemptForUser(ExamsAPITestCase):
             allowed_time_limit_mins=None
         )
 
+    def assert_latest_attempt(self, expected_attempt):
+        """
+        Helper method that asserts that expected attempt matches
+        latest attempt.
+        """
+
+        latest_attempt = get_latest_attempt_for_user(self.user.id)
+        self.assertEqual(latest_attempt.status, expected_attempt.status)
+        self.assertEqual(latest_attempt.attempt_number, expected_attempt.attempt_number)
+        self.assertEqual(latest_attempt.user.username, expected_attempt.user.username)
+        self.assertEqual(latest_attempt.exam.content_id, expected_attempt.exam.content_id)
+
     def test_get_latest_exam_attempt_for_user(self):
         """
         Test that the GET function in the ExamAttempt view returns
@@ -425,12 +437,7 @@ class TestGetLatestAttemptForUser(ExamsAPITestCase):
         one_hour_ago = datetime.now() - timedelta(hours=1)
         expected_attempt = self.create_mock_attempt(self.user, ExamAttemptStatus.started, datetime.now())
         self.create_mock_attempt(self.user, ExamAttemptStatus.started, one_hour_ago)
-        latest_attempt = get_latest_attempt_for_user(self.user.id)
-
-        self.assertEqual(latest_attempt.status, expected_attempt.status)
-        self.assertEqual(latest_attempt.attempt_number, expected_attempt.attempt_number)
-        self.assertEqual(latest_attempt.user.username, expected_attempt.user.username)
-        self.assertEqual(latest_attempt.exam.content_id, expected_attempt.exam.content_id)
+        self.assert_latest_attempt(expected_attempt)
 
     def test_no_attempt_for_user(self):
         """
@@ -441,13 +448,29 @@ class TestGetLatestAttemptForUser(ExamsAPITestCase):
 
         self.assertIsNone(get_latest_attempt_for_user(9999999999))
 
-    def test_no_attempts_have_start_time(self):
+    def test_get_latest_exam_attempt_no_start_time(self):
         """
-        Test that is the user has no exam attempts with a start time, that the endpoint returns None
+        Test that the GET function in the ExamAttempt view returns
+        the latest exam attempt for a user with multiple attempts
+        without a start time.
         """
+
+        self.create_mock_attempt(self.user, ExamAttemptStatus.created, None)
+        expected_attempt = self.create_mock_attempt(self.user, ExamAttemptStatus.ready_to_start, None)
+
+        self.assert_latest_attempt(expected_attempt)
+
+    def test_get_latest_exam_attempt_prioritize_started(self):
+        """
+        Test that the GET function in the ExamAttempt view returns
+        the latest exam attempt for a user with started attempt.
+        """
+
+        one_hour_ago = datetime.now() - timedelta(hours=1)
+        expected_attempt = self.create_mock_attempt(self.user, ExamAttemptStatus.started, one_hour_ago)
         self.create_mock_attempt(self.user, ExamAttemptStatus.created, None)
 
-        self.assertIsNone(get_latest_attempt_for_user(self.user.id))
+        self.assert_latest_attempt(expected_attempt)
 
 
 @ddt.ddt
