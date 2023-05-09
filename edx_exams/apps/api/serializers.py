@@ -138,3 +138,34 @@ class StudentAttemptSerializer(serializers.ModelSerializer):
             'attempt_id', 'attempt_status', 'course_id', 'exam_type',
             'exam_display_name', 'exam_url_path', 'time_remaining_seconds'
         )
+
+
+class InstructorViewAttemptSerializer(serializers.ModelSerializer):
+    """
+    Serializer for the ExamAttempt model containing fields needed for the instructor view
+    """
+
+    # directly from the ExamAttempt Model
+    attempt_id = serializers.IntegerField(source='id')
+    attempt_status = serializers.CharField(source='status')
+    start_time = DateTimeField(format=None)
+    end_time = DateTimeField(format=None)
+    allowed_time_limit_mins = serializers.IntegerField()
+
+    # fields based on the ExamModel
+    exam_type = serializers.CharField(source='exam.exam_type')
+    exam_display_name = serializers.CharField(source='exam.exam_name')
+
+    # fields based on the UserModel
+    username = serializers.CharField(source='user.username')
+
+    class Meta:
+        """
+        Meta Class
+        """
+        model = ExamAttempt
+
+        fields = (
+            'attempt_id', 'attempt_status', 'start_time', 'end_time',
+            'allowed_time_limit_mins', 'exam_type', 'exam_display_name', 'username'
+        )
