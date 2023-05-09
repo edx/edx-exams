@@ -32,7 +32,7 @@ bleach==6.0.0
     #   readme-renderer
 build==0.10.0
     # via -r requirements/doc.in
-certifi==2022.12.7
+certifi==2023.5.7
     # via
     #   -r requirements/test.txt
     #   requests
@@ -96,7 +96,7 @@ distlib==0.3.6
     # via
     #   -r requirements/test.txt
     #   virtualenv
-django==3.2.18
+django==3.2.19
     # via
     #   -c https://raw.githubusercontent.com/edx/edx-lint/master/edx_lint/files/common_constraints.txt
     #   -r requirements/test.txt
@@ -218,7 +218,7 @@ exceptiongroup==1.1.1
     #   pytest
 factory-boy==3.2.1
     # via -r requirements/test.txt
-faker==18.6.1
+faker==18.7.0
     # via
     #   -r requirements/test.txt
     #   factory-boy
@@ -292,7 +292,7 @@ lazy-object-proxy==1.9.0
     # via
     #   -r requirements/test.txt
     #   astroid
-lti-consumer-xblock==9.2.0
+lti-consumer-xblock==9.4.0
     # via -r requirements/test.txt
 lxml==4.9.2
     # via
@@ -403,7 +403,7 @@ pyjwt[crypto]==2.6.0
     #   edx-drf-extensions
     #   edx-rest-api-client
     #   social-auth-core
-pylint==2.17.3
+pylint==2.17.4
     # via
     #   -r requirements/test.txt
     #   edx-lint
@@ -474,7 +474,7 @@ pyyaml==6.0
     #   xblock
 readme-renderer==37.3
     # via twine
-requests==2.29.0
+requests==2.30.0
     # via
     #   -r requirements/test.txt
     #   coreapi
@@ -502,7 +502,7 @@ rfc3986==2.0.0
     # via twine
 rich==13.3.5
     # via twine
-ruamel-yaml==0.17.22
+ruamel-yaml==0.17.24
     # via
     #   -r requirements/test.txt
     #   drf-yasg
@@ -617,7 +617,7 @@ uritemplate==4.1.1
     #   -r requirements/test.txt
     #   coreapi
     #   drf-yasg
-urllib3==1.26.15
+urllib3==2.0.2
     # via
     #   -r requirements/test.txt
     #   requests

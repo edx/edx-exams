@@ -12,7 +12,7 @@ attrs==23.1.0
     # via lti-consumer-xblock
 bleach==6.0.0
     # via lti-consumer-xblock
-certifi==2022.12.7
+certifi==2023.5.7
     # via requests
 cffi==1.15.1
     # via
@@ -39,7 +39,7 @@ defusedxml==0.7.1
     # via
     #   python3-openid
     #   social-auth-core
-django==3.2.18
+django==3.2.19
     # via
     #   -c https://raw.githubusercontent.com/edx/edx-lint/master/edx_lint/files/common_constraints.txt
     #   -r requirements/base.in
@@ -143,7 +143,7 @@ jsonfield==3.1.0
     # via lti-consumer-xblock
 lazy==1.5
     # via lti-consumer-xblock
-lti-consumer-xblock==9.2.0
+lti-consumer-xblock==9.4.0
     # via -r requirements/base.in
 lxml==4.9.2
     # via
@@ -216,7 +216,7 @@ pyyaml==6.0
     # via
     #   edx-django-release-util
     #   xblock
-requests==2.29.0
+requests==2.30.0
     # via
     #   coreapi
     #   edx-drf-extensions
@@ -227,7 +227,7 @@ requests==2.29.0
     #   social-auth-core
 requests-oauthlib==1.3.1
     # via social-auth-core
-ruamel-yaml==0.17.22
+ruamel-yaml==0.17.24
     # via drf-yasg
 ruamel-yaml-clib==0.2.7
     # via ruamel-yaml
@@ -264,7 +264,7 @@ uritemplate==4.1.1
     # via
     #   coreapi
     #   drf-yasg
-urllib3==1.26.15
+urllib3==2.0.2
     # via requests
 web-fragments==2.0.0
     # via
