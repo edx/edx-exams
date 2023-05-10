@@ -24,8 +24,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from edx_exams.apps.core.api import (
-    get_attempt_for_user_with_attempt_number_and_resource_id,
     get_attempt_by_id,
+    get_user_by_anonymous_id,
     update_attempt_status
 )
 from edx_exams.apps.core.exceptions import ExamIllegalStatusTransition
@@ -65,7 +65,7 @@ def acs(request, lti_config_id):
     data = json.loads(request.body)
 
     # This identifies the proctoring tool the request is coming from.
-    user_id = data['user']['sub']
+    anonymous_user_id = data['user']['sub']
 
     # The link to exam the user is attempting
     resource_id = data['resource_link']['id']
@@ -83,39 +83,42 @@ def acs(request, lti_config_id):
     # But not verified, rejected, or expired (no need to flag in these cases)
     # Therefore, any attempt with status from 'started' to 'submitted' can be flagged
     VALID_STATUSES = [
+        ExamAttemptStatus.ready_to_start,
         ExamAttemptStatus.started,
         ExamAttemptStatus.ready_to_submit,
         ExamAttemptStatus.timed_out,
         ExamAttemptStatus.submitted,
     ]
 
-    attempt = get_attempt_for_user_with_attempt_number_and_resource_id(user_id, attempt_number, resource_id)
+    attempt = get_user_by_anonymous_id(anonymous_user_id, attempt_number, resource_id)
     if attempt is None:
-        log.info(
-            f'No attempt found for user with id {user_id}'
-            f'with resource id {resource_id} and attempt number {attempt_number}.'
-            f'for lti config id {lti_config_id}.'
+        error_msg = (
+            f'No attempt found for user with anonymous id {anonymous_user_id} '
+            f'with resource id {resource_id} and attempt number {attempt_number} '
+            f'for lti config id {lti_config_id}, exam id {attempt.exam.id}, and attempt id {attempt.id}.'
         )
+        log.info(error_msg)
+        return Response(error_msg, status=400)
     if attempt.status not in VALID_STATUSES:
-        log.info(
-            f'Attempt cannot be flagged for user with id {user_id}'
-            f'with resource id {resource_id} and attempt number {attempt_number}.'
-            f'for lti config id {lti_config_id}. It has either not started yet, '
-            'been rejcected, expired, or already verified.'
+        error_msg = (
+            f'Attempt cannot be flagged for user with anonymous id {anonymous_user_id} '
+            f'with resource id {resource_id} and attempt number {attempt_number} '
+            f'for lti config id {lti_config_id}, exam id {attempt.exam.id}, and attempt id {attempt.id}.'
+            f'It has either not started yet, been rejcected, expired, or already verified.'
         )
         # NOTE: Do we want to create a new exception in exceptions.py just for this case?
-        return Response(status=400)
+        log.info(error_msg)
+        return Response(error_msg, status=400)
 
     if action == 'flag':
-        log.info(
-            f'Flagging exam for user with id {user_id}'
-            f'with resource id {resource_id} and attempt number {attempt_number}.'
-            f'for lti config id {lti_config_id}. '
-            f'Exam id {attempt.exam.id} '
-            f'Attempt id {attempt.id}'
+        success_msg = (
+            f'Flagging exam for user with id {anonymous_user_id} '
+            f'with resource id {resource_id} and attempt number {attempt_number} '
+            f'for lti config id {lti_config_id}, exam id {attempt.exam.id}, and attempt id {attempt.id}.'
         )
+        log.info(success_msg)
 
-    return Response(action, 200)
+    return Response(success_msg, 200)
 
 
 @api_view(['GET'])

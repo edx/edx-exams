@@ -239,20 +239,11 @@ class ExamAttempt(TimeStampedModel):
         attempt number described by attempt_number.
         """
         try:
-            # If user_id is an integer, use our internal database ID
-            if isinstance(user_id, int):
-                attempt = ExamAttempt.objects.get(
-                    user_id=user_id,
-                    attempt_number=attempt_number,
-                    exam__resource_id=resource_id
-                )
-            # If not an integer, use the User object's anonymous_user_id instead
-            else:
-                attempt = ExamAttempt.objects.get(
-                    user__anonymous_user_id=user_id,
-                    attempt_number=attempt_number,
-                    exam__resource_id=resource_id
-                )
+            attempt = ExamAttempt.objects.get(
+                user_id=user_id,
+                attempt_number=attempt_number,
+                exam__resource_id=resource_id
+            )
             return attempt
         except cls.DoesNotExist:
             return None
