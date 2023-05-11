@@ -15,7 +15,12 @@ from token_utils.api import unpack_token_for
 
 from edx_exams.apps.api.serializers import ExamSerializer, StudentAttemptSerializer
 from edx_exams.apps.api.test_utils import ExamsAPITestCase
-from edx_exams.apps.api.test_utils.factories import UserFactory
+from edx_exams.apps.api.test_utils.factories import (
+    CourseExamConfigurationFactory,
+    ExamAttemptFactory,
+    ExamFactory,
+    UserFactory
+)
 from edx_exams.apps.core.exam_types import get_exam_type
 from edx_exams.apps.core.exceptions import ExamAttemptOnPastDueExam, ExamIllegalStatusTransition
 from edx_exams.apps.core.models import CourseExamConfiguration, Exam, ExamAttempt, ProctoringProvider
@@ -1197,6 +1202,98 @@ class ExamAttemptViewTest(ExamsAPITestCase):
 
         if start_immediately:
             mock_update_attempt.assert_called_once_with(mock_attempt_id, ExamAttemptStatus.started)
+
+
+class ExamAttemptListViewTests(ExamsAPITestCase):
+    """
+    Tests ExamAttemptListView
+    """
+    def setUp(self):
+        super().setUp()
+
+        CourseExamConfigurationFactory.create()
+
+        self.exam_1 = ExamFactory.create()
+        self.exam_2 = ExamFactory.create()
+
+    def get_api(self, exam_id, user=None, page_limit=20):
+        """
+        Helper function to make GET request to the API
+        """
+        user = user or self.user
+        headers = self.build_jwt_headers(user)
+        url = reverse(
+            'api:v1:instructor-attempts-list'
+        )
+
+        return self.client.get(f'{url}?exam_id={exam_id}&limit={page_limit}', **headers)
+
+    def test_requires_staff_user(self):
+        """
+        Test that only staff users can access this endpoint
+        """
+        non_staff_user = UserFactory.create()
+        response = self.get_api(self.exam_1.id, user=non_staff_user)
+        self.assertEqual(response.status_code, 403)
+
+    def test_get_attempt_list_response_data(self):
+        """
+        Test that a list of attempts includes the expected fields
+        """
+        # attempts for a different exam should not return
+        ExamAttemptFactory.create_batch(3, exam=self.exam_2)
+
+        # 3 junk attempts, we'll test the 4th explicitly
+        ExamAttemptFactory.create_batch(3, exam=self.exam_1)
+        user = UserFactory.create(username='attempt_test_user')
+        attempt = ExamAttemptFactory.create(
+            user=user,
+            exam=self.exam_1,
+            status=ExamAttemptStatus.submitted,
+            start_time=timezone.now() - timedelta(hours=2),
+        )
+
+        response = self.get_api(self.exam_1.id)
+        results = response.data.get('results')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data.get('count'), 4)
+        self.assertDictEqual(results[0], {
+            'username': 'attempt_test_user',
+            'attempt_id': attempt.id,
+            'attempt_status': ExamAttemptStatus.submitted,
+            'start_time': attempt.start_time,
+            'end_time': attempt.end_time,
+            'allowed_time_limit_mins': attempt.allowed_time_limit_mins,
+            'exam_type': self.exam_1.exam_type,
+            'exam_display_name': self.exam_1.exam_name,
+        })
+
+    def test_get_attempt_list_response_pagination(self):
+        """
+        Test that the response includes pagination data
+        """
+        ExamAttemptFactory.create_batch(12, exam=self.exam_1)
+        ExamAttemptFactory.create_batch(5, exam=self.exam_2)
+
+        response = self.get_api(self.exam_1.id, page_limit=5)
+        next_url = response.data.get('next')
+        self.assertEqual(next_url, 'http://testserver/api/v1/instructor_view/attempts?exam_id=1&limit=5&offset=5')
+        self.assertEqual(response.data.get('count'), 12)
+        self.assertEqual(len(response.data.get('results')), 5)
+
+        headers = self.build_jwt_headers(self.user)
+        response = self.client.get(next_url, **headers)
+
+        next_url = response.data.get('next')
+        self.assertEqual(next_url, 'http://testserver/api/v1/instructor_view/attempts?exam_id=1&limit=5&offset=10')
+        self.assertEqual(
+            response.data.get('previous'), 'http://testserver/api/v1/instructor_view/attempts?exam_id=1&limit=5'
+        )
+        self.assertEqual(response.data.get('count'), 12)
+        self.assertEqual(len(response.data.get('results')), 5)
+
+        response = self.client.get(next_url, **headers)
+        self.assertEqual(len(response.data.get('results')), 2)
 
 
 class CourseExamAttemptViewTest(ExamsAPITestCase):

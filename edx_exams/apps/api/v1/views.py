@@ -561,12 +561,12 @@ class ExamAttemptView(ExamsAPIView):
         return Response(data)
 
 
-class ExamAttemptListView(ExamsAPIView):
+class InstructorAttemptsListView(ExamsAPIView):
     """
     Endpoint for listing exam attempts. Used to provide data for the instructor
     facing exam dashboard.
 
-    /exams/attempt?exam_id=<exam_id>
+    /instructor_view/attempts?exam_id=<exam_id>
 
     Supports:
         HTTP GET: List student exam attempts.
