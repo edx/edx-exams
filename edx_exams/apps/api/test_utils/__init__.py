@@ -59,3 +59,20 @@ class ExamsAPITestCase(JwtMixin, APITestCase):
         jwt_token = self.generate_token(jwt_payload)
         headers = {'HTTP_AUTHORIZATION': 'JWT ' + jwt_token}
         return headers
+
+
+class LTIToolRequestsTestCase(JwtMixin, APITestCase):
+    """
+    Base class for testing views that handle requests from LTI tools to the edx-exams service
+    """
+    def setUp(self):
+        """
+        Perform operations common to all tests
+        """
+        self.field = "value"
+
+    def function(self):
+        """
+        do something
+        """
+        return
