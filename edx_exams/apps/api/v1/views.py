@@ -10,12 +10,18 @@ from edx_api_doc_tools import path_parameter, schema
 from edx_rest_framework_extensions.auth.jwt.authentication import JwtAuthentication
 from rest_framework import status
 from rest_framework.generics import ListAPIView
+from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from token_utils.api import sign_token_for
 
 from edx_exams.apps.api.permissions import StaffUserOrReadOnlyPermissions, StaffUserPermissions
-from edx_exams.apps.api.serializers import ExamSerializer, ProctoringProviderSerializer, StudentAttemptSerializer
+from edx_exams.apps.api.serializers import (
+    ExamSerializer,
+    InstructorViewAttemptSerializer,
+    ProctoringProviderSerializer,
+    StudentAttemptSerializer
+)
 from edx_exams.apps.api.v1 import ExamsAPIView
 from edx_exams.apps.core.api import (
     check_if_exam_timed_out,
@@ -24,6 +30,7 @@ from edx_exams.apps.core.api import (
     get_course_exams,
     get_current_exam_attempt,
     get_exam_attempt_time_remaining,
+    get_exam_attempts,
     get_exam_by_content_id,
     get_latest_attempt_for_user,
     get_provider_by_exam_id,
@@ -556,6 +563,44 @@ class ExamAttemptView(ExamsAPIView):
 
         data = {'exam_attempt_id': exam_attempt_id}
         return Response(data)
+
+
+class InstructorAttemptsListView(ExamsAPIView):
+    """
+    Endpoint for listing exam attempts. Used to provide data for the instructor
+    facing exam dashboard.
+
+    /instructor_view/attempts?exam_id=<exam_id>
+
+    Supports:
+        HTTP GET: List student exam attempts.
+    """
+
+    authentication_classes = (JwtAuthentication,)
+    permission_classes = (StaffUserPermissions,)
+
+    def get(self, request):
+        """
+        HTTP GET handler to fetch all exam attempt data for a given exam.
+
+        Query Parameters:
+            exam_id: Unique identifier for an exam.
+
+        Returns:
+            A Response object containing all `ExamAttempt` data.
+        """
+        exam_id = request.query_params.get('exam_id', None)
+
+        # instructor serializer will follow FK relationships to get user and
+        # exam fields. This list is potentially large so use
+        # select related to avoid n+1 issues.
+        attempts = get_exam_attempts(exam_id).select_related('exam', 'user')
+
+        paginator = LimitOffsetPagination()
+        paginated_attempts = paginator.paginate_queryset(attempts, request)
+        return paginator.get_paginated_response(
+            InstructorViewAttemptSerializer(paginated_attempts, many=True).data
+        )
 
 
 class CourseExamAttemptView(ExamsAPIView):
