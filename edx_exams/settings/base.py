@@ -80,6 +80,10 @@ MIDDLEWARE = (
     'edx_exams.apps.router.middleware.ExamRequestMiddleware'
 )
 
+REST_FRAMEWORK = {
+    'PAGE_SIZE': 100
+}
+
 # Enable CORS
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_HEADERS = corsheaders_default_headers + (

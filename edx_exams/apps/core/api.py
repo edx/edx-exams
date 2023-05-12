@@ -22,6 +22,13 @@ from edx_exams.apps.core.statuses import ExamAttemptStatus
 log = logging.getLogger(__name__)
 
 
+def get_exam_attempts(exam_id):
+    """
+    Return all attempts for an exam
+    """
+    return ExamAttempt.objects.filter(exam_id=exam_id).order_by('-created')
+
+
 def get_attempt_by_id(attempt_id):
     """
     Return an attempt by id

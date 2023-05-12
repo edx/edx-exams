@@ -215,9 +215,7 @@ class ExamAttempt(TimeStampedModel):
         If start_time does not exist for any attempt, return None
         """
         try:
-            attempt = cls.objects.filter(user_id=user_id).latest('start_time')
-            if attempt.start_time is None:
-                return None
+            attempt = cls.objects.filter(user_id=user_id).latest('start_time', 'created')
         except cls.DoesNotExist:
             attempt = None
         return attempt
