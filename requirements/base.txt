@@ -68,7 +68,7 @@ django-appconf==1.0.5
     # via django-statici18n
 django-config-models==2.3.0
     # via lti-consumer-xblock
-django-cors-headers==3.14.0
+django-cors-headers==4.0.0
     # via -r requirements/base.in
 django-crum==0.7.9
     # via edx-django-utils
@@ -143,7 +143,7 @@ jsonfield==3.1.0
     # via lti-consumer-xblock
 lazy==1.5
     # via lti-consumer-xblock
-lti-consumer-xblock==9.4.0
+lti-consumer-xblock==9.5.0
     # via -r requirements/base.in
 lxml==4.9.2
     # via
@@ -188,7 +188,7 @@ pyjwkest==1.4.2
     #   edx-drf-extensions
     #   edx-token-utils
     #   lti-consumer-xblock
-pyjwt[crypto]==2.6.0
+pyjwt[crypto]==2.7.0
     # via
     #   drf-jwt
     #   edx-auth-backends
@@ -227,7 +227,7 @@ requests==2.30.0
     #   social-auth-core
 requests-oauthlib==1.3.1
     # via social-auth-core
-ruamel-yaml==0.17.24
+ruamel-yaml==0.17.26
     # via drf-yasg
 ruamel-yaml-clib==0.2.7
     # via ruamel-yaml
@@ -256,7 +256,7 @@ social-auth-core==4.4.2
     #   social-auth-app-django
 sqlparse==0.4.4
     # via django
-stevedore==5.0.0
+stevedore==5.1.0
     # via
     #   edx-django-utils
     #   edx-opaque-keys
