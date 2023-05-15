@@ -7,6 +7,7 @@ import logging
 
 from django.http import JsonResponse
 from edx_rest_framework_extensions.auth.jwt.authentication import JwtAuthentication
+from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 
@@ -40,11 +41,21 @@ class CourseExamsLegacyView(APIView):
                 exam['is_proctored'] = exam_type.is_proctored
                 exam['is_practice_exam'] = exam_type.is_practice
 
-        response_data, status = register_exams(course_id, exam_list)
+        response_data, response_status = register_exams(course_id, exam_list)
 
         return JsonResponse(
             data=response_data,
-            status=status,
+            status=response_status,
+            safe=False,
+        )
+
+    def get(self, request, course_id):  # pylint: disable=unused-argument
+        """
+        Currently unsupported endpoint
+        """
+        return JsonResponse(
+            data=[],
+            status=status.HTTP_404_NOT_FOUND,
             safe=False,
         )
 
@@ -61,7 +72,7 @@ class CourseExamAttemptLegacyView(APIView):
         Get exam and attempt data for user in a given section. Pass through
         the response from edx-proctoring directly.
         """
-        response_data, status = get_student_exam_attempt_data(course_id, content_id, request.user.lms_user_id)
+        response_data, response_status = get_student_exam_attempt_data(course_id, content_id, request.user.lms_user_id)
 
         # remove active_attempt to keep response consistent with CourseExamAttemptView
         if 'active_attempt' in response_data:
@@ -69,7 +80,7 @@ class CourseExamAttemptLegacyView(APIView):
 
         return JsonResponse(
             data=response_data,
-            status=status,
+            status=response_status,
             safe=False,
         )
 
@@ -85,10 +96,10 @@ class CourseProviderSettingsLegacyView(APIView):
         """
         Get provider settings given an exam ID. Pass through the response from edx-proctoring directly
         """
-        response_data, status = get_provider_settings(exam_id)
+        response_data, response_status = get_provider_settings(exam_id)
 
         return JsonResponse(
             data=response_data,
-            status=status,
+            status=response_status,
             safe=False
         )
