@@ -46,13 +46,12 @@ log = logging.getLogger(__name__)
 
 class CourseExamsView(ExamsAPIView):
     """
-    View to modify exams for a specific course.
+    View for exams in a specific course.
 
+    HTTP PATCH
     Given a list of exam data for a course, this view will either create a new exam (if one doesn't exist), or modify
     an existing exam. Any course exams missing from the request will be marked as inactive.
 
-    HTTP PATCH
-    Creates a new Exam.
     Expected PATCH data: [{
         "content_id": 123,
         "exam_name": "Test Examination",
@@ -72,6 +71,13 @@ class CourseExamsView(ExamsAPIView):
         * is_active: Whether this exam will be active.
     **Exceptions**
         * HTTP_400_BAD_REQUEST
+
+    HTTP GET
+    Return a list of active exams for a course.
+
+    **GET Response**
+    Returns:
+        * 200: OK, list of Exam Objects
     """
 
     authentication_classes = (JwtAuthentication,)
@@ -196,6 +202,14 @@ class CourseExamsView(ExamsAPIView):
             data = {'detail': 'Invalid data', 'errors': serializer.errors}
 
         return Response(status=response_status, data=data)
+
+    def get(self, request, course_id):
+        """
+        Return a list of all active exams given a course_id
+        """
+        course_exams = get_course_exams(course_id)
+        serialized_exams = ExamSerializer(course_exams, many=True).data
+        return Response(status=status.HTTP_200_OK, data=serialized_exams)
 
 
 class CourseExamConfigurationsView(ExamsAPIView):

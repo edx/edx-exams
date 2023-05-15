@@ -70,6 +70,13 @@ class CourseExamsViewTests(ExamsAPITestCase):
 
         return self.client.patch(self.url, data, **headers, content_type='application/json')
 
+    def get_api(self, user):
+        """
+        Helper function to make a get request to the API
+        """
+        headers = self.build_jwt_headers(user)
+        return self.client.get(self.url, **headers)
+
     def get_response(self, user, data, expected_response):
         """
         Helper function to get API response
@@ -269,6 +276,33 @@ class CourseExamsViewTests(ExamsAPITestCase):
         self.assertEqual(new_exam.due_date, pytz.utc.localize(datetime.fromisoformat('2025-07-01 00:00:00')))
         self.assertEqual(new_exam.hide_after_due, False)
         self.assertEqual(new_exam.is_active, True)
+
+    def test_exams_for_course(self):
+        """
+        Test that given a valid course id, a list of exams for that course are returned
+        """
+        response = self.get_api(self.user)
+        self.assertEqual(response.status_code, 200)
+
+        exams_response = response.data
+        self.assertEqual(len(exams_response), 1)
+
+        self.assertEqual(exams_response[0]['exam_name'], self.exam.exam_name)
+
+    def test_no_exams_for_course(self):
+        """
+        Test that an emtpy 200 response is returned for a course with no exams
+        """
+        # use course_id not associated with any exams
+        course_id = 'courses-v1:edx+testing2+2022'
+        CourseExamConfigurationFactory.create(course_id=course_id)
+        self.url = reverse('api:v1:exams-course_exams', kwargs={'course_id': course_id})
+
+        response = self.get_api(self.user)
+        self.assertEqual(response.status_code, 200)
+
+        exams_response = response.data
+        self.assertEqual(len(exams_response), 0)
 
 
 @ddt.ddt
