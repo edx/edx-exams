@@ -73,6 +73,7 @@ cryptography==40.0.2
     # via
     #   -r requirements/test.txt
     #   pyjwt
+    #   secretstorage
     #   social-auth-core
 ddt==1.6.0
     # via -r requirements/test.txt
@@ -195,7 +196,7 @@ edx-opaque-keys==2.3.0
     #   -r requirements/test.txt
     #   edx-drf-extensions
     #   lti-consumer-xblock
-edx-rest-api-client==5.5.0
+edx-rest-api-client==5.5.1
     # via -r requirements/test.txt
 edx-token-utils==0.2.1
     # via -r requirements/test.txt
@@ -253,6 +254,10 @@ itypes==1.2.0
     #   coreapi
 jaraco-classes==3.2.3
     # via keyring
+jeepney==0.8.0
+    # via
+    #   keyring
+    #   secretstorage
 jinja2==3.1.2
     # via
     #   -r requirements/test.txt
@@ -484,6 +489,8 @@ ruamel-yaml-clib==0.2.7
     # via
     #   -r requirements/test.txt
     #   ruamel-yaml
+secretstorage==3.3.3
+    # via keyring
 semantic-version==2.10.0
     # via
     #   -r requirements/test.txt
