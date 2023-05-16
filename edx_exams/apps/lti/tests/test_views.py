@@ -1,22 +1,18 @@
 '''
 Tests for the exams LTI views
 '''
+import json
 import uuid
 from unittest.mock import patch
 from urllib.parse import urljoin
 
 import ddt
 from Cryptodome.PublicKey import RSA
-
 from django.contrib.auth.models import AnonymousUser
 from django.urls import reverse
-from lti_consumer.lti_1p3.consumer import LtiConsumer1p3
 from lti_consumer.data import Lti1p3LaunchData, Lti1p3ProctoringLaunchData
-from lti_consumer.models import LtiConfiguration, LtiProctoringConsumer
-from lti_consumer.lti_1p3.consumer import LtiProctoringConsumer
 from lti_consumer.lti_1p3.extensions.rest_framework.authentication import Lti1p3ApiAuthentication
-from lti_consumer.lti_1p3.extensions.rest_framework.permissions import LtiProctoringAcsPermissions
-import json
+from lti_consumer.models import LtiConfiguration, LtiProctoringConsumer
 
 from edx_exams.apps.api.test_utils import ExamsAPITestCase, UserFactory
 from edx_exams.apps.core.models import CourseExamConfiguration, Exam, ExamAttempt
@@ -182,14 +178,16 @@ class LtiAcsTestCase(ExamsAPITestCase):
             expected_msg = (
                 f'Flagging exam for user with id {self.user.anonymous_user_id} '
                 f'with resource id {self.exam.resource_id} and attempt number {self.attempt.attempt_number} '
-                f'for lti config id {self.test_provider.lti_configuration_id}, exam id {self.exam.id}, and attempt id {self.attempt.id}.'
+                f'for lti config id {self.test_provider.lti_configuration_id}, exam id {self.exam.id}, '
+                f'and attempt id {self.attempt.id}.'
             )
         else:
             expected_msg = (
                 f'Attempt cannot be flagged for user with anonymous id {self.user.anonymous_user_id} '
                 f'with resource id {self.exam.resource_id} and attempt number {self.attempt.attempt_number} '
-                f'for lti config id {self.test_provider.lti_configuration_id}, exam id {self.exam.id}, and attempt id {self.attempt.id}. '
-                f'It has either not started yet, been rejcected, expired, or already verified.'
+                f'for lti config id {self.test_provider.lti_configuration_id}, exam id {self.exam.id}, and '
+                f'attempt id {self.attempt.id}. It has either not started yet, been rejcected, expired, or '
+                f'already verified.'
             )
 
         self.assertEqual(response.status_code, expected_response_status)
@@ -201,7 +199,10 @@ class LtiAcsTestCase(ExamsAPITestCase):
     @ patch.object(Lti1p3ApiAuthentication, 'authenticate', return_value=(AnonymousUser(), None))
     @ patch('edx_exams.apps.lti.views.LtiProctoringAcsPermissions.has_permission')
     @ patch('edx_exams.apps.lti.views.get_user_by_anonymous_id')
-    def test_acs_no_attempt_found(self, mock_get_attempt, mock_permissions, mock_authentication):  # pylint: disable=unused-argument
+    def test_acs_no_attempt_found(self,
+                                  mock_get_attempt,
+                                  mock_permissions,
+                                  mock_authentication):  # pylint: disable=unused-argument
         false_attempt_number = '88888888'
 
         mock_get_attempt.return_value = None
@@ -239,8 +240,6 @@ class LtiAcsTestCase(ExamsAPITestCase):
         )
 
         self.assertEqual(response.status_code, 400)
-        print("\n", response.data)
-        print("\n", expected_msg)
         self.assertEqual(response.data, expected_msg)
         mock_get_attempt.assert_called_once_with(
             str(self.user.anonymous_user_id), false_attempt_number, self.exam.resource_id)
