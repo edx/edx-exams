@@ -23,8 +23,13 @@ from rest_framework.decorators import api_view, authentication_classes, permissi
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from edx_exams.apps.core.api import get_attempt_by_id, get_user_by_anonymous_id, update_attempt_status
+from edx_exams.apps.core.api import (
+    get_attempt_by_id,
+    get_attempt_for_user_with_attempt_number_and_resource_id,
+    update_attempt_status
+)
 from edx_exams.apps.core.exceptions import ExamIllegalStatusTransition
+from edx_exams.apps.core.models import User
 from edx_exams.apps.core.statuses import ExamAttemptStatus
 from edx_exams.apps.lti.utils import get_lti_root
 
@@ -86,7 +91,8 @@ def acs(request, lti_config_id):
         ExamAttemptStatus.submitted,
     ]
 
-    attempt = get_user_by_anonymous_id(anonymous_user_id, attempt_number, resource_id)
+    user_id = User.objects.get(anonymous_user_id=anonymous_user_id).id
+    attempt = get_attempt_for_user_with_attempt_number_and_resource_id(user_id, attempt_number, resource_id)
     if attempt is None:
         error_msg = (
             f'No attempt found for user with anonymous id {anonymous_user_id} '

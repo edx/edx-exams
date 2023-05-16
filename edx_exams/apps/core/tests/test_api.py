@@ -22,7 +22,6 @@ from edx_exams.apps.core.api import (
     get_exam_by_content_id,
     get_exam_url_path,
     get_latest_attempt_for_user,
-    get_user_by_anonymous_id,
     update_attempt_status
 )
 from edx_exams.apps.core.exceptions import (
@@ -700,68 +699,6 @@ class TestGetExamURLPath(ExamsAPITestCase):
 
         url = get_exam_url_path(course_id, content_id)
         self.assertEqual(expected_string, url)
-
-
-class TestGetUserByAnonymousId(ExamsAPITestCase):
-    """
-    Test the get_user_by_anonymous_id API function.
-    """
-
-    def setUp(self):
-        super().setUp()
-
-        self.resource_id = str(uuid.uuid4())
-
-        self.exam = Exam.objects.create(
-            resource_id=self.resource_id,
-            course_id='course-v1:edx+test+f19',
-            provider=self.test_provider,
-            content_id='abcd1234',
-            exam_name='test_exam',
-            exam_type='proctored',
-            time_limit_mins=30,
-        )
-
-        self.exam_attempt = ExamAttempt.objects.create(
-            user=self.user,
-            exam=self.exam,
-            attempt_number=1,
-            status='created',
-        )
-
-    def test_attempt_retrieved(self):
-        attempt = get_user_by_anonymous_id(
-            self.user.anonymous_user_id,
-            self.exam_attempt.attempt_number,
-            self.exam.resource_id,
-        )
-
-        self.assertEqual(attempt, self.exam_attempt)
-
-    def test_no_attempt(self):
-        attempt = get_user_by_anonymous_id(
-            self.user.anonymous_user_id,
-            100,
-            self.exam.resource_id,
-        )
-
-        self.assertIsNone(attempt)
-
-    def test_multiple_attempts(self):
-        ExamAttempt.objects.create(
-            user=self.user,
-            exam=self.exam,
-            attempt_number=1,
-            status='created',
-        )
-
-        attempt = get_user_by_anonymous_id(
-            self.user.anonymous_user_id,
-            self.exam_attempt.attempt_number,
-            self.exam.resource_id,
-        )
-
-        self.assertIsNone(attempt)
 
 
 class TestGetAttemptForUserWithAttemptNumberAndResourceId(ExamsAPITestCase):

@@ -48,27 +48,6 @@ def get_latest_attempt_for_user(user_id):
     return latest_attempt
 
 
-def get_user_by_anonymous_id(anonymous_user_id, attempt_number, resource_id):
-    """
-    Get an exam attempt described by anonymous_user_id, resource_id, and the attempt_number.
-    """
-    try:
-        attempt = ExamAttempt.objects.get(
-            user__anonymous_user_id=anonymous_user_id,
-            attempt_number=attempt_number,
-            exam__resource_id=resource_id
-        )
-    except ExamAttempt.DoesNotExist:
-        return None
-    except ExamAttempt.MultipleObjectsReturned:
-        log.warning(
-            f'attempt_number={attempt_number} for anonymous user id={anonymous_user_id} '
-            f'in exam with resource_id={resource_id} is associated with multiple attempts.'
-        )
-        return None
-    return attempt
-
-
 def get_attempt_for_user_with_attempt_number_and_resource_id(user_id, attempt_number, resource_id):
     """
     Retrieve an attempt in an exam described by resource_id for a user described by user_id with a particular attempt

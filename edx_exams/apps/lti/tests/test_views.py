@@ -1,6 +1,6 @@
-'''
+"""
 Tests for the exams LTI views
-'''
+"""
 import json
 import uuid
 from unittest.mock import patch
@@ -22,9 +22,9 @@ from edx_exams.apps.lti.utils import get_lti_root
 
 @ddt.ddt
 class LtiAcsTestCase(ExamsAPITestCase):
-    '''
+    """
     Test acs view
-    '''
+    """
 
     def setUp(self):
         super().setUp()
@@ -99,21 +99,21 @@ class LtiAcsTestCase(ExamsAPITestCase):
         self.url = self.get_acs_url(self.attempt.id)
 
     def get_acs_url(self, lti_config_id):
-        '''
+        """
         Return the URL to the acs view.
 
         Parameters:
             * lti_config_id: the id field of the lti config object
-        '''
+        """
         return reverse('lti:acs', kwargs={'lti_config_id': lti_config_id})
 
     def _make_access_token(self, scope):
-        '''
+        """
         Return a valid token with the required scopes.
 
         Notes:
         key_handler.encode_and_sign is in the lti 1.3 folder
-        '''
+        """
         return self.lti_consumer.key_handler.encode_and_sign(
             {
                 'sub': self.lti_consumer.client_id,
@@ -138,7 +138,7 @@ class LtiAcsTestCase(ExamsAPITestCase):
     @ ddt.unpack
     @ patch.object(Lti1p3ApiAuthentication, 'authenticate', return_value=(AnonymousUser(), None))
     @ patch('edx_exams.apps.lti.views.LtiProctoringAcsPermissions.has_permission')
-    @ patch('edx_exams.apps.lti.views.get_user_by_anonymous_id')
+    @ patch('edx_exams.apps.lti.views.get_attempt_for_user_with_attempt_number_and_resource_id')
     def test_acs_attempt_status(self,
                                 attempt_status,
                                 expected_response_status,
@@ -192,13 +192,12 @@ class LtiAcsTestCase(ExamsAPITestCase):
 
         self.assertEqual(response.status_code, expected_response_status)
         self.assertEqual(response.data, expected_msg)
-        mock_get_attempt.assert_called_once_with(
-            str(self.user.anonymous_user_id), self.attempt.attempt_number, self.exam.resource_id)
+        mock_get_attempt.assert_called_once_with(self.user.id, self.attempt.attempt_number, self.exam.resource_id)
 
     # TEST 3: get_attempt returned None -> Expected log
     @ patch.object(Lti1p3ApiAuthentication, 'authenticate', return_value=(AnonymousUser(), None))
     @ patch('edx_exams.apps.lti.views.LtiProctoringAcsPermissions.has_permission')
-    @ patch('edx_exams.apps.lti.views.get_user_by_anonymous_id')
+    @ patch('edx_exams.apps.lti.views.get_attempt_for_user_with_attempt_number_and_resource_id')
     def test_acs_no_attempt_found(self,
                                   mock_get_attempt,
                                   mock_permissions,
@@ -241,15 +240,14 @@ class LtiAcsTestCase(ExamsAPITestCase):
 
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.data, expected_msg)
-        mock_get_attempt.assert_called_once_with(
-            str(self.user.anonymous_user_id), false_attempt_number, self.exam.resource_id)
+        mock_get_attempt.assert_called_once_with(self.user.id, false_attempt_number, self.exam.resource_id)
 
 
 @patch('edx_exams.apps.lti.views.get_lti_1p3_launch_start_url', return_value='https://www.example.com')
 class LtiStartProctoringTestCase(ExamsAPITestCase):
-    '''
+    """
     Test start_proctoring view
-    '''
+    """
 
     def setUp(self):
         super().setUp()
@@ -295,19 +293,19 @@ class LtiStartProctoringTestCase(ExamsAPITestCase):
         self.url = self.get_start_proctoring_url(self.attempt.id)
 
     def get_start_proctoring_url(self, attempt_id):
-        '''
+        """
         Return the URL to the start_proctoring view.
 
         Parameters:
             * attempt_id: the id field of the attempt object
-        '''
+        """
         return reverse('lti:start_proctoring', kwargs={'attempt_id': attempt_id})
 
     def test_start_proctoring_launch_data(self, mock_get_lti_launch_url):
-        '''
+        """
         Test that the instance of Lti1p3LaunchData sent as an argument to get_lti_1p3_launch_start_url
         contains the correct data.
-        '''
+        """
         headers = self.build_jwt_headers(self.user)
         self.client.get(self.url, **headers)
 
@@ -335,10 +333,10 @@ class LtiStartProctoringTestCase(ExamsAPITestCase):
         mock_get_lti_launch_url.assert_called_with(expected_launch_data)
 
     def test_start_proctoring_updated_attempt(self, mock_get_lti_launch_url):
-        '''
+        """
         Test that calling the start_proctoring view updates the appropriate attempt to the
         'download_software_clicked' status.
-        '''
+        """
         headers = self.build_jwt_headers(self.user)
         response = self.client.get(self.url, **headers)
 
@@ -348,10 +346,10 @@ class LtiStartProctoringTestCase(ExamsAPITestCase):
         self.assertEqual(self.attempt.status, ExamAttemptStatus.download_software_clicked)
 
     def test_start_proctoring_no_attempt(self, mock_get_lti_launch_url):  # pylint: disable=unused-argument
-        '''
+        """
         Test that a 400 response is returned when calling the start_proctoring view with an attempt_id
         that does not exist.
-        '''
+        """
         url = self.get_start_proctoring_url(1000)
 
         headers = self.build_jwt_headers(self.user)
@@ -360,10 +358,10 @@ class LtiStartProctoringTestCase(ExamsAPITestCase):
         self.assertEqual(response.status_code, 400)
 
     def test_start_proctoring_illegal_transition(self, mock_get_lti_launch_url):  # pylint: disable=unused-argument
-        '''
+        """
         Test that a 403 response is returned when calling the start_proctoring view requests an illegal status
         transition for the attempt_id.
-        '''
+        """
         self.attempt.status = ExamAttemptStatus.submitted
         self.attempt.save()
 
@@ -373,10 +371,10 @@ class LtiStartProctoringTestCase(ExamsAPITestCase):
         self.assertEqual(response.status_code, 403)
 
     def test_start_proctoring_unauthorized_user(self, mock_get_lti_launch_url):  # pylint: disable=unused-argument
-        '''
+        """
         Test that a 403 response is returned when calling the start_proctoring view with an attempt_id
         that does not belong to the calling user.
-        '''
+        """
         other_user = UserFactory()
 
         headers = self.build_jwt_headers(other_user)
@@ -387,9 +385,9 @@ class LtiStartProctoringTestCase(ExamsAPITestCase):
 
 @patch('edx_exams.apps.lti.views.get_lti_1p3_launch_start_url', return_value='https://www.example.com')
 class LtiEndAssessmentTestCase(ExamsAPITestCase):
-    '''
+    """
     Test end_assessment view
-    '''
+    """
 
     def setUp(self):
         super().setUp()
@@ -435,19 +433,19 @@ class LtiEndAssessmentTestCase(ExamsAPITestCase):
         self.url = self.get_end_assessment_url(self.attempt.id)
 
     def get_end_assessment_url(self, attempt_id):
-        '''
+        """
         Return the URL to the start_proctoring view.
 
         Parameters:
             * attempt_id: the id field of the attempt object
-        '''
+        """
         return reverse('lti:end_assessment', kwargs={'attempt_id': attempt_id})
 
     def test_get_end_assessment_url_launch_data(self, mock_get_lti_launch_url):
-        '''
+        """
         Test that the instance of Lti1p3LaunchData sent as an argument to get_lti_1p3_launch_start_url
         contains the correct data.
-        '''
+        """
         with patch('edx_exams.apps.lti.views.get_end_assessment_return', return_value=True):
             headers = self.build_jwt_headers(self.user)
             self.client.get(self.url, **headers)
@@ -483,10 +481,10 @@ class LtiEndAssessmentTestCase(ExamsAPITestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_end_assessment_updated_attempt(self, mock_get_lti_launch_url):  # pylint: disable=unused-argument
-        '''
+        """
         Test that calling the end_asessment view updates the appropriate attempt to the
         'submitted' status.
-        '''
+        """
         headers = self.build_jwt_headers(self.user)
         self.client.get(self.url, **headers)
 
@@ -495,10 +493,10 @@ class LtiEndAssessmentTestCase(ExamsAPITestCase):
         self.assertEqual(self.attempt.status, ExamAttemptStatus.submitted)
 
     def test_end_assessment_no_attempt(self, mock_get_lti_launch_url):  # pylint: disable=unused-argument
-        '''
+        """
         Test that a 400 response is returned when calling the end_assessment view with an attempt_id
         that does not exist.
-        '''
+        """
         url = self.get_end_assessment_url(1000)
 
         headers = self.build_jwt_headers(self.user)
@@ -507,10 +505,10 @@ class LtiEndAssessmentTestCase(ExamsAPITestCase):
         self.assertEqual(response.status_code, 400)
 
     def test_end_assessment_unauthorized_user(self, mock_get_lti_launch_url):  # pylint: disable=unused-argument
-        '''
+        """
         Test that a 403 response is returned when calling the end_assessment view with an attempt_id
         that does not belong to the calling user.
-        '''
+        """
         other_user = UserFactory()
 
         headers = self.build_jwt_headers(other_user)
