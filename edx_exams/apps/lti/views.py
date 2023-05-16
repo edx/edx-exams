@@ -23,11 +23,7 @@ from rest_framework.decorators import api_view, authentication_classes, permissi
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from edx_exams.apps.core.api import (
-    get_attempt_by_id,
-    get_user_by_anonymous_id,
-    update_attempt_status
-)
+from edx_exams.apps.core.api import get_attempt_by_id, get_user_by_anonymous_id, update_attempt_status
 from edx_exams.apps.core.exceptions import ExamIllegalStatusTransition
 from edx_exams.apps.core.statuses import ExamAttemptStatus
 from edx_exams.apps.lti.utils import get_lti_root
