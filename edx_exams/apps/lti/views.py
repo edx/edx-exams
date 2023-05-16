@@ -50,6 +50,7 @@ LTI_PROCTORING_ASSESSMENT_CONTROL_ACTIONS = [
 @authentication_classes((Lti1p3ApiAuthentication,))
 @permission_classes((LtiProctoringAcsPermissions,))
 def acs(request, lti_config_id):
+    print("VIEW IS HAPPENING\n",request.body)
     """
     Endpoint for ACS actions
 
