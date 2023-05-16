@@ -50,7 +50,6 @@ LTI_PROCTORING_ASSESSMENT_CONTROL_ACTIONS = [
 @authentication_classes((Lti1p3ApiAuthentication,))
 @permission_classes((LtiProctoringAcsPermissions,))
 def acs(request, lti_config_id):
-    print("VIEW IS HAPPENING\n",request.body)
     """
     Endpoint for ACS actions
 
@@ -96,7 +95,7 @@ def acs(request, lti_config_id):
         error_msg = (
             f'No attempt found for user with anonymous id {anonymous_user_id} '
             f'with resource id {resource_id} and attempt number {attempt_number} '
-            f'for lti config id {lti_config_id}, exam id {attempt.exam.id}, and attempt id {attempt.id}.'
+            f'for lti config id {lti_config_id}.'
         )
         log.info(error_msg)
         return Response(error_msg, status=400)
@@ -104,7 +103,7 @@ def acs(request, lti_config_id):
         error_msg = (
             f'Attempt cannot be flagged for user with anonymous id {anonymous_user_id} '
             f'with resource id {resource_id} and attempt number {attempt_number} '
-            f'for lti config id {lti_config_id}, exam id {attempt.exam.id}, and attempt id {attempt.id}.'
+            f'for lti config id {lti_config_id}, exam id {attempt.exam.id}, and attempt id {attempt.id}. '
             f'It has either not started yet, been rejcected, expired, or already verified.'
         )
         # NOTE: Do we want to create a new exception in exceptions.py just for this case?

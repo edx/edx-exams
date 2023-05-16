@@ -65,18 +65,15 @@ class LtiAcsTestCase(ExamsAPITestCase):
         )
 
         # Variables required for testing and verification
-        ISS = "http://test-platform.example/"
-        OIDC_URL = "http://test-platform/oidc"
-        LAUNCH_URL = "http://test-platform/launch"
+        ISS = 'http://test-platform.example/'
+        OIDC_URL = 'http://test-platform/oidc'
+        LAUNCH_URL = 'http://test-platform/launch'
         REDIRECT_URIS = [LAUNCH_URL]
-        CLIENT_ID = "1"
-        DEPLOYMENT_ID = "1"
-        # NONCE = "1234"
-        # STATE = "ABCD"
-        RSA_KEY_ID = "1"
+        CLIENT_ID = '1'
+        DEPLOYMENT_ID = '1'
+        RSA_KEY_ID = '1'
         RSA_KEY = RSA.generate(2048).export_key('PEM')
 
-        # Set up consumer
         # Set up consumer
         self.lti_consumer = LtiProctoringConsumer(
             iss=ISS,
@@ -95,12 +92,8 @@ class LtiAcsTestCase(ExamsAPITestCase):
         self.lti_configuration = LtiConfiguration.objects.create(
             version=LtiConfiguration.LTI_1P3,
             lti_1p3_client_id=CLIENT_ID,
-            # Set to config on DB for easy testing
-            config_store=LtiConfiguration.CONFIG_ON_DB,
+            config_store=LtiConfiguration.CONFIG_ON_DB,  # Set to config on DB for easy testing
             lti_1p3_proctoring_enabled=True,
-            # TODO: Fill this object with the other fields/values that match the consumer's IFF we need them,
-            # e.g:
-            # lti_1p3_oidc_url=OIDC_URL,
         )
 
         # Update the test provider to refer to the correct LtiConfiguration instance.
@@ -121,38 +114,19 @@ class LtiAcsTestCase(ExamsAPITestCase):
     def _make_access_token(self, scope):
         '''
         Return a valid token with the required scopes.
-        '''
-        # Generate a valid access token
-        """
+
         Notes:
         key_handler.encode_and_sign is in the lti 1.3 folder
-        """
-        print("\n\n#######\nclient_id",self.lti_consumer.client_id)
-        print("iss",self.lti_consumer.iss)
+        '''
         return self.lti_consumer.key_handler.encode_and_sign(
             {
-                # 'sub': self.lti_configuration.lti_1p3_client_id,
                 'sub': self.lti_consumer.client_id,
                 'iss': self.lti_consumer.iss,
                 'scopes': scope
             },
             expiration=3600,
         )
-        # return {
-        #     "access_token": self.lti_consumer.key_handler.encode_and_sign(
-        #         {
-        #             'sub': self.lti_configuration.lti_1p3_client_id,
-        #             'iss': self.lti_consumer.iss,
-        #             'scopes': scope
-        #         },
-        #         expiration=3600,
-        #     ),
-        #     "token_type": "bearer",
-        #     "expires_in": 3600,
-        #     "scope": scope
-        # }
 
-    # TEST 1: get_attempt successful, status in valid statuses -> Expected log
     @ ddt.data(
         (ExamAttemptStatus.ready_to_start, 200),
         (ExamAttemptStatus.started, 200),
@@ -166,80 +140,110 @@ class LtiAcsTestCase(ExamsAPITestCase):
         (ExamAttemptStatus.expired, 400),
     )
     @ ddt.unpack
-    # @ patch('lti_consumer.lti_1p3.extensions.rest_framework.authentication')
-    # @ patch('lti_consumer.lti_1p3.extensions.rest_framework.permissions')
-    # @ patch('edx_exams.apps.lti.views.Lti1p3ApiAuthentication.authenticate')
     @ patch.object(Lti1p3ApiAuthentication, 'authenticate', return_value=(AnonymousUser(), None))
     @ patch('edx_exams.apps.lti.views.LtiProctoringAcsPermissions.has_permission')
     @ patch('edx_exams.apps.lti.views.get_user_by_anonymous_id')
-    def test_acs_attempt_status(self, attempt_status, expected_response_status, mock_get_attempt, mock_permissions, mock_authentication):
-        # print('\n\n\nUSER:', self.user)
-        # print('\nUSER ID:', self.user.anonymous_user_id)
-        # change attempt status
+    def test_acs_attempt_status(self,
+                                attempt_status,
+                                expected_response_status,
+                                mock_get_attempt,
+                                mock_permissions,
+                                mock_authentication):  # pylint: disable=unused-argument
         self.attempt.status = attempt_status
-        # mock of get_user_by_anonymous_id
+
         mock_get_attempt.return_value = self.attempt
-        # print("MOCKS:")
-        # print(attempt_status, '\n', expected_response_status, '\n', mock_get_attempt, '\n', mock_permissions, '\n', mock_authentication)
+        mock_permissions.return_value = True
 
         token = self._make_access_token('https://purl.imsglobal.org/spec/lti-ap/scope/control.all')
-        # request body
+
         request_body = {
-            "user": {
-                "iss": self.lti_consumer.iss,
-                "sub": str(self.user.anonymous_user_id)
+            'user': {
+                'iss': self.lti_consumer.iss,
+                'sub': str(self.user.anonymous_user_id)
             },
-            "resource_link": {
-                "id": self.exam.resource_id
+            'resource_link': {
+                'id': self.exam.resource_id
             },
-            "attempt_number": self.attempt.attempt_number,
-            "action": "flag",
-            "incident_time": "2018-02-01T10:45:33Z",
-            "incident_severity": "0.1",
-            "reason_code": "12056",
-            "reason_msg": "Excessive background noise outside candidate control"
+            'attempt_number': self.attempt.attempt_number,
+            'action': 'flag',
+            'incident_time': '2018-02-01T10:45:33Z',
+            'incident_severity': '0.1',
+            'reason_code': '12056',
+            'reason_msg': 'Excessive background noise outside candidate control'
         }
-        # Make the request_body with these headers + the data
-        # print("\nlti config:", self.lti_configuration)
-        # print("\nRequest to URL:", self.url)
-        # print("\nTOKEN:", token)
-        # print("\nrequest_body:", request_body)
-        # print("LTI Config PK id in edx-exams:", self.lti_configuration.id)
-        # print("LTI Config in edx-exams:", LtiConfiguration.objects.get(pk=self.lti_configuration.id))
 
-        # mock_authentication.return_value = (AnonymousUser(), None)
+        # Even though the client.post function below uses json.dumps to serialize the request as json,
+        # The json serialization needs to happen before the request for an unkown reason
         request_body = json.dumps(request_body)
-        # print("\n\nREQUEST BODY:",request_body)
-        mock_permissions.return_value = True
-        response = self.client.post(self.url, data=request_body, content_type="application/json", HTTP_AUTHORIZATION="Bearer {}".format(token))
+        response = self.client.post(self.url, data=request_body, content_type='application/json',
+                                    HTTP_AUTHORIZATION='Bearer {}'.format(token))
 
-        expected_msg = (
-            f'Flagging exam for user with id {self.user.anonymous_user_id} '
-            f'with resource id {self.exam.resource_id} and attempt number {self.attempt.attempt_number} '
-            f'for lti config id {self.test_provider.lti_configuration_id}, exam id {self.exam.id}, and attempt id {self.attempt.id}.'
-        )
+        if response.status_code == 200:
+            expected_msg = (
+                f'Flagging exam for user with id {self.user.anonymous_user_id} '
+                f'with resource id {self.exam.resource_id} and attempt number {self.attempt.attempt_number} '
+                f'for lti config id {self.test_provider.lti_configuration_id}, exam id {self.exam.id}, and attempt id {self.attempt.id}.'
+            )
+        else:
+            expected_msg = (
+                f'Attempt cannot be flagged for user with anonymous id {self.user.anonymous_user_id} '
+                f'with resource id {self.exam.resource_id} and attempt number {self.attempt.attempt_number} '
+                f'for lti config id {self.test_provider.lti_configuration_id}, exam id {self.exam.id}, and attempt id {self.attempt.id}. '
+                f'It has either not started yet, been rejcected, expired, or already verified.'
+            )
 
-        # assertions
         self.assertEqual(response.status_code, expected_response_status)
-        # print("\n\nresponse.data:",response.data)
-        # print("\n\nexpected_msg:",expected_msg)
         self.assertEqual(response.data, expected_msg)
-        # TODO: Abstract these repeated vars at the start of the function to reduce calls
-        print(self.user.anonymous_user_id)
-        mock_get_attempt.assert_called_once_with(str(self.user.anonymous_user_id), self.attempt.attempt_number, self.exam.resource_id)
-
-    # TEST 2: get_attempt successful, status NOT in valid statuses -> Expected log
-    @ddt.data(
-
-    )
-    @ddt.unpack
-    def test_acs_attempt_invalid_status(self):
-        return
+        mock_get_attempt.assert_called_once_with(
+            str(self.user.anonymous_user_id), self.attempt.attempt_number, self.exam.resource_id)
 
     # TEST 3: get_attempt returned None -> Expected log
-    def test_acs_no_attempt_found(self):
-        return
-        # END
+    @ patch.object(Lti1p3ApiAuthentication, 'authenticate', return_value=(AnonymousUser(), None))
+    @ patch('edx_exams.apps.lti.views.LtiProctoringAcsPermissions.has_permission')
+    @ patch('edx_exams.apps.lti.views.get_user_by_anonymous_id')
+    def test_acs_no_attempt_found(self, mock_get_attempt, mock_permissions, mock_authentication):  # pylint: disable=unused-argument
+        false_attempt_number = '88888888'
+
+        mock_get_attempt.return_value = None
+        mock_permissions.return_value = True
+
+        token = self._make_access_token('https://purl.imsglobal.org/spec/lti-ap/scope/control.all')
+
+        # Request w/ attempt number for an attempt that does not exist
+        request_body = {
+            'user': {
+                'iss': self.lti_consumer.iss,
+                'sub': str(self.user.anonymous_user_id)
+            },
+            'resource_link': {
+                'id': self.exam.resource_id
+            },
+            'attempt_number': false_attempt_number,
+            'action': 'flag',
+            'incident_time': '2018-02-01T10:45:33Z',
+            'incident_severity': '0.1',
+            'reason_code': '12056',
+            'reason_msg': 'Excessive background noise outside candidate control'
+        }
+
+        # Even though the client.post function below uses json.dumps to serialize the request as json,
+        # The json serialization needs to happen before the request for an unkown reason
+        request_body = json.dumps(request_body)
+        response = self.client.post(self.url, data=request_body, content_type='application/json',
+                                    HTTP_AUTHORIZATION='Bearer {}'.format(token))
+
+        expected_msg = (
+            f'No attempt found for user with anonymous id {self.user.anonymous_user_id} '
+            f'with resource id {self.exam.resource_id} and attempt number {false_attempt_number} '
+            f'for lti config id {self.test_provider.lti_configuration_id}.'
+        )
+
+        self.assertEqual(response.status_code, 400)
+        print("\n", response.data)
+        print("\n", expected_msg)
+        self.assertEqual(response.data, expected_msg)
+        mock_get_attempt.assert_called_once_with(
+            str(self.user.anonymous_user_id), false_attempt_number, self.exam.resource_id)
 
 
 @patch('edx_exams.apps.lti.views.get_lti_1p3_launch_start_url', return_value='https://www.example.com')
