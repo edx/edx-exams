@@ -3,7 +3,6 @@ LTI Views
 """
 
 
-import json
 import logging
 from urllib.parse import urljoin
 
@@ -94,8 +93,8 @@ def acs(request, lti_config_id):
         error_msg = (
             f'Attempt cannot be flagged for user with anonymous id {anonymous_user_id} '
             f'with resource id {resource_id} and attempt number {attempt_number} '
-            f'for lti config id {lti_config_id}, status {attempt.status}, exam id {attempt.exam.id}, and attempt id {attempt.id}. '
-            f'It has either not started yet, been rejected, expired, or already verified.'
+            f'for lti config id {lti_config_id}, status {attempt.status}, exam id {attempt.exam.id}, '
+            f'and attempt id {attempt.id}. It has either not started yet, been rejected, expired, or already verified.'
         )
         log.info(error_msg)
         return Response(status=400)
@@ -104,7 +103,8 @@ def acs(request, lti_config_id):
         success_msg = (
             f'Flagging exam for user with id {anonymous_user_id} '
             f'with resource id {resource_id} and attempt number {attempt_number} '
-            f'for lti config id {lti_config_id}, status {attempt.status}, exam id {attempt.exam.id}, and attempt id {attempt.id}.'
+            f'for lti config id {lti_config_id}, status {attempt.status}, exam id {attempt.exam.id}, '
+            f'and attempt id {attempt.id}.'
         )
         log.info(success_msg)
     return Response(status=200)

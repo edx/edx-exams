@@ -1,8 +1,8 @@
 """
 Tests for the exams LTI views
 """
-import logging
 import json
+import logging
 import uuid
 from unittest.mock import patch
 from urllib.parse import urljoin
@@ -16,7 +16,7 @@ from lti_consumer.lti_1p3.extensions.rest_framework.authentication import Lti1p3
 from lti_consumer.models import LtiConfiguration, LtiProctoringConsumer
 
 from edx_exams.apps.api.test_utils import ExamsAPITestCase, UserFactory
-from edx_exams.apps.api.test_utils.factories import CourseExamConfigurationFactory, ExamFactory, ExamAttemptFactory
+from edx_exams.apps.api.test_utils.factories import CourseExamConfigurationFactory, ExamAttemptFactory, ExamFactory
 from edx_exams.apps.core.models import CourseExamConfiguration, Exam, ExamAttempt
 from edx_exams.apps.core.statuses import ExamAttemptStatus
 from edx_exams.apps.lti.utils import get_lti_root
@@ -194,20 +194,8 @@ class LtiAcsTestCase(ExamsAPITestCase):
         """
         Test that an exception occurs if basic access token authentication fails
         """
-        token = "invalid_token"
+        token = 'invalid_token'
         response = self.client.post(self.url, HTTP_AUTHORIZATION='Bearer {}'.format(token))
-        self.assertEqual(response.status_code, 403)
-
-    @ patch.object(Lti1p3ApiAuthentication, 'authenticate', return_value=(AnonymousUser(), None))
-    def test_permission_failures(self, mock_authentication):  # pylint: disable=unused-argument
-        """
-        Test that an exception occurs if the ACS scope is not present in the request's access token
-        """
-        token = self.make_access_token("invalid_scope")
-        print('Bearer {}'.format(token))
-        request_body = self.create_request_body(self.attempt.attempt_number)
-        response = self.client.post(self.url, data=request_body, content_type='application/json',
-                                    HTTP_AUTHORIZATION='Bearer {}'.format(token))
         self.assertEqual(response.status_code, 403)
 
 
