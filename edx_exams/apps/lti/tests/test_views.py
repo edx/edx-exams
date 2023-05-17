@@ -16,6 +16,7 @@ from lti_consumer.lti_1p3.extensions.rest_framework.authentication import Lti1p3
 from lti_consumer.models import LtiConfiguration, LtiProctoringConsumer
 
 from edx_exams.apps.api.test_utils import ExamsAPITestCase, UserFactory
+from edx_exams.apps.api.test_utils.factories import CourseExamConfigurationFactory, ExamFactory, ExamAttemptFactory
 from edx_exams.apps.core.models import CourseExamConfiguration, Exam, ExamAttempt
 from edx_exams.apps.core.statuses import ExamAttemptStatus
 from edx_exams.apps.lti.utils import get_lti_root
@@ -32,36 +33,9 @@ class LtiAcsTestCase(ExamsAPITestCase):
     def setUp(self):
         super().setUp()
 
-        self.course_id = 'course-v1:edx+test+f19'
-        self.content_id = '11111111'
-
-        self.course_exam_config = CourseExamConfiguration.objects.create(
-            course_id=self.course_id,
-            provider=self.test_provider,
-            allow_opt_out=False
-        )
-
-        self.exam = Exam.objects.create(
-            resource_id=str(uuid.uuid4()),
-            course_id=self.course_id,
-            provider=self.test_provider,
-            content_id=self.content_id,
-            exam_name='test_exam',
-            exam_type='proctored',
-            time_limit_mins=30,
-            due_date='2021-07-01 00:00:00',
-            hide_after_due=False,
-            is_active=True
-        )
-
-        self.attempt = ExamAttempt.objects.create(
-            user=self.user,
-            exam=self.exam,
-            attempt_number=1111111,
-            status=ExamAttemptStatus.created,
-            start_time=None,
-            allowed_time_limit_mins=None,
-        )
+        self.course_exam_config = CourseExamConfigurationFactory()
+        self.exam = ExamFactory()
+        self.attempt = ExamAttemptFactory()
 
         # Variables required for testing and verification
         ISS = 'http://test-platform.example/'
@@ -186,22 +160,6 @@ class LtiAcsTestCase(ExamsAPITestCase):
         response = self.client.post(self.url, data=request_body, content_type='application/json',
                                     HTTP_AUTHORIZATION='Bearer {}'.format(token))
 
-        if response.status_code == 200:
-            expected_msg = (
-                f'Flagging exam for user with id {self.user.anonymous_user_id} '
-                f'with resource id {self.exam.resource_id} and attempt number {self.attempt.attempt_number} '
-                f'for lti config id {self.test_provider.lti_configuration_id}, status {self.attempt.status},'
-                f' exam id {self.exam.id}, and attempt id {self.attempt.id}.'
-            )
-        else:
-            expected_msg = (
-                f'Attempt cannot be flagged for user with anonymous id {self.user.anonymous_user_id} '
-                f'with resource id {self.exam.resource_id} and attempt number {self.attempt.attempt_number} '
-                f'for lti config id {self.test_provider.lti_configuration_id}, status {self.attempt.status}, '
-                f'exam id {self.exam.id}, and attempt id {self.attempt.id}. It has either not started yet, '
-                f'been rejected, expired, or already verified.'
-            )
-
         self.assertEqual(response.status_code, expected_response_status)
 
     @ patch.object(Lti1p3ApiAuthentication, 'authenticate', return_value=(AnonymousUser(), None))
@@ -230,13 +188,27 @@ class LtiAcsTestCase(ExamsAPITestCase):
         response = self.client.post(self.url, data=request_body, content_type='application/json',
                                     HTTP_AUTHORIZATION='Bearer {}'.format(token))
 
-        expected_msg = (
-            f'No attempt found for user with anonymous id {self.user.anonymous_user_id} '
-            f'with resource id {self.exam.resource_id} and attempt number {false_attempt_number} '
-            f'for lti config id {self.test_provider.lti_configuration_id}.'
-        )
-
         self.assertEqual(response.status_code, 400)
+
+    def test_auth_failures(self):
+        """
+        Test that an exception occurs if basic access token authentication fails
+        """
+        token = "invalid_token"
+        response = self.client.post(self.url, HTTP_AUTHORIZATION='Bearer {}'.format(token))
+        self.assertEqual(response.status_code, 403)
+
+    @ patch.object(Lti1p3ApiAuthentication, 'authenticate', return_value=(AnonymousUser(), None))
+    def test_permission_failures(self, mock_authentication):  # pylint: disable=unused-argument
+        """
+        Test that an exception occurs if the ACS scope is not present in the request's access token
+        """
+        token = self.make_access_token("invalid_scope")
+        print('Bearer {}'.format(token))
+        request_body = self.create_request_body(self.attempt.attempt_number)
+        response = self.client.post(self.url, data=request_body, content_type='application/json',
+                                    HTTP_AUTHORIZATION='Bearer {}'.format(token))
+        self.assertEqual(response.status_code, 403)
 
 
 @patch('edx_exams.apps.lti.views.get_lti_1p3_launch_start_url', return_value='https://www.example.com')
