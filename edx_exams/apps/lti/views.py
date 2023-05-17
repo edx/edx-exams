@@ -2,6 +2,8 @@
 LTI Views
 """
 
+
+import logging
 from urllib.parse import urljoin
 
 from django.contrib.auth import login
@@ -12,18 +14,100 @@ from django.views.decorators.http import require_http_methods
 from edx_rest_framework_extensions.auth.jwt.authentication import JwtAuthentication
 from lti_consumer.api import get_end_assessment_return, get_lti_1p3_launch_start_url
 from lti_consumer.data import Lti1p3LaunchData, Lti1p3ProctoringLaunchData
+from lti_consumer.lti_1p3.extensions.rest_framework.authentication import Lti1p3ApiAuthentication
+from lti_consumer.lti_1p3.extensions.rest_framework.permissions import LtiProctoringAcsPermissions
 from lti_consumer.models import LtiConfiguration
 from rest_framework import status
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from edx_exams.apps.core.api import get_attempt_by_id, update_attempt_status
+from edx_exams.apps.core.api import (
+    get_attempt_by_id,
+    get_attempt_for_user_with_attempt_number_and_resource_id,
+    update_attempt_status
+)
 from edx_exams.apps.core.exceptions import ExamIllegalStatusTransition
+from edx_exams.apps.core.models import User
 from edx_exams.apps.core.statuses import ExamAttemptStatus
 from edx_exams.apps.lti.utils import get_lti_root
 
+log = logging.getLogger(__name__)
+
 EDX_OAUTH_BACKEND = 'auth_backends.backends.EdXOAuth2'
+
+
+@api_view(['POST'])
+@require_http_methods(['POST'])
+@authentication_classes((Lti1p3ApiAuthentication,))
+@permission_classes((LtiProctoringAcsPermissions,))
+def acs(request, lti_config_id):
+    """
+    Endpoint for ACS actions
+
+    NOTE: for now just have the actions LOG what the actions is doing.
+    We can implement proper functionality and tests later once we
+    hear back from our third party proctoring service vendors (i.e. Proctorio).
+
+    Currently, we only support flagging of exam attempts.
+    Other ACS actions (pause, resume, terminate, update) could be implemented
+    in the future if desired.
+    """
+    data = request.data
+
+    # This identifies the proctoring tool the request is coming from.
+    anonymous_user_id = data['user']['sub']
+
+    # The link to exam the user is attempting
+    resource_id = data['resource_link']['id']
+
+    # Exam attempt number (Note: ACS does not differentiate between launches)
+    # i.e, if a launch fails and multiple subsequent launches occur for
+    # the same resource_link + attempt_number combo, the ACS only perceives
+    # this as one singular attempt.
+    attempt_number = data['attempt_number']
+
+    # ACS action to be performed
+    action = data['action']
+
+    # Only flag ongoing or completed attempts
+    VALID_STATUSES = [
+        ExamAttemptStatus.ready_to_start,
+        ExamAttemptStatus.started,
+        ExamAttemptStatus.ready_to_submit,
+        ExamAttemptStatus.timed_out,
+        ExamAttemptStatus.submitted,
+    ]
+
+    user_id = User.objects.get(anonymous_user_id=anonymous_user_id).id
+    attempt = get_attempt_for_user_with_attempt_number_and_resource_id(user_id, attempt_number, resource_id)
+    if attempt is None:
+        error_msg = (
+            f'No attempt found for user with anonymous id {anonymous_user_id} '
+            f'with resource id {resource_id} and attempt number {attempt_number} '
+            f'for lti config id {lti_config_id}.'
+        )
+        log.info(error_msg)
+        return Response(status=400)
+    if attempt.status not in VALID_STATUSES:
+        error_msg = (
+            f'Attempt cannot be flagged for user with anonymous id {anonymous_user_id} '
+            f'with resource id {resource_id} and attempt number {attempt_number} '
+            f'for lti config id {lti_config_id}, status {attempt.status}, exam id {attempt.exam.id}, '
+            f'and attempt id {attempt.id}. It has either not started yet, been rejected, expired, or already verified.'
+        )
+        log.info(error_msg)
+        return Response(status=400)
+
+    if action == 'flag':
+        success_msg = (
+            f'Flagging exam for user with id {anonymous_user_id} '
+            f'with resource id {resource_id} and attempt number {attempt_number} '
+            f'for lti config id {lti_config_id}, status {attempt.status}, exam id {attempt.exam.id}, '
+            f'and attempt id {attempt.id}.'
+        )
+        log.info(success_msg)
+    return Response(status=200)
 
 
 @api_view(['GET'])
@@ -78,9 +162,16 @@ def start_proctoring(request, attempt_id):
         reverse('lti_consumer:lti_consumer.start_proctoring_assessment_endpoint')
     )
 
+    assessment_control_url = urljoin(
+        get_lti_root(),
+        reverse('lti:acs', kwargs={'lti_config_id': lti_config_id}),
+    )
+
     proctoring_launch_data = Lti1p3ProctoringLaunchData(
         attempt_number=attempt.attempt_number,
         start_assessment_url=proctoring_start_assessment_url,
+        assessment_control_url=assessment_control_url,
+        assessment_control_actions=['flagRequest'],
     )
 
     launch_data = Lti1p3LaunchData(

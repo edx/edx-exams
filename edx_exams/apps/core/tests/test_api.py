@@ -705,6 +705,7 @@ class TestGetAttemptForUserWithAttemptNumberAndResourceId(ExamsAPITestCase):
     """
     Test the get_attempt_for_user_with_attempt_number_and_resource_id API function.
     """
+
     def setUp(self):
         super().setUp()
 
