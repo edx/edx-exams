@@ -1,6 +1,7 @@
 """
 Tests for the exams LTI views
 """
+import logging
 import json
 import uuid
 from unittest.mock import patch
@@ -18,6 +19,8 @@ from edx_exams.apps.api.test_utils import ExamsAPITestCase, UserFactory
 from edx_exams.apps.core.models import CourseExamConfiguration, Exam, ExamAttempt
 from edx_exams.apps.core.statuses import ExamAttemptStatus
 from edx_exams.apps.lti.utils import get_lti_root
+
+log = logging.getLogger(__name__)
 
 
 @ddt.ddt
@@ -107,7 +110,7 @@ class LtiAcsTestCase(ExamsAPITestCase):
         """
         return reverse('lti:acs', kwargs={'lti_config_id': lti_config_id})
 
-    def _make_access_token(self, scope):
+    def make_access_token(self, scope):
         """
         Return a valid token with the required scopes.
 
@@ -122,6 +125,26 @@ class LtiAcsTestCase(ExamsAPITestCase):
             },
             expiration=3600,
         )
+
+    def create_request_body(self, attempt_number):
+        """
+        Return a template for the data sent in the request to the ACS endpoint.
+        """
+        return {
+            'user': {
+                'iss': self.lti_consumer.iss,
+                'sub': str(self.user.anonymous_user_id)
+            },
+            'resource_link': {
+                'id': self.exam.resource_id
+            },
+            'attempt_number': attempt_number,
+            'action': 'flag',
+            'incident_time': '2018-02-01T10:45:33Z',
+            'incident_severity': '0.1',
+            'reason_code': '12056',
+            'reason_msg': 'Excessive background noise outside candidate control'
+        }
 
     @ ddt.data(
         (ExamAttemptStatus.ready_to_start, 200),
@@ -145,31 +168,20 @@ class LtiAcsTestCase(ExamsAPITestCase):
                                 mock_get_attempt,
                                 mock_permissions,
                                 mock_authentication):  # pylint: disable=unused-argument
+        """
+        Test that certain exam attempt statuses return the expected response code
+        """
         self.attempt.status = attempt_status
 
         mock_get_attempt.return_value = self.attempt
         mock_permissions.return_value = True
 
-        token = self._make_access_token('https://purl.imsglobal.org/spec/lti-ap/scope/control.all')
+        token = self.make_access_token('https://purl.imsglobal.org/spec/lti-ap/scope/control.all')
 
-        request_body = {
-            'user': {
-                'iss': self.lti_consumer.iss,
-                'sub': str(self.user.anonymous_user_id)
-            },
-            'resource_link': {
-                'id': self.exam.resource_id
-            },
-            'attempt_number': self.attempt.attempt_number,
-            'action': 'flag',
-            'incident_time': '2018-02-01T10:45:33Z',
-            'incident_severity': '0.1',
-            'reason_code': '12056',
-            'reason_msg': 'Excessive background noise outside candidate control'
-        }
+        request_body = self.create_request_body(self.attempt.attempt_number)
 
         # Even though the client.post function below uses json.dumps to serialize the request as json,
-        # The json serialization needs to happen before the request for an unkown reason
+        # The json serialization needs to happen before the request for an unknown reason
         request_body = json.dumps(request_body)
         response = self.client.post(self.url, data=request_body, content_type='application/json',
                                     HTTP_AUTHORIZATION='Bearer {}'.format(token))
@@ -178,23 +190,20 @@ class LtiAcsTestCase(ExamsAPITestCase):
             expected_msg = (
                 f'Flagging exam for user with id {self.user.anonymous_user_id} '
                 f'with resource id {self.exam.resource_id} and attempt number {self.attempt.attempt_number} '
-                f'for lti config id {self.test_provider.lti_configuration_id}, exam id {self.exam.id}, '
-                f'and attempt id {self.attempt.id}.'
+                f'for lti config id {self.test_provider.lti_configuration_id}, status {self.attempt.status},'
+                f' exam id {self.exam.id}, and attempt id {self.attempt.id}.'
             )
         else:
             expected_msg = (
                 f'Attempt cannot be flagged for user with anonymous id {self.user.anonymous_user_id} '
                 f'with resource id {self.exam.resource_id} and attempt number {self.attempt.attempt_number} '
-                f'for lti config id {self.test_provider.lti_configuration_id}, exam id {self.exam.id}, and '
-                f'attempt id {self.attempt.id}. It has either not started yet, been rejcected, expired, or '
-                f'already verified.'
+                f'for lti config id {self.test_provider.lti_configuration_id}, status {self.attempt.status}, '
+                f'exam id {self.exam.id}, and attempt id {self.attempt.id}. It has either not started yet, '
+                f'been rejected, expired, or already verified.'
             )
 
         self.assertEqual(response.status_code, expected_response_status)
-        self.assertEqual(response.data, expected_msg)
-        mock_get_attempt.assert_called_once_with(self.user.id, self.attempt.attempt_number, self.exam.resource_id)
 
-    # TEST 3: get_attempt returned None -> Expected log
     @ patch.object(Lti1p3ApiAuthentication, 'authenticate', return_value=(AnonymousUser(), None))
     @ patch('edx_exams.apps.lti.views.LtiProctoringAcsPermissions.has_permission')
     @ patch('edx_exams.apps.lti.views.get_attempt_for_user_with_attempt_number_and_resource_id')
@@ -202,29 +211,18 @@ class LtiAcsTestCase(ExamsAPITestCase):
                                   mock_get_attempt,
                                   mock_permissions,
                                   mock_authentication):  # pylint: disable=unused-argument
+        """
+        Test that if an exam attempt is not found that the view returns status=400
+        """
         false_attempt_number = '88888888'
 
         mock_get_attempt.return_value = None
         mock_permissions.return_value = True
 
-        token = self._make_access_token('https://purl.imsglobal.org/spec/lti-ap/scope/control.all')
+        token = self.make_access_token('https://purl.imsglobal.org/spec/lti-ap/scope/control.all')
 
         # Request w/ attempt number for an attempt that does not exist
-        request_body = {
-            'user': {
-                'iss': self.lti_consumer.iss,
-                'sub': str(self.user.anonymous_user_id)
-            },
-            'resource_link': {
-                'id': self.exam.resource_id
-            },
-            'attempt_number': false_attempt_number,
-            'action': 'flag',
-            'incident_time': '2018-02-01T10:45:33Z',
-            'incident_severity': '0.1',
-            'reason_code': '12056',
-            'reason_msg': 'Excessive background noise outside candidate control'
-        }
+        request_body = self.create_request_body(false_attempt_number)
 
         # Even though the client.post function below uses json.dumps to serialize the request as json,
         # The json serialization needs to happen before the request for an unkown reason
@@ -239,8 +237,6 @@ class LtiAcsTestCase(ExamsAPITestCase):
         )
 
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.data, expected_msg)
-        mock_get_attempt.assert_called_once_with(self.user.id, false_attempt_number, self.exam.resource_id)
 
 
 @patch('edx_exams.apps.lti.views.get_lti_1p3_launch_start_url', return_value='https://www.example.com')

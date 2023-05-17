@@ -51,7 +51,3 @@ def assessment_started(sender, **kwargs):  # pylint: disable=unused-argument
             f'status={ExamAttemptStatus.ready_to_start}, but this status '
             f'transition is illegal.'
         )
-
-# Match LTI specifications here:
-# http://www.imsglobal.org/spec/proctoring/v1p0#h.awao2i3cnvsy
-# Use lti library to ensure response matches shape
