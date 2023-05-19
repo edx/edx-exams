@@ -34,6 +34,7 @@ from edx_exams.apps.core.api import (
     get_exam_by_content_id,
     get_latest_attempt_for_user,
     get_provider_by_exam_id,
+    is_exam_passed_due,
     update_attempt_status
 )
 from edx_exams.apps.core.exam_types import get_exam_type
@@ -661,6 +662,8 @@ class CourseExamAttemptView(ExamsAPIView):
         serialized_exam['total_time'] = exam.time_limit_mins
         # timed exams will have None as a backend
         serialized_exam['backend'] = exam.provider.verbose_name if exam.provider is not None else None
+
+        serialized_exam['passed_due_date'] = is_exam_passed_due(serialized_exam)
         exam_attempt = get_current_exam_attempt(request.user.id, exam.id)
         if exam_attempt is not None:
             exam_attempt = check_if_exam_timed_out(exam_attempt)

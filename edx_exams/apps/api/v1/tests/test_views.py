@@ -1355,7 +1355,7 @@ class CourseExamAttemptViewTest(ExamsAPITestCase):
             exam_name='test_exam',
             exam_type='proctored',
             time_limit_mins=30,
-            due_date='2040-07-01T00:00:00Z',
+            due_date=timezone.now() + timedelta(days=1),
             hide_after_due=False,
             is_active=True
         )
@@ -1404,6 +1404,7 @@ class CourseExamAttemptViewTest(ExamsAPITestCase):
         expected_data['is_practice_exam'] = exam_type_class.is_practice
         expected_data['total_time'] = self.exam.time_limit_mins
         expected_data['backend'] = self.exam.provider.verbose_name
+        expected_data['passed_due_date'] = False
         expected_data['attempt'] = {}
 
         response = self.get_api(self.user, self.course_id, self.content_id)
