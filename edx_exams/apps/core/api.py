@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 
 import pytz
 from django.conf import settings
-from django.utils import timezone
+from django.utils import dateparse, timezone
 from opaque_keys.edx.keys import CourseKey, UsageKey
 
 from edx_exams.apps.core.exam_types import OnboardingExamType, PracticeExamType, get_exam_type
@@ -333,3 +333,19 @@ def get_provider_by_exam_id(exam_id):
         return exam.provider
     except Exam.DoesNotExist:
         return None
+
+
+def is_exam_passed_due(exam):
+    """
+    Return whether the exam is passed due.
+
+    Parameters:
+        * exam: a serialized representation of the exam
+    """
+    due_date = exam['due_date']
+
+    # In certain cases, an exam may not have a due date. In this case, the exam is never passed due.
+    if due_date:
+        due_date = dateparse.parse_datetime(due_date)
+        return due_date <= datetime.now(pytz.UTC)
+    return False

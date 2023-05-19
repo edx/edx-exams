@@ -22,6 +22,7 @@ from edx_exams.apps.core.api import (
     get_exam_by_content_id,
     get_exam_url_path,
     get_latest_attempt_for_user,
+    is_exam_passed_due,
     update_attempt_status
 )
 from edx_exams.apps.core.exceptions import (
@@ -761,3 +762,45 @@ class TestGetAttemptForUserWithAttemptNumberAndResourceId(ExamsAPITestCase):
         )
 
         self.assertIsNone(attempt)
+
+
+class TestIsExamPassedDue(ExamsAPITestCase):
+    """
+    Test the is_exam_passed_due API function.
+    """
+    def test_passed_due_equal(self):
+        """
+        Test that is_exam_passed_due returns True when the due date is equal to the current date (i.e. now).
+        """
+        with freeze_time(timezone.now()):
+            exam = {'due_date': str(timezone.now())}
+
+            self.assertTrue(is_exam_passed_due(exam))
+
+    def test_passed_due_less_than(self):
+        """
+        Test that is_exam_passed_due returns True when the due date is less than the current date (i.e. in the past).
+        """
+        with freeze_time(timezone.now()):
+            exam = {'due_date': str(timezone.now() - timedelta(hours=1))}
+
+            self.assertTrue(is_exam_passed_due(exam))
+
+    def test_not_passed_due_greater_than(self):
+        """
+        Test that is_exam_passed_due returns False when the due date is greater than the current date
+        (i.e. in the future).
+        """
+        with freeze_time(timezone.now()):
+            exam = {'due_date': str(timezone.now() + timedelta(hours=1))}
+
+            self.assertFalse(is_exam_passed_due(exam))
+
+    def test_not_passed_due_no_due_date(self):
+        """
+        Test that is_exam_passed_due returns False when the due date does not exist.
+        """
+        with freeze_time(timezone.now()):
+            exam = {'due_date': None}
+
+            self.assertFalse(is_exam_passed_due(exam))
