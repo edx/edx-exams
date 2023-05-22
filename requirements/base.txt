@@ -143,7 +143,7 @@ jsonfield==3.1.0
     # via lti-consumer-xblock
 lazy==1.5
     # via lti-consumer-xblock
-lti-consumer-xblock==9.5.0
+lti-consumer-xblock==9.5.1
     # via -r requirements/base.in
 lxml==4.9.2
     # via
