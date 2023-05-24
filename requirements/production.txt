@@ -146,14 +146,14 @@ edx-django-utils==5.4.0
     #   django-config-models
     #   edx-drf-extensions
     #   edx-rest-api-client
-edx-drf-extensions==8.7.0
+edx-drf-extensions==8.8.0
     # via -r requirements/base.txt
 edx-opaque-keys==2.3.0
     # via
     #   -r requirements/base.txt
     #   edx-drf-extensions
     #   lti-consumer-xblock
-edx-rest-api-client==5.5.1
+edx-rest-api-client==5.5.2
     # via -r requirements/base.txt
 edx-token-utils==0.2.1
     # via -r requirements/base.txt
@@ -251,7 +251,7 @@ pycparser==2.21
     # via
     #   -r requirements/base.txt
     #   cffi
-pycryptodomex==3.17
+pycryptodomex==3.18.0
     # via
     #   -r requirements/base.txt
     #   lti-consumer-xblock
@@ -259,7 +259,6 @@ pycryptodomex==3.17
 pyjwkest==1.4.2
     # via
     #   -r requirements/base.txt
-    #   edx-drf-extensions
     #   edx-token-utils
     #   lti-consumer-xblock
 pyjwt[crypto]==2.7.0
@@ -302,7 +301,7 @@ pyyaml==6.0
     #   -r requirements/production.in
     #   edx-django-release-util
     #   xblock
-requests==2.30.0
+requests==2.31.0
     # via
     #   -r requirements/base.txt
     #   coreapi

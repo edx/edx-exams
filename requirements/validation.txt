@@ -200,7 +200,7 @@ djangorestframework==3.14.0
     #   drf-yasg
     #   edx-api-doc-tools
     #   edx-drf-extensions
-docutils==0.20
+docutils==0.20.1
     # via
     #   -r requirements/quality.txt
     #   readme-renderer
@@ -233,7 +233,7 @@ edx-django-utils==5.4.0
     #   django-config-models
     #   edx-drf-extensions
     #   edx-rest-api-client
-edx-drf-extensions==8.7.0
+edx-drf-extensions==8.8.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -247,7 +247,7 @@ edx-opaque-keys==2.3.0
     #   -r requirements/test.txt
     #   edx-drf-extensions
     #   lti-consumer-xblock
-edx-rest-api-client==5.5.1
+edx-rest-api-client==5.5.2
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -264,7 +264,7 @@ factory-boy==3.2.1
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
-faker==18.7.0
+faker==18.9.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -472,7 +472,7 @@ pycparser==2.21
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   cffi
-pycryptodomex==3.17
+pycryptodomex==3.18.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -489,7 +489,6 @@ pyjwkest==1.4.2
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
-    #   edx-drf-extensions
     #   edx-token-utils
     #   lti-consumer-xblock
 pyjwt[crypto]==2.7.0
@@ -519,7 +518,7 @@ pylint-django==2.5.3
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   edx-lint
-pylint-plugin-utils==0.8.1
+pylint-plugin-utils==0.8.2
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -587,7 +586,7 @@ readme-renderer==37.3
     # via
     #   -r requirements/quality.txt
     #   twine
-requests==2.30.0
+requests==2.31.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -717,12 +716,12 @@ tox==3.28.0
     #   -r requirements/test.txt
 twine==4.0.2
     # via -r requirements/quality.txt
-types-pyyaml==6.0.12.9
+types-pyyaml==6.0.12.10
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   responses
-typing-extensions==4.5.0
+typing-extensions==4.6.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
