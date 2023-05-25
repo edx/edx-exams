@@ -182,6 +182,7 @@ def start_proctoring(request, attempt_id):
         external_user_id=str(user.anonymous_user_id),
         message_type='LtiStartProctoring',
         proctoring_launch_data=proctoring_launch_data,
+        context_id=exam.course_id,
     )
 
     return redirect(get_lti_1p3_launch_start_url(launch_data))
@@ -243,6 +244,7 @@ def end_assessment(request, attempt_id):
             external_user_id=str(request.user.anonymous_user_id),
             message_type='LtiEndAssessment',
             proctoring_launch_data=proctoring_launch_data,
+            context_id=exam.course_id,
         )
 
         # TODO: "If the assessment needs to close due to an error NOT handled by the Assessment Platform that error MUST

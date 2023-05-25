@@ -283,7 +283,8 @@ class LtiStartProctoringTestCase(ExamsAPITestCase):
             resource_link_id=self.exam.resource_id,
             external_user_id=str(self.user.anonymous_user_id),
             message_type='LtiStartProctoring',
-            proctoring_launch_data=expected_proctoring_launch_data
+            proctoring_launch_data=expected_proctoring_launch_data,
+            context_id=self.course_id,
         )
 
         mock_get_lti_launch_url.assert_called_with(expected_launch_data)
@@ -417,7 +418,8 @@ class LtiEndAssessmentTestCase(ExamsAPITestCase):
             resource_link_id=self.exam.resource_id,
             external_user_id=str(self.user.anonymous_user_id),
             message_type='LtiEndAssessment',
-            proctoring_launch_data=expected_proctoring_launch_data
+            proctoring_launch_data=expected_proctoring_launch_data,
+            context_id=self.course_id,
         )
 
         mock_get_lti_launch_url.assert_called_with(expected_launch_data)
