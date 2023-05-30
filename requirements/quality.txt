@@ -8,7 +8,7 @@ appdirs==1.4.4
     # via
     #   -r requirements/test.txt
     #   fs
-asgiref==3.6.0
+asgiref==3.7.2
     # via
     #   -r requirements/test.txt
     #   django
@@ -65,7 +65,7 @@ coreschema==0.0.4
     #   -r requirements/test.txt
     #   coreapi
     #   drf-yasg
-coverage[toml]==7.2.5
+coverage[toml]==7.2.7
     # via
     #   -r requirements/test.txt
     #   pytest-cov
@@ -323,7 +323,7 @@ openapi-codec==1.3.2
     # via
     #   -r requirements/test.txt
     #   django-rest-swagger
-openedx-filters==1.2.0
+openedx-filters==1.3.0
     # via
     #   -r requirements/test.txt
     #   lti-consumer-xblock
@@ -420,7 +420,7 @@ pytest==7.3.1
     #   -r requirements/test.txt
     #   pytest-cov
     #   pytest-django
-pytest-cov==4.0.0
+pytest-cov==4.1.0
     # via -r requirements/test.txt
 pytest-django==4.5.2
     # via -r requirements/test.txt
@@ -480,7 +480,7 @@ rfc3986==2.0.0
     # via twine
 rich==13.3.5
     # via twine
-ruamel-yaml==0.17.26
+ruamel-yaml==0.17.30
     # via
     #   -r requirements/test.txt
     #   drf-yasg
@@ -562,9 +562,10 @@ types-pyyaml==6.0.12.10
     # via
     #   -r requirements/test.txt
     #   responses
-typing-extensions==4.6.0
+typing-extensions==4.6.2
     # via
     #   -r requirements/test.txt
+    #   asgiref
     #   astroid
     #   pylint
     #   rich
@@ -605,7 +606,7 @@ xblock==1.6.2
     #   -r requirements/test.txt
     #   lti-consumer-xblock
     #   xblock-utils
-xblock-utils==3.0.0
+xblock-utils==3.1.0
     # via
     #   -r requirements/test.txt
     #   lti-consumer-xblock
