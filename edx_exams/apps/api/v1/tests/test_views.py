@@ -1252,6 +1252,13 @@ class ExamAttemptViewTest(ExamsAPITestCase):
         with self.assertRaises(ExamAttempt.DoesNotExist):
             attempt.refresh_from_db()
 
+    def test_delete_attempt_with_bad_attempt_id(self):
+        """
+        Test that a bad attempt ID returns 400
+        """
+        response = self.delete_api(self.staff_user, 9999999)
+        self.assertEqual(response.status_code, 400)
+
 
 class ExamAttemptListViewTests(ExamsAPITestCase):
     """
