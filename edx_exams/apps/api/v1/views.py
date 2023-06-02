@@ -587,7 +587,7 @@ class ExamAttemptView(ExamsAPIView):
         if exam_attempt is None:
             return Response(
                 status=status.HTTP_400_BAD_REQUEST,
-                data={'detail': f'Attempt with attempt_id={attempt_id} does not exit.'}
+                data={'detail': f'Attempt with attempt_id={attempt_id} does not exist.'}
             )
 
         # TODO: this staff check will be updated once an instructor role is added
