@@ -579,6 +579,29 @@ class ExamAttemptView(ExamsAPIView):
         data = {'exam_attempt_id': exam_attempt_id}
         return Response(data)
 
+    def delete(self, request, attempt_id):
+        """
+        HTTP DELETE handler to delete exam attempt
+        """
+        exam_attempt = get_attempt_by_id(attempt_id)
+        if exam_attempt is None:
+            return Response(
+                status=status.HTTP_400_BAD_REQUEST,
+                data={'detail': f'Attempt with attempt_id={attempt_id} does not exit.'}
+            )
+
+        # TODO: this staff check will be updated once an instructor role is added
+        if not request.user.is_staff and exam_attempt.user.id != request.user.id:
+            error_msg = (
+                f'user_id={exam_attempt.user.id} attempted to delete attempt_id={exam_attempt.id} in '
+                f'course_id={exam_attempt.exam.course_id} but does not have access to it.'
+            )
+            error = {'detail': error_msg}
+            return Response(status=status.HTTP_403_FORBIDDEN, data=error)
+
+        exam_attempt.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 class InstructorAttemptsListView(ExamsAPIView):
     """
