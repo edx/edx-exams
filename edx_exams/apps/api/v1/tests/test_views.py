@@ -1051,29 +1051,22 @@ class ExamAttemptViewTest(ExamsAPITestCase):
     def setUp(self):
         super().setUp()
 
-        self.course_id = 'course-v1:edx+test+f19'
-        self.content_id = '11111111'
-
-        self.course_exam_config = CourseExamConfiguration.objects.create(
-            course_id=self.course_id,
+        self.exam = ExamFactory(
             provider=self.test_provider,
-            allow_opt_out=False
-        )
-
-        self.exam = Exam.objects.create(
-            resource_id=str(uuid.uuid4()),
-            course_id=self.course_id,
-            provider=self.test_provider,
-            content_id=self.content_id,
-            exam_name='test_exam',
-            exam_type='proctored',
-            time_limit_mins=30,
-            due_date='2040-07-01 00:00:00',
-            hide_after_due=False,
-            is_active=True
         )
 
         self.non_staff_user = UserFactory()
+        self.staff_user = UserFactory(is_staff=True)
+
+    def delete_api(self, user, attempt_id):
+        """
+        Helper function to make delete request to the API
+        """
+
+        headers = self.build_jwt_headers(user)
+        url = reverse('api:v1:exams-attempt', args=[attempt_id])
+
+        return self.client.delete(url, **headers)
 
     def put_api(self, user, attempt_id, data):
         """
@@ -1102,13 +1095,9 @@ class ExamAttemptViewTest(ExamsAPITestCase):
         """
         # create non-staff user with attempt
         other_user = UserFactory()
-        attempt = ExamAttempt.objects.create(
+        attempt = ExamAttemptFactory(
             user=other_user,
             exam=self.exam,
-            attempt_number=1111111,
-            status=ExamAttemptStatus.created,
-            start_time=None,
-            allowed_time_limit_mins=None,
         )
 
         # try to update other user's attempt
@@ -1136,13 +1125,9 @@ class ExamAttemptViewTest(ExamsAPITestCase):
         Test that an exam can be updated
         """
         # create exam attempt for user
-        attempt = ExamAttempt.objects.create(
+        attempt = ExamAttemptFactory(
             user=self.non_staff_user,
             exam=self.exam,
-            attempt_number=1111111,
-            status=ExamAttemptStatus.created,
-            start_time=None,
-            allowed_time_limit_mins=None,
         )
 
         mock_update_attempt_status.return_value = attempt.id
@@ -1159,13 +1144,9 @@ class ExamAttemptViewTest(ExamsAPITestCase):
         error_msg = 'Something bad happened'
         mock_update_attempt_status.side_effect = ExamIllegalStatusTransition(error_msg)
 
-        attempt = ExamAttempt.objects.create(
+        attempt = ExamAttemptFactory(
             user=self.non_staff_user,
             exam=self.exam,
-            attempt_number=1111111,
-            status=ExamAttemptStatus.created,
-            start_time=None,
-            allowed_time_limit_mins=None,
         )
 
         response = self.put_api(self.non_staff_user, attempt.id, {'action': 'start'})
@@ -1176,14 +1157,10 @@ class ExamAttemptViewTest(ExamsAPITestCase):
         """
         Test that an unrecognized action fails
         """
-
-        attempt = ExamAttempt.objects.create(
+        attempt = ExamAttemptFactory(
             user=self.non_staff_user,
             exam=self.exam,
-            attempt_number=1111111,
             status=ExamAttemptStatus.started,
-            start_time='2020-07-01 00:00:00',
-            allowed_time_limit_mins=None,
         )
 
         # try to update other user's attempt
@@ -1236,6 +1213,51 @@ class ExamAttemptViewTest(ExamsAPITestCase):
 
         if start_immediately:
             mock_update_attempt.assert_called_once_with(mock_attempt_id, ExamAttemptStatus.started)
+
+    def test_learner_delete_attempt(self):
+        """
+        Non-staff users can only delete their own exam attempts
+        """
+        other_user = UserFactory()
+        attempt = ExamAttemptFactory(
+            user=self.non_staff_user,
+            exam=self.exam,
+        )
+        attempt_other_user = ExamAttemptFactory(
+            user=other_user,
+            exam=self.exam,
+        )
+
+        # try to delete another user's attempt
+        response = self.delete_api(self.non_staff_user, attempt_other_user.id)
+        self.assertEqual(response.status_code, 403)
+
+        # delete own attempt
+        response = self.delete_api(self.non_staff_user, attempt.id)
+        self.assertEqual(response.status_code, 204)
+        with self.assertRaises(ExamAttempt.DoesNotExist):
+            attempt.refresh_from_db()
+
+    def test_staff_delete_attempt(self):
+        """
+        Test that staff can delete any exam attempt
+        """
+        attempt = ExamAttemptFactory(
+            user=self.non_staff_user,
+            exam=self.exam,
+        )
+
+        response = self.delete_api(self.staff_user, attempt.id)
+        self.assertEqual(response.status_code, 204)
+        with self.assertRaises(ExamAttempt.DoesNotExist):
+            attempt.refresh_from_db()
+
+    def test_delete_attempt_with_bad_attempt_id(self):
+        """
+        Test that a bad attempt ID returns 400
+        """
+        response = self.delete_api(self.staff_user, 9999999)
+        self.assertEqual(response.status_code, 400)
 
 
 class ExamAttemptListViewTests(ExamsAPITestCase):
