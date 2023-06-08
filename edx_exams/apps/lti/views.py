@@ -183,6 +183,7 @@ def start_proctoring(request, attempt_id):
         message_type='LtiStartProctoring',
         proctoring_launch_data=proctoring_launch_data,
         context_id=exam.course_id,
+        context_label=exam.content_id,
     )
 
     return redirect(get_lti_1p3_launch_start_url(launch_data))

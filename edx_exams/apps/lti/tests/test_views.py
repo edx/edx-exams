@@ -285,6 +285,7 @@ class LtiStartProctoringTestCase(ExamsAPITestCase):
             message_type='LtiStartProctoring',
             proctoring_launch_data=expected_proctoring_launch_data,
             context_id=self.course_id,
+            context_label=self.content_id,
         )
 
         mock_get_lti_launch_url.assert_called_with(expected_launch_data)
