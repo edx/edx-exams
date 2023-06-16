@@ -88,6 +88,7 @@ cryptography==41.0.1
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   pyjwt
+    #   secretstorage
     #   social-auth-core
 ddt==1.6.0
     # via
@@ -268,7 +269,7 @@ faker==18.10.1
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   factory-boy
-filelock==3.12.1
+filelock==3.12.2
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -326,6 +327,11 @@ jaraco-classes==3.2.3
     # via
     #   -r requirements/quality.txt
     #   keyring
+jeepney==0.8.0
+    # via
+    #   -r requirements/quality.txt
+    #   keyring
+    #   secretstorage
 jinja2==3.1.2
     # via
     #   -r requirements/quality.txt
@@ -625,6 +631,10 @@ ruamel-yaml-clib==0.2.7
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   ruamel-yaml
+secretstorage==3.3.3
+    # via
+    #   -r requirements/quality.txt
+    #   keyring
 semantic-version==2.10.0
     # via
     #   -r requirements/quality.txt
