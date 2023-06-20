@@ -25,12 +25,9 @@ click==8.1.3
 coreapi==2.3.3
     # via
     #   django-rest-swagger
-    #   drf-yasg
     #   openapi-codec
 coreschema==0.0.4
-    # via
-    #   coreapi
-    #   drf-yasg
+    # via coreapi
 cryptography==41.0.1
     # via
     #   pyjwt
@@ -68,7 +65,7 @@ django-appconf==1.0.5
     # via django-statici18n
 django-config-models==2.3.0
     # via lti-consumer-xblock
-django-cors-headers==4.0.0
+django-cors-headers==4.1.0
     # via -r requirements/base.in
 django-crum==0.7.9
     # via edx-django-utils
@@ -102,7 +99,7 @@ djangorestframework==3.14.0
     #   edx-drf-extensions
 drf-jwt==1.19.2
     # via edx-drf-extensions
-drf-yasg==1.21.5
+drf-yasg==1.21.6
     # via edx-api-doc-tools
 edx-api-doc-tools==1.6.0
     # via -r requirements/base.in
@@ -213,6 +210,7 @@ pytz==2023.3
     #   xblock
 pyyaml==6.0
     # via
+    #   drf-yasg
     #   edx-django-release-util
     #   xblock
 requests==2.31.0
@@ -226,10 +224,6 @@ requests==2.31.0
     #   social-auth-core
 requests-oauthlib==1.3.1
     # via social-auth-core
-ruamel-yaml==0.17.31
-    # via drf-yasg
-ruamel-yaml-clib==0.2.7
-    # via ruamel-yaml
 semantic-version==2.10.0
     # via edx-drf-extensions
 simplejson==3.19.1
@@ -279,7 +273,7 @@ xblock==1.6.2
     # via
     #   lti-consumer-xblock
     #   xblock-utils
-xblock-utils==3.1.0
+xblock-utils==3.2.0
     # via lti-consumer-xblock
 
 # The following packages are considered to be unsafe in a requirements file:
