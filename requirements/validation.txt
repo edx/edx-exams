@@ -70,14 +70,12 @@ coreapi==2.3.3
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   django-rest-swagger
-    #   drf-yasg
     #   openapi-codec
 coreschema==0.0.4
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   coreapi
-    #   drf-yasg
 coverage[toml]==7.2.7
     # via
     #   -r requirements/quality.txt
@@ -145,7 +143,7 @@ django-config-models==2.3.0
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   lti-consumer-xblock
-django-cors-headers==4.0.0
+django-cors-headers==4.1.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -209,7 +207,7 @@ drf-jwt==1.19.2
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   edx-drf-extensions
-drf-yasg==1.21.5
+drf-yasg==1.21.6
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -294,7 +292,7 @@ idna==3.4
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   requests
-importlib-metadata==6.6.0
+importlib-metadata==6.7.0
     # via
     #   -r requirements/quality.txt
     #   keyring
@@ -343,7 +341,7 @@ jsonfield==3.1.0
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   lti-consumer-xblock
-keyring==23.13.1
+keyring==24.0.0
     # via
     #   -r requirements/quality.txt
     #   twine
@@ -443,7 +441,7 @@ pkginfo==1.9.6
     # via
     #   -r requirements/quality.txt
     #   twine
-platformdirs==3.5.3
+platformdirs==3.6.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -579,10 +577,11 @@ pyyaml==6.0
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   code-annotations
+    #   drf-yasg
     #   edx-django-release-util
     #   responses
     #   xblock
-readme-renderer==37.3
+readme-renderer==40.0
     # via
     #   -r requirements/quality.txt
     #   twine
@@ -621,16 +620,6 @@ rich==13.4.2
     # via
     #   -r requirements/quality.txt
     #   twine
-ruamel-yaml==0.17.31
-    # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
-    #   drf-yasg
-ruamel-yaml-clib==0.2.7
-    # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
-    #   ruamel-yaml
 secretstorage==3.3.3
     # via
     #   -r requirements/quality.txt
@@ -742,7 +731,7 @@ urllib3==2.0.3
     #   requests
     #   responses
     #   twine
-virtualenv==20.23.0
+virtualenv==20.23.1
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -774,7 +763,7 @@ xblock==1.6.2
     #   -r requirements/test.txt
     #   lti-consumer-xblock
     #   xblock-utils
-xblock-utils==3.1.0
+xblock-utils==3.2.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
