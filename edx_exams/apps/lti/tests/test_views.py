@@ -3,7 +3,6 @@ Tests for the exams LTI views
 """
 import json
 import logging
-import uuid
 from unittest.mock import patch
 from urllib.parse import urljoin
 
@@ -22,7 +21,6 @@ from edx_exams.apps.api.test_utils.factories import (
     ExamFactory,
     ProctoringProviderFactory
 )
-from edx_exams.apps.core.models import CourseExamConfiguration, Exam, ExamAttempt
 from edx_exams.apps.core.statuses import ExamAttemptStatus
 from edx_exams.apps.lti.utils import get_lti_root
 
@@ -340,32 +338,14 @@ class LtiEndAssessmentTestCase(ExamsAPITestCase):
         self.course_id = 'course-v1:edx+test+f19'
         self.content_id = '11111111'
 
-        self.course_exam_config = CourseExamConfiguration.objects.create(
-            course_id=self.course_id,
-            provider=self.test_provider,
-            allow_opt_out=False
-        )
-
-        self.exam = Exam.objects.create(
-            resource_id=str(uuid.uuid4()),
+        self.exam = ExamFactory(
             course_id=self.course_id,
             provider=self.test_provider,
             content_id=self.content_id,
-            exam_name='test_exam',
-            exam_type='proctored',
-            time_limit_mins=30,
-            due_date='2021-07-01 00:00:00',
-            hide_after_due=False,
-            is_active=True
         )
-
-        self.attempt = ExamAttempt.objects.create(
+        self.attempt = ExamAttemptFactory(
             user=self.user,
             exam=self.exam,
-            attempt_number=1111111,
-            status=ExamAttemptStatus.created,
-            start_time=None,
-            allowed_time_limit_mins=None,
         )
 
         # Create an LtiConfiguration instance so that the config_id can be included in the Lti1p3LaunchData.
