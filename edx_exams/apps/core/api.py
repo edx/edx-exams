@@ -299,6 +299,16 @@ def get_exam_by_content_id(course_id, content_id):
         return None
 
 
+def get_exam_by_id(exam_id):
+    """
+    Retrieve an exam filtered by a course_id and content_id
+    """
+    try:
+        exam = Exam.objects.get(id=exam_id)
+        return exam
+    except Exam.DoesNotExist:
+        return None
+
 def get_course_exams(course_id):
     """
     Retrieve all active exams for a course

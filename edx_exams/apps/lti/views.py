@@ -25,6 +25,7 @@ from rest_framework.response import Response
 from edx_exams.apps.core.api import (
     get_attempt_by_id,
     get_attempt_for_user_with_attempt_number_and_resource_id,
+    get_exam_by_id,
     update_attempt_status
 )
 from edx_exams.apps.core.exceptions import ExamIllegalStatusTransition
@@ -256,3 +257,38 @@ def end_assessment(request, attempt_id):
         return redirect(preflight_url)
 
     return JsonResponse({})
+
+@api_view(['GET'])
+@require_http_methods(['GET'])
+@authentication_classes((JwtAuthentication,))
+@permission_classes((IsAuthenticated,))
+def launch_instructor_tool(request, exam_id):
+    """
+    View to initiate an LTI launch of the Instructor Tool for an exam.
+    """
+    user = request.user
+
+    # TODO: this should eventually be replaced with a permission check
+    # for course staff
+    if not user.is_staff:
+        return Response(status=status.HTTP_403_FORBIDDEN)
+
+    exam = get_exam_by_id(exam_id)
+    if not exam:
+        return Response(
+            status=status.HTTP_400_BAD_REQUEST,
+            data={'detail': f'Exam with exam_id={exam_id} does not exist.'}
+        )
+
+    lti_config_id = exam.provider.lti_configuration_id
+    lti_config = LtiConfiguration.objects.get(id=lti_config_id)
+    launch_data = Lti1p3LaunchData(
+        user_id=user.id,
+        user_role='instructor',
+        config_id=lti_config.config_id,
+        resource_link_id=exam.resource_id,
+        external_user_id=str(user.anonymous_user_id),
+        context_id=exam.course_id,
+    )
+
+    return redirect(get_lti_1p3_launch_start_url(launch_data))
