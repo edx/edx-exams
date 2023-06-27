@@ -258,6 +258,7 @@ def end_assessment(request, attempt_id):
 
     return JsonResponse({})
 
+
 @api_view(['GET'])
 @require_http_methods(['GET'])
 @authentication_classes((JwtAuthentication,))

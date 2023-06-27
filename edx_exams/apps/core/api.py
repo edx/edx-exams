@@ -309,6 +309,7 @@ def get_exam_by_id(exam_id):
     except Exam.DoesNotExist:
         return None
 
+
 def get_course_exams(course_id):
     """
     Retrieve all active exams for a course

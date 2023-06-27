@@ -509,7 +509,7 @@ class LtiInstructorLaunchTest(ExamsAPITestCase):
 
         self.assertEqual(response.status_code, 400)
 
-    def test_requires_staff_user(self, mock_create_launch_url): # pylint: disable=unused-argument
+    def test_requires_staff_user(self, mock_create_launch_url):  # pylint: disable=unused-argument
         """
         Test that a 403 response is returned when calling the view with a non-staff user.
         """
