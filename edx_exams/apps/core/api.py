@@ -301,7 +301,7 @@ def get_exam_by_content_id(course_id, content_id):
 
 def get_exam_by_id(exam_id):
     """
-    Retrieve an exam filtered by a course_id and content_id
+    Retrieve an exam by id
     """
     try:
         exam = Exam.objects.get(id=exam_id)
