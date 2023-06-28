@@ -3,7 +3,6 @@ Tests for the exams LTI views
 """
 import json
 import logging
-import uuid
 from unittest.mock import patch
 from urllib.parse import urljoin
 
@@ -16,8 +15,12 @@ from lti_consumer.lti_1p3.extensions.rest_framework.authentication import Lti1p3
 from lti_consumer.models import LtiConfiguration, LtiProctoringConsumer
 
 from edx_exams.apps.api.test_utils import ExamsAPITestCase, UserFactory
-from edx_exams.apps.api.test_utils.factories import CourseExamConfigurationFactory, ExamAttemptFactory, ExamFactory
-from edx_exams.apps.core.models import CourseExamConfiguration, Exam, ExamAttempt
+from edx_exams.apps.api.test_utils.factories import (
+    CourseExamConfigurationFactory,
+    ExamAttemptFactory,
+    ExamFactory,
+    ProctoringProviderFactory
+)
 from edx_exams.apps.core.statuses import ExamAttemptStatus
 from edx_exams.apps.lti.utils import get_lti_root
 
@@ -211,32 +214,14 @@ class LtiStartProctoringTestCase(ExamsAPITestCase):
         self.course_id = 'course-v1:edx+test+f19'
         self.content_id = '11111111'
 
-        self.course_exam_config = CourseExamConfiguration.objects.create(
-            course_id=self.course_id,
-            provider=self.test_provider,
-            allow_opt_out=False
-        )
-
-        self.exam = Exam.objects.create(
-            resource_id=str(uuid.uuid4()),
+        self.exam = ExamFactory(
             course_id=self.course_id,
             provider=self.test_provider,
             content_id=self.content_id,
-            exam_name='test_exam',
-            exam_type='proctored',
-            time_limit_mins=30,
-            due_date='2021-07-01 00:00:00',
-            hide_after_due=False,
-            is_active=True
         )
-
-        self.attempt = ExamAttempt.objects.create(
+        self.attempt = ExamAttemptFactory(
             user=self.user,
             exam=self.exam,
-            attempt_number=1111111,
-            status=ExamAttemptStatus.created,
-            start_time=None,
-            allowed_time_limit_mins=None,
         )
 
         # Create an LtiConfiguration instance so that the config_id can be included in the Lti1p3LaunchData.
@@ -353,32 +338,14 @@ class LtiEndAssessmentTestCase(ExamsAPITestCase):
         self.course_id = 'course-v1:edx+test+f19'
         self.content_id = '11111111'
 
-        self.course_exam_config = CourseExamConfiguration.objects.create(
-            course_id=self.course_id,
-            provider=self.test_provider,
-            allow_opt_out=False
-        )
-
-        self.exam = Exam.objects.create(
-            resource_id=str(uuid.uuid4()),
+        self.exam = ExamFactory(
             course_id=self.course_id,
             provider=self.test_provider,
             content_id=self.content_id,
-            exam_name='test_exam',
-            exam_type='proctored',
-            time_limit_mins=30,
-            due_date='2021-07-01 00:00:00',
-            hide_after_due=False,
-            is_active=True
         )
-
-        self.attempt = ExamAttempt.objects.create(
+        self.attempt = ExamAttemptFactory(
             user=self.user,
             exam=self.exam,
-            attempt_number=1111111,
-            status=ExamAttemptStatus.created,
-            start_time=None,
-            allowed_time_limit_mins=None,
         )
 
         # Create an LtiConfiguration instance so that the config_id can be included in the Lti1p3LaunchData.
@@ -472,5 +439,61 @@ class LtiEndAssessmentTestCase(ExamsAPITestCase):
 
         headers = self.build_jwt_headers(other_user)
         response = self.client.get(self.url, **headers)
+
+        self.assertEqual(response.status_code, 403)
+
+
+@patch('edx_exams.apps.lti.views.get_lti_1p3_launch_start_url', return_value='https://www.example.com')
+class LtiInstructorLaunchTest(ExamsAPITestCase):
+    """
+    Test launch_instructor_view
+    """
+    def setUp(self):
+        super().setUp()
+        self.lti_configuration = LtiConfiguration.objects.create()
+        self.exam = ExamFactory(
+            provider=ProctoringProviderFactory(
+                lti_configuration_id=self.lti_configuration.id
+            ),
+        )
+
+    def _get_launch_url(self, exam_id):
+        return reverse('lti:instructor_tool', kwargs={'exam_id': exam_id})
+
+    def test_lti_launch(self, mock_create_launch_url):
+        """
+        Test that the view calls get_lti_1p3_launch_start_url with the correct data.
+        """
+        headers = self.build_jwt_headers(self.user)
+        response = self.client.get(self._get_launch_url(self.exam.id), **headers)
+
+        mock_create_launch_url.assert_called_with(
+            Lti1p3LaunchData(
+                user_id=self.user.id,
+                user_role='instructor',
+                config_id=self.lti_configuration.config_id,
+                resource_link_id=self.exam.resource_id,
+                external_user_id=str(self.user.anonymous_user_id),
+                context_id=self.exam.course_id,
+            )
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, 'https://www.example.com')
+
+    def test_invalid_exam_id(self, mock_create_launch_url):  # pylint: disable=unused-argument
+        """
+        Test that a 400 response is returned when calling the view with an exam_id that does not exist.
+        """
+        headers = self.build_jwt_headers(self.user)
+        response = self.client.get(self._get_launch_url(1000), **headers)
+
+        self.assertEqual(response.status_code, 400)
+
+    def test_requires_staff_user(self, mock_create_launch_url):  # pylint: disable=unused-argument
+        """
+        Test that a 403 response is returned when calling the view with a non-staff user.
+        """
+        headers = self.build_jwt_headers(UserFactory(is_staff=False))
+        response = self.client.get(self._get_launch_url(self.exam.id), **headers)
 
         self.assertEqual(response.status_code, 403)
