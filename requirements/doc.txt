@@ -216,7 +216,7 @@ exceptiongroup==1.1.1
     #   pytest
 factory-boy==3.2.1
     # via -r requirements/test.txt
-faker==18.10.1
+faker==18.11.1
     # via
     #   -r requirements/test.txt
     #   factory-boy
@@ -280,7 +280,7 @@ jsonfield==3.1.0
     # via
     #   -r requirements/test.txt
     #   lti-consumer-xblock
-keyring==24.0.0
+keyring==24.2.0
     # via twine
 lazy==1.5
     # via
@@ -320,9 +320,9 @@ mock==5.0.2
     # via -r requirements/test.txt
 more-itertools==9.1.0
     # via jaraco-classes
-mysqlclient==2.1.1
+mysqlclient==2.2.0
     # via -r requirements/test.txt
-newrelic==8.8.0
+newrelic==8.8.1
     # via
     #   -r requirements/test.txt
     #   edx-django-utils
@@ -354,12 +354,12 @@ pbr==5.11.1
     #   stevedore
 pkginfo==1.9.6
     # via twine
-platformdirs==3.6.0
+platformdirs==3.8.0
     # via
     #   -r requirements/test.txt
     #   pylint
     #   virtualenv
-pluggy==1.0.0
+pluggy==1.2.0
     # via
     #   -r requirements/test.txt
     #   pytest
@@ -430,7 +430,7 @@ pynacl==1.5.0
     #   edx-django-utils
 pyproject-hooks==1.0.0
     # via build
-pytest==7.3.2
+pytest==7.4.0
     # via
     #   -r requirements/test.txt
     #   pytest-cov
@@ -542,7 +542,6 @@ social-auth-core==4.4.2
     #   social-auth-app-django
 sphinx==5.3.0
     # via
-    #   -c https://raw.githubusercontent.com/edx/edx-lint/master/edx_lint/files/common_constraints.txt
     #   -r requirements/doc.in
     #   edx-sphinx-theme
 sphinxcontrib-applehelp==1.0.4

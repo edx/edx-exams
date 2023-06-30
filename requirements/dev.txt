@@ -217,7 +217,7 @@ exceptiongroup==1.1.1
     #   pytest
 factory-boy==3.2.1
     # via -r requirements/validation.txt
-faker==18.10.1
+faker==18.11.1
     # via
     #   -r requirements/validation.txt
     #   factory-boy
@@ -284,7 +284,7 @@ jsonfield==3.1.0
     # via
     #   -r requirements/validation.txt
     #   lti-consumer-xblock
-keyring==24.0.0
+keyring==24.2.0
     # via
     #   -r requirements/validation.txt
     #   twine
@@ -332,9 +332,9 @@ more-itertools==9.1.0
     # via
     #   -r requirements/validation.txt
     #   jaraco-classes
-mysqlclient==2.1.1
+mysqlclient==2.2.0
     # via -r requirements/validation.txt
-newrelic==8.8.0
+newrelic==8.8.1
     # via
     #   -r requirements/validation.txt
     #   edx-django-utils
@@ -372,12 +372,12 @@ pkginfo==1.9.6
     # via
     #   -r requirements/validation.txt
     #   twine
-platformdirs==3.6.0
+platformdirs==3.8.0
     # via
     #   -r requirements/validation.txt
     #   pylint
     #   virtualenv
-pluggy==1.0.0
+pluggy==1.2.0
     # via
     #   -r requirements/validation.txt
     #   diff-cover
@@ -457,7 +457,7 @@ pyproject-hooks==1.0.0
     # via
     #   -r requirements/pip-tools.txt
     #   build
-pytest==7.3.2
+pytest==7.4.0
     # via
     #   -r requirements/validation.txt
     #   pytest-cov
