@@ -14,6 +14,8 @@ MAINTAINER sre@edx.org
 # libmysqlclient-dev; to install header files needed to use native C implementation for
 # MySQL-python for performance gains.
 
+# pkg-config; mysqlclient>=2.2.0 requires pkg-config (https://github.com/PyMySQL/mysqlclient/issues/620)
+
 # libssl-dev; # mysqlclient wont install without this.
 
 # python3-dev; to install header files for python extensions; much wheel-building depends on this
@@ -29,6 +31,7 @@ RUN apt-get update && apt-get -qy install --no-install-recommends \
  python3.8 \
  python3-pip \
  libmysqlclient-dev \
+ pkg-config \
  libssl-dev \
  python3-dev \
  gcc \
