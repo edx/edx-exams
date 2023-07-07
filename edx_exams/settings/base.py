@@ -273,3 +273,5 @@ PLATFORM_NAME = 'Your Platform Name Here'
 LOGGING = get_logger_config(debug=DEBUG)
 
 LEARNING_MICROFRONTEND_URL = None
+
+EXAMS_DASHBOARD_MFE_URL = None
