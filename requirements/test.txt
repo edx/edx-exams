@@ -184,11 +184,11 @@ edx-rest-api-client==5.5.2
     # via -r requirements/base.txt
 edx-token-utils==0.2.1
     # via -r requirements/base.txt
-exceptiongroup==1.1.1
+exceptiongroup==1.1.2
     # via pytest
 factory-boy==3.2.1
     # via -r requirements/test.in
-faker==18.11.1
+faker==18.11.2
     # via factory-boy
 filelock==3.12.2
     # via
@@ -459,7 +459,7 @@ tox==3.28.0
     #   -r requirements/test.in
 types-pyyaml==6.0.12.10
     # via responses
-typing-extensions==4.6.3
+typing-extensions==4.7.1
     # via
     #   -r requirements/base.txt
     #   asgiref
