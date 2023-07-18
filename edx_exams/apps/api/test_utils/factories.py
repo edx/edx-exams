@@ -8,7 +8,13 @@ import factory
 from django.contrib.auth import get_user_model
 from factory.django import DjangoModelFactory
 
-from edx_exams.apps.core.models import CourseExamConfiguration, Exam, ExamAttempt, ProctoringProvider
+from edx_exams.apps.core.models import (
+    AssessmentControlResult,
+    CourseExamConfiguration,
+    Exam,
+    ExamAttempt,
+    ProctoringProvider
+)
 from edx_exams.apps.core.statuses import ExamAttemptStatus
 
 
@@ -91,3 +97,17 @@ class ExamAttemptFactory(DjangoModelFactory):
     status = ExamAttemptStatus.created
     start_time = None
     allowed_time_limit_mins = 30
+
+
+class AssessmentControlResultFactory(DjangoModelFactory):
+    """
+    Factory to create assessment control results
+    """
+    class Meta:
+        model = AssessmentControlResult
+
+    attempt = factory.SubFactory(ExamAttemptFactory)
+    action_type = 'terminate'
+    incident_time = datetime.datetime.now() - datetime.timedelta(hours=1)
+    severity = 1
+    reason_code = 'test_code'

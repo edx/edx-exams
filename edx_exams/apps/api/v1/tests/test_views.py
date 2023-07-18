@@ -16,6 +16,7 @@ from token_utils.api import unpack_token_for
 from edx_exams.apps.api.serializers import ExamSerializer, StudentAttemptSerializer
 from edx_exams.apps.api.test_utils import ExamsAPITestCase
 from edx_exams.apps.api.test_utils.factories import (
+    AssessmentControlResultFactory,
     CourseExamConfigurationFactory,
     ExamAttemptFactory,
     ExamFactory,
@@ -1299,7 +1300,8 @@ class ExamAttemptListViewTests(ExamsAPITestCase):
         # attempts for a different exam should not return
         ExamAttemptFactory.create_batch(3, exam=self.exam_2)
 
-        # 3 junk attempts, we'll test the 4th explicitly
+        # 3 junk attempts, we'll test the 4th/5th explicitly
+        # for one reviewed and one unreviewed attempt
         ExamAttemptFactory.create_batch(3, exam=self.exam_1)
         user = UserFactory.create(username='attempt_test_user')
         attempt = ExamAttemptFactory.create(
@@ -1308,12 +1310,26 @@ class ExamAttemptListViewTests(ExamsAPITestCase):
             status=ExamAttemptStatus.submitted,
             start_time=timezone.now() - timedelta(hours=2),
         )
+        reviewed_attempt = ExamAttemptFactory.create(
+            user=user,
+            exam=self.exam_1,
+            status=ExamAttemptStatus.verified,
+            start_time=timezone.now() - timedelta(hours=4),
+            end_time=timezone.now() - timedelta(hours=3),
+        )
+        AssessmentControlResultFactory.create(
+            attempt=reviewed_attempt,
+            severity=0.1,
+            reason_code='test_reason_code',
+            incident_time=reviewed_attempt.end_time,
+        )
 
         response = self.get_api(self.exam_1.id)
         results = response.data.get('results')
+        self.maxDiff = None
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data.get('count'), 4)
-        self.assertDictEqual(results[0], {
+        self.assertEqual(response.data.get('count'), 5)
+        self.assertDictEqual(results[1], {
             'username': 'attempt_test_user',
             'attempt_id': attempt.id,
             'attempt_status': ExamAttemptStatus.submitted,
@@ -1322,6 +1338,22 @@ class ExamAttemptListViewTests(ExamsAPITestCase):
             'allowed_time_limit_mins': attempt.allowed_time_limit_mins,
             'exam_type': self.exam_1.exam_type,
             'exam_display_name': self.exam_1.exam_name,
+            'proctored_review': None,
+        })
+        self.assertDictEqual(results[0], {
+            'username': 'attempt_test_user',
+            'attempt_id': reviewed_attempt.id,
+            'attempt_status': ExamAttemptStatus.verified,
+            'start_time': reviewed_attempt.start_time,
+            'end_time': reviewed_attempt.end_time,
+            'allowed_time_limit_mins': reviewed_attempt.allowed_time_limit_mins,
+            'exam_type': self.exam_1.exam_type,
+            'exam_display_name': self.exam_1.exam_name,
+            'proctored_review': {
+                'submission_time': reviewed_attempt.end_time,
+                'severity': '0.10',
+                'submission_reason': 'test_reason_code',
+            },
         })
 
     def test_get_attempt_list_response_pagination(self):

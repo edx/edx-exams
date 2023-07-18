@@ -105,7 +105,7 @@ class AssessmentControlReviewSerializer(serializers.ModelSerializer):
     """
 
     submission_time = DateTimeField(source='incident_time', format=None)
-    severity = serializers.CharField()
+    severity = serializers.DecimalField(max_digits=3, decimal_places=2)
     submission_reason = serializers.CharField(source='reason_code')
 
     class Meta:
