@@ -20,7 +20,7 @@ cffi==1.15.1
     #   pynacl
 charset-normalizer==3.2.0
     # via requests
-click==8.1.4
+click==8.1.5
     # via edx-django-utils
 coreapi==2.3.3
     # via
@@ -140,7 +140,7 @@ jsonfield==3.1.0
     # via lti-consumer-xblock
 lazy==1.5
     # via lti-consumer-xblock
-lti-consumer-xblock==9.5.4
+lti-consumer-xblock==9.5.5
     # via -r requirements/base.in
 lxml==4.9.3
     # via
@@ -208,7 +208,7 @@ pytz==2023.3
     #   djangorestframework
     #   drf-yasg
     #   xblock
-pyyaml==6.0
+pyyaml==6.0.1
     # via
     #   drf-yasg
     #   edx-django-release-util
