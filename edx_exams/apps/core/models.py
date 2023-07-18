@@ -255,6 +255,30 @@ class ExamAttempt(TimeStampedModel):
             return None
 
 
+class AssessmentControlResult(TimeStampedModel):
+    """
+    Information about the exam attempt provided by the proctoring provider
+    though the ACS API
+
+    .. no_pii:
+    """
+
+    attempt = models.ForeignKey(ExamAttempt, on_delete=models.CASCADE)
+
+    action_type = models.CharField(max_length=64, choices=[('terminate', 'terminate')])
+
+    incident_time = models.DateTimeField()
+
+    severity = models.DecimalField(max_digits=3, decimal_places=2)
+
+    reason_code = models.CharField(max_length=64)
+
+    class Meta:
+        """ Meta class for this Django model """
+        db_table = 'exams_assessmentcontrolresult'
+        verbose_name = 'assessment control result'
+
+
 class CourseExamConfiguration(TimeStampedModel):
     """
     Information about the Course Exam Configuration
