@@ -110,4 +110,4 @@ class AssessmentControlResultFactory(DjangoModelFactory):
     action_type = 'terminate'
     incident_time = datetime.datetime.now() - datetime.timedelta(hours=1)
     severity = 1
-    reason_code = 'test_code'
+    reason_code = '1'

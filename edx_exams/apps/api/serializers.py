@@ -4,6 +4,7 @@ Serializers for the edx-exams API
 from rest_framework import serializers
 from rest_framework.fields import DateTimeField
 
+from edx_exams.apps.api.constants import ASSESSMENT_CONTROL_CODES
 from edx_exams.apps.core.api import get_exam_attempt_time_remaining, get_exam_url_path
 from edx_exams.apps.core.exam_types import EXAM_TYPES
 from edx_exams.apps.core.models import AssessmentControlResult, Exam, ExamAttempt, ProctoringProvider, User
@@ -106,7 +107,13 @@ class AssessmentControlReviewSerializer(serializers.ModelSerializer):
 
     submission_time = DateTimeField(source='incident_time', format=None)
     severity = serializers.DecimalField(max_digits=3, decimal_places=2)
-    submission_reason = serializers.CharField(source='reason_code')
+    submission_reason = serializers.SerializerMethodField()
+
+    def get_submission_reason(self, obj):
+        """
+        Get display message from the reason code.
+        """
+        return ASSESSMENT_CONTROL_CODES.get(obj.reason_code, obj.reason_code)
 
     class Meta:
         """

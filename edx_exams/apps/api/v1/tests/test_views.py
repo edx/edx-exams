@@ -1320,7 +1320,7 @@ class ExamAttemptListViewTests(ExamsAPITestCase):
         AssessmentControlResultFactory.create(
             attempt=reviewed_attempt,
             severity=0.1,
-            reason_code='test_reason_code',
+            reason_code='1',
             incident_time=reviewed_attempt.end_time,
         )
 
@@ -1352,7 +1352,7 @@ class ExamAttemptListViewTests(ExamsAPITestCase):
             'proctored_review': {
                 'submission_time': reviewed_attempt.end_time,
                 'severity': '0.10',
-                'submission_reason': 'test_reason_code',
+                'submission_reason': 'Submitted by user',
             },
         })
 
