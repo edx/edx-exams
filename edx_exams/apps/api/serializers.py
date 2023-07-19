@@ -101,7 +101,7 @@ class ExamAttemptSerializer(serializers.ModelSerializer):
 class AssessmentControlReviewSerializer(serializers.ModelSerializer):
     """
     Serializer for AssessmentControlResult as a review. Currently a single
-    ACS response is equvalent to a review but this may change if we introduce
+    ACS response is equivalent to a review but this may change if we introduce
     multiple ACS responses per attempt.
     """
 
