@@ -44,6 +44,9 @@ class ExamAttemptStatus:
     # the course end date has passed
     expired = 'expired'
 
+    # the exam attempt requires a secondary review to verify its integrity
+    second_review_required = 'second_review_required'
+
     # the exam has errored
     error = 'error'
 

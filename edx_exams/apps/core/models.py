@@ -161,6 +161,8 @@ class ExamAttempt(TimeStampedModel):
         ExamAttemptStatus.verified,
         ExamAttemptStatus.rejected,
         ExamAttemptStatus.expired,
+        ExamAttemptStatus.second_review_required,
+        ExamAttemptStatus.error,
     ]
 
     user = models.ForeignKey(User, db_index=True, on_delete=models.CASCADE)

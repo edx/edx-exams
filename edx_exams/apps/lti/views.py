@@ -101,14 +101,85 @@ def acs(request, lti_config_id):
         return Response(status=400)
 
     if action == 'flag':
+        # TODO: Make the flag action actually modify the exam attempt data (or perhaps another model?)
         success_msg = (
-            f'Flagging exam for user with id {anonymous_user_id} '
+            f'Flagging exam attempt for user with id {anonymous_user_id} '
             f'with resource id {resource_id} and attempt number {attempt_number} '
             f'for lti config id {lti_config_id}, status {attempt.status}, exam id {attempt.exam.id}, '
             f'and attempt id {attempt.id}.'
         )
         log.info(success_msg)
-    return Response(status=200)
+
+    # Yeah we should probably store them somewhere... 
+    # In a perfect world that would be configurable by provider outside the codebase 
+    # along with what codes are error and what codes are success. 
+    # Sounds like a followup for when we add a second provider to me. 
+    # Maybe we just add some constants or something to map this right now?
+
+    # Leaning toward a simple solution right now which could be:
+
+    # "1" is a success and anything else is an error
+    # We keep a map of display labels on the backend for error codes and return that display label instead of the code in the serializer.
+
+    # Other codes: Zach added these in his PR so we will just merge with that
+    # 0 : Disconnected from Proctorio
+    # 1 : Submitted
+    # 2 : Navigated away from the exam
+    # 4 : Left exam when in full screen
+    # 5 : Ended screen recording
+    # 6 : Uninstalled Chrome Extension
+    # 7 : Switched to a proxy during the exam
+    # 8 : Changed networks during the exam
+    # 9 : Closed or reloaded the exam tab
+    # 12 : Attempted to modify the quiz page
+    # 13 : Attempted to download a file during the quiz
+    # 14 : The battery died
+    # 15 : Plugged in an additional monitor
+    # 16 : Unplugged a camera or microphone
+    # 21 : Page became unresponsive during the exam
+    # 24 : Revoked the microphone permission
+    # 25 : Revoked the webcam permission
+
+    elif action == 'terminate':
+        # Upon receiving a terminate request, the attempt referenced in the request should be moved to a corresponding status,
+        # depending on the reason for termination (reason_code) and incident_severity.
+
+        # Get the reason code for the termination
+        reason_code = data['reason_code']
+        # Get the severity
+        severity = float(data['incident_severity'])
+        SEVERITY_THRESHOLD = 0.25
+        success_msg = ''
+
+        # Reason codes:
+        if reason_code == 'user_submission':
+            # terminate with severity > 0.25 will move to second_review_required otherwise verified
+            if severity > SEVERITY_THRESHOLD:
+                update_attempt_status(attempt.id, 'second_review_required')
+                success_msg = (
+                    f'Termination Severity > 0.25, marking exam attempt for secondary review. '
+                    f'Terminating exam attempt for user with id {anonymous_user_id} '
+                    f'with resource id {resource_id} and attempt number {attempt_number} '
+                    f'for lti config id {lti_config_id}, status {attempt.status}, exam id {attempt.exam.id}, '
+                    f'and attempt id {attempt.id}.'
+                )
+            elif severity <= SEVERITY_THRESHOLD:
+                update_attempt_status(attempt.id, 'verified')
+                success_msg = (
+                    f'Termination Severity <= 0.25, marking exam attempt as verified. '
+                    f'Terminating exam attempt for user with id {anonymous_user_id} '
+                    f'with resource id {resource_id} and attempt number {attempt_number} '
+                    f'for lti config id {lti_config_id}, status {attempt.status}, exam id {attempt.exam.id}, '
+                    f'and attempt id {attempt.id}.'
+                )
+                log.info(success_msg)
+        elif reason_code == 'error':
+            # error: set attempt status to error
+            print('error')
+
+        # Question: Do we want to store the reason code and incident severity in another model (similar to a review)?
+
+    return Response(success_msg, status=200)
 
 
 @api_view(['GET'])

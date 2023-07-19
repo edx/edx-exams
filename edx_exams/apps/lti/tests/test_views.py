@@ -103,11 +103,11 @@ class LtiAcsTestCase(ExamsAPITestCase):
             expiration=3600,
         )
 
-    def create_request_body(self, attempt_number):
+    def create_request_body(self, attempt_number, action, reason_code=None, incident_severity=None):
         """
         Return a template for the data sent in the request to the ACS endpoint.
         """
-        return {
+        request_body = {
             'user': {
                 'iss': self.lti_consumer.iss,
                 'sub': str(self.user.anonymous_user_id)
@@ -116,12 +116,18 @@ class LtiAcsTestCase(ExamsAPITestCase):
                 'id': self.exam.resource_id
             },
             'attempt_number': attempt_number,
-            'action': 'flag',
+            'action': action,
             'incident_time': '2018-02-01T10:45:33Z',
-            'incident_severity': '0.1',
+            'incident_incident_severity': '0.1',
             'reason_code': '12056',
             'reason_msg': 'Excessive background noise outside candidate control'
         }
+        if reason_code and incident_severity:
+            request_body.update({
+                "reason_code": reason_code,
+                "incident_severity": incident_severity,
+            })
+        return request_body
 
     @ ddt.data(
         (ExamAttemptStatus.ready_to_start, 200),
@@ -155,7 +161,7 @@ class LtiAcsTestCase(ExamsAPITestCase):
 
         token = self.make_access_token('https://purl.imsglobal.org/spec/lti-ap/scope/control.all')
 
-        request_body = self.create_request_body(self.attempt.attempt_number)
+        request_body = self.create_request_body(self.attempt.attempt_number, 'flag')
 
         # Even though the client.post function below uses json.dumps to serialize the request as json,
         # The json serialization needs to happen before the request for an unknown reason
@@ -183,7 +189,7 @@ class LtiAcsTestCase(ExamsAPITestCase):
         token = self.make_access_token('https://purl.imsglobal.org/spec/lti-ap/scope/control.all')
 
         # Request w/ attempt number for an attempt that does not exist
-        request_body = self.create_request_body(false_attempt_number)
+        request_body = self.create_request_body(false_attempt_number, 'flag')
 
         # Even though the client.post function below uses json.dumps to serialize the request as json,
         # The json serialization needs to happen before the request for an unkown reason
@@ -192,6 +198,49 @@ class LtiAcsTestCase(ExamsAPITestCase):
                                     HTTP_AUTHORIZATION='Bearer {}'.format(token))
 
         self.assertEqual(response.status_code, 400)
+
+    # TODO: Test that flag action changes the status of an exam attempt to flagged (once it's implemented)
+
+    @ ddt.data(
+        ('user_submission', 999999.999, 'second_review_required'),
+        ('user_submission', 1.0, 'second_review_required'),
+        ('user_submission', 0.3, 'second_review_required'),
+        ('user_submission', 0.26, 'second_review_required'),
+        ('user_submission', 0.25, 'verified'),
+        ('user_submission', 0, 'verified'),
+        ('user_submission', -1, 'verified'),
+    )
+    @ ddt.unpack
+    @ patch.object(Lti1p3ApiAuthentication, 'authenticate', return_value=(AnonymousUser(), None))
+    @ patch('edx_exams.apps.lti.views.LtiProctoringAcsPermissions.has_permission')
+    @ patch('edx_exams.apps.lti.views.get_attempt_for_user_with_attempt_number_and_resource_id')
+    def test_acs_terminate(self,
+                           reason_code,
+                           incident_severity,
+                           expected_attempt_status,
+                           mock_get_attempt,
+                           mock_permissions,
+                           mock_authentication):  # pylint: disable=unused-argument
+        """
+        Test that the terminate action changes the exam attempt status as expected
+        based on the 'reason_code' and 'incident_severity'.
+        """
+        self.attempt.status = ExamAttemptStatus.submitted
+        mock_get_attempt.return_value = self.attempt
+        mock_permissions.return_value = True
+
+        token = self.make_access_token('https://purl.imsglobal.org/spec/lti-ap/scope/control.all')
+
+        request_body = self.create_request_body(self.attempt.attempt_number, 'terminate', reason_code, incident_severity)
+
+        # Even though the client.post function below uses json.dumps to serialize the request as json,
+        # The json serialization needs to happen before the request for an unknown reason
+        request_body = json.dumps(request_body)
+        # TODO: Figure out why this isn't setting the right attempt status???
+        response = self.client.post(self.url, data=request_body, content_type='application/json',
+                                    HTTP_AUTHORIZATION='Bearer {}'.format(token))
+
+        self.assertEqual(self.attempt.status, expected_attempt_status)
 
     def test_auth_failures(self):
         """
@@ -448,6 +497,7 @@ class LtiInstructorLaunchTest(ExamsAPITestCase):
     """
     Test launch_instructor_view
     """
+
     def setUp(self):
         super().setUp()
         self.lti_configuration = LtiConfiguration.objects.create()
