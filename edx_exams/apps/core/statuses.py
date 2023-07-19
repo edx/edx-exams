@@ -35,6 +35,9 @@ class ExamAttemptStatus:
     # the exam has been verified and approved
     verified = 'verified'
 
+    # the exam has received a high suspicion score and should be reviewed
+    second_review_required = 'second_review_required'
+
     # the exam has been rejected
     rejected = 'rejected'
 
@@ -48,7 +51,7 @@ class ExamAttemptStatus:
     in_progress_statuses = [started, ready_to_submit]
 
     # list of all statuses considered completed
-    completed_statuses = [timed_out, submitted, verified, rejected, error]
+    completed_statuses = [timed_out, submitted, verified, rejected, error, second_review_required]
 
     # list of all statuses considered incomplete
     incomplete_statuses = [created, download_software_clicked, ready_to_start, started, ready_to_submit]
