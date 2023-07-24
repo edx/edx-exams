@@ -4,9 +4,10 @@ Serializers for the edx-exams API
 from rest_framework import serializers
 from rest_framework.fields import DateTimeField
 
+from edx_exams.apps.api.constants import ASSESSMENT_CONTROL_CODES
 from edx_exams.apps.core.api import get_exam_attempt_time_remaining, get_exam_url_path
 from edx_exams.apps.core.exam_types import EXAM_TYPES
-from edx_exams.apps.core.models import Exam, ExamAttempt, ProctoringProvider, User
+from edx_exams.apps.core.models import AssessmentControlResult, Exam, ExamAttempt, ProctoringProvider, User
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -97,6 +98,34 @@ class ExamAttemptSerializer(serializers.ModelSerializer):
         )
 
 
+class AssessmentControlReviewSerializer(serializers.ModelSerializer):
+    """
+    Serializer for AssessmentControlResult as a review. Currently a single
+    ACS response is equivalent to a review but this may change if we introduce
+    multiple ACS responses per attempt.
+    """
+
+    submission_time = DateTimeField(source='incident_time', format=None)
+    severity = serializers.DecimalField(max_digits=3, decimal_places=2)
+    submission_reason = serializers.SerializerMethodField()
+
+    def get_submission_reason(self, obj):
+        """
+        Get display message from the reason code.
+        """
+        return ASSESSMENT_CONTROL_CODES.get(obj.reason_code, obj.reason_code)
+
+    class Meta:
+        """
+        Meta Class
+        """
+        model = AssessmentControlResult
+
+        fields = (
+            'submission_time', 'severity', 'submission_reason'
+        )
+
+
 class StudentAttemptSerializer(serializers.ModelSerializer):
     """
     Serializer for the ExamAttempt model containing additional fields needed for the frontend UI
@@ -159,6 +188,16 @@ class InstructorViewAttemptSerializer(serializers.ModelSerializer):
     # fields based on the UserModel
     username = serializers.CharField(source='user.username')
 
+    # review information
+    proctored_review = serializers.SerializerMethodField()
+
+    def get_proctored_review(self, obj):
+        """
+        Get the proctored review information for the attempt
+        """
+        review = obj.assessmentcontrolresult_set.first()
+        return AssessmentControlReviewSerializer(review).data if review else None
+
     class Meta:
         """
         Meta Class
@@ -167,5 +206,6 @@ class InstructorViewAttemptSerializer(serializers.ModelSerializer):
 
         fields = (
             'attempt_id', 'attempt_status', 'start_time', 'end_time',
-            'allowed_time_limit_mins', 'exam_type', 'exam_display_name', 'username'
+            'allowed_time_limit_mins', 'exam_type', 'exam_display_name', 'username',
+            'proctored_review',
         )
