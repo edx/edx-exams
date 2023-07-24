@@ -1121,7 +1121,7 @@ class ExamAttemptViewTest(ExamsAPITestCase):
     )
     @ddt.unpack
     @patch('edx_exams.apps.api.v1.views.update_attempt_status')
-    def test_put_update_exam_attempt(self, action, expected_status, mock_update_attempt_status):
+    def test_put_learner_update_exam_attempt(self, action, expected_status, mock_update_attempt_status):
         """
         Test that an exam can be updated
         """
@@ -1136,6 +1136,41 @@ class ExamAttemptViewTest(ExamsAPITestCase):
         response = self.put_api(self.non_staff_user, attempt.id, {'action': action})
         self.assertEqual(response.status_code, 200)
         mock_update_attempt_status.assert_called_once_with(attempt.id, expected_status)
+
+    @ddt.data(
+        ('verify', ExamAttemptStatus.verified),
+        ('reject', ExamAttemptStatus.rejected),
+    )
+    @ddt.unpack
+    @patch('edx_exams.apps.api.v1.views.update_attempt_status')
+    def test_put_staff_update_exam_attempt(self, action, expected_status, mock_update_attempt_status):
+        """
+        Test staff/instructor updates
+        """
+        # create exam attempt for user
+        attempt = ExamAttemptFactory(
+            user=self.non_staff_user,
+            exam=self.exam,
+        )
+
+        mock_update_attempt_status.return_value = attempt.id
+
+        response = self.put_api(self.staff_user, attempt.id, {'action': action})
+        self.assertEqual(response.status_code, 200)
+        mock_update_attempt_status.assert_called_once_with(attempt.id, expected_status)
+
+    def test_put_learner_verify(self):
+        """
+        Test that a learner account cannot verify an attempt
+        """
+        # create exam attempt for user
+        attempt = ExamAttemptFactory(
+            user=self.non_staff_user,
+            exam=self.exam,
+        )
+
+        response = self.put_api(self.non_staff_user, attempt.id, {'action': 'verify'})
+        self.assertEqual(response.status_code, 400)
 
     @patch('edx_exams.apps.api.v1.views.update_attempt_status')
     def test_put_exception_raised(self, mock_update_attempt_status):

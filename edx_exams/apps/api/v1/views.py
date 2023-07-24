@@ -535,22 +535,28 @@ class ExamAttemptView(ExamsAPIView):
                 data={'detail': f'Attempt with attempt_id={attempt_id} does not exit.'}
             )
 
-        # user should only be able to update their own attempt
-        if attempt.user.id != request.user.id:
+        action_mapping = {}
+        if request.user.is_staff:
+            action_mapping = {
+                'verify': ExamAttemptStatus.verified,
+                'reject': ExamAttemptStatus.rejected,
+            }
+        # instructors/staff cannot take exams so they do not need these actions
+        elif attempt.user.id == request.user.id:
+            action_mapping = {
+                'stop': ExamAttemptStatus.ready_to_submit,
+                'start': ExamAttemptStatus.started,
+                'submit': ExamAttemptStatus.submitted,
+                'click_download_software': ExamAttemptStatus.download_software_clicked,
+                'error': ExamAttemptStatus.error,
+            }
+        else:
             error_msg = (
                 f'user_id={attempt.user.id} attempted to update attempt_id={attempt.id} in '
                 f'course_id={attempt.exam.course_id} but does not have access to it. (action={action})'
             )
             error = {'detail': error_msg}
             return Response(status=status.HTTP_403_FORBIDDEN, data=error)
-
-        action_mapping = {
-            'stop': ExamAttemptStatus.ready_to_submit,
-            'start': ExamAttemptStatus.started,
-            'submit': ExamAttemptStatus.submitted,
-            'click_download_software': ExamAttemptStatus.download_software_clicked,
-            'error': ExamAttemptStatus.error,
-        }
 
         to_status = action_mapping.get(action)
         if to_status:
