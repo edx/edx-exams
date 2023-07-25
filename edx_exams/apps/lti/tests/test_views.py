@@ -237,13 +237,18 @@ class LtiAcsTestCase(ExamsAPITestCase):
 
         token = self.make_access_token('https://purl.imsglobal.org/spec/lti-ap/scope/control.all')
 
-        request_body = self.create_request_body(self.attempt.attempt_number, 'terminate', reason_code, incident_severity)
+        request_body = self.create_request_body(
+            self.attempt.attempt_number,
+            'terminate',
+            reason_code,
+            incident_severity
+        )
 
         # Even though the client.post function below uses json.dumps to serialize the request as json,
         # The json serialization needs to happen before the request for an unknown reason
         request_body = json.dumps(request_body)
         self.client.post(self.url, data=request_body, content_type='application/json',
-                                    HTTP_AUTHORIZATION='Bearer {}'.format(token))
+                         HTTP_AUTHORIZATION='Bearer {}'.format(token))
         self.attempt.refresh_from_db()
 
         self.assertEqual(self.attempt.status, expected_attempt_status)

@@ -110,36 +110,10 @@ def acs(request, lti_config_id):
         )
         log.info(success_msg)
 
-    # Yeah we should probably store them somewhere... 
-    # In a perfect world that would be configurable by provider outside the codebase 
-    # along with what codes are error and what codes are success. 
-    # Sounds like a followup for when we add a second provider to me. 
-    # Maybe we just add some constants or something to map this right now?
-    # Leaning toward a simple solution right now which could be:
-        # "1" is a success and anything else is an error
-        # We keep a map of display labels on the backend for error codes
-        # and return that display label instead of the code in the serializer.
-    # 0 : Disconnected from Proctorio
-    # 1 : Submitted
-    # 2 : Navigated away from the exam
-    # 4 : Left exam when in full screen
-    # 5 : Ended screen recording
-    # 6 : Uninstalled Chrome Extension
-    # 7 : Switched to a proxy during the exam
-    # 8 : Changed networks during the exam
-    # 9 : Closed or reloaded the exam tab
-    # 12 : Attempted to modify the quiz page
-    # 13 : Attempted to download a file during the quiz
-    # 14 : The battery died
-    # 15 : Plugged in an additional monitor
-    # 16 : Unplugged a camera or microphone
-    # 21 : Page became unresponsive during the exam
-    # 24 : Revoked the microphone permission
-    # 25 : Revoked the webcam permission
-
     elif action == 'terminate':
-        # Upon receiving a terminate request, the attempt referenced in the request should be moved to a corresponding status,
-        # depending on the reason for termination (reason_code) and incident_severity.
+        # Upon receiving a terminate request, the attempt referenced in the request
+        # should be moved to a corresponding status, depending on the reason for
+        # termination (reason_code) and incident_severity.
 
         # Get the reason code for the termination
         reason_code = data['reason_code']
