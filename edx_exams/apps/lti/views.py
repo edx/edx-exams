@@ -82,6 +82,9 @@ def acs(request, lti_config_id):
 
     user_id = User.objects.get(anonymous_user_id=anonymous_user_id).id
     attempt = get_attempt_for_user_with_attempt_number_and_resource_id(user_id, attempt_number, resource_id)
+    from pprint import pprint
+    print("\n\nself.attempt got in view")
+    pprint(vars(attempt))
     if attempt is None:
         error_msg = (
             f'No attempt found for user with anonymous id {anonymous_user_id} '
@@ -156,6 +159,8 @@ def acs(request, lti_config_id):
             # terminate with severity > 0.25 will move to second_review_required otherwise verified
             if severity > SEVERITY_THRESHOLD:
                 update_attempt_status(attempt.id, 'second_review_required')
+                print("\n\That same attempt after update")
+                pprint(vars(attempt))
                 success_msg = (
                     f'Termination Severity > 0.25, marking exam attempt for secondary review. '
                     f'Terminating exam attempt for user with id {anonymous_user_id} '
@@ -176,8 +181,6 @@ def acs(request, lti_config_id):
         elif reason_code == 'error':
             # error: set attempt status to error
             print('error')
-
-        # Question: Do we want to store the reason code and incident severity in another model (similar to a review)?
 
     return Response(success_msg, status=200)
 
