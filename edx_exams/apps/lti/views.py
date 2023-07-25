@@ -111,9 +111,9 @@ def acs(request, lti_config_id):
         log.info(success_msg)
 
     elif action == 'terminate':
-        # Upon receiving a terminate request, the attempt referenced in the request
-        # should be moved to a corresponding status, depending on the reason for
-        # termination (reason_code) and incident_severity.
+        # Upon receiving a terminate request, the attempt referenced should have their status updated
+        # depending on the reason for termination (reason_code) and the incident_severity (scaling from 0.0 to 1.0).
+        # If the severity is greater than 0.25, then the attempt is marked for secondary review.
 
         # Get the reason code for the termination
         reason_code = data['reason_code']
