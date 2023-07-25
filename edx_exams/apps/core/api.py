@@ -67,9 +67,6 @@ def update_attempt_status(attempt_id, to_status):
     """
 
     attempt_obj = ExamAttempt.get_attempt_by_id(attempt_id)
-    from pprint import pprint
-    print("\nattempt_obj in api function GOT:")
-    pprint(vars(attempt_obj))
 
     exam_id = attempt_obj.exam.id
     user_id = attempt_obj.user.id
@@ -104,8 +101,6 @@ def update_attempt_status(attempt_id, to_status):
 
     attempt_obj.status = to_status
     attempt_obj.save()
-    print("\nattempt_obj in api function after SAVE:")
-    pprint(vars(attempt_obj))
 
     return attempt_id
 

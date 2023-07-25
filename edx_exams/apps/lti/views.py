@@ -82,9 +82,6 @@ def acs(request, lti_config_id):
 
     user_id = User.objects.get(anonymous_user_id=anonymous_user_id).id
     attempt = get_attempt_for_user_with_attempt_number_and_resource_id(user_id, attempt_number, resource_id)
-    from pprint import pprint
-    print("\n\nself.attempt got in view")
-    pprint(vars(attempt))
     if attempt is None:
         error_msg = (
             f'No attempt found for user with anonymous id {anonymous_user_id} '
@@ -118,13 +115,10 @@ def acs(request, lti_config_id):
     # along with what codes are error and what codes are success. 
     # Sounds like a followup for when we add a second provider to me. 
     # Maybe we just add some constants or something to map this right now?
-
     # Leaning toward a simple solution right now which could be:
-
-    # "1" is a success and anything else is an error
-    # We keep a map of display labels on the backend for error codes and return that display label instead of the code in the serializer.
-
-    # Other codes: Zach added these in his PR so we will just merge with that
+        # "1" is a success and anything else is an error
+        # We keep a map of display labels on the backend for error codes
+        # and return that display label instead of the code in the serializer.
     # 0 : Disconnected from Proctorio
     # 1 : Submitted
     # 2 : Navigated away from the exam
@@ -159,8 +153,6 @@ def acs(request, lti_config_id):
             # terminate with severity > 0.25 will move to second_review_required otherwise verified
             if severity > SEVERITY_THRESHOLD:
                 update_attempt_status(attempt.id, 'second_review_required')
-                print("\n\That same attempt after update")
-                pprint(vars(attempt))
                 success_msg = (
                     f'Termination Severity > 0.25, marking exam attempt for secondary review. '
                     f'Terminating exam attempt for user with id {anonymous_user_id} '
