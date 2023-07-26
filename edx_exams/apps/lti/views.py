@@ -100,16 +100,6 @@ def acs(request, lti_config_id):
         log.info(error_msg)
         return Response(status=400)
 
-    if action == 'flag':
-        # TODO: Make the flag action actually modify the exam attempt data (or perhaps another model?)
-        success_msg = (
-            f'Flagging exam attempt for user with id {anonymous_user_id} '
-            f'with resource id {resource_id} and attempt number {attempt_number} '
-            f'for lti config id {lti_config_id}, status {attempt.status}, exam id {attempt.exam.id}, '
-            f'and attempt id {attempt.id}.'
-        )
-        log.info(success_msg)
-
     elif action == 'terminate':
         # Upon receiving a terminate request, the attempt referenced should have their status updated
         # depending on the reason for termination (reason_code) and the incident_severity (scaling from 0.0 to 1.0).
