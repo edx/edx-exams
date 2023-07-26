@@ -199,20 +199,35 @@ class LtiAcsTestCase(ExamsAPITestCase):
 
         self.assertEqual(response.status_code, 400)
 
-    # TODO: COMPLETE THIS TEST ########
     @ ddt.data(
-        ('user_submission', 999999.999, 'second_review_required'),
-        ('user_submission', 1.0, 'second_review_required'),
-        ('user_submission', 0.3, 'second_review_required'),
-        ('user_submission', 0.26, 'second_review_required'),
-        ('user_submission', 0.25, 'verified'),
-        ('user_submission', 0.1, 'verified'),
-        ('user_submission', '0.1', 'verified'),
+        # Testing reason codes with severity > 0.25
+        ('0', '1.0', 'second_review_required'),
+        ('1', '1.0', 'verified'),
+        ('2', '1.0', 'second_review_required'),
+        ('4', '1.0', 'second_review_required'),
+        ('5', '1.0', 'second_review_required'),
+        ('6', '1.0', 'second_review_required'),
+        ('7', '1.0', 'second_review_required'),
+        ('8', '1.0', 'second_review_required'),
+        ('9', '1.0', 'second_review_required'),
+        ('12', '1.0', 'second_review_required'),
+        ('13', '1.0', 'second_review_required'),
+        ('14', '1.0', 'error'),
+        ('15', '1.0', 'second_review_required'),
+        ('16', '1.0', 'second_review_required'),
+        ('21', '1.0', 'error'),
+        ('24', '1.0', 'second_review_required'),
+        ('25', '1.0', 'second_review_required'),
+        # Testing the incident severity
+        ('2', '1.0', 'second_review_required'),
+        ('2', '0.3', 'second_review_required'),
+        ('2', '0.26', 'second_review_required'),
+        ('2', '0.25', 'verified'),
+        ('2', '0.1', 'verified'),
         # NOTE: I wanted to include a test where we pass in 0 (as an int).
         # However, a unit test with integer 0 as incident_severity breaks this test for some weird reason.
         # The 'incident_severity' variable turns into 'incident_incident_severity' in the data passed to views.py.
         # Passing in 0 as an integer value works when using Postman, so I have ignored this case for now.
-        ('user_submission', -1, 'verified'),
     )
     @ ddt.unpack
     @ patch.object(Lti1p3ApiAuthentication, 'authenticate', return_value=(AnonymousUser(), None))

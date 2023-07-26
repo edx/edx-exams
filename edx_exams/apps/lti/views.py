@@ -28,6 +28,7 @@ from edx_exams.apps.core.api import (
     get_exam_by_id,
     update_attempt_status
 )
+from edx_exams.apps.api.constants import ASSESSMENT_CONTROL_CODES
 from edx_exams.apps.core.exceptions import ExamIllegalStatusTransition
 from edx_exams.apps.core.models import User
 from edx_exams.apps.core.statuses import ExamAttemptStatus
@@ -46,30 +47,29 @@ def acs(request, lti_config_id):
     """
     Endpoint for ACS actions
 
-    NOTE: for now just have the actions LOG what the actions is doing.
-    We can implement proper functionality and tests later once we
-    hear back from our third party proctoring service vendors (i.e. Proctorio).
-
-    Currently, we only support flagging of exam attempts.
-    Other ACS actions (pause, resume, terminate, update) could be implemented
+    Currently, we only support the termination of exam attempts.
+    Other ACS actions (pause, resume, flag, update) could be implemented
     in the future if desired.
     """
-    data = request.data
+    try:
+        data = request.data
 
-    # This identifies the proctoring tool the request is coming from.
-    anonymous_user_id = data['user']['sub']
+        # This identifies the proctoring tool the request is coming from.
+        anonymous_user_id = data['user']['sub']
 
-    # The link to exam the user is attempting
-    resource_id = data['resource_link']['id']
+        # The link to exam the user is attempting
+        resource_id = data['resource_link']['id']
 
-    # Exam attempt number (Note: ACS does not differentiate between launches)
-    # i.e, if a launch fails and multiple subsequent launches occur for
-    # the same resource_link + attempt_number combo, the ACS only perceives
-    # this as one singular attempt.
-    attempt_number = data['attempt_number']
+        # Exam attempt number (Note: ACS does not differentiate between launches)
+        # i.e, if a launch fails and multiple subsequent launches occur for
+        # the same resource_link + attempt_number combo, the ACS only perceives
+        # this as one singular attempt.
+        attempt_number = data['attempt_number']
 
-    # ACS action to be performed
-    action = data['action']
+        # ACS action to be performed
+        action = data['action']
+    except KeyError as err:
+        return Response(status=status.HTTP_400_BAD_REQUEST, data={'detail': err})
 
     # Only flag ongoing or completed attempts
     VALID_STATUSES = [
@@ -100,23 +100,80 @@ def acs(request, lti_config_id):
         log.info(error_msg)
         return Response(status=400)
 
+    if action == 'flag':
+        # NOTE: The flag action is not yet supported.
+        # TODO: Make the flag action actually modify the exam attempt data (or perhaps another model?)
+        success_msg = (
+            f'NOTE: The flag action is not yet supported. The following is a placeholder message.'
+            f'Flagging exam attempt for user with id {anonymous_user_id} '
+            f'with resource id {resource_id} and attempt number {attempt_number} '
+            f'for lti config id {lti_config_id}, status {attempt.status}, exam id {attempt.exam.id}, '
+            f'and attempt id {attempt.id}.'
+        )
+        log.info(success_msg)
+
     elif action == 'terminate':
         # Upon receiving a terminate request, the attempt referenced should have their status updated
         # depending on the reason for termination (reason_code) and the incident_severity (scaling from 0.0 to 1.0).
         # If the severity is greater than 0.25, then the attempt is marked for secondary review.
 
-        # Get the reason code for the termination
-        reason_code = data['reason_code']
-        # Get the severity
-        severity = float(data['incident_severity'])
+        # Get the reason code for the termination and ensure it's a string to comply with the LTI specs
+        # See: http://www.imsglobal.org/spec/proctoring/v1p0#h.rsq8h6qxveab
+        reason_code_key = data['reason_code']
+        if not isinstance(reason_code_key, str):
+            error_msg = 'ERROR: reason_code must be passed to the ACS endpoint as a string per LTI specs.'
+            error = {'detail': error_msg}
+            return Response(status=status.HTTP_400_BAD_REQUEST, data=error)
+
+        # Get the incident severity and ensure it's a string to comply with the LTI specs
+        severity = data['incident_severity']
+        if not isinstance(severity, str):
+            error_msg = 'ERROR: incident_severity must be passed to the ACS endpoint as a string per LTI specs.'
+            error = {'detail': error_msg}
+            return Response(status=status.HTTP_400_BAD_REQUEST, data=error)
+
+        # Convert reason code and severity to correct formats
+        # NOTE: Is there a point in checking if severity is a string if we're just converting it into a
+        # float anyways?
+        reason_code = ASSESSMENT_CONTROL_CODES[reason_code_key]
+        severity = float(severity)
         SEVERITY_THRESHOLD = 0.25
         success_msg = ''
 
         # Reason codes:
-        if reason_code == 'user_submission':
+        # Regular submission occurred
+        # Code 1
+        if reason_code == 'Submitted by user':
+            update_attempt_status(attempt.id, ExamAttemptStatus.verified)
+            success_msg = (
+                f'Termination Severity <= 0.25, marking exam attempt as verified. '
+                f'Terminating exam attempt for user with id {anonymous_user_id} '
+                f'with resource id {resource_id} and attempt number {attempt_number} '
+                f'for lti config id {lti_config_id}, status {attempt.status}, exam id {attempt.exam.id}, '
+                f'and attempt id {attempt.id}.'
+            )
+        # The learner did something worth marking the attempt for review
+        # Code 0,2,4,5,6,7,8,9,12,13,15,16,24,25
+        # NOTE for reviewer: I'm guessing we may want a better way of doing this
+        elif reason_code in [
+            'Disconnected from proctoring',
+            'Navigated away from assessment',
+            'Left exam when in full screen',
+            'Ended screen recording',
+            'Uninstalled browser extension',
+            'Switched to a proxy during exam',
+            'Changed networks during exam',
+            'Closed or reloaded the exam tab',
+            'Attempted to modify the exam page',
+            'Attempted to download a file during exam',
+            'Plugged in additional monitors',
+            'Unplugged camera or microphone',
+            'Revoked microphone permissions',
+            'Revoked camera permissions',
+        ]:
             # terminate with severity > 0.25 will move to second_review_required otherwise verified
             if severity > SEVERITY_THRESHOLD:
-                update_attempt_status(attempt.id, 'second_review_required')
+                update_attempt_status(attempt.id, ExamAttemptStatus.second_review_required)
                 success_msg = (
                     f'Termination Severity > 0.25, marking exam attempt for secondary review. '
                     f'Terminating exam attempt for user with id {anonymous_user_id} '
@@ -125,7 +182,7 @@ def acs(request, lti_config_id):
                     f'and attempt id {attempt.id}.'
                 )
             elif severity <= SEVERITY_THRESHOLD:
-                update_attempt_status(attempt.id, 'verified')
+                update_attempt_status(attempt.id, ExamAttemptStatus.verified)
                 success_msg = (
                     f'Termination Severity <= 0.25, marking exam attempt as verified. '
                     f'Terminating exam attempt for user with id {anonymous_user_id} '
@@ -134,9 +191,19 @@ def acs(request, lti_config_id):
                     f'and attempt id {attempt.id}.'
                 )
                 log.info(success_msg)
-        elif reason_code == 'error':
-            # error: set attempt status to error
-            print('error')
+        # Errors outside of the learner's control occurred.
+        # Code 14, 21
+        elif reason_code in ['The battery died on learner\'s device', 'Page became unresponsive during exam']:
+        # TODO: Decide if these are the codes we should count as errors
+            update_attempt_status(attempt.id, ExamAttemptStatus.error)
+            success_msg = (
+                f'Marked exam attempt as error. '
+                f'Terminating exam attempt for user with id {anonymous_user_id} '
+                f'with resource id {resource_id} and attempt number {attempt_number} '
+                f'for lti config id {lti_config_id}, status {attempt.status}, exam id {attempt.exam.id}, '
+                f'and attempt id {attempt.id}.'
+            )
+            log.info(success_msg)
 
     return Response(success_msg, status=200)
 
@@ -202,7 +269,8 @@ def start_proctoring(request, attempt_id):
         attempt_number=attempt.attempt_number,
         start_assessment_url=proctoring_start_assessment_url,
         assessment_control_url=assessment_control_url,
-        assessment_control_actions=['flagRequest'],
+        # TODO: Is this the correct action?
+        assessment_control_actions=['terminateRequest'],
     )
 
     launch_data = Lti1p3LaunchData(
