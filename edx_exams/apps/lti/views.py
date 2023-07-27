@@ -3,8 +3,8 @@ LTI Views
 """
 
 
-from decimal import Decimal
 import logging
+from decimal import Decimal
 from urllib.parse import urljoin
 
 from django.contrib.auth import login
