@@ -167,7 +167,7 @@ def acs(request, lti_config_id):
         # Errors outside of the learner's control occurred -> Mark the attempt with status 'error'
         # NOTE: This currently catches all reason codes that are not '1'. Should this integration
         # be changed, or if we add another proctoring integration, then we may need to add a more
-        # precise elif condition here.
+        # precise condition here.
         else:
             update_attempt_status(attempt.id, ExamAttemptStatus.error)
             success_msg = (
