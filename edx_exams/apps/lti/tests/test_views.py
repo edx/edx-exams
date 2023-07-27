@@ -14,7 +14,6 @@ from lti_consumer.data import Lti1p3LaunchData, Lti1p3ProctoringLaunchData
 from lti_consumer.lti_1p3.extensions.rest_framework.authentication import Lti1p3ApiAuthentication
 from lti_consumer.models import LtiConfiguration, LtiProctoringConsumer
 
-from edx_exams.apps.core.models import AssessmentControlResult
 from edx_exams.apps.api.test_utils import ExamsAPITestCase, UserFactory
 from edx_exams.apps.api.test_utils.factories import (
     CourseExamConfigurationFactory,
@@ -22,6 +21,7 @@ from edx_exams.apps.api.test_utils.factories import (
     ExamFactory,
     ProctoringProviderFactory
 )
+from edx_exams.apps.core.models import AssessmentControlResult
 from edx_exams.apps.core.statuses import ExamAttemptStatus
 from edx_exams.apps.lti.utils import get_lti_root
 
