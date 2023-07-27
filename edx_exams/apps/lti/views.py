@@ -3,6 +3,7 @@ LTI Views
 """
 
 
+from decimal import Decimal
 import logging
 from urllib.parse import urljoin
 
@@ -22,13 +23,13 @@ from rest_framework.decorators import api_view, authentication_classes, permissi
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
+from edx_exams.apps.api.constants import ASSEßSMENT_CONTROL_CODES
 from edx_exams.apps.core.api import (
     get_attempt_by_id,
     get_attempt_for_user_with_attempt_number_and_resource_id,
     get_exam_by_id,
     update_attempt_status
 )
-from edx_exams.apps.api.constants import ASSESSMENT_CONTROL_CODES
 from edx_exams.apps.core.exceptions import ExamIllegalStatusTransition
 from edx_exams.apps.core.models import User
 from edx_exams.apps.core.statuses import ExamAttemptStatus
@@ -119,9 +120,10 @@ def acs(request, lti_config_id):
 
         # Get the reason code for the termination and ensure it's a string to comply with the LTI specs
         # See: http://www.imsglobal.org/spec/proctoring/v1p0#h.rsq8h6qxveab
-        reason_code_key = data['reason_code']
-        if not isinstance(reason_code_key, str):
-            error_msg = 'ERROR: reason_code must be passed to the ACS endpoint as a string per LTI specs.'
+        try:
+            reason_code = data['reason_code']
+        except KeyError:
+            error_msg = 'ERROR: required parameter reason_code was not found.'
             error = {'detail': error_msg}
             return Response(status=status.HTTP_400_BAD_REQUEST, data=error)
 
@@ -135,43 +137,14 @@ def acs(request, lti_config_id):
         # Convert reason code and severity to correct formats
         # NOTE: Is there a point in checking if severity is a string if we're just converting it into a
         # float anyways?
-        reason_code = ASSESSMENT_CONTROL_CODES[reason_code_key]
-        severity = float(severity)
+        severity = Decimal(severity)
         SEVERITY_THRESHOLD = 0.25
-        success_msg = ''
+        reason_code_description = ASSESSMENT_CONTROL_CODES[reason_code]
 
-        # Reason codes:
-        # Regular submission occurred
-        # Code 1
-        if reason_code == 'Submitted by user':
-            update_attempt_status(attempt.id, ExamAttemptStatus.verified)
-            success_msg = (
-                f'Termination Severity <= 0.25, marking exam attempt as verified. '
-                f'Terminating exam attempt for user with id {anonymous_user_id} '
-                f'with resource id {resource_id} and attempt number {attempt_number} '
-                f'for lti config id {lti_config_id}, status {attempt.status}, exam id {attempt.exam.id}, '
-                f'and attempt id {attempt.id}.'
-            )
-        # The learner did something worth marking the attempt for review
-        # Code 0,2,4,5,6,7,8,9,12,13,15,16,24,25
-        # NOTE for reviewer: I'm guessing we may want a better way of doing this
-        elif reason_code in [
-            'Disconnected from proctoring',
-            'Navigated away from assessment',
-            'Left exam when in full screen',
-            'Ended screen recording',
-            'Uninstalled browser extension',
-            'Switched to a proxy during exam',
-            'Changed networks during exam',
-            'Closed or reloaded the exam tab',
-            'Attempted to modify the exam page',
-            'Attempted to download a file during exam',
-            'Plugged in additional monitors',
-            'Unplugged camera or microphone',
-            'Revoked microphone permissions',
-            'Revoked camera permissions',
-        ]:
-            # terminate with severity > 0.25 will move to second_review_required otherwise verified
+        # Regular submission occurred, but the learner did something
+        # that might be worth marking the attempt for review. Mark the attempt
+        # as requiring review based on the severity level (>0.25 -> needs review)
+        if reason_code == '1':
             if severity > SEVERITY_THRESHOLD:
                 update_attempt_status(attempt.id, ExamAttemptStatus.second_review_required)
                 success_msg = (
@@ -179,7 +152,8 @@ def acs(request, lti_config_id):
                     f'Terminating exam attempt for user with id {anonymous_user_id} '
                     f'with resource id {resource_id} and attempt number {attempt_number} '
                     f'for lti config id {lti_config_id}, status {attempt.status}, exam id {attempt.exam.id}, '
-                    f'and attempt id {attempt.id}.'
+                    f'and attempt id {attempt.id}. '
+                    f'Reason code for the ACS request is {reason_code}: {reason_code_description}'
                 )
             elif severity <= SEVERITY_THRESHOLD:
                 update_attempt_status(attempt.id, ExamAttemptStatus.verified)
@@ -189,12 +163,15 @@ def acs(request, lti_config_id):
                     f'with resource id {resource_id} and attempt number {attempt_number} '
                     f'for lti config id {lti_config_id}, status {attempt.status}, exam id {attempt.exam.id}, '
                     f'and attempt id {attempt.id}.'
+                    f'Reason code for the ACS request is {reason_code}: {reason_code_description}'
                 )
                 log.info(success_msg)
-        # Errors outside of the learner's control occurred.
-        # Code 14, 21
-        elif reason_code in ['The battery died on learner\'s device', 'Page became unresponsive during exam']:
-        # TODO: Decide if these are the codes we should count as errors
+        # Errors outside of the learner's control occurred -> Mark the attempt with status 'error'
+        # NOTE: This currently catches all reason codes that are not '1'. Should this integration
+        # be changed, or if we add another proctoring integration, then we may need to add a more
+        # precise elif condition here.
+        else:
+            # TODO: Decide if these are the codes we should count as errors
             update_attempt_status(attempt.id, ExamAttemptStatus.error)
             success_msg = (
                 f'Marked exam attempt as error. '
@@ -202,6 +179,7 @@ def acs(request, lti_config_id):
                 f'with resource id {resource_id} and attempt number {attempt_number} '
                 f'for lti config id {lti_config_id}, status {attempt.status}, exam id {attempt.exam.id}, '
                 f'and attempt id {attempt.id}.'
+                f'Reason code for the ACS request is {reason_code}: {reason_code_description}'
             )
             log.info(success_msg)
 
@@ -269,8 +247,7 @@ def start_proctoring(request, attempt_id):
         attempt_number=attempt.attempt_number,
         start_assessment_url=proctoring_start_assessment_url,
         assessment_control_url=assessment_control_url,
-        # TODO: Is this the correct action?
-        assessment_control_actions=['terminateRequest'],
+        assessment_control_actions=['terminate'],
     )
 
     launch_data = Lti1p3LaunchData(
