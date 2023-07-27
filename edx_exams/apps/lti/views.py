@@ -23,7 +23,7 @@ from rest_framework.decorators import api_view, authentication_classes, permissi
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from edx_exams.apps.api.constants import ASSEßSMENT_CONTROL_CODES
+from edx_exams.apps.api.constants import ASSESSMENT_CONTROL_CODES
 from edx_exams.apps.core.api import (
     get_attempt_by_id,
     get_attempt_for_user_with_attempt_number_and_resource_id,
@@ -31,7 +31,7 @@ from edx_exams.apps.core.api import (
     update_attempt_status
 )
 from edx_exams.apps.core.exceptions import ExamIllegalStatusTransition
-from edx_exams.apps.core.models import User
+from edx_exams.apps.core.models import AssessmentControlResult, User
 from edx_exams.apps.core.statuses import ExamAttemptStatus
 from edx_exams.apps.lti.utils import get_lti_root
 
@@ -70,7 +70,8 @@ def acs(request, lti_config_id):
         # ACS action to be performed
         action = data['action']
     except KeyError as err:
-        return Response(status=status.HTTP_400_BAD_REQUEST, data={'detail': err})
+        error_msg = f'ERROR: required parameter {err} was not found.'
+        return Response(status=status.HTTP_400_BAD_REQUEST, data=error_msg)
 
     # Only flag ongoing or completed attempts
     VALID_STATUSES = [
@@ -103,7 +104,7 @@ def acs(request, lti_config_id):
 
     if action == 'flag':
         # NOTE: The flag action is not yet supported.
-        # TODO: Make the flag action actually modify the exam attempt data (or perhaps another model?)
+        # If implemented, have it modify the exam attempt data (or perhaps another model?)
         success_msg = (
             f'NOTE: The flag action is not yet supported. The following is a placeholder message.'
             f'Flagging exam attempt for user with id {anonymous_user_id} '
@@ -113,34 +114,31 @@ def acs(request, lti_config_id):
         )
         log.info(success_msg)
 
+    # NOTE: The code below is for the 'terminate' action, which is the only action we support currently.
+    # This code and its tests will need to be modified if other ACS actions are implemented.
     elif action == 'terminate':
         # Upon receiving a terminate request, the attempt referenced should have their status updated
         # depending on the reason for termination (reason_code) and the incident_severity (scaling from 0.0 to 1.0).
         # If the severity is greater than 0.25, then the attempt is marked for secondary review.
 
-        # Get the reason code for the termination and ensure it's a string to comply with the LTI specs
-        # See: http://www.imsglobal.org/spec/proctoring/v1p0#h.rsq8h6qxveab
+        # Get the termination paramenters
         try:
             reason_code = data['reason_code']
-        except KeyError:
-            error_msg = 'ERROR: required parameter reason_code was not found.'
-            error = {'detail': error_msg}
-            return Response(status=status.HTTP_400_BAD_REQUEST, data=error)
+            incident_time = data['incident_time']
+            severity = data['incident_severity']
+        except KeyError as err:
+            error_msg = f'ERROR: required parameter {err} was not found.'
+            return Response(status=status.HTTP_400_BAD_REQUEST, data=error_msg)
 
-        # Get the incident severity and ensure it's a string to comply with the LTI specs
-        severity = data['incident_severity']
+        # Ensure the incident_severity's a string to comply with the LTI specs
+        # See: http://www.imsglobal.org/spec/proctoring/v1p0#h.rsq8h6qxveab
         if not isinstance(severity, str):
             error_msg = 'ERROR: incident_severity must be passed to the ACS endpoint as a string per LTI specs.'
-            error = {'detail': error_msg}
-            return Response(status=status.HTTP_400_BAD_REQUEST, data=error)
+            return Response(status=status.HTTP_400_BAD_REQUEST, data=error_msg)
 
-        # Convert reason code and severity to correct formats
-        # NOTE: Is there a point in checking if severity is a string if we're just converting it into a
-        # float anyways?
         severity = Decimal(severity)
         SEVERITY_THRESHOLD = 0.25
         reason_code_description = ASSESSMENT_CONTROL_CODES[reason_code]
-
         # Regular submission occurred, but the learner did something
         # that might be worth marking the attempt for review. Mark the attempt
         # as requiring review based on the severity level (>0.25 -> needs review)
@@ -171,7 +169,6 @@ def acs(request, lti_config_id):
         # be changed, or if we add another proctoring integration, then we may need to add a more
         # precise elif condition here.
         else:
-            # TODO: Decide if these are the codes we should count as errors
             update_attempt_status(attempt.id, ExamAttemptStatus.error)
             success_msg = (
                 f'Marked exam attempt as error. '
@@ -182,6 +179,20 @@ def acs(request, lti_config_id):
                 f'Reason code for the ACS request is {reason_code}: {reason_code_description}'
             )
             log.info(success_msg)
+
+        # Create a record of the ACS result
+        AssessmentControlResult.objects.create(
+            attempt=attempt,
+            action_type=action,
+            incident_time=incident_time,
+            severity=severity,
+            reason_code=reason_code,
+        )
+        log.info(
+            f'Created AssessmentControlResult for attempt with id {attempt.id}, '
+            f'action_type {action}, incident_time {incident_time}, severity {severity}, '
+            f'and reason_code {reason_code}.'
+        )
 
     return Response(success_msg, status=200)
 
