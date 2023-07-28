@@ -276,6 +276,30 @@ class LtiAcsTestCase(ExamsAPITestCase):
         self.attempt.refresh_from_db()
         self.assertEqual(response.data, f'ERROR: required parameter \'{acs_parameter}\' was not found.')
 
+    @ patch.object(Lti1p3ApiAuthentication, 'authenticate', return_value=(AnonymousUser(), None))
+    @ patch('edx_exams.apps.lti.views.LtiProctoringAcsPermissions.has_permission')
+    @ patch('edx_exams.apps.lti.views.get_attempt_for_user_with_attempt_number_and_resource_id')
+    def test_acs_invalid_action(self,
+                                mock_get_attempt,
+                                mock_permissions,
+                                mock_authentication):  # pylint: disable=unused-argument
+        """
+        Test that the endpoint fails if it receives an invalid/unsupported action type
+        """
+        mock_get_attempt.return_value = self.attempt
+        mock_permissions.return_value = True
+        request_body = self.create_request_body(
+            self.attempt.attempt_number,
+            'invalid_action',
+            '1',
+            '0.1'
+        )
+
+        response = self.make_post_request(request_body, self.token)
+        self.attempt.refresh_from_db()
+
+        self.assertEqual(response.status_code, 400)
+
     @ ddt.data(
         # Testing reason codes with severity > 0.25
         ('0', '1.0', 'error'),

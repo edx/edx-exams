@@ -159,19 +159,24 @@ def acs(request, lti_config_id):
         )
         log.info(success_msg)
 
-        # Create a record of the ACS result
-        AssessmentControlResult.objects.create(
-            attempt=attempt,
-            action_type=action,
-            incident_time=incident_time,
-            severity=severity,
-            reason_code=reason_code,
-        )
-        log.info(
-            f'Created AssessmentControlResult for attempt with id {attempt.id}, '
-            f'action_type {action}, incident_time {incident_time}, severity {severity}, '
-            f'and reason_code {reason_code}.'
-        )
+    # Base case for unsupported or invalid action types
+    else:
+        log.info(f'Received ACS request containing invalid or unsupported action: {action}')
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    # Create a record of the ACS result
+    AssessmentControlResult.objects.create(
+        attempt=attempt,
+        action_type=action,
+        incident_time=incident_time,
+        severity=severity,
+        reason_code=reason_code,
+    )
+    log.info(
+        f'Created AssessmentControlResult for attempt with id {attempt.id}, '
+        f'action_type {action}, incident_time {incident_time}, severity {severity}, '
+        f'and reason_code {reason_code}.'
+    )
 
     # Send back the status of terminated for the terminate action per LTI specs
     # for ACS Response data: http://www.imsglobal.org/spec/proctoring/v1p0#h.r9n0nket2gul
