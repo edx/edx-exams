@@ -21,6 +21,7 @@ from edx_exams.apps.api.test_utils.factories import (
     ExamFactory,
     ProctoringProviderFactory
 )
+from edx_exams.apps.core.models import AssessmentControlResult
 from edx_exams.apps.core.statuses import ExamAttemptStatus
 from edx_exams.apps.lti.utils import get_lti_root
 
@@ -38,7 +39,9 @@ class LtiAcsTestCase(ExamsAPITestCase):
 
         self.course_exam_config = CourseExamConfigurationFactory()
         self.exam = ExamFactory()
-        self.attempt = ExamAttemptFactory()
+
+        # Create an Exam Attempt that has already been submitted.
+        self.attempt = ExamAttemptFactory(status=ExamAttemptStatus.submitted)
 
         # Variables required for testing and verification
         ISS = 'http://test-platform.example/'
@@ -77,6 +80,7 @@ class LtiAcsTestCase(ExamsAPITestCase):
         self.test_provider.save()
 
         self.url = self.get_acs_url(self.attempt.id)
+        self.token = self.make_access_token('https://purl.imsglobal.org/spec/lti-ap/scope/control.all')
 
     def get_acs_url(self, lti_config_id):
         """
@@ -103,11 +107,11 @@ class LtiAcsTestCase(ExamsAPITestCase):
             expiration=3600,
         )
 
-    def create_request_body(self, attempt_number):
+    def create_request_body(self, attempt_number, action, reason_code=None, incident_severity=None):
         """
         Return a template for the data sent in the request to the ACS endpoint.
         """
-        return {
+        request_body = {
             'user': {
                 'iss': self.lti_consumer.iss,
                 'sub': str(self.user.anonymous_user_id)
@@ -116,13 +120,27 @@ class LtiAcsTestCase(ExamsAPITestCase):
                 'id': self.exam.resource_id
             },
             'attempt_number': attempt_number,
-            'action': 'flag',
+            'action': action,
             'incident_time': '2018-02-01T10:45:33Z',
-            'incident_severity': '0.1',
+            'incident_incident_severity': '0.1',
             'reason_code': '12056',
             'reason_msg': 'Excessive background noise outside candidate control'
         }
+        if reason_code and incident_severity:
+            request_body.update({
+                'reason_code': reason_code,
+                'incident_severity': incident_severity,
+            })
+        return request_body
 
+    def make_post_request(self, request_body, token):
+        # Even though the client.post function below uses json.dumps to serialize the request as json,
+        # The json serialization needs to happen before the request for an unknown reason
+        request_body = json.dumps(request_body)
+        return self.client.post(self.url, data=request_body, content_type='application/json',
+                                HTTP_AUTHORIZATION='Bearer {}'.format(token))
+
+    # Test that an ACS result is created with the expected type
     @ ddt.data(
         (ExamAttemptStatus.ready_to_start, 200),
         (ExamAttemptStatus.started, 200),
@@ -152,16 +170,9 @@ class LtiAcsTestCase(ExamsAPITestCase):
 
         mock_get_attempt.return_value = self.attempt
         mock_permissions.return_value = True
+        request_body = self.create_request_body(self.attempt.attempt_number, 'flag')
 
-        token = self.make_access_token('https://purl.imsglobal.org/spec/lti-ap/scope/control.all')
-
-        request_body = self.create_request_body(self.attempt.attempt_number)
-
-        # Even though the client.post function below uses json.dumps to serialize the request as json,
-        # The json serialization needs to happen before the request for an unknown reason
-        request_body = json.dumps(request_body)
-        response = self.client.post(self.url, data=request_body, content_type='application/json',
-                                    HTTP_AUTHORIZATION='Bearer {}'.format(token))
+        response = self.make_post_request(request_body, self.token)
 
         self.assertEqual(response.status_code, expected_response_status)
 
@@ -179,19 +190,160 @@ class LtiAcsTestCase(ExamsAPITestCase):
 
         mock_get_attempt.return_value = None
         mock_permissions.return_value = True
-
-        token = self.make_access_token('https://purl.imsglobal.org/spec/lti-ap/scope/control.all')
-
         # Request w/ attempt number for an attempt that does not exist
-        request_body = self.create_request_body(false_attempt_number)
+        request_body = self.create_request_body(false_attempt_number, 'flag')
 
-        # Even though the client.post function below uses json.dumps to serialize the request as json,
-        # The json serialization needs to happen before the request for an unkown reason
-        request_body = json.dumps(request_body)
-        response = self.client.post(self.url, data=request_body, content_type='application/json',
-                                    HTTP_AUTHORIZATION='Bearer {}'.format(token))
+        response = self.make_post_request(request_body, self.token)
 
         self.assertEqual(response.status_code, 400)
+
+    @ ddt.data(
+        ('user', ''),
+        ('user', 'sub'),
+        ('resource_link', ''),
+        ('resource_link', 'id'),
+        ('attempt_number', ''),
+        ('action', ''),
+    )
+    @ ddt.unpack
+    @ patch.object(Lti1p3ApiAuthentication, 'authenticate', return_value=(AnonymousUser(), None))
+    @ patch('edx_exams.apps.lti.views.LtiProctoringAcsPermissions.has_permission')
+    @ patch('edx_exams.apps.lti.views.get_attempt_for_user_with_attempt_number_and_resource_id')
+    def test_acs_base_parameter_missing_errors(self,
+                                               acs_parameter,
+                                               acs_sub_parameter,
+                                               mock_get_attempt,
+                                               mock_permissions,
+                                               mock_authentication):  # pylint: disable=unused-argument
+        """
+        Test that the endpoint errors correctly if base ACS request parameters are not present
+        """
+        # Make requests missing these items (create request but set the item passed in to undefined/None)
+        # Make the request
+        # Assert the correct error is thrown in the response with status 400
+        mock_get_attempt.return_value = self.attempt
+        mock_permissions.return_value = True
+        request_body = self.create_request_body(
+            self.attempt.attempt_number,
+            'terminate',
+        )
+
+        # Delete the selected field from the request body before sending to cause an error
+        if acs_sub_parameter == '':
+            del request_body[acs_parameter]
+            key_to_fail = acs_parameter
+        else:
+            del request_body[acs_parameter][acs_sub_parameter]
+            key_to_fail = acs_sub_parameter
+
+        response = self.make_post_request(request_body, self.token)
+
+        self.attempt.refresh_from_db()
+        self.assertEqual(response.data, f'ERROR: required parameter \'{key_to_fail}\' was not found.')
+
+    @ ddt.data(
+        ['reason_code'],
+        ['incident_time'],
+        ['incident_severity'],
+    )
+    @ ddt.unpack
+    @ patch.object(Lti1p3ApiAuthentication, 'authenticate', return_value=(AnonymousUser(), None))
+    @ patch('edx_exams.apps.lti.views.LtiProctoringAcsPermissions.has_permission')
+    @ patch('edx_exams.apps.lti.views.get_attempt_for_user_with_attempt_number_and_resource_id')
+    def test_acs_terminate_parameter_errors(self,
+                                            acs_parameter,
+                                            mock_get_attempt,
+                                            mock_permissions,
+                                            mock_authentication):  # pylint: disable=unused-argument
+        """
+        Test the endpoint errors correctly if request parameters required for the terminate action are not present
+        """
+        # Make requests missing these items (create request but set the item passed in to undefined/None)
+        # Make the request
+        # Assert the correct error is thrown in the response with status 400
+        mock_get_attempt.return_value = self.attempt
+        mock_permissions.return_value = True
+        request_body = self.create_request_body(
+            self.attempt.attempt_number,
+            action='terminate',
+            reason_code='1',
+            incident_severity='0.1',
+        )
+
+        del request_body[acs_parameter]
+
+        response = self.make_post_request(request_body, self.token)
+        self.attempt.refresh_from_db()
+        self.assertEqual(response.data, f'ERROR: required parameter \'{acs_parameter}\' was not found.')
+
+    @ patch.object(Lti1p3ApiAuthentication, 'authenticate', return_value=(AnonymousUser(), None))
+    @ patch('edx_exams.apps.lti.views.LtiProctoringAcsPermissions.has_permission')
+    @ patch('edx_exams.apps.lti.views.get_attempt_for_user_with_attempt_number_and_resource_id')
+    def test_acs_invalid_action(self,
+                                mock_get_attempt,
+                                mock_permissions,
+                                mock_authentication):  # pylint: disable=unused-argument
+        """
+        Test that the endpoint fails if it receives an invalid/unsupported action type
+        """
+        mock_get_attempt.return_value = self.attempt
+        mock_permissions.return_value = True
+        request_body = self.create_request_body(
+            self.attempt.attempt_number,
+            'invalid_action',
+            '1',
+            '0.1'
+        )
+
+        response = self.make_post_request(request_body, self.token)
+        self.attempt.refresh_from_db()
+
+        self.assertEqual(response.status_code, 400)
+
+    @ ddt.data(
+        # Testing reason codes with severity > 0.25
+        ('0', '1.0', 'error'),
+        ('1', '1.0', 'second_review_required'),
+        ('2', '1.0', 'error'),
+        ('25', '1.0', 'error'),
+        # Testing the incident severity
+        ('1', '0.3', 'second_review_required'),
+        ('1', '0.26', 'second_review_required'),
+        ('1', '0.25', 'verified'),
+        ('1', '0.1', 'verified'),
+    )
+    @ ddt.unpack
+    @ patch.object(Lti1p3ApiAuthentication, 'authenticate', return_value=(AnonymousUser(), None))
+    @ patch('edx_exams.apps.lti.views.LtiProctoringAcsPermissions.has_permission')
+    @ patch('edx_exams.apps.lti.views.get_attempt_for_user_with_attempt_number_and_resource_id')
+    def test_acs_terminate(self,
+                           reason_code,
+                           incident_severity,
+                           expected_attempt_status,
+                           mock_get_attempt,
+                           mock_permissions,
+                           mock_authentication):  # pylint: disable=unused-argument
+        """
+        Test that the terminate action changes the exam attempt status as expected
+        based on the 'reason_code' and 'incident_severity'.
+        """
+        mock_get_attempt.return_value = self.attempt
+        mock_permissions.return_value = True
+        request_body = self.create_request_body(
+            self.attempt.attempt_number,
+            'terminate',
+            reason_code,
+            incident_severity
+        )
+
+        self.make_post_request(request_body, self.token)
+        self.attempt.refresh_from_db()
+
+        self.assertEqual(self.attempt.status, expected_attempt_status)
+
+        # Assure an entry was added to the ACResult model
+        data = AssessmentControlResult.objects.get(attempt=self.attempt.id)
+        self.assertEqual(self.attempt.id, data.attempt.id)
 
     def test_auth_failures(self):
         """
@@ -258,7 +410,7 @@ class LtiStartProctoringTestCase(ExamsAPITestCase):
             attempt_number=self.attempt.attempt_number,
             start_assessment_url=expected_proctoring_start_assessment_url,
             assessment_control_url='http://test.exams:18740/lti/1/acs',
-            assessment_control_actions=['flagRequest'],
+            assessment_control_actions=['terminate'],
         )
 
         expected_launch_data = Lti1p3LaunchData(
@@ -448,6 +600,7 @@ class LtiInstructorLaunchTest(ExamsAPITestCase):
     """
     Test launch_instructor_view
     """
+
     def setUp(self):
         super().setUp()
         self.lti_configuration = LtiConfiguration.objects.create()

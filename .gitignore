@@ -38,6 +38,9 @@ htmlcov
 nosetests.xml
 unittests.xml
 
+# VSCode Debugging Setup
+pyvenv.cfg
+
 # PII annotation reports
 pii_report
 
