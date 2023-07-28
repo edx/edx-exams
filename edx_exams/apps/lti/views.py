@@ -138,7 +138,7 @@ def acs(request, lti_config_id):
             if severity > SEVERITY_THRESHOLD:
                 update_attempt_status(attempt.id, ExamAttemptStatus.second_review_required)
                 success_msg = 'Termination Severity > 0.25, marking exam attempt for secondary review. '
-            elif severity <= SEVERITY_THRESHOLD:
+            else:
                 update_attempt_status(attempt.id, ExamAttemptStatus.verified)
                 success_msg = 'Termination Severity <= 0.25, marking exam attempt as verified. '
                 log.info(success_msg)
