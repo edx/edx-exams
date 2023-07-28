@@ -241,7 +241,6 @@ class LtiAcsTestCase(ExamsAPITestCase):
         self.attempt.refresh_from_db()
         self.assertEqual(response.data, f'ERROR: required parameter \'{key_to_fail}\' was not found.')
 
-    # TODO: Add tests for termination errors
     @ ddt.data(
         ['reason_code'],
         ['incident_time'],
@@ -304,9 +303,6 @@ class LtiAcsTestCase(ExamsAPITestCase):
         Test that the terminate action changes the exam attempt status as expected
         based on the 'reason_code' and 'incident_severity'.
         """
-        self.attempt.status = ExamAttemptStatus.submitted
-        self.attempt.save()
-
         mock_get_attempt.return_value = self.attempt
         mock_permissions.return_value = True
         request_body = self.create_request_body(
