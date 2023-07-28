@@ -23,7 +23,6 @@ from rest_framework.decorators import api_view, authentication_classes, permissi
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from edx_exams.apps.api.constants import ASSESSMENT_CONTROL_CODES
 from edx_exams.apps.core.api import (
     get_attempt_by_id,
     get_attempt_for_user_with_attempt_number_and_resource_id,
@@ -130,39 +129,18 @@ def acs(request, lti_config_id):
             error_msg = f'ERROR: required parameter {err} was not found.'
             return Response(status=status.HTTP_400_BAD_REQUEST, data=error_msg)
 
-        # Ensure the incident_severity's a string to comply with the LTI specs
-        # See: http://www.imsglobal.org/spec/proctoring/v1p0#h.rsq8h6qxveab
-        if not isinstance(severity, str):
-            error_msg = 'ERROR: incident_severity must be passed to the ACS endpoint as a string per LTI specs.'
-            return Response(status=status.HTTP_400_BAD_REQUEST, data=error_msg)
-
         severity = Decimal(severity)
         SEVERITY_THRESHOLD = 0.25
-        reason_code_description = ASSESSMENT_CONTROL_CODES[reason_code]
         # Regular submission occurred, but the learner did something
         # that might be worth marking the attempt for review. Mark the attempt
         # as requiring review based on the severity level (>0.25 -> needs review)
         if reason_code == '1':
             if severity > SEVERITY_THRESHOLD:
                 update_attempt_status(attempt.id, ExamAttemptStatus.second_review_required)
-                success_msg = (
-                    f'Termination Severity > 0.25, marking exam attempt for secondary review. '
-                    f'Terminating exam attempt for user with id {anonymous_user_id} '
-                    f'with resource id {resource_id} and attempt number {attempt_number} '
-                    f'for lti config id {lti_config_id}, status {attempt.status}, exam id {attempt.exam.id}, '
-                    f'and attempt id {attempt.id}. '
-                    f'Reason code for the ACS request is {reason_code}: {reason_code_description}'
-                )
+                success_msg = 'Termination Severity > 0.25, marking exam attempt for secondary review. '
             elif severity <= SEVERITY_THRESHOLD:
                 update_attempt_status(attempt.id, ExamAttemptStatus.verified)
-                success_msg = (
-                    f'Termination Severity <= 0.25, marking exam attempt as verified. '
-                    f'Terminating exam attempt for user with id {anonymous_user_id} '
-                    f'with resource id {resource_id} and attempt number {attempt_number} '
-                    f'for lti config id {lti_config_id}, status {attempt.status}, exam id {attempt.exam.id}, '
-                    f'and attempt id {attempt.id}.'
-                    f'Reason code for the ACS request is {reason_code}: {reason_code_description}'
-                )
+                success_msg = 'Termination Severity <= 0.25, marking exam attempt as verified. '
                 log.info(success_msg)
         # Errors outside of the learner's control occurred -> Mark the attempt with status 'error'
         # NOTE: This currently catches all reason codes that are not '1'. Should this integration
@@ -170,15 +148,16 @@ def acs(request, lti_config_id):
         # precise condition here.
         else:
             update_attempt_status(attempt.id, ExamAttemptStatus.error)
-            success_msg = (
-                f'Marked exam attempt as error. '
-                f'Terminating exam attempt for user with id {anonymous_user_id} '
-                f'with resource id {resource_id} and attempt number {attempt_number} '
-                f'for lti config id {lti_config_id}, status {attempt.status}, exam id {attempt.exam.id}, '
-                f'and attempt id {attempt.id}.'
-                f'Reason code for the ACS request is {reason_code}: {reason_code_description}'
-            )
-            log.info(success_msg)
+            success_msg = 'Marked exam attempt as error. '
+
+        success_msg += (
+            f'Terminating exam attempt for user with id {anonymous_user_id} '
+            f'with resource id {resource_id} and attempt number {attempt_number} '
+            f'for lti config id {lti_config_id}, status {attempt.status}, exam id {attempt.exam.id}, '
+            f'and attempt id {attempt.id}. '
+            f'Reason code for the ACS request is: {reason_code}'
+        )
+        log.info(success_msg)
 
         # Create a record of the ACS result
         AssessmentControlResult.objects.create(
@@ -194,7 +173,9 @@ def acs(request, lti_config_id):
             f'and reason_code {reason_code}.'
         )
 
-    return Response(success_msg, status=200)
+    # Send back the status of terminated for the terminate action per LTI specs
+    # for ACS Response data: http://www.imsglobal.org/spec/proctoring/v1p0#h.r9n0nket2gul
+    return Response(data={'status': 'terminated'}, status=status.HTTP_200_OK)
 
 
 @api_view(['GET'])

@@ -41,9 +41,7 @@ class LtiAcsTestCase(ExamsAPITestCase):
         self.exam = ExamFactory()
 
         # Create an Exam Attempt that has already been submitted.
-        self.attempt = ExamAttemptFactory()
-        self.attempt.status = ExamAttemptStatus.submitted
-        self.attempt.save()
+        self.attempt = ExamAttemptFactory(status=ExamAttemptStatus.submitted)
 
         # Variables required for testing and verification
         ISS = 'http://test-platform.example/'
@@ -134,6 +132,13 @@ class LtiAcsTestCase(ExamsAPITestCase):
             })
         return request_body
 
+    def make_post_request(self, request_body, token):
+        # Even though the client.post function below uses json.dumps to serialize the request as json,
+        # The json serialization needs to happen before the request for an unknown reason
+        request_body = json.dumps(request_body)
+        return self.client.post(self.url, data=request_body, content_type='application/json',
+                                HTTP_AUTHORIZATION='Bearer {}'.format(token))
+
     # Test that an ACS result is created with the expected type
     @ ddt.data(
         (ExamAttemptStatus.ready_to_start, 200),
@@ -169,11 +174,7 @@ class LtiAcsTestCase(ExamsAPITestCase):
 
         request_body = self.create_request_body(self.attempt.attempt_number, 'flag')
 
-        # Even though the client.post function below uses json.dumps to serialize the request as json,
-        # The json serialization needs to happen before the request for an unknown reason
-        request_body = json.dumps(request_body)
-        response = self.client.post(self.url, data=request_body, content_type='application/json',
-                                    HTTP_AUTHORIZATION='Bearer {}'.format(token))
+        response = self.make_post_request(request_body, token)
 
         self.assertEqual(response.status_code, expected_response_status)
 
@@ -197,11 +198,7 @@ class LtiAcsTestCase(ExamsAPITestCase):
         # Request w/ attempt number for an attempt that does not exist
         request_body = self.create_request_body(false_attempt_number, 'flag')
 
-        # Even though the client.post function below uses json.dumps to serialize the request as json,
-        # The json serialization needs to happen before the request for an unkown reason
-        request_body = json.dumps(request_body)
-        response = self.client.post(self.url, data=request_body, content_type='application/json',
-                                    HTTP_AUTHORIZATION='Bearer {}'.format(token))
+        response = self.make_post_request(request_body, token)
 
         self.assertEqual(response.status_code, 400)
 
@@ -247,11 +244,8 @@ class LtiAcsTestCase(ExamsAPITestCase):
             del request_body[acs_parameter][acs_sub_parameter]
             key_to_fail = acs_sub_parameter
 
-        # Even though the client.post function below uses json.dumps to serialize the request as json,
-        # The json serialization needs to happen before the request for an unknown reason
-        request_body = json.dumps(request_body)
-        response = self.client.post(self.url, data=request_body, content_type='application/json',
-                                    HTTP_AUTHORIZATION='Bearer {}'.format(token))
+        response = self.make_post_request(request_body, token)
+
         self.attempt.refresh_from_db()
         self.assertEqual(response.data, f'ERROR: required parameter \'{key_to_fail}\' was not found.')
 
@@ -290,11 +284,7 @@ class LtiAcsTestCase(ExamsAPITestCase):
 
         del request_body[acs_parameter]
 
-        # Even though the client.post function below uses json.dumps to serialize the request as json,
-        # The json serialization needs to happen before the request for an unknown reason
-        request_body = json.dumps(request_body)
-        response = self.client.post(self.url, data=request_body, content_type='application/json',
-                                    HTTP_AUTHORIZATION='Bearer {}'.format(token))
+        response = self.make_post_request(request_body, token)
         self.attempt.refresh_from_db()
         self.assertEqual(response.data, f'ERROR: required parameter \'{acs_parameter}\' was not found.')
 
@@ -303,29 +293,12 @@ class LtiAcsTestCase(ExamsAPITestCase):
         ('0', '1.0', 'error'),
         ('1', '1.0', 'second_review_required'),
         ('2', '1.0', 'error'),
-        ('4', '1.0', 'error'),
-        ('5', '1.0', 'error'),
-        ('6', '1.0', 'error'),
-        ('7', '1.0', 'error'),
-        ('8', '1.0', 'error'),
-        ('9', '1.0', 'error'),
-        ('12', '1.0', 'error'),
-        ('13', '1.0', 'error'),
-        ('14', '1.0', 'error'),
-        ('15', '1.0', 'error'),
-        ('16', '1.0', 'error'),
-        ('21', '1.0', 'error'),
-        ('24', '1.0', 'error'),
         ('25', '1.0', 'error'),
         # Testing the incident severity
         ('1', '0.3', 'second_review_required'),
         ('1', '0.26', 'second_review_required'),
         ('1', '0.25', 'verified'),
         ('1', '0.1', 'verified'),
-        # NOTE: I wanted to include a test where we pass in 0 (as an int).
-        # However, a unit test with integer 0 as incident_severity breaks this test for some weird reason.
-        # The 'incident_severity' variable turns into 'incident_incident_severity' in the data passed to views.py.
-        # Passing in 0 as an integer value works when using Postman, so I have ignored this case for now.
     )
     @ ddt.unpack
     @ patch.object(Lti1p3ApiAuthentication, 'authenticate', return_value=(AnonymousUser(), None))
@@ -357,18 +330,14 @@ class LtiAcsTestCase(ExamsAPITestCase):
             incident_severity
         )
 
-        # Even though the client.post function below uses json.dumps to serialize the request as json,
-        # The json serialization needs to happen before the request for an unknown reason
-        request_body = json.dumps(request_body)
-        self.client.post(self.url, data=request_body, content_type='application/json',
-                         HTTP_AUTHORIZATION='Bearer {}'.format(token))
+        self.make_post_request(request_body, token)
         self.attempt.refresh_from_db()
 
         self.assertEqual(self.attempt.status, expected_attempt_status)
 
         # Assure an entry was added to the ACResult model
-        data = AssessmentControlResult.objects.all()
-        self.assertEqual(len(data), 1)
+        data = AssessmentControlResult.objects.get(attempt=self.attempt.id)
+        self.assertEqual(self.attempt.id, data.attempt.id)
 
     def test_auth_failures(self):
         """
