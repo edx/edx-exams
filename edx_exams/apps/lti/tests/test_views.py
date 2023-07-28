@@ -80,6 +80,7 @@ class LtiAcsTestCase(ExamsAPITestCase):
         self.test_provider.save()
 
         self.url = self.get_acs_url(self.attempt.id)
+        self.token = self.make_access_token('https://purl.imsglobal.org/spec/lti-ap/scope/control.all')
 
     def get_acs_url(self, lti_config_id):
         """
@@ -169,12 +170,9 @@ class LtiAcsTestCase(ExamsAPITestCase):
 
         mock_get_attempt.return_value = self.attempt
         mock_permissions.return_value = True
-
-        token = self.make_access_token('https://purl.imsglobal.org/spec/lti-ap/scope/control.all')
-
         request_body = self.create_request_body(self.attempt.attempt_number, 'flag')
 
-        response = self.make_post_request(request_body, token)
+        response = self.make_post_request(request_body, self.token)
 
         self.assertEqual(response.status_code, expected_response_status)
 
@@ -192,13 +190,10 @@ class LtiAcsTestCase(ExamsAPITestCase):
 
         mock_get_attempt.return_value = None
         mock_permissions.return_value = True
-
-        token = self.make_access_token('https://purl.imsglobal.org/spec/lti-ap/scope/control.all')
-
         # Request w/ attempt number for an attempt that does not exist
         request_body = self.create_request_body(false_attempt_number, 'flag')
 
-        response = self.make_post_request(request_body, token)
+        response = self.make_post_request(request_body, self.token)
 
         self.assertEqual(response.status_code, 400)
 
@@ -228,9 +223,6 @@ class LtiAcsTestCase(ExamsAPITestCase):
         # Assert the correct error is thrown in the response with status 400
         mock_get_attempt.return_value = self.attempt
         mock_permissions.return_value = True
-
-        token = self.make_access_token('https://purl.imsglobal.org/spec/lti-ap/scope/control.all')
-
         request_body = self.create_request_body(
             self.attempt.attempt_number,
             'terminate',
@@ -244,7 +236,7 @@ class LtiAcsTestCase(ExamsAPITestCase):
             del request_body[acs_parameter][acs_sub_parameter]
             key_to_fail = acs_sub_parameter
 
-        response = self.make_post_request(request_body, token)
+        response = self.make_post_request(request_body, self.token)
 
         self.attempt.refresh_from_db()
         self.assertEqual(response.data, f'ERROR: required parameter \'{key_to_fail}\' was not found.')
@@ -272,9 +264,6 @@ class LtiAcsTestCase(ExamsAPITestCase):
         # Assert the correct error is thrown in the response with status 400
         mock_get_attempt.return_value = self.attempt
         mock_permissions.return_value = True
-
-        token = self.make_access_token('https://purl.imsglobal.org/spec/lti-ap/scope/control.all')
-
         request_body = self.create_request_body(
             self.attempt.attempt_number,
             action='terminate',
@@ -284,7 +273,7 @@ class LtiAcsTestCase(ExamsAPITestCase):
 
         del request_body[acs_parameter]
 
-        response = self.make_post_request(request_body, token)
+        response = self.make_post_request(request_body, self.token)
         self.attempt.refresh_from_db()
         self.assertEqual(response.data, f'ERROR: required parameter \'{acs_parameter}\' was not found.')
 
@@ -320,9 +309,6 @@ class LtiAcsTestCase(ExamsAPITestCase):
 
         mock_get_attempt.return_value = self.attempt
         mock_permissions.return_value = True
-
-        token = self.make_access_token('https://purl.imsglobal.org/spec/lti-ap/scope/control.all')
-
         request_body = self.create_request_body(
             self.attempt.attempt_number,
             'terminate',
@@ -330,7 +316,7 @@ class LtiAcsTestCase(ExamsAPITestCase):
             incident_severity
         )
 
-        self.make_post_request(request_body, token)
+        self.make_post_request(request_body, self.token)
         self.attempt.refresh_from_db()
 
         self.assertEqual(self.attempt.status, expected_attempt_status)
