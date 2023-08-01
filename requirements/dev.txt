@@ -110,6 +110,7 @@ django==3.2.20
     #   django-filter
     #   django-model-utils
     #   django-statici18n
+    #   django-waffle
     #   djangorestframework
     #   drf-jwt
     #   drf-yasg
@@ -154,11 +155,11 @@ django-rest-swagger==2.2.0
     # via -r requirements/validation.txt
 django-simple-history==3.0.0
     # via -r requirements/validation.txt
-django-statici18n==2.3.1
+django-statici18n==2.4.0
     # via
     #   -r requirements/validation.txt
     #   lti-consumer-xblock
-django-waffle==3.0.0
+django-waffle==4.0.0
     # via
     #   -r requirements/validation.txt
     #   edx-django-utils
@@ -207,7 +208,7 @@ edx-opaque-keys==2.3.0
     #   -r requirements/validation.txt
     #   edx-drf-extensions
     #   lti-consumer-xblock
-edx-rest-api-client==5.5.2
+edx-rest-api-client==5.6.0
     # via -r requirements/validation.txt
 edx-token-utils==0.2.1
     # via -r requirements/validation.txt
@@ -334,7 +335,7 @@ more-itertools==10.0.0
     #   jaraco-classes
 mysqlclient==2.2.0
     # via -r requirements/validation.txt
-newrelic==8.8.1
+newrelic==8.9.0
     # via
     #   -r requirements/validation.txt
     #   edx-django-utils
@@ -372,7 +373,7 @@ pkginfo==1.9.6
     # via
     #   -r requirements/validation.txt
     #   twine
-platformdirs==3.9.1
+platformdirs==3.10.0
     # via
     #   -r requirements/validation.txt
     #   pylint
@@ -393,7 +394,7 @@ py==1.11.0
     # via
     #   -r requirements/validation.txt
     #   tox
-pycodestyle==2.10.0
+pycodestyle==2.11.0
     # via -r requirements/validation.txt
 pycparser==2.21
     # via
@@ -425,7 +426,7 @@ pyjwt[crypto]==2.8.0
     #   edx-drf-extensions
     #   edx-rest-api-client
     #   social-auth-core
-pylint==2.17.4
+pylint==2.17.5
     # via
     #   -r requirements/validation.txt
     #   edx-lint
@@ -522,13 +523,13 @@ requests-toolbelt==1.0.0
     # via
     #   -r requirements/validation.txt
     #   twine
-responses==0.23.1
+responses==0.23.3
     # via -r requirements/validation.txt
 rfc3986==2.0.0
     # via
     #   -r requirements/validation.txt
     #   twine
-rich==13.4.2
+rich==13.5.1
     # via
     #   -r requirements/validation.txt
     #   twine
@@ -601,7 +602,7 @@ tomli==2.0.1
     #   pyproject-hooks
     #   pytest
     #   tox
-tomlkit==0.11.8
+tomlkit==0.12.1
     # via
     #   -r requirements/validation.txt
     #   pylint
