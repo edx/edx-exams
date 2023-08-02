@@ -26,13 +26,13 @@ from edx_exams.apps.api.v1 import ExamsAPIView
 from edx_exams.apps.core.api import (
     check_if_exam_timed_out,
     create_exam_attempt,
+    get_active_attempt_for_user,
     get_attempt_by_id,
     get_course_exams,
     get_current_exam_attempt,
     get_exam_attempt_time_remaining,
     get_exam_attempts,
     get_exam_by_content_id,
-    get_latest_attempt_for_user,
     get_provider_by_exam_id,
     is_exam_passed_due,
     update_attempt_status
@@ -412,11 +412,15 @@ class LatestExamAttemptView(ExamsAPIView):
         HTTP GET: Get the data for a user's latest exam attempt.
 
     HTTP GET
-    Fetches a user's latest exam attempt.
+    Fetches a user's latest exam attempt for a given exam.
+    If no exam is provided, the actively running attempt is returned.
     Status changes to 'submitted' if time remaining is zero.
 
     **GET data Parameters**
         'user': The data of the user whose latest attempt we want to fetch.
+        'exam_id': The id of the exam whose latest attempt we want to fetch.
+        'content_id: (optional) If provided, return the state of the user's attempt
+            for this exam regardless of state.
 
     **Returns**
     {
@@ -440,6 +444,10 @@ class LatestExamAttemptView(ExamsAPIView):
         """
         HTTP GET handler to fetch all exam attempt data
 
+        TODO: The endpoint should be refactored on deprecation of edx-proctoring.
+        Most of the complexity here has to do with the fact that we are supporting
+        slightly different API behaviors from that service.
+
         Parameters:
             None
 
@@ -447,29 +455,39 @@ class LatestExamAttemptView(ExamsAPIView):
             A Response object containing all `ExamAttempt` data.
         """
         user = request.user
-        latest_attempt = get_latest_attempt_for_user(user.id)
-        serialized_attempt = StudentAttemptSerializer(latest_attempt)
+        exam_content_id = request.GET.get('content_id', None)
+        exam = get_exam_by_content_id(exam_content_id)
 
-        # if there is an active attempt in this service, return it
-        if latest_attempt is not None:
-            latest_attempt = check_if_exam_timed_out(latest_attempt)
-            serialized_attempt = StudentAttemptSerializer(latest_attempt)
-            if latest_attempt.status in (ExamAttemptStatus.started, ExamAttemptStatus.ready_to_submit):
+        # if a specific exam is requested always return that exam
+        if exam is not None:
+            attempt = get_current_exam_attempt(user.id, exam.id)
+        else:
+            attempt = get_active_attempt_for_user(user.id)
+
+        serialized_attempt = StudentAttemptSerializer(attempt)
+
+        # if there is an active attempt in this service, return it.
+        if attempt is not None:
+            # An in progress attempt may be moved to 'submitted' if check_if_exam_timed_out
+            # determines that the attempt has timed out.
+            attempt = check_if_exam_timed_out(attempt)
+            serialized_attempt = StudentAttemptSerializer(attempt)
+            if attempt.status in (ExamAttemptStatus.started, ExamAttemptStatus.ready_to_submit):
                 return Response(status=status.HTTP_200_OK, data=serialized_attempt.data)
 
         # if edx-proctoring has an active attempt, return it
-        latest_attempt_legacy, response_status = get_active_exam_attempt(user.lms_user_id)
+        legacy_attempt, response_status = get_active_exam_attempt(user.lms_user_id)
         if (
-            latest_attempt_legacy is not None
-            and latest_attempt_legacy != {}
+            legacy_attempt is not None
+            and legacy_attempt != {}
             and response_status == status.HTTP_200_OK
         ):
-            return Response(status=status.HTTP_200_OK, data=latest_attempt_legacy)
+            return Response(status=status.HTTP_200_OK, data=legacy_attempt)
 
-        # otherwise return the latest attempt here regardless of status
+        # otherwise return the attempt from edx-exams regardless of status
         return Response(
             status=status.HTTP_200_OK,
-            data=serialized_attempt.data if latest_attempt is not None else {}
+            data=serialized_attempt.data if attempt is not None else {}
         )
 
 
@@ -669,11 +687,11 @@ class CourseExamAttemptView(ExamsAPIView):
     authentication_classes = (JwtAuthentication,)
     permission_classes = (IsAuthenticated,)
 
-    def get(self, request, course_id, content_id):
+    def get(self, request, course_id, content_id):  # pylint: disable=unused-argument
         """
         HTTP GET handler. Returns exam and an attempt, if one exists for the exam
         """
-        exam = get_exam_by_content_id(course_id, content_id)
+        exam = get_exam_by_content_id(content_id)
 
         if exam is None:
             data = {'exam': {}}
