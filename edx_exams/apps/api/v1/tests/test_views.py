@@ -15,17 +15,17 @@ from token_utils.api import unpack_token_for
 
 from edx_exams.apps.api.serializers import ExamSerializer, StudentAttemptSerializer
 from edx_exams.apps.api.test_utils import ExamsAPITestCase
-from edx_exams.apps.api.test_utils.factories import (
+from edx_exams.apps.core.exam_types import get_exam_type
+from edx_exams.apps.core.exceptions import ExamAttemptOnPastDueExam, ExamIllegalStatusTransition
+from edx_exams.apps.core.models import CourseExamConfiguration, Exam, ExamAttempt, ProctoringProvider
+from edx_exams.apps.core.statuses import ExamAttemptStatus
+from edx_exams.apps.core.test_utils.factories import (
     AssessmentControlResultFactory,
     CourseExamConfigurationFactory,
     ExamAttemptFactory,
     ExamFactory,
     UserFactory
 )
-from edx_exams.apps.core.exam_types import get_exam_type
-from edx_exams.apps.core.exceptions import ExamAttemptOnPastDueExam, ExamIllegalStatusTransition
-from edx_exams.apps.core.models import CourseExamConfiguration, Exam, ExamAttempt, ProctoringProvider
-from edx_exams.apps.core.statuses import ExamAttemptStatus
 
 
 @ddt.ddt

@@ -13,7 +13,6 @@ from freezegun import freeze_time
 from opaque_keys.edx.keys import CourseKey, UsageKey
 
 from edx_exams.apps.api.test_utils import ExamsAPITestCase
-from edx_exams.apps.api.test_utils.factories import ExamAttemptFactory, ExamFactory
 from edx_exams.apps.core.api import (
     check_if_exam_timed_out,
     create_exam_attempt,
@@ -35,6 +34,7 @@ from edx_exams.apps.core.exceptions import (
 )
 from edx_exams.apps.core.models import Exam, ExamAttempt
 from edx_exams.apps.core.statuses import ExamAttemptStatus
+from edx_exams.apps.core.test_utils.factories import ExamAttemptFactory, ExamFactory
 
 test_start_time = datetime(2023, 11, 4, 11, 5, 23)
 test_time_limit_mins = 30

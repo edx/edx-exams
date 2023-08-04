@@ -15,8 +15,8 @@ from responses import matchers
 from rest_framework.exceptions import ValidationError
 
 from edx_exams.apps.api.test_utils import ExamsAPITestCase
-from edx_exams.apps.api.test_utils.factories import UserFactory
 from edx_exams.apps.core.models import CourseExamConfiguration, Exam
+from edx_exams.apps.core.test_utils.factories import UserFactory
 from edx_exams.apps.router.views import CourseExamsLegacyView
 
 

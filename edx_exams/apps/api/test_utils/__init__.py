@@ -4,9 +4,9 @@ Test Utilities
 
 from rest_framework.test import APIClient, APITestCase
 
-from edx_exams.apps.api.test_utils.factories import UserFactory
 from edx_exams.apps.api.test_utils.mixins import JwtMixin
 from edx_exams.apps.core.models import ProctoringProvider
+from edx_exams.apps.core.test_utils.factories import UserFactory
 
 TEST_USERNAME = 'api_worker'
 TEST_EMAIL = 'test@email.com'
