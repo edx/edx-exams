@@ -67,6 +67,7 @@ django==3.2.20
     #   django-filter
     #   django-model-utils
     #   django-statici18n
+    #   django-waffle
     #   djangorestframework
     #   drf-jwt
     #   drf-yasg
@@ -106,11 +107,11 @@ django-rest-swagger==2.2.0
     # via -r requirements/base.txt
 django-simple-history==3.0.0
     # via -r requirements/base.txt
-django-statici18n==2.3.1
+django-statici18n==2.4.0
     # via
     #   -r requirements/base.txt
     #   lti-consumer-xblock
-django-waffle==3.0.0
+django-waffle==4.0.0
     # via
     #   -r requirements/base.txt
     #   edx-django-utils
@@ -151,7 +152,7 @@ edx-opaque-keys==2.3.0
     #   -r requirements/base.txt
     #   edx-drf-extensions
     #   lti-consumer-xblock
-edx-rest-api-client==5.5.2
+edx-rest-api-client==5.6.0
     # via -r requirements/base.txt
 edx-token-utils==0.2.1
     # via -r requirements/base.txt
@@ -215,7 +216,7 @@ mysqlclient==2.2.0
     # via
     #   -r requirements/base.txt
     #   -r requirements/production.in
-newrelic==8.8.1
+newrelic==8.9.0
     # via
     #   -r requirements/base.txt
     #   edx-django-utils
