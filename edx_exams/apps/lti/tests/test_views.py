@@ -15,14 +15,14 @@ from lti_consumer.lti_1p3.extensions.rest_framework.authentication import Lti1p3
 from lti_consumer.models import LtiConfiguration, LtiProctoringConsumer
 
 from edx_exams.apps.api.test_utils import ExamsAPITestCase, UserFactory
-from edx_exams.apps.api.test_utils.factories import (
+from edx_exams.apps.core.models import AssessmentControlResult
+from edx_exams.apps.core.statuses import ExamAttemptStatus
+from edx_exams.apps.core.test_utils.factories import (
     CourseExamConfigurationFactory,
     ExamAttemptFactory,
     ExamFactory,
     ProctoringProviderFactory
 )
-from edx_exams.apps.core.models import AssessmentControlResult
-from edx_exams.apps.core.statuses import ExamAttemptStatus
 from edx_exams.apps.lti.utils import get_lti_root
 
 log = logging.getLogger(__name__)

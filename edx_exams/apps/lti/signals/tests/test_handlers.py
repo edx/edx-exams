@@ -8,9 +8,9 @@ from unittest.mock import patch
 from ddt import ddt, idata, unpack
 from django.test import TestCase
 
-from edx_exams.apps.api.test_utils.factories import UserFactory
 from edx_exams.apps.core.models import Exam, ExamAttempt, ProctoringProvider
 from edx_exams.apps.core.statuses import ExamAttemptStatus
+from edx_exams.apps.core.test_utils.factories import UserFactory
 from edx_exams.apps.lti.signals.handlers import assessment_started
 
 

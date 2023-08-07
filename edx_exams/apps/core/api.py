@@ -38,14 +38,11 @@ def get_attempt_by_id(attempt_id):
     return attempt
 
 
-def get_latest_attempt_for_user(user_id):
+def get_active_attempt_for_user(user_id):
     """
-    Function to fetch a user's latest exam attempt
+    Find the currently running attempt for a user if it exists.
     """
-
-    latest_attempt = ExamAttempt.get_latest_attempt_for_user(user_id)
-
-    return latest_attempt
+    return ExamAttempt.get_active_attempt_for_user(user_id)
 
 
 def get_attempt_for_user_with_attempt_number_and_resource_id(user_id, attempt_number, resource_id):
@@ -288,12 +285,12 @@ def create_exam_attempt(exam_id, user_id):
     return attempt.id
 
 
-def get_exam_by_content_id(course_id, content_id):
+def get_exam_by_content_id(content_id):
     """
-    Retrieve an exam filtered by a course_id and content_id
+    Retrieve an exam filtered by content_id
     """
     try:
-        exam = Exam.objects.get(course_id=course_id, content_id=content_id, is_active=True)
+        exam = Exam.objects.get(content_id=content_id, is_active=True)
         return exam
     except Exam.DoesNotExist:
         return None

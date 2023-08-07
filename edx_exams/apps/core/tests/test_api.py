@@ -4,6 +4,7 @@ Tests for API utility functions
 import uuid
 from datetime import datetime, timedelta
 from itertools import product
+from unittest.mock import patch
 
 import ddt
 from django.conf import settings
@@ -15,13 +16,13 @@ from edx_exams.apps.api.test_utils import ExamsAPITestCase
 from edx_exams.apps.core.api import (
     check_if_exam_timed_out,
     create_exam_attempt,
+    get_active_attempt_for_user,
     get_attempt_by_id,
     get_attempt_for_user_with_attempt_number_and_resource_id,
     get_current_exam_attempt,
     get_exam_attempt_time_remaining,
     get_exam_by_content_id,
     get_exam_url_path,
-    get_latest_attempt_for_user,
     is_exam_passed_due,
     update_attempt_status
 )
@@ -33,6 +34,7 @@ from edx_exams.apps.core.exceptions import (
 )
 from edx_exams.apps.core.models import Exam, ExamAttempt
 from edx_exams.apps.core.statuses import ExamAttemptStatus
+from edx_exams.apps.core.test_utils.factories import ExamAttemptFactory, ExamFactory
 
 test_start_time = datetime(2023, 11, 4, 11, 5, 23)
 test_time_limit_mins = 30
@@ -383,95 +385,76 @@ class TestGetAttemptById(ExamsAPITestCase):
 
 
 @ddt.ddt
-class TestGetLatestAttemptForUser(ExamsAPITestCase):
+class TestGetActiveAttemptForUser(ExamsAPITestCase):
     """
-    Test for the API utility function `get_latest_attempt_for_user`
+    Test for the API utility function `get_active_attempt_for_user`
     """
 
-    def setUp(self):
-        super().setUp()
-
-        self.course_id = 'course-v1:edx+test+f19'
-        self.content_id = '11111111'
-
-        self.exam = Exam.objects.create(
-            resource_id=str(uuid.uuid4()),
-            course_id=self.course_id,
-            provider=self.test_provider,
-            content_id=self.content_id,
-            exam_name='test_exam',
-            exam_type='proctored',
-            time_limit_mins=30,
-            due_date='2040-07-01 00:00:00',
-            hide_after_due=False,
-            is_active=True
-        )
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.exam = ExamFactory()
 
     def create_mock_attempt(self, user, status, start_time):
-        return ExamAttempt.objects.create(
+        return ExamAttemptFactory(
             user=user,
             exam=self.exam,
-            attempt_number=1,
             status=status,
             start_time=start_time,
-            allowed_time_limit_mins=None
         )
 
-    def assert_latest_attempt(self, expected_attempt):
+    def assert_active_attempt(self, expected_attempt):
         """
         Helper method that asserts that expected attempt matches
         latest attempt.
         """
 
-        latest_attempt = get_latest_attempt_for_user(self.user.id)
-        self.assertEqual(latest_attempt.status, expected_attempt.status)
-        self.assertEqual(latest_attempt.attempt_number, expected_attempt.attempt_number)
-        self.assertEqual(latest_attempt.user.username, expected_attempt.user.username)
-        self.assertEqual(latest_attempt.exam.content_id, expected_attempt.exam.content_id)
+        attempt = get_active_attempt_for_user(self.user.id)
+        self.assertEqual(attempt.status, expected_attempt.status)
+        self.assertEqual(attempt.attempt_number, expected_attempt.attempt_number)
+        self.assertEqual(attempt.user.username, expected_attempt.user.username)
 
-    def test_get_latest_exam_attempt_for_user(self):
+    @ddt.data(
+        ExamAttemptStatus.started,
+        ExamAttemptStatus.ready_to_submit,
+    )
+    def test_active_exam_attempt_for_user(self, status):
         """
-        Test that the GET function in the ExamAttempt view returns
-        the latest exam attempt for a user
+        Function returns the started/ready_to_submit exam attempt for a user
         """
 
         one_hour_ago = datetime.now() - timedelta(hours=1)
-        expected_attempt = self.create_mock_attempt(self.user, ExamAttemptStatus.started, datetime.now())
-        self.create_mock_attempt(self.user, ExamAttemptStatus.started, one_hour_ago)
-        self.assert_latest_attempt(expected_attempt)
+        expected_attempt = self.create_mock_attempt(self.user, status, one_hour_ago)
+        self.create_mock_attempt(self.user, ExamAttemptStatus.created, datetime.now())
+        self.create_mock_attempt(self.user, ExamAttemptStatus.submitted, datetime.now() - timedelta(hours=2))
+        self.assert_active_attempt(expected_attempt)
 
-    def test_no_attempt_for_user(self):
+    def test_no_active_attempt_for_user(self):
         """
-        Test that if the user has no exam attempts, that the endpoint returns None
+        If the user has no exam attempts, that the endpoint returns None
         """
 
         self.create_mock_attempt(self.user, ExamAttemptStatus.created, datetime.now())
+        self.assertIsNone(get_active_attempt_for_user(self.user.id))
 
-        self.assertIsNone(get_latest_attempt_for_user(9999999999))
-
-    def test_get_latest_exam_attempt_no_start_time(self):
+    def test_multiple_active_attempts(self):
         """
-        Test that the GET function in the ExamAttempt view returns
-        the latest exam attempt for a user with multiple attempts
-        without a start time.
-        """
-
-        self.create_mock_attempt(self.user, ExamAttemptStatus.created, None)
-        expected_attempt = self.create_mock_attempt(self.user, ExamAttemptStatus.ready_to_start, None)
-
-        self.assert_latest_attempt(expected_attempt)
-
-    def test_get_latest_exam_attempt_prioritize_started(self):
-        """
-        Test that the GET function in the ExamAttempt view returns
-        the latest exam attempt for a user with started attempt.
+        If there are multiple active attempts an error is logged.
+        This should never happen.
         """
 
         one_hour_ago = datetime.now() - timedelta(hours=1)
-        expected_attempt = self.create_mock_attempt(self.user, ExamAttemptStatus.started, one_hour_ago)
-        self.create_mock_attempt(self.user, ExamAttemptStatus.created, None)
+        second_exam = ExamFactory()
+        ExamAttemptFactory(
+            user=self.user,
+            exam=second_exam,
+            status=ExamAttemptStatus.started,
+        )
+        self.create_mock_attempt(self.user, ExamAttemptStatus.started, one_hour_ago)
 
-        self.assert_latest_attempt(expected_attempt)
+        with patch('edx_exams.apps.core.models.log.error') as error_log:
+            get_active_attempt_for_user(self.user.id)
+            error_log.assert_called_once()
 
 
 @ddt.ddt
@@ -633,11 +616,11 @@ class TestGetExamByContentId(ExamsAPITestCase):
         )
 
     def test_get_exam(self):
-        exam = get_exam_by_content_id(self.exam.course_id, self.exam.content_id)
+        exam = get_exam_by_content_id(self.exam.content_id)
         self.assertEqual(self.exam, exam)
 
     def test_no_exam(self):
-        data = get_exam_by_content_id(self.exam.course_id, 1111111)
+        data = get_exam_by_content_id(1111111)
         self.assertIsNone(data)
 
 

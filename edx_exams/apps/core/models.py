@@ -210,17 +210,25 @@ class ExamAttempt(TimeStampedModel):
         return attempt
 
     @classmethod
-    def get_latest_attempt_for_user(cls, user_id):
+    def get_active_attempt_for_user(cls, user_id):
         """
-        Return latest ExamAttempt (based on start time) associated with a given user_id
+        Return currently running attempt associated with a given user_id
 
         If start_time does not exist for any attempt, return None
         """
         try:
-            attempt = cls.objects.filter(user_id=user_id).latest('start_time', 'created')
-        except cls.DoesNotExist:
-            attempt = None
-        return attempt
+            return cls.objects.get(
+                user_id=user_id,
+                status__in=(ExamAttemptStatus.started, ExamAttemptStatus.ready_to_submit),
+            )
+        except ExamAttempt.DoesNotExist:
+            return None
+        except ExamAttempt.MultipleObjectsReturned:
+            log.error(
+                'Multiple attempts found for user_id=%(user_id)s with status IN_PROGRESS or READY_TO_SUBMIT',
+                {'user_id': user_id},
+            )
+            return None
 
     @classmethod
     def check_no_other_active_attempts_for_user(cls, user_id, attempt_id):
