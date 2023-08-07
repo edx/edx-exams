@@ -464,8 +464,6 @@ class LatestExamAttemptView(ExamsAPIView):
         else:
             attempt = get_active_attempt_for_user(user.id)
 
-        serialized_attempt = StudentAttemptSerializer(attempt)
-
         # if there is an active attempt in this service, return it.
         if attempt is not None:
             # An in progress attempt may be moved to 'submitted' if check_if_exam_timed_out
@@ -487,7 +485,7 @@ class LatestExamAttemptView(ExamsAPIView):
         # otherwise return the attempt from edx-exams regardless of status
         return Response(
             status=status.HTTP_200_OK,
-            data=serialized_attempt.data if attempt is not None else {}
+            data=StudentAttemptSerializer(attempt).data if attempt else {}
         )
 
 
