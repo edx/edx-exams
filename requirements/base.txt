@@ -28,7 +28,7 @@ coreapi==2.3.3
     #   openapi-codec
 coreschema==0.0.4
     # via coreapi
-cryptography==41.0.2
+cryptography==41.0.3
     # via
     #   pyjwt
     #   social-auth-core
@@ -64,7 +64,7 @@ django==3.2.20
     #   social-auth-app-django
 django-appconf==1.0.5
     # via django-statici18n
-django-config-models==2.4.0
+django-config-models==2.5.0
     # via lti-consumer-xblock
 django-cors-headers==4.2.0
     # via -r requirements/base.in
@@ -104,11 +104,11 @@ drf-yasg==1.21.7
     # via edx-api-doc-tools
 edx-api-doc-tools==1.7.0
     # via -r requirements/base.in
-edx-auth-backends==4.1.0
+edx-auth-backends==4.2.0
     # via -r requirements/base.in
 edx-django-release-util==1.3.0
     # via -r requirements/base.in
-edx-django-utils==5.6.0
+edx-django-utils==5.7.0
     # via
     #   -r requirements/base.in
     #   django-config-models
@@ -116,7 +116,7 @@ edx-django-utils==5.6.0
     #   edx-rest-api-client
 edx-drf-extensions==8.8.0
     # via -r requirements/base.in
-edx-opaque-keys==2.3.0
+edx-opaque-keys==2.4.0
     # via
     #   -r requirements/base.in
     #   edx-drf-extensions
@@ -141,7 +141,7 @@ jsonfield==3.1.0
     # via lti-consumer-xblock
 lazy==1.5
     # via lti-consumer-xblock
-lti-consumer-xblock==9.5.7
+lti-consumer-xblock==9.6.0
     # via -r requirements/base.in
 lxml==4.9.3
     # via
@@ -167,7 +167,7 @@ oauthlib==3.2.2
     #   social-auth-core
 openapi-codec==1.3.2
     # via django-rest-swagger
-openedx-filters==1.4.0
+openedx-filters==1.5.0
     # via lti-consumer-xblock
 packaging==23.1
     # via drf-yasg
@@ -262,7 +262,7 @@ uritemplate==4.1.1
     #   drf-yasg
 urllib3==2.0.4
     # via requests
-web-fragments==2.0.0
+web-fragments==2.1.0
     # via
     #   xblock
     #   xblock-utils
@@ -270,11 +270,11 @@ webencodings==0.5.1
     # via bleach
 webob==1.8.7
     # via xblock
-xblock==1.6.2
+xblock==1.7.0
     # via
     #   lti-consumer-xblock
     #   xblock-utils
-xblock-utils==3.3.0
+xblock-utils==3.4.0
     # via lti-consumer-xblock
 
 # The following packages are considered to be unsafe in a requirements file:
