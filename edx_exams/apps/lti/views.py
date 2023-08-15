@@ -347,7 +347,7 @@ def launch_instructor_tool(request, exam_id):
             data={'detail': f'Exam with exam_id={exam_id} does not exist.'}
         )
 
-    if not user.is_staff or not user.has_course_staff_permission(exam.course_id):
+    if not user.is_staff and not user.has_course_staff_permission(exam.course_id):
         return Response(status=status.HTTP_403_FORBIDDEN)
 
     lti_config_id = exam.provider.lti_configuration_id
