@@ -15,7 +15,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from token_utils.api import sign_token_for
 
-from edx_exams.apps.api.permissions import StaffUserOrReadOnlyPermissions, StaffUserPermissions
+from edx_exams.apps.api.permissions import CourseStaffOrReadOnlyPermissions, CourseStaffUserPermissions
 from edx_exams.apps.api.serializers import (
     ExamSerializer,
     InstructorViewAttemptSerializer,
@@ -82,7 +82,7 @@ class CourseExamsView(ExamsAPIView):
     """
 
     authentication_classes = (JwtAuthentication,)
-    permission_classes = (StaffUserPermissions,)
+    permission_classes = (CourseStaffUserPermissions,)
 
     @classmethod
     def update_exam(cls, exam_object, fields):
@@ -239,7 +239,7 @@ class CourseExamConfigurationsView(ExamsAPIView):
     """
 
     authentication_classes = (JwtAuthentication,)
-    permission_classes = (StaffUserOrReadOnlyPermissions,)
+    permission_classes = (CourseStaffOrReadOnlyPermissions,)
 
     def get(self, request, course_id):
         """
@@ -321,7 +321,7 @@ class ExamAccessTokensView(ExamsAPIView):
     """
 
     authentication_classes = (JwtAuthentication,)
-    permission_classes = (StaffUserOrReadOnlyPermissions,)
+    permission_classes = (CourseStaffOrReadOnlyPermissions,)
 
     @classmethod
     def get_expiration_window(cls, exam_attempt, default_exp_seconds):
@@ -552,7 +552,8 @@ class ExamAttemptView(ExamsAPIView):
             )
 
         action_mapping = {}
-        if request.user.is_staff:
+        course_id = attempt.exam.course_id
+        if request.user.is_staff or request.user.has_course_staff_permission(course_id):
             action_mapping = {
                 'verify': ExamAttemptStatus.verified,
                 'reject': ExamAttemptStatus.rejected,
@@ -569,7 +570,7 @@ class ExamAttemptView(ExamsAPIView):
         else:
             error_msg = (
                 f'user_id={attempt.user.id} attempted to update attempt_id={attempt.id} in '
-                f'course_id={attempt.exam.course_id} but does not have access to it. (action={action})'
+                f'course_id={course_id} but does not have access to it. (action={action})'
             )
             error = {'detail': error_msg}
             return Response(status=status.HTTP_403_FORBIDDEN, data=error)
@@ -612,8 +613,11 @@ class ExamAttemptView(ExamsAPIView):
                 data={'detail': f'Attempt with attempt_id={attempt_id} does not exist.'}
             )
 
-        # TODO: this staff check will be updated once an instructor role is added
-        if not request.user.is_staff and exam_attempt.user.id != request.user.id:
+        if (
+            exam_attempt.user.id != request.user.id and
+            not request.user.is_staff and
+            not request.user.has_course_staff_permission(exam_attempt.exam.course_id)
+        ):
             error_msg = (
                 f'user_id={exam_attempt.user.id} attempted to delete attempt_id={exam_attempt.id} in '
                 f'course_id={exam_attempt.exam.course_id} but does not have access to it.'
@@ -637,9 +641,9 @@ class InstructorAttemptsListView(ExamsAPIView):
     """
 
     authentication_classes = (JwtAuthentication,)
-    permission_classes = (StaffUserPermissions,)
+    permission_classes = (CourseStaffUserPermissions,)
 
-    def get(self, request):
+    def get(self, request, course_id):  # pylint: disable=unused-argument
         """
         HTTP GET handler to fetch all exam attempt data for a given exam.
 

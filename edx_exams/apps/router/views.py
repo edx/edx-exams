@@ -11,7 +11,7 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 
-from edx_exams.apps.api.permissions import StaffUserPermissions
+from edx_exams.apps.api.permissions import CourseStaffUserPermissions
 from edx_exams.apps.core.exam_types import get_exam_type
 from edx_exams.apps.router.interop import get_provider_settings, get_student_exam_attempt_data, register_exams
 
@@ -25,7 +25,7 @@ class CourseExamsLegacyView(APIView):
     Forwards all requests to edx-proctoring
     """
     authentication_classes = (JwtAuthentication,)
-    permission_classes = (StaffUserPermissions,)
+    permission_classes = (CourseStaffUserPermissions,)
 
     def patch(self, request, course_id):
         """
