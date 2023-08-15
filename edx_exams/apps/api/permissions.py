@@ -11,7 +11,8 @@ class CourseStaffUserPermissions(BasePermission):
 
         if view.kwargs.get('course_id'):
             return request.user.is_staff or request.user.has_course_staff_permission(view.kwargs['course_id'])
-        return request.user.is_staff
+        # right now we don't have any views that use this
+        return request.user.is_staff  # pragma: no cover
 
 
 class CourseStaffOrReadOnlyPermissions(CourseStaffUserPermissions):
