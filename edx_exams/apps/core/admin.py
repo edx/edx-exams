@@ -73,9 +73,18 @@ class CourseExamConfigurationAdmin(admin.ModelAdmin):
 
 class AssessmentControlResultAdmin(admin.ModelAdmin):
     """ Admin configuration for the AssessmentControlResult model """
-    list_display = ('user', 'course_id', 'exam_name')
+    list_display = ('get_username', 'get_course_id', 'get_exam_name')
     search_fields = ('user__username', 'course_id', 'exam_name')
     ordering = ('-modified',)
+
+    def get_username(self, obj):
+        return obj.attempt.user.username
+
+    def get_course_id(self, obj):
+        return obj.attempt.exam.course_id
+
+    def get_exam_name(self, obj):
+        return obj.attempt.exam.exam_name
 
 
 class CourseStaffRoleAdmin(admin.ModelAdmin):

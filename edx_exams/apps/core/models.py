@@ -310,18 +310,6 @@ class AssessmentControlResult(TimeStampedModel):
         db_table = 'exams_assessmentcontrolresult'
         verbose_name = 'assessment control result'
 
-    @property
-    def user(self):
-        return self.attempt.user
-
-    @property
-    def course_id(self):
-        return self.attempt.exam.course_id
-
-    @property
-    def exam_name(self):
-        return self.attempt.exam.exam_name
-
 
 class CourseExamConfiguration(TimeStampedModel):
     """
