@@ -31,6 +31,17 @@ bleach==6.0.0
     #   -r requirements/test.txt
     #   lti-consumer-xblock
     #   readme-renderer
+boto3==1.28.26
+    # via
+    #   -r requirements/quality.txt
+    #   -r requirements/test.txt
+    #   fs-s3fs
+botocore==1.31.26
+    # via
+    #   -r requirements/quality.txt
+    #   -r requirements/test.txt
+    #   boto3
+    #   s3transfer
 certifi==2023.7.22
     # via
     #   -r requirements/quality.txt
@@ -76,7 +87,7 @@ coreschema==0.0.4
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   coreapi
-coverage[toml]==7.2.7
+coverage[toml]==7.3.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -132,6 +143,7 @@ django==3.2.20
     #   edx-token-utils
     #   jsonfield
     #   lti-consumer-xblock
+    #   openedx-django-pyfs
     #   openedx-filters
     #   social-auth-app-django
 django-appconf==1.0.5
@@ -232,7 +244,7 @@ edx-django-utils==5.7.0
     #   django-config-models
     #   edx-drf-extensions
     #   edx-rest-api-client
-edx-drf-extensions==8.8.0
+edx-drf-extensions==8.9.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -254,7 +266,7 @@ edx-token-utils==0.2.1
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
-exceptiongroup==1.1.2
+exceptiongroup==1.1.3
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -282,7 +294,14 @@ fs==2.4.16
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
+    #   fs-s3fs
+    #   openedx-django-pyfs
     #   xblock
+fs-s3fs==1.1.1
+    # via
+    #   -r requirements/quality.txt
+    #   -r requirements/test.txt
+    #   openedx-django-pyfs
 future==0.18.3
     # via
     #   -r requirements/quality.txt
@@ -337,6 +356,12 @@ jinja2==3.1.2
     #   -r requirements/test.txt
     #   code-annotations
     #   coreschema
+jmespath==1.0.1
+    # via
+    #   -r requirements/quality.txt
+    #   -r requirements/test.txt
+    #   boto3
+    #   botocore
 jsonfield==3.1.0
     # via
     #   -r requirements/quality.txt
@@ -351,6 +376,7 @@ lazy==1.5
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   lti-consumer-xblock
+    #   xblock
 lazy-object-proxy==1.9.0
     # via
     #   -r requirements/quality.txt
@@ -404,7 +430,7 @@ mysqlclient==2.2.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
-newrelic==8.9.0
+newrelic==8.10.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -421,6 +447,11 @@ openapi-codec==1.3.2
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   django-rest-swagger
+openedx-django-pyfs==3.4.0
+    # via
+    #   -r requirements/quality.txt
+    #   -r requirements/test.txt
+    #   xblock
 openedx-filters==1.5.0
     # via
     #   -r requirements/quality.txt
@@ -551,6 +582,7 @@ python-dateutil==2.8.2
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
+    #   botocore
     #   edx-drf-extensions
     #   faker
     #   freezegun
@@ -621,6 +653,11 @@ rich==13.5.2
     # via
     #   -r requirements/quality.txt
     #   twine
+s3transfer==0.6.1
+    # via
+    #   -r requirements/quality.txt
+    #   -r requirements/test.txt
+    #   boto3
 secretstorage==3.3.3
     # via
     #   -r requirements/quality.txt
@@ -647,6 +684,7 @@ six==1.16.0
     #   edx-drf-extensions
     #   edx-lint
     #   fs
+    #   fs-s3fs
     #   pyjwkest
     #   python-dateutil
     #   tox
@@ -726,14 +764,15 @@ uritemplate==4.1.1
     #   -r requirements/test.txt
     #   coreapi
     #   drf-yasg
-urllib3==2.0.4
+urllib3==1.26.16
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
+    #   botocore
     #   requests
     #   responses
     #   twine
-virtualenv==20.24.2
+virtualenv==20.24.3
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -759,13 +798,13 @@ wrapt==1.15.0
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   astroid
-xblock==1.7.0
+xblock[django]==1.7.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   lti-consumer-xblock
     #   xblock-utils
-xblock-utils==3.4.0
+xblock-utils==3.4.1
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
