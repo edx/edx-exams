@@ -32,6 +32,7 @@ from edx_exams.apps.core.api import (
     get_current_exam_attempt,
     get_exam_attempt_time_remaining,
     get_exam_attempts,
+    get_exam_by_id,
     get_exam_by_content_id,
     get_provider_by_exam_id,
     is_exam_passed_due,
@@ -643,7 +644,7 @@ class InstructorAttemptsListView(ExamsAPIView):
     authentication_classes = (JwtAuthentication,)
     permission_classes = (CourseStaffUserPermissions,)
 
-    def get(self, request, course_id):  # pylint: disable=unused-argument
+    def get(self, request, course_id):
         """
         HTTP GET handler to fetch all exam attempt data for a given exam.
 
@@ -654,6 +655,14 @@ class InstructorAttemptsListView(ExamsAPIView):
             A Response object containing all `ExamAttempt` data.
         """
         exam_id = request.query_params.get('exam_id', None)
+
+        # permissions are checked at the course level, the requested
+        # exam must be in the course the user has been authorized to access
+        if get_exam_by_id(exam_id).course_id != course_id:
+            return Response(
+                status=status.HTTP_404_NOT_FOUND,
+                data={'detail': 'Exam does not exist in course'}
+            )
 
         # instructor serializer will follow FK relationships to get user and
         # exam fields. This list is potentially large so use

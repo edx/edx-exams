@@ -1389,6 +1389,18 @@ class ExamAttemptListViewTests(ExamsAPITestCase):
         response = self.get_api(self.exam_1.id, user=course_staff_user)
         self.assertEqual(response.status_code, 200)
 
+    def test_exam_in_another_course(self):
+        """
+        Users cannot access exams that are not in their course
+        """
+        course_staff_user = UserFactory.create()
+        CourseStaffRole.objects.create(user=course_staff_user, course_id=self.course_id)
+        exam_in_another_course = ExamFactory.create(
+            course_id='course-v1:edx+another+course',
+        )
+        response = self.get_api(exam_in_another_course.id)
+        self.assertEqual(response.status_code, 404)
+
     def test_get_attempt_list_response_data(self):
         """
         Test that a list of attempts includes the expected fields
