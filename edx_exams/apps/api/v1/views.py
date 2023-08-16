@@ -32,8 +32,8 @@ from edx_exams.apps.core.api import (
     get_current_exam_attempt,
     get_exam_attempt_time_remaining,
     get_exam_attempts,
-    get_exam_by_id,
     get_exam_by_content_id,
+    get_exam_by_id,
     get_provider_by_exam_id,
     is_exam_passed_due,
     update_attempt_status
