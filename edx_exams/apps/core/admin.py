@@ -6,7 +6,15 @@ from django.utils.translation import gettext_lazy as _
 
 from edx_exams.apps.lti.utils import get_lti_root
 
-from .models import CourseExamConfiguration, Exam, ExamAttempt, ProctoringProvider, User
+from .models import (
+    AssessmentControlResult,
+    CourseExamConfiguration,
+    CourseStaffRole,
+    Exam,
+    ExamAttempt,
+    ProctoringProvider,
+    User
+)
 
 
 class CustomUserAdmin(UserAdmin):
@@ -63,8 +71,34 @@ class CourseExamConfigurationAdmin(admin.ModelAdmin):
     ordering = ('course_id',)
 
 
+class AssessmentControlResultAdmin(admin.ModelAdmin):
+    """ Admin configuration for the AssessmentControlResult model """
+    list_display = ('get_username', 'get_course_id', 'get_exam_name')
+    search_fields = ('user__username', 'course_id', 'exam_name')
+    ordering = ('-modified',)
+
+    def get_username(self, obj):
+        return obj.attempt.user.username
+
+    def get_course_id(self, obj):
+        return obj.attempt.exam.course_id
+
+    def get_exam_name(self, obj):
+        return obj.attempt.exam.exam_name
+
+
+class CourseStaffRoleAdmin(admin.ModelAdmin):
+    """ Admin configuration for the Course Staff Role model """
+    list_display = ('user', 'course_id')
+    list_filter = ('course_id',)
+    search_fields = ('user__username', 'course_id')
+    ordering = ('course_id',)
+
+
 admin.site.register(User, CustomUserAdmin)
 admin.site.register(ProctoringProvider, ProctoringProviderAdmin)
 admin.site.register(Exam, ExamAdmin)
 admin.site.register(ExamAttempt, ExamAttemptAdmin)
 admin.site.register(CourseExamConfiguration, CourseExamConfigurationAdmin)
+admin.site.register(AssessmentControlResult, AssessmentControlResultAdmin)
+admin.site.register(CourseStaffRole, CourseStaffRoleAdmin)

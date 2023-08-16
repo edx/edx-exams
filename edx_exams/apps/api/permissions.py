@@ -2,20 +2,26 @@
 from rest_framework.permissions import BasePermission
 
 
-class StaffUserPermissions(BasePermission):
-    """ Permission class to check if user is staff """
+class CourseStaffUserPermissions(BasePermission):
+    """ Permission class to check if user has course staff permissions """
 
     def has_permission(self, request, view):
-        return request.user.is_staff
+        if not request.user.is_authenticated:
+            return False
+
+        if view.kwargs.get('course_id'):
+            return request.user.is_staff or request.user.has_course_staff_permission(view.kwargs['course_id'])
+        # right now we don't have any views that use this
+        return request.user.is_staff  # pragma: no cover
 
 
-class StaffUserOrReadOnlyPermissions(BasePermission):
+class CourseStaffOrReadOnlyPermissions(CourseStaffUserPermissions):
     """
-    Permission class granting write access to staff users and
-    read-only access to authenticated users
+    Permission class granting write access to course staff users
+    and read-only access to other authenticated users
     """
     def has_permission(self, request, view):
-        return request.user.is_staff or (
-            request.user.is_authenticated and
-            request.method == 'GET'
-        )
+        if request.user.is_authenticated and request.method == 'GET':
+            return True
+        else:
+            return super().has_permission(request, view)

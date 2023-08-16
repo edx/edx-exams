@@ -47,6 +47,28 @@ class User(AbstractUser):
     def get_full_name(self):
         return self.full_name or super().get_full_name()
 
+    def has_course_staff_permission(self, course_id):
+        """
+        Return True if the user is a staff member for the given course.
+        """
+        return self.is_staff or CourseStaffRole.objects.filter(user_id=self.id, course_id=course_id).exists()
+
+
+class CourseStaffRole(TimeStampedModel):
+    """
+    Users with staff access to a course.
+
+    .. no_pii:
+    """
+    user = models.ForeignKey(User, db_index=True, on_delete=models.CASCADE)
+
+    course_id = models.CharField(max_length=255, db_index=True)
+
+    class Meta:
+        """ Meta class for this Django model """
+        db_table = 'exams_coursestaffrole'
+        verbose_name = 'course staff role'
+
 
 class ProctoringProvider(TimeStampedModel):
     """

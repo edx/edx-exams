@@ -340,18 +340,15 @@ def launch_instructor_tool(request, exam_id):
     View to initiate an LTI launch of the Instructor Tool for an exam.
     """
     user = request.user
-
-    # TODO: this should eventually be replaced with a permission check
-    # for course staff
-    if not user.is_staff:
-        return Response(status=status.HTTP_403_FORBIDDEN)
-
     exam = get_exam_by_id(exam_id)
     if not exam:
         return Response(
             status=status.HTTP_400_BAD_REQUEST,
             data={'detail': f'Exam with exam_id={exam_id} does not exist.'}
         )
+
+    if not user.is_staff and not user.has_course_staff_permission(exam.course_id):
+        return Response(status=status.HTTP_403_FORBIDDEN)
 
     lti_config_id = exam.provider.lti_configuration_id
     lti_config = LtiConfiguration.objects.get(id=lti_config_id)

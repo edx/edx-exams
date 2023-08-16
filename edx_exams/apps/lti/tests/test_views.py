@@ -15,7 +15,7 @@ from lti_consumer.lti_1p3.extensions.rest_framework.authentication import Lti1p3
 from lti_consumer.models import LtiConfiguration, LtiProctoringConsumer
 
 from edx_exams.apps.api.test_utils import ExamsAPITestCase, UserFactory
-from edx_exams.apps.core.models import AssessmentControlResult
+from edx_exams.apps.core.models import AssessmentControlResult, CourseStaffRole
 from edx_exams.apps.core.statuses import ExamAttemptStatus
 from edx_exams.apps.core.test_utils.factories import (
     CourseExamConfigurationFactory,
@@ -609,6 +609,11 @@ class LtiInstructorLaunchTest(ExamsAPITestCase):
                 lti_configuration_id=self.lti_configuration.id
             ),
         )
+        self.course_staff_user = UserFactory()
+        CourseStaffRole.objects.create(
+            user=self.course_staff_user,
+            course_id=self.exam.course_id,
+        )
 
     def _get_launch_url(self, exam_id):
         return reverse('lti:instructor_tool', kwargs={'exam_id': exam_id})
@@ -617,16 +622,16 @@ class LtiInstructorLaunchTest(ExamsAPITestCase):
         """
         Test that the view calls get_lti_1p3_launch_start_url with the correct data.
         """
-        headers = self.build_jwt_headers(self.user)
+        headers = self.build_jwt_headers(self.course_staff_user)
         response = self.client.get(self._get_launch_url(self.exam.id), **headers)
 
         mock_create_launch_url.assert_called_with(
             Lti1p3LaunchData(
-                user_id=self.user.id,
+                user_id=self.course_staff_user.id,
                 user_role='instructor',
                 config_id=self.lti_configuration.config_id,
                 resource_link_id=self.exam.resource_id,
-                external_user_id=str(self.user.anonymous_user_id),
+                external_user_id=str(self.course_staff_user.anonymous_user_id),
                 context_id=self.exam.course_id,
             )
         )

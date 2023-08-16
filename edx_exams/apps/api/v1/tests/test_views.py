@@ -17,7 +17,7 @@ from edx_exams.apps.api.serializers import ExamSerializer, StudentAttemptSeriali
 from edx_exams.apps.api.test_utils import ExamsAPITestCase
 from edx_exams.apps.core.exam_types import get_exam_type
 from edx_exams.apps.core.exceptions import ExamAttemptOnPastDueExam, ExamIllegalStatusTransition
-from edx_exams.apps.core.models import CourseExamConfiguration, Exam, ExamAttempt, ProctoringProvider
+from edx_exams.apps.core.models import CourseExamConfiguration, CourseStaffRole, Exam, ExamAttempt, ProctoringProvider
 from edx_exams.apps.core.statuses import ExamAttemptStatus
 from edx_exams.apps.core.test_utils.factories import (
     AssessmentControlResultFactory,
@@ -99,6 +99,14 @@ class CourseExamsViewTests(ExamsAPITestCase):
         # Test non-staff worker
         random_user = UserFactory()
         self.get_response(random_user, [], 403)
+
+    def test_course_staff_access(self):
+        """
+        Verify course staff can access endpoint
+        """
+        course_staff_user = UserFactory()
+        CourseStaffRole.objects.create(user=course_staff_user, course_id=self.course_id)
+        self.get_response(course_staff_user, [], 200)
 
     def test_exam_empty_exam_list(self):
         """
@@ -341,6 +349,17 @@ class CourseExamConfigurationsViewTests(ExamsAPITestCase):
         random_user = UserFactory()
         response = self.patch_api(random_user, {})
         self.assertEqual(403, response.status_code)
+
+    def test_course_staff_write_access(self):
+        """
+        Verify course staff have write access
+        """
+        course_staff_user = UserFactory()
+        CourseStaffRole.objects.create(user=course_staff_user, course_id=self.course_id)
+        response = self.patch_api(course_staff_user, {
+            'provider': None,
+        })
+        self.assertEqual(204, response.status_code)
 
     def test_patch_invalid_data(self):
         """
@@ -1083,7 +1102,8 @@ class ExamAttemptViewTest(ExamsAPITestCase):
         )
 
         self.non_staff_user = UserFactory()
-        self.staff_user = UserFactory(is_staff=True)
+        self.course_staff_user = UserFactory()
+        CourseStaffRole.objects.create(user=self.course_staff_user, course_id=self.exam.course_id)
 
     def delete_api(self, user, attempt_id):
         """
@@ -1181,13 +1201,14 @@ class ExamAttemptViewTest(ExamsAPITestCase):
 
         mock_update_attempt_status.return_value = attempt.id
 
-        response = self.put_api(self.staff_user, attempt.id, {'action': action})
+        response = self.put_api(self.course_staff_user, attempt.id, {'action': action})
         self.assertEqual(response.status_code, 200)
         mock_update_attempt_status.assert_called_once_with(attempt.id, expected_status)
 
     def test_put_learner_verify(self):
         """
         Test that a learner account cannot verify an attempt
+        but course staff can
         """
         # create exam attempt for user
         attempt = ExamAttemptFactory(
@@ -1197,6 +1218,9 @@ class ExamAttemptViewTest(ExamsAPITestCase):
 
         response = self.put_api(self.non_staff_user, attempt.id, {'action': 'verify'})
         self.assertEqual(response.status_code, 400)
+
+        response = self.put_api(self.course_staff_user, attempt.id, {'action': 'verify'})
+        self.assertEqual(response.status_code, 200)
 
     @patch('edx_exams.apps.api.v1.views.update_attempt_status')
     def test_put_exception_raised(self, mock_update_attempt_status):
@@ -1309,7 +1333,7 @@ class ExamAttemptViewTest(ExamsAPITestCase):
             exam=self.exam,
         )
 
-        response = self.delete_api(self.staff_user, attempt.id)
+        response = self.delete_api(self.course_staff_user, attempt.id)
         self.assertEqual(response.status_code, 204)
         with self.assertRaises(ExamAttempt.DoesNotExist):
             attempt.refresh_from_db()
@@ -1318,7 +1342,7 @@ class ExamAttemptViewTest(ExamsAPITestCase):
         """
         Test that a bad attempt ID returns 400
         """
-        response = self.delete_api(self.staff_user, 9999999)
+        response = self.delete_api(self.course_staff_user, 9999999)
         self.assertEqual(response.status_code, 400)
 
 
@@ -1329,7 +1353,8 @@ class ExamAttemptListViewTests(ExamsAPITestCase):
     def setUp(self):
         super().setUp()
 
-        CourseExamConfigurationFactory.create()
+        config = CourseExamConfigurationFactory.create()
+        self.course_id = config.course_id
 
         self.exam_1 = ExamFactory.create()
         self.exam_2 = ExamFactory.create()
@@ -1341,18 +1366,40 @@ class ExamAttemptListViewTests(ExamsAPITestCase):
         user = user or self.user
         headers = self.build_jwt_headers(user)
         url = reverse(
-            'api:v1:instructor-attempts-list'
+            'api:v1:instructor-attempts-list',
+            kwargs={'course_id': self.course_id}
         )
 
         return self.client.get(f'{url}?exam_id={exam_id}&limit={page_limit}', **headers)
 
     def test_requires_staff_user(self):
         """
-        Test that only staff users can access this endpoint
+        Users that are neither staff nor course staff access this endpoint
         """
         non_staff_user = UserFactory.create()
         response = self.get_api(self.exam_1.id, user=non_staff_user)
         self.assertEqual(response.status_code, 403)
+
+    def test_course_staff_access(self):
+        """
+        Course staff can access this endpoint
+        """
+        course_staff_user = UserFactory.create()
+        CourseStaffRole.objects.create(user=course_staff_user, course_id=self.course_id)
+        response = self.get_api(self.exam_1.id, user=course_staff_user)
+        self.assertEqual(response.status_code, 200)
+
+    def test_exam_in_another_course(self):
+        """
+        Users cannot access exams that are not in their course
+        """
+        course_staff_user = UserFactory.create()
+        CourseStaffRole.objects.create(user=course_staff_user, course_id=self.course_id)
+        exam_in_another_course = ExamFactory.create(
+            course_id='course-v1:edx+another+course',
+        )
+        response = self.get_api(exam_in_another_course.id)
+        self.assertEqual(response.status_code, 404)
 
     def test_get_attempt_list_response_data(self):
         """
@@ -1426,7 +1473,10 @@ class ExamAttemptListViewTests(ExamsAPITestCase):
 
         response = self.get_api(self.exam_1.id, page_limit=5)
         next_url = response.data.get('next')
-        self.assertEqual(next_url, 'http://testserver/api/v1/instructor_view/attempts?exam_id=1&limit=5&offset=5')
+        self.assertEqual(
+            next_url,
+            f'http://testserver/api/v1/instructor_view/course_id/{self.course_id}/attempts?exam_id=1&limit=5&offset=5',
+        )
         self.assertEqual(response.data.get('count'), 12)
         self.assertEqual(len(response.data.get('results')), 5)
 
@@ -1434,9 +1484,13 @@ class ExamAttemptListViewTests(ExamsAPITestCase):
         response = self.client.get(next_url, **headers)
 
         next_url = response.data.get('next')
-        self.assertEqual(next_url, 'http://testserver/api/v1/instructor_view/attempts?exam_id=1&limit=5&offset=10')
         self.assertEqual(
-            response.data.get('previous'), 'http://testserver/api/v1/instructor_view/attempts?exam_id=1&limit=5'
+            next_url,
+            f'http://testserver/api/v1/instructor_view/course_id/{self.course_id}/attempts?exam_id=1&limit=5&offset=10',
+        )
+        self.assertEqual(
+            response.data.get('previous'),
+            f'http://testserver/api/v1/instructor_view/course_id/{self.course_id}/attempts?exam_id=1&limit=5',
         )
         self.assertEqual(response.data.get('count'), 12)
         self.assertEqual(len(response.data.get('results')), 5)

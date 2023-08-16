@@ -15,7 +15,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from token_utils.api import sign_token_for
 
-from edx_exams.apps.api.permissions import StaffUserOrReadOnlyPermissions, StaffUserPermissions
+from edx_exams.apps.api.permissions import CourseStaffOrReadOnlyPermissions, CourseStaffUserPermissions
 from edx_exams.apps.api.serializers import (
     ExamSerializer,
     InstructorViewAttemptSerializer,
@@ -33,6 +33,7 @@ from edx_exams.apps.core.api import (
     get_exam_attempt_time_remaining,
     get_exam_attempts,
     get_exam_by_content_id,
+    get_exam_by_id,
     get_provider_by_exam_id,
     is_exam_passed_due,
     update_attempt_status
@@ -82,7 +83,7 @@ class CourseExamsView(ExamsAPIView):
     """
 
     authentication_classes = (JwtAuthentication,)
-    permission_classes = (StaffUserPermissions,)
+    permission_classes = (CourseStaffUserPermissions,)
 
     @classmethod
     def update_exam(cls, exam_object, fields):
@@ -239,7 +240,7 @@ class CourseExamConfigurationsView(ExamsAPIView):
     """
 
     authentication_classes = (JwtAuthentication,)
-    permission_classes = (StaffUserOrReadOnlyPermissions,)
+    permission_classes = (CourseStaffOrReadOnlyPermissions,)
 
     def get(self, request, course_id):
         """
@@ -321,7 +322,7 @@ class ExamAccessTokensView(ExamsAPIView):
     """
 
     authentication_classes = (JwtAuthentication,)
-    permission_classes = (StaffUserOrReadOnlyPermissions,)
+    permission_classes = (CourseStaffOrReadOnlyPermissions,)
 
     @classmethod
     def get_expiration_window(cls, exam_attempt, default_exp_seconds):
@@ -552,7 +553,8 @@ class ExamAttemptView(ExamsAPIView):
             )
 
         action_mapping = {}
-        if request.user.is_staff:
+        course_id = attempt.exam.course_id
+        if request.user.is_staff or request.user.has_course_staff_permission(course_id):
             action_mapping = {
                 'verify': ExamAttemptStatus.verified,
                 'reject': ExamAttemptStatus.rejected,
@@ -569,7 +571,7 @@ class ExamAttemptView(ExamsAPIView):
         else:
             error_msg = (
                 f'user_id={attempt.user.id} attempted to update attempt_id={attempt.id} in '
-                f'course_id={attempt.exam.course_id} but does not have access to it. (action={action})'
+                f'course_id={course_id} but does not have access to it. (action={action})'
             )
             error = {'detail': error_msg}
             return Response(status=status.HTTP_403_FORBIDDEN, data=error)
@@ -612,8 +614,11 @@ class ExamAttemptView(ExamsAPIView):
                 data={'detail': f'Attempt with attempt_id={attempt_id} does not exist.'}
             )
 
-        # TODO: this staff check will be updated once an instructor role is added
-        if not request.user.is_staff and exam_attempt.user.id != request.user.id:
+        if (
+            exam_attempt.user.id != request.user.id and
+            not request.user.is_staff and
+            not request.user.has_course_staff_permission(exam_attempt.exam.course_id)
+        ):
             error_msg = (
                 f'user_id={exam_attempt.user.id} attempted to delete attempt_id={exam_attempt.id} in '
                 f'course_id={exam_attempt.exam.course_id} but does not have access to it.'
@@ -637,9 +642,9 @@ class InstructorAttemptsListView(ExamsAPIView):
     """
 
     authentication_classes = (JwtAuthentication,)
-    permission_classes = (StaffUserPermissions,)
+    permission_classes = (CourseStaffUserPermissions,)
 
-    def get(self, request):
+    def get(self, request, course_id):
         """
         HTTP GET handler to fetch all exam attempt data for a given exam.
 
@@ -650,6 +655,14 @@ class InstructorAttemptsListView(ExamsAPIView):
             A Response object containing all `ExamAttempt` data.
         """
         exam_id = request.query_params.get('exam_id', None)
+
+        # permissions are checked at the course level, the requested
+        # exam must be in the course the user has been authorized to access
+        if get_exam_by_id(exam_id).course_id != course_id:
+            return Response(
+                status=status.HTTP_404_NOT_FOUND,
+                data={'detail': 'Exam does not exist in course'}
+            )
 
         # instructor serializer will follow FK relationships to get user and
         # exam fields. This list is potentially large so use

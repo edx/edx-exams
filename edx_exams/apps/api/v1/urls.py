@@ -53,8 +53,8 @@ urlpatterns = [
         LatestExamAttemptView.as_view(),
         name='exams-attempt-latest',
     ),
-    path(
-        'instructor_view/attempts',
+    re_path(
+        fr'instructor_view/course_id/{COURSE_ID_PATTERN}/attempts',
         InstructorAttemptsListView.as_view(),
         name='instructor-attempts-list'
     ),
