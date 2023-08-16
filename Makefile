@@ -35,10 +35,7 @@ piptools: ## install pinned version of pip-compile and pip-sync
 	pip install -r requirements/pip.txt
 	pip install -r requirements/pip-tools.txt
 
-clean_pycrypto: ## temporary (?) hack to deal with the pycrypto dep that's installed via setup-tools
-	ls -d /usr/lib/python3/dist-packages/* | grep 'pycrypto\|pygobject\|pyxdg' | xargs rm -f
-
-requirements: clean_pycrypto piptools dev_requirements ## sync to default requirements
+requirements: piptools dev_requirements ## sync to default requirements
 
 test_requirements:
 	pip-sync -q requirements/test.txt
