@@ -14,9 +14,9 @@ attrs==23.1.0
     #   openedx-events
 bleach==6.0.0
     # via lti-consumer-xblock
-boto3==1.28.26
+boto3==1.28.42
     # via fs-s3fs
-botocore==1.31.26
+botocore==1.31.42
     # via
     #   boto3
     #   s3transfer
@@ -28,8 +28,12 @@ cffi==1.15.1
     #   pynacl
 charset-normalizer==3.2.0
     # via requests
-click==8.1.6
-    # via edx-django-utils
+click==8.1.7
+    # via
+    #   code-annotations
+    #   edx-django-utils
+code-annotations==1.5.0
+    # via edx-toggles
 coreapi==2.3.3
     # via
     #   django-rest-swagger
@@ -44,7 +48,7 @@ defusedxml==0.7.1
     # via
     #   python3-openid
     #   social-auth-core
-django==3.2.20
+django==3.2.21
     # via
     #   -c https://raw.githubusercontent.com/edx/edx-lint/master/edx_lint/files/common_constraints.txt
     #   -r requirements/base.in
@@ -66,6 +70,7 @@ django==3.2.20
     #   edx-django-utils
     #   edx-drf-extensions
     #   edx-event-bus-kafka
+    #   edx-toggles
     #   edx-token-utils
     #   jsonfield
     #   lti-consumer-xblock
@@ -80,7 +85,9 @@ django-config-models==2.5.0
 django-cors-headers==4.2.0
     # via -r requirements/base.in
 django-crum==0.7.9
-    # via edx-django-utils
+    # via
+    #   edx-django-utils
+    #   edx-toggles
 django-extensions==3.2.3
     # via -r requirements/base.in
 django-filter==23.2
@@ -100,6 +107,7 @@ django-waffle==4.0.0
     #   -r requirements/base.in
     #   edx-django-utils
     #   edx-drf-extensions
+    #   edx-toggles
 djangorestframework==3.14.0
     # via
     #   -r requirements/base.in
@@ -117,6 +125,8 @@ edx-api-doc-tools==1.7.0
     # via -r requirements/base.in
 edx-auth-backends==4.2.0
     # via -r requirements/base.in
+edx-ccx-keys==1.2.1
+    # via lti-consumer-xblock
 edx-django-release-util==1.3.0
     # via -r requirements/base.in
 edx-django-utils==5.7.0
@@ -126,23 +136,25 @@ edx-django-utils==5.7.0
     #   edx-drf-extensions
     #   edx-event-bus-kafka
     #   edx-rest-api-client
-edx-drf-extensions==8.9.0
+    #   edx-toggles
+edx-drf-extensions==8.9.2
     # via -r requirements/base.in
-edx-event-bus-kafka==3.9.6
+edx-event-bus-kafka==5.4.0
     # via -r requirements/base.in
-edx-opaque-keys==2.4.0
+edx-opaque-keys[django]==2.5.0
     # via
     #   -r requirements/base.in
+    #   edx-ccx-keys
     #   edx-drf-extensions
     #   lti-consumer-xblock
     #   openedx-events
 edx-rest-api-client==5.6.0
     # via -r requirements/base.in
-edx-toggles==5.0.0
+edx-toggles==5.1.0
     # via edx-event-bus-kafka
 edx-token-utils==0.2.1
     # via -r requirements/base.in
-fastavro==1.7.3
+fastavro==1.8.3
     # via openedx-events
 fs==2.4.16
     # via
@@ -160,7 +172,9 @@ inflection==0.5.1
 itypes==1.2.0
     # via coreapi
 jinja2==3.1.2
-    # via coreschema
+    # via
+    #   code-annotations
+    #   coreschema
 jmespath==1.0.1
     # via
     #   boto3
@@ -171,7 +185,7 @@ lazy==1.5
     # via
     #   lti-consumer-xblock
     #   xblock
-lti-consumer-xblock==9.6.0
+lti-consumer-xblock==9.6.2
     # via -r requirements/base.in
 lxml==4.9.3
     # via
@@ -188,7 +202,7 @@ markupsafe==2.1.3
     #   xblock
 mysqlclient==2.2.0
     # via -r requirements/base.in
-newrelic==8.10.0
+newrelic==9.0.0
     # via edx-django-utils
 oauthlib==3.2.2
     # via
@@ -198,10 +212,14 @@ oauthlib==3.2.2
 openapi-codec==1.3.2
     # via django-rest-swagger
 openedx-django-pyfs==3.4.0
-    # via xblock
-openedx-events==7.0.0
-    # via edx-event-bus-kafka
-openedx-filters==1.5.0
+    # via
+    #   lti-consumer-xblock
+    #   xblock
+openedx-events==8.6.0
+    # via
+    #   -r requirements/base.in
+    #   edx-event-bus-kafka
+openedx-filters==1.6.0
     # via lti-consumer-xblock
 packaging==23.1
     # via drf-yasg
@@ -235,9 +253,11 @@ python-dateutil==2.8.2
     #   botocore
     #   edx-drf-extensions
     #   xblock
+python-slugify==8.0.1
+    # via code-annotations
 python3-openid==3.2.0
     # via social-auth-core
-pytz==2023.3
+pytz==2023.3.post1
     # via
     #   -r requirements/base.in
     #   django
@@ -246,6 +266,7 @@ pytz==2023.3
     #   xblock
 pyyaml==6.0.1
     # via
+    #   code-annotations
     #   drf-yasg
     #   edx-django-release-util
     #   xblock
@@ -260,7 +281,7 @@ requests==2.31.0
     #   social-auth-core
 requests-oauthlib==1.3.1
     # via social-auth-core
-s3transfer==0.6.1
+s3transfer==0.6.2
     # via boto3
 semantic-version==2.10.0
     # via edx-drf-extensions
@@ -272,6 +293,7 @@ six==1.16.0
     # via
     #   bleach
     #   edx-auth-backends
+    #   edx-ccx-keys
     #   edx-django-release-util
     #   edx-drf-extensions
     #   fs
@@ -280,7 +302,7 @@ six==1.16.0
     #   python-dateutil
 slumber==0.7.1
     # via edx-rest-api-client
-social-auth-app-django==5.2.0
+social-auth-app-django==5.3.0
     # via edx-auth-backends
 social-auth-core==4.4.2
     # via
@@ -290,10 +312,15 @@ sqlparse==0.4.4
     # via django
 stevedore==5.1.0
     # via
+    #   code-annotations
     #   edx-django-utils
     #   edx-opaque-keys
+text-unidecode==1.3
+    # via python-slugify
 typing-extensions==4.7.1
-    # via asgiref
+    # via
+    #   asgiref
+    #   edx-opaque-keys
 uritemplate==4.1.1
     # via
     #   coreapi

@@ -17,7 +17,8 @@ edx-drf-extensions
 edx-event-bus-kafka
 edx-opaque-keys
 edx-rest-api-client
+edx-token-utils
 lti-consumer-xblock
 mysqlclient
+openedx-events
 pytz
-edx-token-utils
