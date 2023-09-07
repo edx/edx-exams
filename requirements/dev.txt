@@ -21,6 +21,7 @@ attrs==23.1.0
     # via
     #   -r requirements/validation.txt
     #   lti-consumer-xblock
+    #   openedx-events
 bleach==6.0.0
     # via
     #   -r requirements/validation.txt
@@ -128,11 +129,13 @@ django==3.2.20
     #   edx-django-release-util
     #   edx-django-utils
     #   edx-drf-extensions
+    #   edx-event-bus-kafka
     #   edx-i18n-tools
     #   edx-token-utils
     #   jsonfield
     #   lti-consumer-xblock
     #   openedx-django-pyfs
+    #   openedx-events
     #   openedx-filters
     #   social-auth-app-django
 django-appconf==1.0.5
@@ -206,9 +209,12 @@ edx-django-utils==5.7.0
     #   -r requirements/validation.txt
     #   django-config-models
     #   edx-drf-extensions
+    #   edx-event-bus-kafka
     #   edx-rest-api-client
 edx-drf-extensions==8.9.0
     # via -r requirements/validation.txt
+edx-event-bus-kafka==3.9.6
+    # via -r requirements/test.txt
 edx-i18n-tools==1.1.0
     # via -r requirements/dev.in
 edx-lint==5.3.4
@@ -218,10 +224,15 @@ edx-opaque-keys==2.4.0
     #   -r requirements/validation.txt
     #   edx-drf-extensions
     #   lti-consumer-xblock
+    #   openedx-events
 edx-rest-api-client==5.6.0
     # via -r requirements/validation.txt
 edx-token-utils==0.2.1
     # via -r requirements/validation.txt
+edx-toggles==5.0.0
+    # via
+    #   -r requirements/test.txt
+    #   edx-event-bus-kafka
 exceptiongroup==1.1.3
     # via
     #   -r requirements/validation.txt
@@ -232,6 +243,10 @@ faker==19.3.0
     # via
     #   -r requirements/validation.txt
     #   factory-boy
+fastavro==1.7.3
+    # via
+    #   -r requirements/test.txt
+    #   openedx-events
 filelock==3.12.2
     # via
     #   -r requirements/validation.txt
@@ -375,6 +390,10 @@ openedx-django-pyfs==3.4.0
     # via
     #   -r requirements/validation.txt
     #   xblock
+openedx-events==7.0.0
+    # via
+    #   -r requirements/test.txt
+    #   edx-event-bus-kafka
 openedx-filters==1.5.0
     # via
     #   -r requirements/validation.txt

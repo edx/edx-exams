@@ -9,7 +9,9 @@ appdirs==1.4.4
 asgiref==3.7.2
     # via django
 attrs==23.1.0
-    # via lti-consumer-xblock
+    # via
+    #   lti-consumer-xblock
+    #   openedx-events
 bleach==6.0.0
     # via lti-consumer-xblock
 boto3==1.28.26
@@ -63,10 +65,12 @@ django==3.2.20
     #   edx-django-release-util
     #   edx-django-utils
     #   edx-drf-extensions
+    #   edx-event-bus-kafka
     #   edx-token-utils
     #   jsonfield
     #   lti-consumer-xblock
     #   openedx-django-pyfs
+    #   openedx-events
     #   openedx-filters
     #   social-auth-app-django
 django-appconf==1.0.5
@@ -120,18 +124,26 @@ edx-django-utils==5.7.0
     #   -r requirements/base.in
     #   django-config-models
     #   edx-drf-extensions
+    #   edx-event-bus-kafka
     #   edx-rest-api-client
 edx-drf-extensions==8.9.0
+    # via -r requirements/base.in
+edx-event-bus-kafka==3.9.6
     # via -r requirements/base.in
 edx-opaque-keys==2.4.0
     # via
     #   -r requirements/base.in
     #   edx-drf-extensions
     #   lti-consumer-xblock
+    #   openedx-events
 edx-rest-api-client==5.6.0
     # via -r requirements/base.in
+edx-toggles==5.0.0
+    # via edx-event-bus-kafka
 edx-token-utils==0.2.1
     # via -r requirements/base.in
+fastavro==1.7.3
+    # via openedx-events
 fs==2.4.16
     # via
     #   fs-s3fs
@@ -187,6 +199,8 @@ openapi-codec==1.3.2
     # via django-rest-swagger
 openedx-django-pyfs==3.4.0
     # via xblock
+openedx-events==7.0.0
+    # via edx-event-bus-kafka
 openedx-filters==1.5.0
     # via lti-consumer-xblock
 packaging==23.1
