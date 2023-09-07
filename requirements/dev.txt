@@ -21,21 +21,22 @@ attrs==23.1.0
     # via
     #   -r requirements/validation.txt
     #   lti-consumer-xblock
+    #   openedx-events
 bleach==6.0.0
     # via
     #   -r requirements/validation.txt
     #   lti-consumer-xblock
     #   readme-renderer
-boto3==1.28.26
+boto3==1.28.42
     # via
     #   -r requirements/validation.txt
     #   fs-s3fs
-botocore==1.31.26
+botocore==1.31.42
     # via
     #   -r requirements/validation.txt
     #   boto3
     #   s3transfer
-build==0.10.0
+build==1.0.3
     # via
     #   -r requirements/pip-tools.txt
     #   pip-tools
@@ -54,7 +55,7 @@ charset-normalizer==3.2.0
     # via
     #   -r requirements/validation.txt
     #   requests
-click==8.1.6
+click==8.1.7
     # via
     #   -r requirements/pip-tools.txt
     #   -r requirements/validation.txt
@@ -71,6 +72,7 @@ code-annotations==1.5.0
     # via
     #   -r requirements/validation.txt
     #   edx-lint
+    #   edx-toggles
 coreapi==2.3.3
     # via
     #   -r requirements/validation.txt
@@ -80,7 +82,7 @@ coreschema==0.0.4
     # via
     #   -r requirements/validation.txt
     #   coreapi
-coverage[toml]==7.3.0
+coverage[toml]==7.3.1
     # via
     #   -r requirements/validation.txt
     #   pytest-cov
@@ -88,7 +90,6 @@ cryptography==41.0.3
     # via
     #   -r requirements/validation.txt
     #   pyjwt
-    #   secretstorage
     #   social-auth-core
 ddt==1.6.0
     # via -r requirements/validation.txt
@@ -107,7 +108,7 @@ distlib==0.3.7
     # via
     #   -r requirements/validation.txt
     #   virtualenv
-django==3.2.20
+django==3.2.21
     # via
     #   -r requirements/validation.txt
     #   django-appconf
@@ -128,11 +129,14 @@ django==3.2.20
     #   edx-django-release-util
     #   edx-django-utils
     #   edx-drf-extensions
+    #   edx-event-bus-kafka
     #   edx-i18n-tools
+    #   edx-toggles
     #   edx-token-utils
     #   jsonfield
     #   lti-consumer-xblock
     #   openedx-django-pyfs
+    #   openedx-events
     #   openedx-filters
     #   social-auth-app-django
 django-appconf==1.0.5
@@ -149,9 +153,10 @@ django-crum==0.7.9
     # via
     #   -r requirements/validation.txt
     #   edx-django-utils
+    #   edx-toggles
 django-debug-toolbar==4.2.0
     # via -r requirements/dev.in
-django-dynamic-fixture==3.1.2
+django-dynamic-fixture==4.0.0
     # via -r requirements/validation.txt
 django-extensions==3.2.3
     # via -r requirements/validation.txt
@@ -174,6 +179,7 @@ django-waffle==4.0.0
     #   -r requirements/validation.txt
     #   edx-django-utils
     #   edx-drf-extensions
+    #   edx-toggles
 djangorestframework==3.14.0
     # via
     #   -r requirements/validation.txt
@@ -199,6 +205,10 @@ edx-api-doc-tools==1.7.0
     # via -r requirements/validation.txt
 edx-auth-backends==4.2.0
     # via -r requirements/validation.txt
+edx-ccx-keys==1.2.1
+    # via
+    #   -r requirements/validation.txt
+    #   lti-consumer-xblock
 edx-django-release-util==1.3.0
     # via -r requirements/validation.txt
 edx-django-utils==5.7.0
@@ -206,20 +216,30 @@ edx-django-utils==5.7.0
     #   -r requirements/validation.txt
     #   django-config-models
     #   edx-drf-extensions
+    #   edx-event-bus-kafka
     #   edx-rest-api-client
-edx-drf-extensions==8.9.0
+    #   edx-toggles
+edx-drf-extensions==8.9.2
+    # via -r requirements/validation.txt
+edx-event-bus-kafka==5.4.0
     # via -r requirements/validation.txt
 edx-i18n-tools==1.1.0
     # via -r requirements/dev.in
 edx-lint==5.3.4
     # via -r requirements/validation.txt
-edx-opaque-keys==2.4.0
+edx-opaque-keys[django]==2.5.0
     # via
     #   -r requirements/validation.txt
+    #   edx-ccx-keys
     #   edx-drf-extensions
     #   lti-consumer-xblock
+    #   openedx-events
 edx-rest-api-client==5.6.0
     # via -r requirements/validation.txt
+edx-toggles==5.1.0
+    # via
+    #   -r requirements/validation.txt
+    #   edx-event-bus-kafka
 edx-token-utils==0.2.1
     # via -r requirements/validation.txt
 exceptiongroup==1.1.3
@@ -228,11 +248,15 @@ exceptiongroup==1.1.3
     #   pytest
 factory-boy==3.3.0
     # via -r requirements/validation.txt
-faker==19.3.0
+faker==19.4.0
     # via
     #   -r requirements/validation.txt
     #   factory-boy
-filelock==3.12.2
+fastavro==1.8.3
+    # via
+    #   -r requirements/validation.txt
+    #   openedx-events
+filelock==3.12.3
     # via
     #   -r requirements/validation.txt
     #   tox
@@ -259,7 +283,9 @@ idna==3.4
     #   requests
 importlib-metadata==6.8.0
     # via
+    #   -r requirements/pip-tools.txt
     #   -r requirements/validation.txt
+    #   build
     #   keyring
     #   twine
 importlib-resources==6.0.1
@@ -286,11 +312,6 @@ jaraco-classes==3.3.0
     # via
     #   -r requirements/validation.txt
     #   keyring
-jeepney==0.8.0
-    # via
-    #   -r requirements/validation.txt
-    #   keyring
-    #   secretstorage
 jinja2==3.1.2
     # via
     #   -r requirements/validation.txt
@@ -319,7 +340,7 @@ lazy-object-proxy==1.9.0
     # via
     #   -r requirements/validation.txt
     #   astroid
-lti-consumer-xblock==9.6.0
+lti-consumer-xblock==9.6.2
     # via -r requirements/validation.txt
 lxml==4.9.3
     # via
@@ -357,7 +378,7 @@ more-itertools==10.1.0
     #   jaraco-classes
 mysqlclient==2.2.0
     # via -r requirements/validation.txt
-newrelic==8.10.0
+newrelic==9.0.0
     # via
     #   -r requirements/validation.txt
     #   edx-django-utils
@@ -374,8 +395,13 @@ openapi-codec==1.3.2
 openedx-django-pyfs==3.4.0
     # via
     #   -r requirements/validation.txt
+    #   lti-consumer-xblock
     #   xblock
-openedx-filters==1.5.0
+openedx-events==8.6.0
+    # via
+    #   -r requirements/validation.txt
+    #   edx-event-bus-kafka
+openedx-filters==1.6.0
     # via
     #   -r requirements/validation.txt
     #   lti-consumer-xblock
@@ -404,7 +430,7 @@ platformdirs==3.10.0
     #   -r requirements/validation.txt
     #   pylint
     #   virtualenv
-pluggy==1.2.0
+pluggy==1.3.0
     # via
     #   -r requirements/validation.txt
     #   diff-cover
@@ -484,7 +510,7 @@ pyproject-hooks==1.0.0
     # via
     #   -r requirements/pip-tools.txt
     #   build
-pytest==7.4.0
+pytest==7.4.1
     # via
     #   -r requirements/validation.txt
     #   pytest-cov
@@ -509,7 +535,7 @@ python3-openid==3.2.0
     # via
     #   -r requirements/validation.txt
     #   social-auth-core
-pytz==2023.3
+pytz==2023.3.post1
     # via
     #   -r requirements/validation.txt
     #   django
@@ -525,7 +551,7 @@ pyyaml==6.0.1
     #   edx-i18n-tools
     #   responses
     #   xblock
-readme-renderer==40.0
+readme-renderer==41.0
     # via
     #   -r requirements/validation.txt
     #   twine
@@ -560,14 +586,10 @@ rich==13.5.2
     # via
     #   -r requirements/validation.txt
     #   twine
-s3transfer==0.6.1
+s3transfer==0.6.2
     # via
     #   -r requirements/validation.txt
     #   boto3
-secretstorage==3.3.3
-    # via
-    #   -r requirements/validation.txt
-    #   keyring
 semantic-version==2.10.0
     # via
     #   -r requirements/validation.txt
@@ -581,8 +603,8 @@ six==1.16.0
     # via
     #   -r requirements/validation.txt
     #   bleach
-    #   django-dynamic-fixture
     #   edx-auth-backends
+    #   edx-ccx-keys
     #   edx-django-release-util
     #   edx-drf-extensions
     #   edx-lint
@@ -599,7 +621,7 @@ snowballstemmer==2.2.0
     # via
     #   -r requirements/validation.txt
     #   pydocstyle
-social-auth-app-django==5.2.0
+social-auth-app-django==5.3.0
     # via
     #   -r requirements/validation.txt
     #   edx-auth-backends
@@ -651,7 +673,9 @@ typing-extensions==4.7.1
     #   -r requirements/validation.txt
     #   asgiref
     #   astroid
+    #   edx-opaque-keys
     #   faker
+    #   filelock
     #   pylint
     #   rich
 uritemplate==4.1.1
@@ -666,7 +690,7 @@ urllib3==1.26.16
     #   requests
     #   responses
     #   twine
-virtualenv==20.24.3
+virtualenv==20.24.4
     # via
     #   -r requirements/validation.txt
     #   tox
@@ -683,7 +707,7 @@ webob==1.8.7
     # via
     #   -r requirements/validation.txt
     #   xblock
-wheel==0.41.1
+wheel==0.41.2
     # via
     #   -r requirements/pip-tools.txt
     #   pip-tools
@@ -702,6 +726,7 @@ xblock-utils==3.4.1
     #   lti-consumer-xblock
 zipp==3.16.2
     # via
+    #   -r requirements/pip-tools.txt
     #   -r requirements/validation.txt
     #   importlib-metadata
     #   importlib-resources
