@@ -20,8 +20,8 @@ As such, we plan to use the event bus to send info to edx-platform services with
 
 Below are lists of downstream effects of exam submission and review that we will or will not be translating into events in edx-exams as part of this decision.
 
-Downstream effects to be implemented as events in the short term:
-*****************************************************************
+Downstream effects to be implemented as events:
+***********************************************
 
   * Grades Override - A python API call to the grades app to generate a grade override when an exam attempt is rejected.
 
@@ -35,8 +35,8 @@ Downstream effects to be implemented as events in the short term:
 
   * Set Credit Requirement Status - A python API call to the credits app to create or modify a learner’s credit requirement status for an exam.
 
-Downstream effects that will be implemented in the long term:
-*************************************************************
+Downstream effects that are not being implemented as part of this decision:
+***************************************************************************
 
   * Credit Prerequisite Check:
 
