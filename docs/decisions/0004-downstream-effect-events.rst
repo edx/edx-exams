@@ -4,7 +4,7 @@ Implementation of Event Driven Architecture for Exam Downstream Effects
 Status
 ------
 
-Draft (circa Sept 2023)
+Approved (circa September 2023)
 
 Context
 -------
