@@ -8,6 +8,7 @@ from urllib.parse import urljoin
 
 import ddt
 from Cryptodome.PublicKey import RSA
+from django.conf import settings
 from django.contrib.auth.models import AnonymousUser
 from django.urls import reverse
 from lti_consumer.data import Lti1p3LaunchData, Lti1p3ProctoringLaunchData
@@ -488,7 +489,7 @@ class LtiEndAssessmentTestCase(ExamsAPITestCase):
         super().setUp()
 
         self.course_id = 'course-v1:edx+test+f19'
-        self.content_id = '11111111'
+        self.content_id = 'block-v1:edX+test+2023+type@sequential+block@1111111111'
 
         self.exam = ExamFactory(
             course_id=self.course_id,
@@ -540,23 +541,29 @@ class LtiEndAssessmentTestCase(ExamsAPITestCase):
             message_type='LtiEndAssessment',
             proctoring_launch_data=expected_proctoring_launch_data,
             context_id=self.course_id,
+            launch_presentation_return_url=f'{settings.LEARNING_MICROFRONTEND_URL}/'
+                                           f'course/{self.course_id}/{self.content_id}',
         )
 
         mock_get_lti_launch_url.assert_called_with(expected_launch_data)
 
-    def test_end_assessment_redirect(self, mock_get_lti_launch_url):
+    def test_end_assessment_requires_lti(self, mock_get_lti_launch_url):
         with patch('edx_exams.apps.lti.views.get_end_assessment_return', return_value=True):
             headers = self.build_jwt_headers(self.user)
             response = self.client.get(self.url, **headers)
 
         self.assertRedirects(response, mock_get_lti_launch_url.return_value, fetch_redirect_response=False)
 
-    def test_end_assessment_no_redirect(self, mock_get_lti_launch_url):  # pylint: disable=unused-argument
+    def test_end_assessment_no_lti_endassessment(self, mock_get_lti_launch_url):  # pylint: disable=unused-argument
         with patch('edx_exams.apps.lti.views.get_end_assessment_return', return_value=False):
             headers = self.build_jwt_headers(self.user)
             response = self.client.get(self.url, **headers)
 
-        self.assertEqual(response.status_code, 200)
+        self.assertRedirects(
+            response,
+            f'{settings.LEARNING_MICROFRONTEND_URL}/course/{self.course_id}/{self.content_id}',
+            fetch_redirect_response=False
+        )
 
     def test_end_assessment_updated_attempt(self, mock_get_lti_launch_url):  # pylint: disable=unused-argument
         """
