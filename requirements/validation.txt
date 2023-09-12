@@ -31,13 +31,12 @@ bleach==6.0.0
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   lti-consumer-xblock
-    #   readme-renderer
-boto3==1.28.42
+boto3==1.28.45
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   fs-s3fs
-botocore==1.31.42
+botocore==1.31.45
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -99,6 +98,7 @@ cryptography==41.0.3
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   pyjwt
+    #   secretstorage
     #   social-auth-core
 ddt==1.6.0
     # via
@@ -299,7 +299,7 @@ factory-boy==3.3.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
-faker==19.4.0
+faker==19.6.1
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -374,6 +374,11 @@ jaraco-classes==3.3.0
     # via
     #   -r requirements/quality.txt
     #   keyring
+jeepney==0.8.0
+    # via
+    #   -r requirements/quality.txt
+    #   keyring
+    #   secretstorage
 jinja2==3.1.2
     # via
     #   -r requirements/quality.txt
@@ -459,6 +464,10 @@ newrelic==9.0.0
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   edx-django-utils
+nh3==0.2.14
+    # via
+    #   -r requirements/quality.txt
+    #   readme-renderer
 oauthlib==3.2.2
     # via
     #   -r requirements/quality.txt
@@ -594,7 +603,7 @@ pynacl==1.5.0
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   edx-django-utils
-pytest==7.4.1
+pytest==7.4.2
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -644,7 +653,7 @@ pyyaml==6.0.1
     #   edx-django-release-util
     #   responses
     #   xblock
-readme-renderer==41.0
+readme-renderer==42.0
     # via
     #   -r requirements/quality.txt
     #   twine
@@ -688,6 +697,10 @@ s3transfer==0.6.2
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   boto3
+secretstorage==3.3.3
+    # via
+    #   -r requirements/quality.txt
+    #   keyring
 semantic-version==2.10.0
     # via
     #   -r requirements/quality.txt
@@ -800,7 +813,7 @@ urllib3==1.26.16
     #   requests
     #   responses
     #   twine
-virtualenv==20.24.4
+virtualenv==20.24.5
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
