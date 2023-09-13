@@ -8,7 +8,6 @@ from decimal import Decimal
 from urllib.parse import urljoin
 
 from django.contrib.auth import login
-from django.http import JsonResponse
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.views.decorators.http import require_http_methods
@@ -27,6 +26,7 @@ from edx_exams.apps.core.api import (
     get_attempt_by_id,
     get_attempt_for_user_with_attempt_number_and_resource_id,
     get_exam_by_id,
+    get_exam_url_path,
     update_attempt_status
 )
 from edx_exams.apps.core.exceptions import ExamIllegalStatusTransition
@@ -290,11 +290,6 @@ def end_assessment(request, attempt_id):
 
     update_attempt_status(attempt_id, ExamAttemptStatus.submitted)
 
-    # user is authenticated via JWT so use that to create a
-    # session with this service's authentication backend
-    request.user.backend = EDX_OAUTH_BACKEND
-    login(request, user)
-
     exam = attempt.exam
     resource_link_id = exam.resource_id
     end_assessment_return = get_end_assessment_return(request.user.anonymous_user_id, resource_link_id)
@@ -303,6 +298,11 @@ def end_assessment(request, attempt_id):
     # Platform MUST send an End Assessment message to the Proctoring Tool. Otherwise, the Assessment Platform can
     # complete its normal post-assessment flow.
     if end_assessment_return:
+        # user is authenticated via JWT so use that to create a
+        # session with this service's authentication backend
+        request.user.backend = EDX_OAUTH_BACKEND
+        login(request, user)
+
         lti_config_id = exam.provider.lti_configuration_id
         lti_config = LtiConfiguration.objects.get(id=lti_config_id)
 
@@ -319,6 +319,7 @@ def end_assessment(request, attempt_id):
             message_type='LtiEndAssessment',
             proctoring_launch_data=proctoring_launch_data,
             context_id=exam.course_id,
+            launch_presentation_return_url=get_exam_url_path(exam.course_id, exam.content_id),
         )
 
         # TODO: "If the assessment needs to close due to an error NOT handled by the Assessment Platform that error MUST
@@ -328,7 +329,7 @@ def end_assessment(request, attempt_id):
 
         return redirect(preflight_url)
 
-    return JsonResponse({})
+    return redirect(get_exam_url_path(exam.course_id, exam.content_id))
 
 
 @api_view(['GET'])
