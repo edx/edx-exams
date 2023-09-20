@@ -11,6 +11,7 @@ from django.conf import settings
 from django.utils import timezone
 from freezegun import freeze_time
 from opaque_keys.edx.keys import CourseKey, UsageKey
+from openedx_events.learning.data import ExamAttemptData, UserData, UserPersonalData
 
 from edx_exams.apps.api.test_utils import ExamsAPITestCase
 from edx_exams.apps.core.api import (
@@ -212,7 +213,7 @@ class TestUpdateAttemptStatus(ExamsAPITestCase):
             resource_id=str(uuid.uuid4()),
             course_id=self.course_id,
             provider=self.test_provider,
-            content_id='abcd1234',
+            content_id='block-v1:edX+test+2023+type@sequential+block@1111111111',
             exam_name='test_exam',
             exam_type='proctored',
             time_limit_mins=30,
@@ -297,6 +298,35 @@ class TestUpdateAttemptStatus(ExamsAPITestCase):
             updated_attempt = ExamAttempt.get_attempt_by_id(attempt_id)
             self.assertEqual(updated_attempt.status, ExamAttemptStatus.submitted)
             self.assertEqual(updated_attempt.end_time, timezone.now())
+
+    @patch('edx_exams.apps.core.signals.signals.EXAM_ATTEMPT_SUBMITTED.send_event')
+    def test_submit_attempt_event_emitted(self, mock_event_send):
+        """
+        Test that when an exam is submitted, the EXAM_ATTEMPT_SUBMITED Open edX event is emitted.
+        """
+        update_attempt_status(self.exam_attempt.id, ExamAttemptStatus.submitted)
+        self.assertEqual(mock_event_send.call_count, 1)
+
+        user_data = UserData(
+            id=self.user.id,
+            is_active=self.user.is_active,
+            pii=UserPersonalData(
+                username=self.user.username,
+                email=self.user.email,
+                name=self.user.full_name
+            )
+        )
+        course_key = CourseKey.from_string(self.exam.course_id)
+        usage_key = UsageKey.from_string(self.exam.content_id)
+
+        expected_data = ExamAttemptData(
+            student_user=user_data,
+            course_key=course_key,
+            usage_key=usage_key,
+            exam_type=self.exam.exam_type,
+            requesting_user=user_data,
+        )
+        mock_event_send.assert_called_with(exam_attempt=expected_data)
 
     def test_illegal_start(self):
         """
