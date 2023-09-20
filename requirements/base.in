@@ -15,6 +15,7 @@ edx-django-utils
 edx-django-release-util
 edx-drf-extensions
 edx-event-bus-kafka
+edx-event-bus-redis
 edx-opaque-keys
 edx-rest-api-client
 edx-token-utils
