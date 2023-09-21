@@ -36,12 +36,12 @@ bleach==6.0.0
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   lti-consumer-xblock
-boto3==1.28.51
+boto3==1.28.52
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   fs-s3fs
-botocore==1.31.51
+botocore==1.31.52
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -103,6 +103,7 @@ cryptography==41.0.4
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   pyjwt
+    #   secretstorage
     #   social-auth-core
 ddt==1.6.0
     # via
@@ -267,7 +268,7 @@ edx-drf-extensions==8.10.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
-edx-event-bus-kafka==5.4.0
+edx-event-bus-kafka==5.5.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -279,7 +280,7 @@ edx-lint==5.3.4
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
-edx-opaque-keys[django]==2.5.0
+edx-opaque-keys[django]==2.5.1
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -310,7 +311,7 @@ factory-boy==3.3.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
-faker==19.6.1
+faker==19.6.2
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -357,7 +358,7 @@ importlib-metadata==6.8.0
     #   -r requirements/quality.txt
     #   keyring
     #   twine
-importlib-resources==6.0.1
+importlib-resources==6.1.0
     # via
     #   -r requirements/quality.txt
     #   keyring
@@ -385,6 +386,11 @@ jaraco-classes==3.3.0
     # via
     #   -r requirements/quality.txt
     #   keyring
+jeepney==0.8.0
+    # via
+    #   -r requirements/quality.txt
+    #   keyring
+    #   secretstorage
 jinja2==3.1.2
     # via
     #   -r requirements/quality.txt
@@ -708,6 +714,10 @@ s3transfer==0.6.2
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   boto3
+secretstorage==3.3.3
+    # via
+    #   -r requirements/quality.txt
+    #   keyring
 semantic-version==2.10.0
     # via
     #   -r requirements/quality.txt
