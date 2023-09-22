@@ -26,18 +26,22 @@ attrs==23.1.0
     #   -r requirements/test.txt
     #   lti-consumer-xblock
     #   openedx-events
+avro==1.11.2
+    # via
+    #   -r requirements/quality.txt
+    #   -r requirements/test.txt
+    #   confluent-kafka
 bleach==6.0.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   lti-consumer-xblock
-    #   readme-renderer
-boto3==1.28.42
+boto3==1.28.52
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   fs-s3fs
-botocore==1.31.42
+botocore==1.31.52
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -78,6 +82,10 @@ code-annotations==1.5.0
     #   -r requirements/test.txt
     #   edx-lint
     #   edx-toggles
+confluent-kafka[avro,schema-registry]==2.2.0
+    # via
+    #   -r requirements/quality.txt
+    #   -r requirements/test.txt
 coreapi==2.3.3
     # via
     #   -r requirements/quality.txt
@@ -94,7 +102,7 @@ coverage[toml]==7.3.1
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   pytest-cov
-cryptography==41.0.3
+cryptography==41.0.4
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -155,7 +163,7 @@ django-appconf==1.0.5
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   django-statici18n
-django-config-models==2.5.0
+django-config-models==2.5.1
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -170,7 +178,7 @@ django-crum==0.7.9
     #   -r requirements/test.txt
     #   edx-django-utils
     #   edx-toggles
-django-dynamic-fixture==4.0.0
+django-dynamic-fixture==4.0.1
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -178,7 +186,7 @@ django-extensions==3.2.3
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
-django-filter==23.2
+django-filter==23.3
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -257,11 +265,11 @@ edx-django-utils==5.7.0
     #   edx-event-bus-kafka
     #   edx-rest-api-client
     #   edx-toggles
-edx-drf-extensions==8.9.2
+edx-drf-extensions==8.10.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
-edx-event-bus-kafka==5.4.0
+edx-event-bus-kafka==5.5.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -269,7 +277,7 @@ edx-lint==5.3.4
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
-edx-opaque-keys[django]==2.5.0
+edx-opaque-keys[django]==2.5.1
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -299,7 +307,7 @@ factory-boy==3.3.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
-faker==19.4.0
+faker==19.6.2
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -308,8 +316,9 @@ fastavro==1.8.3
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
+    #   confluent-kafka
     #   openedx-events
-filelock==3.12.3
+filelock==3.12.4
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -346,7 +355,7 @@ importlib-metadata==6.8.0
     #   -r requirements/quality.txt
     #   keyring
     #   twine
-importlib-resources==6.0.1
+importlib-resources==6.1.0
     # via
     #   -r requirements/quality.txt
     #   keyring
@@ -395,7 +404,7 @@ keyring==24.2.0
     # via
     #   -r requirements/quality.txt
     #   twine
-lazy==1.5
+lazy==1.6
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -459,6 +468,10 @@ newrelic==9.0.0
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   edx-django-utils
+nh3==0.2.14
+    # via
+    #   -r requirements/quality.txt
+    #   readme-renderer
 oauthlib==3.2.2
     # via
     #   -r requirements/quality.txt
@@ -532,7 +545,7 @@ pycparser==2.21
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   cffi
-pycryptodomex==3.18.0
+pycryptodomex==3.19.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -594,7 +607,7 @@ pynacl==1.5.0
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   edx-django-utils
-pytest==7.4.1
+pytest==7.4.2
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -613,7 +626,6 @@ python-dateutil==2.8.2
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   botocore
-    #   edx-drf-extensions
     #   faker
     #   freezegun
     #   xblock
@@ -644,7 +656,7 @@ pyyaml==6.0.1
     #   edx-django-release-util
     #   responses
     #   xblock
-readme-renderer==41.0
+readme-renderer==42.0
     # via
     #   -r requirements/quality.txt
     #   twine
@@ -652,6 +664,7 @@ requests==2.31.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
+    #   confluent-kafka
     #   coreapi
     #   edx-drf-extensions
     #   edx-rest-api-client
@@ -679,7 +692,7 @@ rfc3986==2.0.0
     # via
     #   -r requirements/quality.txt
     #   twine
-rich==13.5.2
+rich==13.5.3
     # via
     #   -r requirements/quality.txt
     #   twine
@@ -707,7 +720,6 @@ six==1.16.0
     #   edx-auth-backends
     #   edx-ccx-keys
     #   edx-django-release-util
-    #   edx-drf-extensions
     #   edx-lint
     #   fs
     #   fs-s3fs
@@ -775,7 +787,7 @@ types-pyyaml==6.0.12.11
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   responses
-typing-extensions==4.7.1
+typing-extensions==4.8.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -783,7 +795,6 @@ typing-extensions==4.7.1
     #   astroid
     #   edx-opaque-keys
     #   faker
-    #   filelock
     #   pylint
     #   rich
 uritemplate==4.1.1
@@ -800,7 +811,7 @@ urllib3==1.26.16
     #   requests
     #   responses
     #   twine
-virtualenv==20.24.4
+virtualenv==20.24.5
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -837,7 +848,7 @@ xblock-utils==3.4.1
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   lti-consumer-xblock
-zipp==3.16.2
+zipp==3.17.0
     # via
     #   -r requirements/quality.txt
     #   importlib-metadata
