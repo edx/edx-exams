@@ -26,6 +26,10 @@ attrs==23.1.0
     #   -r requirements/test.txt
     #   lti-consumer-xblock
     #   openedx-events
+avro==1.11.2
+    # via
+    #   -r requirements/test.txt
+    #   confluent-kafka
 bleach==6.0.0
     # via
     #   -r requirements/test.txt
@@ -68,6 +72,8 @@ code-annotations==1.5.0
     #   -r requirements/test.txt
     #   edx-lint
     #   edx-toggles
+confluent-kafka[avro,schema-registry]==2.2.0
+    # via -r requirements/test.txt
 coreapi==2.3.3
     # via
     #   -r requirements/test.txt
@@ -251,6 +257,7 @@ faker==19.6.2
 fastavro==1.8.3
     # via
     #   -r requirements/test.txt
+    #   confluent-kafka
     #   openedx-events
 filelock==3.12.4
     # via
@@ -529,6 +536,7 @@ redis==5.0.1
 requests==2.31.0
     # via
     #   -r requirements/test.txt
+    #   confluent-kafka
     #   coreapi
     #   edx-drf-extensions
     #   edx-rest-api-client

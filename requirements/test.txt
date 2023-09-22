@@ -25,6 +25,10 @@ attrs==23.1.0
     #   -r requirements/base.txt
     #   lti-consumer-xblock
     #   openedx-events
+avro==1.11.2
+    # via
+    #   -r requirements/base.txt
+    #   confluent-kafka
 bleach==6.0.0
     # via
     #   -r requirements/base.txt
@@ -66,6 +70,8 @@ code-annotations==1.5.0
     #   -r requirements/test.in
     #   edx-lint
     #   edx-toggles
+confluent-kafka[avro,schema-registry]==2.2.0
+    # via -r requirements/base.txt
 coreapi==2.3.3
     # via
     #   -r requirements/base.txt
@@ -205,8 +211,11 @@ edx-django-utils==5.7.0
 edx-drf-extensions==8.10.0
     # via -r requirements/base.txt
 edx-event-bus-kafka==5.5.0
+<<<<<<< HEAD
     # via -r requirements/base.txt
 edx-event-bus-redis==0.3.1
+=======
+>>>>>>> 3c5ca59 (feat: install confluent_kafka[avro,schema-registry] for use with edx-event-bus-kafka)
     # via -r requirements/base.txt
 edx-lint==5.3.4
     # via -r requirements/test.in
@@ -235,6 +244,7 @@ faker==19.6.2
 fastavro==1.8.3
     # via
     #   -r requirements/base.txt
+    #   confluent-kafka
     #   openedx-events
 filelock==3.12.4
     # via
@@ -458,6 +468,7 @@ redis==5.0.1
 requests==2.31.0
     # via
     #   -r requirements/base.txt
+    #   confluent-kafka
     #   coreapi
     #   edx-drf-extensions
     #   edx-rest-api-client
