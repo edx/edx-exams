@@ -14,7 +14,7 @@ asgiref==3.7.2
     # via
     #   -r requirements/test.txt
     #   django
-astroid==2.15.6
+astroid==2.15.8
     # via
     #   -r requirements/test.txt
     #   pylint
@@ -30,15 +30,19 @@ attrs==23.1.0
     #   openedx-events
 babel==2.12.1
     # via sphinx
+backports-zoneinfo==0.2.1
+    # via
+    #   -r requirements/test.txt
+    #   django
 bleach==6.0.0
     # via
     #   -r requirements/test.txt
     #   lti-consumer-xblock
-boto3==1.28.52
+boto3==1.28.54
     # via
     #   -r requirements/test.txt
     #   fs-s3fs
-botocore==1.31.52
+botocore==1.31.54
     # via
     #   -r requirements/test.txt
     #   boto3
@@ -108,9 +112,8 @@ distlib==0.3.7
     # via
     #   -r requirements/test.txt
     #   virtualenv
-django==3.2.21
+django==4.2.5
     # via
-    #   -c https://raw.githubusercontent.com/edx/edx-lint/master/edx_lint/files/common_constraints.txt
     #   -r requirements/test.txt
     #   django-appconf
     #   django-config-models
@@ -143,7 +146,7 @@ django-appconf==1.0.5
     # via
     #   -r requirements/test.txt
     #   django-statici18n
-django-config-models==2.5.0
+django-config-models==2.5.1
     # via
     #   -r requirements/test.txt
     #   lti-consumer-xblock
@@ -168,7 +171,7 @@ django-rest-swagger==2.2.0
     # via -r requirements/test.txt
 django-simple-history==3.0.0
     # via
-    #   -c https://raw.githubusercontent.com/edx/edx-lint/master/edx_lint/files/common_constraints.txt
+    #   -c requirements/constraints.txt
     #   -r requirements/test.txt
 django-statici18n==2.4.0
     # via
@@ -379,7 +382,7 @@ more-itertools==10.1.0
     # via jaraco-classes
 mysqlclient==2.2.0
     # via -r requirements/test.txt
-newrelic==9.0.0
+newrelic==9.1.0
     # via
     #   -r requirements/test.txt
     #   edx-django-utils
@@ -469,7 +472,7 @@ pyjwt[crypto]==2.8.0
     #   edx-drf-extensions
     #   edx-rest-api-client
     #   social-auth-core
-pylint==2.17.5
+pylint==2.17.6
     # via
     #   -r requirements/test.txt
     #   edx-lint
@@ -527,7 +530,6 @@ pytz==2023.3.post1
     # via
     #   -r requirements/test.txt
     #   babel
-    #   django
     #   djangorestframework
     #   drf-yasg
     #   xblock
@@ -541,7 +543,7 @@ pyyaml==6.0.1
     #   xblock
 readme-renderer==42.0
     # via twine
-redis==5.0.0
+redis==5.0.1
     # via
     #   -r requirements/test.txt
     #   walrus
@@ -664,11 +666,11 @@ tomlkit==0.12.1
     #   pylint
 tox==3.28.0
     # via
-    #   -c https://raw.githubusercontent.com/edx/edx-lint/master/edx_lint/files/common_constraints.txt
+    #   -c requirements/constraints.txt
     #   -r requirements/test.txt
 twine==4.0.2
     # via -r requirements/doc.in
-types-pyyaml==6.0.12.11
+types-pyyaml==6.0.12.12
     # via
     #   -r requirements/test.txt
     #   responses
@@ -718,7 +720,7 @@ wrapt==1.15.0
     # via
     #   -r requirements/test.txt
     #   astroid
-xblock[django]==1.7.0
+xblock[django]==1.8.0
     # via
     #   -r requirements/test.txt
     #   lti-consumer-xblock

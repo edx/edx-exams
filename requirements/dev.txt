@@ -12,7 +12,7 @@ asgiref==3.7.2
     # via
     #   -r requirements/validation.txt
     #   django
-astroid==2.15.6
+astroid==2.15.8
     # via
     #   -r requirements/validation.txt
     #   pylint
@@ -26,15 +26,19 @@ attrs==23.1.0
     #   -r requirements/validation.txt
     #   lti-consumer-xblock
     #   openedx-events
+backports-zoneinfo==0.2.1
+    # via
+    #   -r requirements/validation.txt
+    #   django
 bleach==6.0.0
     # via
     #   -r requirements/validation.txt
     #   lti-consumer-xblock
-boto3==1.28.52
+boto3==1.28.54
     # via
     #   -r requirements/validation.txt
     #   fs-s3fs
-botocore==1.31.52
+botocore==1.31.54
     # via
     #   -r requirements/validation.txt
     #   boto3
@@ -112,7 +116,7 @@ distlib==0.3.7
     # via
     #   -r requirements/validation.txt
     #   virtualenv
-django==3.2.21
+django==4.2.5
     # via
     #   -r requirements/validation.txt
     #   django-appconf
@@ -148,7 +152,7 @@ django-appconf==1.0.5
     # via
     #   -r requirements/validation.txt
     #   django-statici18n
-django-config-models==2.5.0
+django-config-models==2.5.1
     # via
     #   -r requirements/validation.txt
     #   lti-consumer-xblock
@@ -392,7 +396,7 @@ more-itertools==10.1.0
     #   jaraco-classes
 mysqlclient==2.2.0
     # via -r requirements/validation.txt
-newrelic==9.0.0
+newrelic==9.1.0
     # via
     #   -r requirements/validation.txt
     #   edx-django-utils
@@ -497,7 +501,7 @@ pyjwt[crypto]==2.8.0
     #   edx-drf-extensions
     #   edx-rest-api-client
     #   social-auth-core
-pylint==2.17.5
+pylint==2.17.6
     # via
     #   -r requirements/validation.txt
     #   edx-lint
@@ -556,7 +560,6 @@ python3-openid==3.2.0
 pytz==2023.3.post1
     # via
     #   -r requirements/validation.txt
-    #   django
     #   djangorestframework
     #   drf-yasg
     #   xblock
@@ -573,7 +576,7 @@ readme-renderer==42.0
     # via
     #   -r requirements/validation.txt
     #   twine
-redis==5.0.0
+redis==5.0.1
     # via
     #   -r requirements/validation.txt
     #   walrus
@@ -689,7 +692,7 @@ tox==3.28.0
     # via -r requirements/validation.txt
 twine==4.0.2
     # via -r requirements/validation.txt
-types-pyyaml==6.0.12.11
+types-pyyaml==6.0.12.12
     # via
     #   -r requirements/validation.txt
     #   responses
@@ -743,7 +746,7 @@ wrapt==1.15.0
     # via
     #   -r requirements/validation.txt
     #   astroid
-xblock[django]==1.7.0
+xblock[django]==1.8.0
     # via
     #   -r requirements/validation.txt
     #   lti-consumer-xblock
