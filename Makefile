@@ -98,6 +98,10 @@ migrate: ## apply database migrations
 html_coverage: ## generate and view HTML coverage report
 	coverage html && open htmlcov/index.html
 
+define COMMON_CONSTRAINTS_TEMP_COMMENT
+# This is a temporary solution to override the real common_constraints.txt\n# In edx-lint, until the pyjwt constraint in edx-lint has been removed.\n# See BOM-2721 for more details.\n# Below is the copied and edited version of common_constraints\n
+endef
+
 COMMON_CONSTRAINTS_TXT=requirements/common_constraints.txt
 .PHONY: $(COMMON_CONSTRAINTS_TXT)
 $(COMMON_CONSTRAINTS_TXT):
@@ -107,6 +111,8 @@ $(COMMON_CONSTRAINTS_TXT):
 upgrade: export CUSTOM_COMPILE_COMMAND=make upgrade
 upgrade: piptools $(COMMON_CONSTRAINTS_TXT) ## update the requirements/*.txt files with the latest packages satisfying requirements/*.in
 	sed 's/django-simple-history==3.0.0//g' requirements/common_constraints.txt > requirements/common_constraints.tmp
+	mv requirements/common_constraints.tmp requirements/common_constraints.txt
+	sed 's/Django<4.0//g' requirements/common_constraints.txt > requirements/common_constraints.tmp
 	mv requirements/common_constraints.tmp requirements/common_constraints.txt
 	# Make sure to compile files after any other files they include!
 	pip-compile --upgrade --allow-unsafe --rebuild -o requirements/pip.txt requirements/pip.in

@@ -27,6 +27,10 @@ attrs==23.2.0
     #   -r requirements/validation.txt
     #   lti-consumer-xblock
     #   openedx-events
+backports-zoneinfo==0.2.1
+    # via
+    #   -r requirements/validation.txt
+    #   django
 bleach==6.1.0
     # via
     #   -r requirements/validation.txt
@@ -106,7 +110,6 @@ cryptography==41.0.7
     # via
     #   -r requirements/validation.txt
     #   pyjwt
-    #   secretstorage
     #   social-auth-core
 ddt==1.7.0
     # via -r requirements/validation.txt
@@ -125,7 +128,7 @@ distlib==0.3.8
     # via
     #   -r requirements/validation.txt
     #   virtualenv
-django==3.2.23
+django==4.2.8
     # via
     #   -r requirements/validation.txt
     #   django-appconf
@@ -335,11 +338,6 @@ jaraco-classes==3.3.0
     # via
     #   -r requirements/validation.txt
     #   keyring
-jeepney==0.8.0
-    # via
-    #   -r requirements/validation.txt
-    #   keyring
-    #   secretstorage
 jinja2==3.1.2
     # via
     #   -r requirements/validation.txt
@@ -570,7 +568,6 @@ python3-openid==3.2.0
 pytz==2023.3.post1
     # via
     #   -r requirements/validation.txt
-    #   django
     #   djangorestframework
     #   drf-yasg
     #   xblock
@@ -626,10 +623,6 @@ s3transfer==0.10.0
     # via
     #   -r requirements/validation.txt
     #   boto3
-secretstorage==3.3.3
-    # via
-    #   -r requirements/validation.txt
-    #   keyring
 semantic-version==2.10.0
     # via
     #   -r requirements/validation.txt
