@@ -12,7 +12,7 @@ asgiref==3.7.2
     # via
     #   -r requirements/test.txt
     #   django
-astroid==2.15.6
+astroid==2.15.8
     # via
     #   -r requirements/test.txt
     #   pylint
@@ -30,11 +30,11 @@ bleach==6.0.0
     # via
     #   -r requirements/test.txt
     #   lti-consumer-xblock
-boto3==1.28.52
+boto3==1.28.54
     # via
     #   -r requirements/test.txt
     #   fs-s3fs
-botocore==1.31.52
+botocore==1.31.54
     # via
     #   -r requirements/test.txt
     #   boto3
@@ -137,7 +137,7 @@ django-appconf==1.0.5
     # via
     #   -r requirements/test.txt
     #   django-statici18n
-django-config-models==2.5.0
+django-config-models==2.5.1
     # via
     #   -r requirements/test.txt
     #   lti-consumer-xblock
@@ -363,7 +363,7 @@ more-itertools==10.1.0
     # via jaraco-classes
 mysqlclient==2.2.0
     # via -r requirements/test.txt
-newrelic==9.0.0
+newrelic==9.1.0
     # via
     #   -r requirements/test.txt
     #   edx-django-utils
@@ -453,7 +453,7 @@ pyjwt[crypto]==2.8.0
     #   edx-drf-extensions
     #   edx-rest-api-client
     #   social-auth-core
-pylint==2.17.5
+pylint==2.17.6
     # via
     #   -r requirements/test.txt
     #   edx-lint
@@ -522,7 +522,7 @@ pyyaml==6.0.1
     #   xblock
 readme-renderer==42.0
     # via twine
-redis==5.0.0
+redis==5.0.1
     # via
     #   -r requirements/test.txt
     #   walrus
@@ -625,7 +625,7 @@ tox==3.28.0
     #   -r requirements/test.txt
 twine==4.0.2
     # via -r requirements/quality.in
-types-pyyaml==6.0.12.11
+types-pyyaml==6.0.12.12
     # via
     #   -r requirements/test.txt
     #   responses
@@ -675,7 +675,7 @@ wrapt==1.15.0
     # via
     #   -r requirements/test.txt
     #   astroid
-xblock[django]==1.7.0
+xblock[django]==1.8.0
     # via
     #   -r requirements/test.txt
     #   lti-consumer-xblock
