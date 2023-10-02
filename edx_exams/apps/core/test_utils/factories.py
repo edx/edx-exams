@@ -37,6 +37,7 @@ class UserFactory(DjangoModelFactory):
     password = factory.PostGenerationMethodCall('set_password', _DEFAULT_PASSWORD)
     first_name = factory.Sequence('User{}'.format)
     last_name = 'Test'
+    full_name = "{} {}".format(first_name, last_name)
     is_superuser = False
     is_staff = False
 
