@@ -12,7 +12,7 @@ asgiref==3.7.2
     # via
     #   -r requirements/test.txt
     #   django
-astroid==2.15.6
+astroid==2.15.8
     # via
     #   -r requirements/test.txt
     #   pylint
@@ -22,7 +22,7 @@ attrs==23.1.0
     #   -r requirements/test.txt
     #   lti-consumer-xblock
     #   openedx-events
-avro==1.11.2
+avro==1.11.3
     # via
     #   -r requirements/test.txt
     #   confluent-kafka
@@ -30,11 +30,11 @@ bleach==6.0.0
     # via
     #   -r requirements/test.txt
     #   lti-consumer-xblock
-boto3==1.28.52
+boto3==1.28.57
     # via
     #   -r requirements/test.txt
     #   fs-s3fs
-botocore==1.31.52
+botocore==1.31.57
     # via
     #   -r requirements/test.txt
     #   boto3
@@ -43,12 +43,12 @@ certifi==2023.7.22
     # via
     #   -r requirements/test.txt
     #   requests
-cffi==1.15.1
+cffi==1.16.0
     # via
     #   -r requirements/test.txt
     #   cryptography
     #   pynacl
-charset-normalizer==3.2.0
+charset-normalizer==3.3.0
     # via
     #   -r requirements/test.txt
     #   requests
@@ -79,7 +79,7 @@ coreschema==0.0.4
     # via
     #   -r requirements/test.txt
     #   coreapi
-coverage[toml]==7.3.1
+coverage[toml]==7.3.2
     # via
     #   -r requirements/test.txt
     #   pytest-cov
@@ -90,7 +90,7 @@ cryptography==41.0.4
     #   social-auth-core
 ddt==1.6.0
     # via -r requirements/test.txt
-defusedxml==0.7.1
+defusedxml==0.8.0rc2
     # via
     #   -r requirements/test.txt
     #   python3-openid
@@ -356,7 +356,7 @@ more-itertools==10.1.0
     # via jaraco-classes
 mysqlclient==2.2.0
     # via -r requirements/test.txt
-newrelic==9.0.0
+newrelic==9.1.0
     # via
     #   -r requirements/test.txt
     #   edx-django-utils
@@ -377,7 +377,7 @@ openedx-django-pyfs==3.4.0
     #   -r requirements/test.txt
     #   lti-consumer-xblock
     #   xblock
-openedx-events==8.6.0
+openedx-events==8.8.0
     # via
     #   -r requirements/test.txt
     #   edx-event-bus-kafka
@@ -385,7 +385,7 @@ openedx-filters==1.6.0
     # via
     #   -r requirements/test.txt
     #   lti-consumer-xblock
-packaging==23.1
+packaging==23.2
     # via
     #   -r requirements/test.txt
     #   drf-yasg
@@ -397,7 +397,7 @@ pbr==5.11.1
     #   stevedore
 pkginfo==1.9.6
     # via twine
-platformdirs==3.10.0
+platformdirs==3.11.0
     # via
     #   -r requirements/test.txt
     #   pylint
@@ -445,7 +445,7 @@ pyjwt[crypto]==2.8.0
     #   edx-drf-extensions
     #   edx-rest-api-client
     #   social-auth-core
-pylint==2.17.5
+pylint==2.17.7
     # via
     #   -r requirements/test.txt
     #   edx-lint
@@ -538,9 +538,9 @@ responses==0.23.3
     # via -r requirements/test.txt
 rfc3986==2.0.0
     # via twine
-rich==13.5.3
+rich==13.6.0
     # via twine
-s3transfer==0.6.2
+s3transfer==0.7.0
     # via
     #   -r requirements/test.txt
     #   boto3
@@ -612,7 +612,7 @@ tox==3.28.0
     #   -r requirements/test.txt
 twine==4.0.2
     # via -r requirements/quality.in
-types-pyyaml==6.0.12.11
+types-pyyaml==6.0.12.12
     # via
     #   -r requirements/test.txt
     #   responses
@@ -630,7 +630,7 @@ uritemplate==4.1.1
     #   -r requirements/test.txt
     #   coreapi
     #   drf-yasg
-urllib3==1.26.16
+urllib3==1.26.17
     # via
     #   -r requirements/test.txt
     #   botocore
@@ -658,7 +658,7 @@ wrapt==1.15.0
     # via
     #   -r requirements/test.txt
     #   astroid
-xblock[django]==1.7.0
+xblock[django]==1.8.0
     # via
     #   -r requirements/test.txt
     #   lti-consumer-xblock
