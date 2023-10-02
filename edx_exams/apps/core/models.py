@@ -24,7 +24,8 @@ class User(AbstractUser):
     .. pii_retirement: local_api
 
     """
-    full_name = models.CharField(_('Full Name'), max_length=255, blank=True, null=True)
+    # The default empty string was added to change full_name from nullable to non-nullable.
+    full_name = models.CharField(_('Full Name'), max_length=255, blank=True, default='')
 
     lms_user_id = models.IntegerField(null=True, db_index=True)
 
