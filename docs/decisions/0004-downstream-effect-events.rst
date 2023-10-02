@@ -18,11 +18,10 @@ Decision
 We've decided to use an event driven architecture because unlike the legacy system (edx-proctoring), edx-exams is an independent service.
 As such, we plan to use the event bus to send info to edx-platform services without needing a response as one would in a REST framework.
 
-Below are lists of downstream effects of exam submission and review that we will or will not be impementing as downstream effects that will be
-triggered by events emitted in edx-exams per this decision.
+Below are lists of expected downstream effects of exam submission and review. We have decided to implement some downstream effects and not others; these decisions are enumerated below. Those that will be implemented will be triggered by events emitted by the edx-exams service, as described in this decision.
 
-Downstream effects to be implemented:
-***********************************************
+Downstream effects to be implemented as part of this decision:
+**************************************************************
 
   * Grades Override - A python API call to the grades app to generate a grade override when an exam attempt is rejected.
 
@@ -30,7 +29,7 @@ Downstream effects to be implemented:
 
   * Instructor Delete Attempt - A python API call to the instructor app to delete an exam attempt.
 
-  * Instructor Complete Attempt - A python API call to the instructor app to mark an exam subsection as completed.
+  * Mark Exam Subsection Completed - A python API call to a function in the instructor app that causes the exam subsection to be marked as completed.
 
   * Invalidate Certificate - A python API call to the certificates app to invalidate a leaner’s edx certificate for a course.
 
@@ -59,18 +58,19 @@ Downstream effects that are not being implemented as part of this decision:
 
 For easier visualization, here are all of the downstream effects we plan to port, described from end to end:
 
-Downstream effects to be implemented as part of this decision:
-**************************************************************
- ====================================== ================================================================================================ ============================================ =============================================== ========================================================================= ====================================================================================== 
-  Downstream Effect                      Context in which it's triggered                                                                  Consumer Location                            Functions Called                                General Context for Calls                                                 Expected Result                                                                       
- ====================================== ================================================================================================ ============================================ =============================================== ========================================================================= ====================================================================================== 
-  Grades Override                        When an exam attempt is rejected.                                                                lms/djangoapps/grades/signals.py             override_subsection_grade in api.py             When we need to override a grade from any service.                        A grade override object is created or modified in the grades service within the LMS.  
-  Undo Grades Override                   When an exam attempt is verified after previously being rejected, OR when it is deleted/reset.   lms/djangoapps/grades/signals.py             undo_override_subsection_grade in services.py   When we need to undo a grade override from any service.                   A grade override object is deleted in the grades service within the LMS.              
-  Instructor Reset Subsection            When an exam attempt is deleted/reset.                                                           lms/djangoapps/instructor/signals.py         reset_student_attempts in enrollments.py        When we need to reset a student’s state in a subsection.                  A learner's state for a subsection is reset.                                          
-  Instructor Mark Subsection Completed   When an exam attempt is completed.                                                               lms/djangoapps/instructor/signals.py         update_exam_completion_task in tasks.py         When we need to mark a subsection as completed.                           A subsection is marked completed for a learner.                                       
-  Invalidate Certificate                 When an exam attempt is rejected.                                                                lms/djangoapps/certificates/signals.py       invalidate_certificate in services.py           When we need to invalidate a learner's certificate.                       A certificate object's status is set to "unavailable".                                
-  Set Credit Requirement Status          When exam attempt is completed.                                                                  openedx/core/djangoapps/credits/signals.py   set_credit_requirement_status in services.py    When we need to create or modify a learner's credit requirement status.   A credit requirement status object is created or modified within the LMS.             
- ====================================== ================================================================================================ ============================================ =============================================== ========================================================================= ====================================================================================== 
+Table of downstream effects to be implemented as part of this decision:
+***********************************************************************
+ ====================================== ================================================================================================ ========================================================================= ====================================================================================== 
+  Event Type                             Production Context                                                                               General Context for Calls                                                 Expected Result                                                                       
+ ====================================== ================================================================================================ ========================================================================= ====================================================================================== 
+  Grades Override                        When an exam attempt is rejected.                                                                When we need to override a grade from any service.                        A grade override object is created or modified in the grades service within the LMS.  
+  Undo Grades Override                   When an exam attempt is verified after previously being rejected, OR when it is deleted/reset.   When we need to undo a grade override from any service.                   A grade override object is deleted in the grades service within the LMS.              
+  Instructor Reset Subsection            When an exam attempt is deleted/reset.                                                           When we need to reset a student’s state in a subsection.                  A learner's state for a subsection is reset.                                          
+  Mark Exam Subsection Completed         When an exam attempt is submitted.                                                               When we need to mark a subsection as completed.                           A subsection is marked completed for a learner.                                       
+  Invalidate Certificate                 When an exam attempt is rejected.                                                                When we need to invalidate a learner's certificate.                       A certificate object's status is set to "unavailable".                                
+  Set Credit Requirement Status          When exam attempt is submitted.                                                                  When we need to create or modify a learner's credit requirement status.   A credit requirement status object is created or modified within the LMS.             
+ ====================================== ================================================================================================ ========================================================================= ====================================================================================== 
+
 
 Event Triggers:
 ***************
@@ -78,6 +78,18 @@ We will define the events in edx-exams such that they are emitted whenever an ex
 After these events are emitted, they will trigger their respective chosen downstream effects.
 
 For easier visualization, here are all of the events we plan to implement:
+
+Events Data Shape:
+******************
+The event data for all of the events will be defined here: https://github.com/openedx/openedx-events/blob/main/openedx_events/learning/data.py 
+
+ExamAttemptData:
+
+* student_user (UserData)
+* course_key (CourseKey)
+* usage_key (UsageKey)
+* requesting_user (UserData)
+* exam_type (str) (Can be: proctored, timed, practice, onboarding)
 
 Events to be implemented as part of this decision:
 **************************************************
@@ -87,7 +99,7 @@ Events to be implemented as part of this decision:
   Exam Attempt Submitted   When an exam attempt is submitted.       Instructor Mark Subsection Completed, Set Credit Requirement Status     
   Exam Attempt Rejected    When an exam attempt is rejected.        Set Credit Requirement Status, Grades Override, Invalidate Certificate  
   Exam Attempt Verified    When an exam attempt is verified.        Set Credit Requirement Status, Undo Grades Override                     
-  Exam Attempt Errored     When exam attempt errors out.            Set Credit Requirement Status                                           
+  Exam Attempt Errored     When an exam attempt errors out.            Set Credit Requirement Status                                           
   Exam Attempt Reset       When an exam attempt is deleted/reset.   Instructor Reset Subsection, Reset Credit Requirement Status            
  ======================== ======================================== ======================================================================== 
 
