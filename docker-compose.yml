@@ -1,7 +1,9 @@
 version: "2.1"
 services:
   db:
-    image: mysql:5.6
+    # Oracle-packaged version includes a `linux/arm64/v8` version, needed for
+    # machines with Apple Silicon CPUs (Mac M1, M2)
+    image: mysql:8.0.33-oracle
     container_name: edx_exams.db
     environment:
       MYSQL_ROOT_PASSWORD: ""
