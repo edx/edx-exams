@@ -17,7 +17,11 @@ from edx_exams.apps.core.exceptions import (
     ExamIllegalStatusTransition
 )
 from edx_exams.apps.core.models import Exam, ExamAttempt
-from edx_exams.apps.core.signals.signals import emit_exam_attempt_submitted_event, emit_exam_attempt_verified_event
+from edx_exams.apps.core.signals.signals import (
+    emit_exam_attempt_rejected_event,
+    emit_exam_attempt_submitted_event,
+    emit_exam_attempt_verified_event
+)
 from edx_exams.apps.core.statuses import ExamAttemptStatus
 
 log = logging.getLogger(__name__)
@@ -109,6 +113,14 @@ def update_attempt_status(attempt_id, to_status):
 
     if to_status == ExamAttemptStatus.verified:
         emit_exam_attempt_verified_event(
+            attempt_obj.user,
+            course_key,
+            usage_key,
+            attempt_obj.exam.exam_type
+        )
+
+    if to_status == ExamAttemptStatus.rejected:
+        emit_exam_attempt_rejected_event(
             attempt_obj.user,
             course_key,
             usage_key,
