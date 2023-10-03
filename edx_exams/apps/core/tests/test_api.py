@@ -355,6 +355,34 @@ class TestUpdateAttemptStatus(ExamsAPITestCase):
         )
         mock_event_send.assert_called_with(exam_attempt=expected_data)
 
+    @patch('edx_exams.apps.core.signals.signals.EXAM_ATTEMPT_REJECTED.send_event')
+    def test_reject_attempt_event_emitted(self, mock_event_send):
+        """
+        Test that when an exam is rejected, the EXAM_ATTEMPT_REJECTED Open edX event is emitted.
+        """
+        update_attempt_status(self.exam_attempt.id, ExamAttemptStatus.rejected)
+        self.assertEqual(mock_event_send.call_count, 1)
+
+        user_data = UserData(
+            id=self.user.id,
+            is_active=self.user.is_active,
+            pii=UserPersonalData(
+                username=self.user.username,
+                email=self.user.email,
+                name=self.user.full_name
+            )
+        )
+        course_key = CourseKey.from_string(self.exam.course_id)
+        usage_key = UsageKey.from_string(self.exam.content_id)
+
+        expected_data = ExamAttemptData(
+            student_user=user_data,
+            course_key=course_key,
+            usage_key=usage_key,
+            exam_type=self.exam.exam_type,
+        )
+        mock_event_send.assert_called_with(exam_attempt=expected_data)
+
     def test_illegal_start(self):
         """
         Test that an already started exam cannot be started
