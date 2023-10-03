@@ -29,11 +29,11 @@ bleach==6.0.0
     # via
     #   -r requirements/base.txt
     #   lti-consumer-xblock
-boto3==1.28.54
+boto3==1.28.58
     # via
     #   -r requirements/base.txt
     #   fs-s3fs
-botocore==1.31.54
+botocore==1.31.58
     # via
     #   -r requirements/base.txt
     #   boto3
@@ -42,12 +42,12 @@ certifi==2023.7.22
     # via
     #   -r requirements/base.txt
     #   requests
-cffi==1.15.1
+cffi==1.16.0
     # via
     #   -r requirements/base.txt
     #   cryptography
     #   pynacl
-charset-normalizer==3.2.0
+charset-normalizer==3.3.0
     # via
     #   -r requirements/base.txt
     #   requests
@@ -75,7 +75,7 @@ coreschema==0.0.4
     # via
     #   -r requirements/base.txt
     #   coreapi
-coverage[toml]==7.3.1
+coverage[toml]==7.3.2
     # via
     #   -r requirements/test.in
     #   pytest-cov
@@ -86,7 +86,7 @@ cryptography==41.0.4
     #   social-auth-core
 ddt==1.6.0
     # via -r requirements/test.in
-defusedxml==0.7.1
+defusedxml==0.8.0rc2
     # via
     #   -r requirements/base.txt
     #   python3-openid
@@ -206,7 +206,7 @@ edx-drf-extensions==8.10.0
     # via -r requirements/base.txt
 edx-event-bus-kafka==5.5.0
     # via -r requirements/base.txt
-edx-event-bus-redis==0.3.1
+edx-event-bus-redis==0.3.2
     # via -r requirements/base.txt
 edx-lint==5.3.4
     # via -r requirements/test.in
@@ -336,7 +336,7 @@ openedx-django-pyfs==3.4.0
     #   -r requirements/base.txt
     #   lti-consumer-xblock
     #   xblock
-openedx-events==8.6.0
+openedx-events==8.8.0
     # via
     #   -r requirements/base.txt
     #   edx-event-bus-kafka
@@ -345,7 +345,7 @@ openedx-filters==1.6.0
     # via
     #   -r requirements/base.txt
     #   lti-consumer-xblock
-packaging==23.1
+packaging==23.2
     # via
     #   -r requirements/base.txt
     #   drf-yasg
@@ -355,7 +355,7 @@ pbr==5.11.1
     # via
     #   -r requirements/base.txt
     #   stevedore
-platformdirs==3.10.0
+platformdirs==3.11.0
     # via
     #   pylint
     #   virtualenv
@@ -391,7 +391,7 @@ pyjwt[crypto]==2.8.0
     #   edx-drf-extensions
     #   edx-rest-api-client
     #   social-auth-core
-pylint==2.17.6
+pylint==2.17.7
     # via
     #   edx-lint
     #   pylint-celery
@@ -472,7 +472,7 @@ requests-oauthlib==1.3.1
     #   social-auth-core
 responses==0.23.3
     # via -r requirements/test.in
-s3transfer==0.6.2
+s3transfer==0.7.0
     # via
     #   -r requirements/base.txt
     #   boto3
@@ -552,7 +552,7 @@ uritemplate==4.1.1
     #   -r requirements/base.txt
     #   coreapi
     #   drf-yasg
-urllib3==1.26.16
+urllib3==1.26.17
     # via
     #   -r requirements/base.txt
     #   botocore

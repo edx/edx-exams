@@ -30,11 +30,11 @@ bleach==6.0.0
     # via
     #   -r requirements/validation.txt
     #   lti-consumer-xblock
-boto3==1.28.54
+boto3==1.28.58
     # via
     #   -r requirements/validation.txt
     #   fs-s3fs
-botocore==1.31.54
+botocore==1.31.58
     # via
     #   -r requirements/validation.txt
     #   boto3
@@ -47,14 +47,14 @@ certifi==2023.7.22
     # via
     #   -r requirements/validation.txt
     #   requests
-cffi==1.15.1
+cffi==1.16.0
     # via
     #   -r requirements/validation.txt
     #   cryptography
     #   pynacl
 chardet==5.2.0
     # via diff-cover
-charset-normalizer==3.2.0
+charset-normalizer==3.3.0
     # via
     #   -r requirements/validation.txt
     #   requests
@@ -85,7 +85,7 @@ coreschema==0.0.4
     # via
     #   -r requirements/validation.txt
     #   coreapi
-coverage[toml]==7.3.1
+coverage[toml]==7.3.2
     # via
     #   -r requirements/validation.txt
     #   pytest-cov
@@ -97,7 +97,7 @@ cryptography==41.0.4
     #   social-auth-core
 ddt==1.6.0
     # via -r requirements/validation.txt
-defusedxml==0.7.1
+defusedxml==0.8.0rc2
     # via
     #   -r requirements/validation.txt
     #   python3-openid
@@ -229,7 +229,7 @@ edx-drf-extensions==8.10.0
     # via -r requirements/validation.txt
 edx-event-bus-kafka==5.5.0
     # via -r requirements/validation.txt
-edx-event-bus-redis==0.3.1
+edx-event-bus-redis==0.3.2
     # via -r requirements/validation.txt
 edx-i18n-tools==1.2.0
     # via -r requirements/dev.in
@@ -415,7 +415,7 @@ openedx-django-pyfs==3.4.0
     #   -r requirements/validation.txt
     #   lti-consumer-xblock
     #   xblock
-openedx-events==8.6.0
+openedx-events==8.8.0
     # via
     #   -r requirements/validation.txt
     #   edx-event-bus-kafka
@@ -424,7 +424,7 @@ openedx-filters==1.6.0
     # via
     #   -r requirements/validation.txt
     #   lti-consumer-xblock
-packaging==23.1
+packaging==23.2
     # via
     #   -r requirements/pip-tools.txt
     #   -r requirements/validation.txt
@@ -444,7 +444,7 @@ pkginfo==1.9.6
     # via
     #   -r requirements/validation.txt
     #   twine
-platformdirs==3.10.0
+platformdirs==3.11.0
     # via
     #   -r requirements/validation.txt
     #   pylint
@@ -497,7 +497,7 @@ pyjwt[crypto]==2.8.0
     #   edx-drf-extensions
     #   edx-rest-api-client
     #   social-auth-core
-pylint==2.17.6
+pylint==2.17.7
     # via
     #   -r requirements/validation.txt
     #   edx-lint
@@ -604,11 +604,11 @@ rfc3986==2.0.0
     # via
     #   -r requirements/validation.txt
     #   twine
-rich==13.5.3
+rich==13.6.0
     # via
     #   -r requirements/validation.txt
     #   twine
-s3transfer==0.6.2
+s3transfer==0.7.0
     # via
     #   -r requirements/validation.txt
     #   boto3
@@ -707,7 +707,7 @@ uritemplate==4.1.1
     #   -r requirements/validation.txt
     #   coreapi
     #   drf-yasg
-urllib3==1.26.16
+urllib3==1.26.17
     # via
     #   -r requirements/validation.txt
     #   botocore
