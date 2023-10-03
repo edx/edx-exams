@@ -299,48 +299,23 @@ class TestUpdateAttemptStatus(ExamsAPITestCase):
             self.assertEqual(updated_attempt.status, ExamAttemptStatus.submitted)
             self.assertEqual(updated_attempt.end_time, timezone.now())
 
-    @patch('edx_exams.apps.core.signals.signals.EXAM_ATTEMPT_SUBMITTED.send_event')
-    def test_submit_attempt_event_emitted(self, mock_event_send):
+    @ddt.data(
+        ('EXAM_ATTEMPT_SUBMITTED', ExamAttemptStatus.submitted, True),
+        ('EXAM_ATTEMPT_VERIFIED', ExamAttemptStatus.verified, False),
+        ('EXAM_ATTEMPT_REJECTED', ExamAttemptStatus.rejected, False),
+        ('EXAM_ATTEMPT_ERRORED', ExamAttemptStatus.error, False)
+    )
+    @ddt.unpack
+    def test_attempt_event_emitted(self, event_name, status, expect_requesting_user):
         """
-        Test that when an exam is submitted, the EXAM_ATTEMPT_SUBMITED Open edX event is emitted.
+        Test that when an exam status is updated, the corresponding Open edX event is emitted.
         """
-        update_attempt_status(self.exam_attempt.id, ExamAttemptStatus.submitted)
-        self.assertEqual(mock_event_send.call_count, 1)
+        patch_event = 'edx_exams.apps.core.signals.signals.{event_name}.send_event'.format(event_name=event_name)
+        with patch(patch_event) as mock_event_send:
+            update_attempt_status(self.exam_attempt.id, status)
+            self.assertEqual(mock_event_send.call_count, 1)
 
-        user_data = UserData(
-            id=self.user.id,
-            is_active=self.user.is_active,
-            pii=UserPersonalData(
-                username=self.user.username,
-                email=self.user.email,
-                name=self.user.full_name
-            )
-        )
-        course_key = CourseKey.from_string(self.exam.course_id)
-        usage_key = UsageKey.from_string(self.exam.content_id)
-
-        expected_data = ExamAttemptData(
-            student_user=user_data,
-            course_key=course_key,
-            usage_key=usage_key,
-            exam_type=self.exam.exam_type,
-            requesting_user=user_data,
-        )
-        mock_event_send.assert_called_with(exam_attempt=expected_data)
-
-    @patch('edx_exams.apps.core.signals.signals.EXAM_ATTEMPT_VERIFIED.send_event')
-    def test_verified_attempt_event_emitted(self, mock_event_send):
-        """
-        Test that when an exam is verified, the EXAM_ATTEMPT_VERIFIED Open edX event is emitted.
-        """
-        update_attempt_status(self.exam_attempt.id, ExamAttemptStatus.verified)
-        self.assertEqual(mock_event_send.call_count, 1)
-
-        usage_key = UsageKey.from_string(self.exam.content_id)
-        course_key = CourseKey.from_string(self.exam.course_id)
-
-        expected_data = ExamAttemptData(
-            student_user=UserData(
+            user_data = UserData(
                 id=self.user.id,
                 is_active=self.user.is_active,
                 pii=UserPersonalData(
@@ -348,40 +323,18 @@ class TestUpdateAttemptStatus(ExamsAPITestCase):
                     email=self.user.email,
                     name=self.user.full_name
                 )
-            ),
-            course_key=course_key,
-            usage_key=usage_key,
-            exam_type=self.exam.exam_type,
-        )
-        mock_event_send.assert_called_with(exam_attempt=expected_data)
-
-    @patch('edx_exams.apps.core.signals.signals.EXAM_ATTEMPT_REJECTED.send_event')
-    def test_reject_attempt_event_emitted(self, mock_event_send):
-        """
-        Test that when an exam is rejected, the EXAM_ATTEMPT_REJECTED Open edX event is emitted.
-        """
-        update_attempt_status(self.exam_attempt.id, ExamAttemptStatus.rejected)
-        self.assertEqual(mock_event_send.call_count, 1)
-
-        user_data = UserData(
-            id=self.user.id,
-            is_active=self.user.is_active,
-            pii=UserPersonalData(
-                username=self.user.username,
-                email=self.user.email,
-                name=self.user.full_name
             )
-        )
-        course_key = CourseKey.from_string(self.exam.course_id)
-        usage_key = UsageKey.from_string(self.exam.content_id)
+            course_key = CourseKey.from_string(self.exam.course_id)
+            usage_key = UsageKey.from_string(self.exam.content_id)
 
-        expected_data = ExamAttemptData(
-            student_user=user_data,
-            course_key=course_key,
-            usage_key=usage_key,
-            exam_type=self.exam.exam_type,
-        )
-        mock_event_send.assert_called_with(exam_attempt=expected_data)
+            expected_data = ExamAttemptData(
+                student_user=user_data,
+                course_key=course_key,
+                usage_key=usage_key,
+                exam_type=self.exam.exam_type,
+                requesting_user=user_data if expect_requesting_user else None,
+            )
+            mock_event_send.assert_called_with(exam_attempt=expected_data)
 
     def test_illegal_start(self):
         """

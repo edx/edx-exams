@@ -18,6 +18,7 @@ from edx_exams.apps.core.exceptions import (
 )
 from edx_exams.apps.core.models import Exam, ExamAttempt
 from edx_exams.apps.core.signals.signals import (
+    emit_exam_attempt_errored_event,
     emit_exam_attempt_rejected_event,
     emit_exam_attempt_submitted_event,
     emit_exam_attempt_verified_event
@@ -121,6 +122,14 @@ def update_attempt_status(attempt_id, to_status):
 
     if to_status == ExamAttemptStatus.rejected:
         emit_exam_attempt_rejected_event(
+            attempt_obj.user,
+            course_key,
+            usage_key,
+            attempt_obj.exam.exam_type
+        )
+
+    if to_status == ExamAttemptStatus.error:
+        emit_exam_attempt_errored_event(
             attempt_obj.user,
             course_key,
             usage_key,
