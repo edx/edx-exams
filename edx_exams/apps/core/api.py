@@ -17,7 +17,7 @@ from edx_exams.apps.core.exceptions import (
     ExamIllegalStatusTransition
 )
 from edx_exams.apps.core.models import Exam, ExamAttempt
-from edx_exams.apps.core.signals.signals import emit_exam_attempt_submitted_event
+from edx_exams.apps.core.signals.signals import emit_exam_attempt_submitted_event, emit_exam_attempt_verified_event
 from edx_exams.apps.core.statuses import ExamAttemptStatus
 
 log = logging.getLogger(__name__)
@@ -94,12 +94,21 @@ def update_attempt_status(attempt_id, to_status):
         attempt_obj.start_time = datetime.now(pytz.UTC)
         attempt_obj.allowed_time_limit_mins = _calculate_allowed_mins(attempt_obj.exam)
 
+    course_key = CourseKey.from_string(attempt_obj.exam.course_id)
+    usage_key = UsageKey.from_string(attempt_obj.exam.content_id)
+
     if to_status == ExamAttemptStatus.submitted:
         attempt_obj.end_time = datetime.now(pytz.UTC)
 
-        course_key = CourseKey.from_string(attempt_obj.exam.course_id)
-        usage_key = UsageKey.from_string(attempt_obj.exam.content_id)
         emit_exam_attempt_submitted_event(
+            attempt_obj.user,
+            course_key,
+            usage_key,
+            attempt_obj.exam.exam_type
+        )
+
+    if to_status == ExamAttemptStatus.verified:
+        emit_exam_attempt_verified_event(
             attempt_obj.user,
             course_key,
             usage_key,

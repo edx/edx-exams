@@ -3,7 +3,7 @@ Signal definitions and functions to send those signals for the edx-exams applica
 """
 
 from openedx_events.learning.data import ExamAttemptData, UserData, UserPersonalData
-from openedx_events.learning.signals import EXAM_ATTEMPT_SUBMITTED
+from openedx_events.learning.signals import EXAM_ATTEMPT_SUBMITTED, EXAM_ATTEMPT_VERIFIED
 
 
 def emit_exam_attempt_submitted_event(user, course_key, usage_key, exam_type):
@@ -28,5 +28,31 @@ def emit_exam_attempt_submitted_event(user, course_key, usage_key, exam_type):
             usage_key=usage_key,
             exam_type=exam_type,
             requesting_user=user_data
+        )
+    )
+
+
+def emit_exam_attempt_verified_event(user, course_key, usage_key, exam_type):
+    """
+    Emit the EXAM_ATTEMPT_VERIFIED Open edX event.
+    """
+    name = user.full_name or ''
+    user_data = UserData(
+        id=user.id,
+        is_active=user.is_active,
+        pii=UserPersonalData(
+            username=user.username,
+            email=user.email,
+            name=name
+        )
+    )
+
+    # .. event_implemented_name: EXAM_ATTEMPT_VERIFIED
+    EXAM_ATTEMPT_VERIFIED.send_event(
+        exam_attempt=ExamAttemptData(
+            student_user=user_data,
+            course_key=course_key,
+            usage_key=usage_key,
+            exam_type=exam_type
         )
     )

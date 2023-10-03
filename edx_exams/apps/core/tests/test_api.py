@@ -268,7 +268,7 @@ class TestUpdateAttemptStatus(ExamsAPITestCase):
                 resource_id=str(uuid.uuid4()),
                 course_id=self.course_id,
                 provider=self.test_provider,
-                content_id='abcd1234',
+                content_id='block-v1:edX+test+2023+type@sequential+block@1111111111',
                 exam_name='test_exam',
                 exam_type='proctored',
                 time_limit_mins=30,
@@ -325,6 +325,33 @@ class TestUpdateAttemptStatus(ExamsAPITestCase):
             usage_key=usage_key,
             exam_type=self.exam.exam_type,
             requesting_user=user_data,
+        )
+        mock_event_send.assert_called_with(exam_attempt=expected_data)
+
+    @patch('edx_exams.apps.core.signals.signals.EXAM_ATTEMPT_VERIFIED.send_event')
+    def test_verified_attempt_event_emitted(self, mock_event_send):
+        """
+        Test that when an exam is verified, the EXAM_ATTEMPT_VERIFIED Open edX event is emitted.
+        """
+        update_attempt_status(self.exam_attempt.id, ExamAttemptStatus.verified)
+        self.assertEqual(mock_event_send.call_count, 1)
+
+        usage_key = UsageKey.from_string(self.exam.content_id)
+        course_key = CourseKey.from_string(self.exam.course_id)
+
+        expected_data = ExamAttemptData(
+            student_user=UserData(
+                id=self.user.id,
+                is_active=self.user.is_active,
+                pii=UserPersonalData(
+                    username=self.user.username,
+                    email=self.user.email,
+                    name=self.user.full_name
+                )
+            ),
+            course_key=course_key,
+            usage_key=usage_key,
+            exam_type=self.exam.exam_type,
         )
         mock_event_send.assert_called_with(exam_attempt=expected_data)
 
