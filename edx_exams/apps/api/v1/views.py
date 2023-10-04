@@ -26,6 +26,7 @@ from edx_exams.apps.api.v1 import ExamsAPIView
 from edx_exams.apps.core.api import (
     check_if_exam_timed_out,
     create_exam_attempt,
+    delete_exam_attempt,
     get_active_attempt_for_user,
     get_attempt_by_id,
     get_course_exams,
@@ -626,7 +627,7 @@ class ExamAttemptView(ExamsAPIView):
             error = {'detail': error_msg}
             return Response(status=status.HTTP_403_FORBIDDEN, data=error)
 
-        exam_attempt.delete()
+        delete_exam_attempt(exam_attempt, request.user)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 

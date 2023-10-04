@@ -17,6 +17,7 @@ from edx_exams.apps.api.test_utils import ExamsAPITestCase
 from edx_exams.apps.core.api import (
     check_if_exam_timed_out,
     create_exam_attempt,
+    delete_exam_attempt,
     get_active_attempt_for_user,
     get_attempt_by_id,
     get_attempt_for_user_with_attempt_number_and_resource_id,
@@ -35,7 +36,7 @@ from edx_exams.apps.core.exceptions import (
 )
 from edx_exams.apps.core.models import Exam, ExamAttempt
 from edx_exams.apps.core.statuses import ExamAttemptStatus
-from edx_exams.apps.core.test_utils.factories import ExamAttemptFactory, ExamFactory
+from edx_exams.apps.core.test_utils.factories import ExamAttemptFactory, ExamFactory, UserFactory
 
 test_start_time = datetime(2023, 11, 4, 11, 5, 23)
 test_time_limit_mins = 30
@@ -621,6 +622,62 @@ class TestCreateExamAttempt(ExamsAPITestCase):
 
         create_exam_attempt(exam_id, user_id)
         self.assertIsNotNone(ExamAttempt.objects.get(user_id=user_id, exam_id=exam_id))
+
+
+class TestDeleteExamAttempt(ExamsAPITestCase):
+    """
+    Tests for the API utility function `delete_exam_attempt`
+    """
+    def setUp(self):
+        super().setUp()
+
+        self.exam = ExamFactory()
+        self.student_user = UserFactory()
+        self.exam_attempt = ExamAttemptFactory(user=self.student_user, exam=self.exam)
+
+    def test_delete_exam_attempt(self):
+        """
+        Test that an exam attempt is deleted
+        """
+        delete_exam_attempt(self.exam_attempt, self.user)
+        self.assertFalse(ExamAttempt.objects.filter(id=self.exam_attempt.id).exists())
+
+    @patch('edx_exams.apps.core.signals.signals.EXAM_ATTEMPT_RESET.send_event')
+    def test_event_emitted(self, mock_event_send):
+        """
+        Test that when an exam attempt is deleted, the EXAM_ATTEMPT_RESET event is emitted.
+        """
+        delete_exam_attempt(self.exam_attempt, self.user)
+
+        user_data = UserData(
+            id=self.student_user.id,
+            is_active=self.student_user.is_active,
+            pii=UserPersonalData(
+                username=self.student_user.username,
+                email=self.student_user.email,
+                name=self.student_user.full_name
+            )
+        )
+        requesting_user_data = UserData(
+            id=self.user.id,
+            is_active=self.user.is_active,
+            pii=UserPersonalData(
+                username=self.user.username,
+                email=self.user.email,
+                name=self.user.full_name
+            )
+        )
+        course_key = CourseKey.from_string(self.exam.course_id)
+        usage_key = UsageKey.from_string(self.exam.content_id)
+
+        expected_data = ExamAttemptData(
+            student_user=user_data,
+            course_key=course_key,
+            usage_key=usage_key,
+            exam_type=self.exam.exam_type,
+            requesting_user=requesting_user_data,
+        )
+        mock_event_send.assert_called_once_with(exam_attempt=expected_data)
 
 
 class TestGetExamByContentId(ExamsAPITestCase):
