@@ -1,15 +1,6 @@
 # Core requirements for using this application
 -c constraints.txt
 
-# The confluent_kafka[avro,schema-registry] dependencies should eventually be moved to some form of optional
-# dependency management because the installation of confluent_kafka poses issues for users of Tutor on M1 Macs, which
-# includes many in the Open edX community. 
-# For now, we will keep this as an explicit dependency until we plan to move edx-exams to the openedx GitHub
-# organization.
-# For more details, please see https://github.com/openedx/event-bus-kafka/blob/main/docs/decisions/
-# 0005-optional-import-of-confluent-kafka.rst.
-# TODO: Move confluent_kafka to optional dependency management: https://2u-internal.atlassian.net/browse/MST-2160
-confluent_kafka[avro,schema-registry]
 Django         # Web application framework
 django-cors-headers
 django-extensions

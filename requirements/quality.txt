@@ -22,10 +22,6 @@ attrs==23.1.0
     #   -r requirements/test.txt
     #   lti-consumer-xblock
     #   openedx-events
-avro==1.11.3
-    # via
-    #   -r requirements/test.txt
-    #   confluent-kafka
 bleach==6.0.0
     # via
     #   -r requirements/test.txt
@@ -68,8 +64,6 @@ code-annotations==1.5.0
     #   -r requirements/test.txt
     #   edx-lint
     #   edx-toggles
-confluent-kafka[avro,schema-registry]==2.2.0
-    # via -r requirements/test.txt
 coreapi==2.3.3
     # via
     #   -r requirements/test.txt
@@ -103,7 +97,7 @@ distlib==0.3.7
     # via
     #   -r requirements/test.txt
     #   virtualenv
-django==3.2.21
+django==3.2.22
     # via
     #   -c https://raw.githubusercontent.com/edx/edx-lint/master/edx_lint/files/common_constraints.txt
     #   -r requirements/test.txt
@@ -248,7 +242,6 @@ faker==19.6.2
 fastavro==1.8.4
     # via
     #   -r requirements/test.txt
-    #   confluent-kafka
     #   openedx-events
 filelock==3.12.4
     # via
@@ -376,7 +369,7 @@ openedx-django-pyfs==3.4.0
     #   -r requirements/test.txt
     #   lti-consumer-xblock
     #   xblock
-openedx-events==8.8.0
+openedx-events==8.9.0
     # via
     #   -r requirements/test.txt
     #   edx-event-bus-kafka
@@ -521,7 +514,6 @@ redis==5.0.1
 requests==2.31.0
     # via
     #   -r requirements/test.txt
-    #   confluent-kafka
     #   coreapi
     #   edx-drf-extensions
     #   edx-rest-api-client
@@ -659,7 +651,7 @@ xblock[django]==1.8.0
     #   -r requirements/test.txt
     #   lti-consumer-xblock
     #   xblock-utils
-xblock-utils==3.4.1
+xblock-utils==4.0.0
     # via
     #   -r requirements/test.txt
     #   lti-consumer-xblock

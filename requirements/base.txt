@@ -12,8 +12,6 @@ attrs==23.1.0
     # via
     #   lti-consumer-xblock
     #   openedx-events
-avro==1.11.3
-    # via confluent-kafka
 bleach==6.0.0
     # via lti-consumer-xblock
 boto3==1.28.59
@@ -36,8 +34,6 @@ click==8.1.7
     #   edx-django-utils
 code-annotations==1.5.0
     # via edx-toggles
-confluent-kafka[avro,schema-registry]==2.2.0
-    # via -r requirements/base.in
 coreapi==2.3.3
     # via
     #   django-rest-swagger
@@ -52,7 +48,7 @@ defusedxml==0.8.0rc2
     # via
     #   python3-openid
     #   social-auth-core
-django==3.2.21
+django==3.2.22
     # via
     #   -c https://raw.githubusercontent.com/edx/edx-lint/master/edx_lint/files/common_constraints.txt
     #   -r requirements/base.in
@@ -165,9 +161,7 @@ edx-toggles==5.1.0
 edx-token-utils==0.2.1
     # via -r requirements/base.in
 fastavro==1.8.4
-    # via
-    #   confluent-kafka
-    #   openedx-events
+    # via openedx-events
 fs==2.4.16
     # via
     #   fs-s3fs
@@ -227,7 +221,7 @@ openedx-django-pyfs==3.4.0
     # via
     #   lti-consumer-xblock
     #   xblock
-openedx-events==8.8.0
+openedx-events==8.9.0
     # via
     #   -r requirements/base.in
     #   edx-event-bus-kafka
@@ -286,7 +280,6 @@ redis==5.0.1
     # via walrus
 requests==2.31.0
     # via
-    #   confluent-kafka
     #   coreapi
     #   edx-drf-extensions
     #   edx-rest-api-client
@@ -355,7 +348,7 @@ xblock[django]==1.8.0
     # via
     #   lti-consumer-xblock
     #   xblock-utils
-xblock-utils==3.4.1
+xblock-utils==4.0.0
     # via lti-consumer-xblock
 
 # The following packages are considered to be unsafe in a requirements file:
