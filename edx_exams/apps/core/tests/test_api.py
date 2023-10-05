@@ -639,7 +639,7 @@ class TestResetExamAttempt(ExamsAPITestCase):
         """
         Test that an exam attempt is deleted
         """
-        delete_exam_attempt(self.exam_attempt, self.user)
+        reset_exam_attempt(self.exam_attempt, self.user)
         self.assertFalse(ExamAttempt.objects.filter(id=self.exam_attempt.id).exists())
 
     @patch('edx_exams.apps.core.signals.signals.EXAM_ATTEMPT_RESET.send_event')
@@ -647,7 +647,7 @@ class TestResetExamAttempt(ExamsAPITestCase):
         """
         Test that when an exam attempt is reset, the EXAM_ATTEMPT_RESET event is emitted.
         """
-        delete_exam_attempt(self.exam_attempt, self.user)
+        reset_exam_attempt(self.exam_attempt, self.user)
 
         user_data = UserData(
             id=self.student_user.id,
