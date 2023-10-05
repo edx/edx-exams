@@ -150,6 +150,10 @@ def reset_exam_attempt(attempt, requesting_user):
     course_key = CourseKey.from_string(attempt.exam.course_id)
     usage_key = UsageKey.from_string(attempt.exam.content_id)
 
+    log.info(
+        f'Resetting exam attempt for user_id={attempt.user.id} in exam={attempt.exam.id} '
+    )
+
     attempt.delete()
     emit_exam_attempt_reset_event(
         attempt.user,
