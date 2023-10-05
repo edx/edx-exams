@@ -53,6 +53,8 @@ JWT_AUTH.update({
 
 LMS_ROOT_URL = 'http://edx.devstack.lms:18000'
 
+# EVENT BUS
+
 EVENT_BUS_PRODUCER = 'edx_event_bus_kafka.create_producer'
 EVENT_BUS_CONSUMER = 'edx_event_bus_kafka.KafkaEventConsumer'
 EVENT_BUS_KAFKA_SCHEMA_REGISTRY_URL = 'http://edx.devstack.schema-registry:8081'
