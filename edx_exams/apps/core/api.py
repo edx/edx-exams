@@ -143,9 +143,9 @@ def update_attempt_status(attempt_id, to_status):
     return attempt_id
 
 
-def delete_exam_attempt(attempt, requesting_user):
+def reset_exam_attempt(attempt, requesting_user):
     """
-    Delete or 'reset' an exam attempt
+    Reset an exam attempt
     """
     course_key = CourseKey.from_string(attempt.exam.course_id)
     usage_key = UsageKey.from_string(attempt.exam.content_id)

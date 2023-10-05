@@ -17,7 +17,6 @@ from edx_exams.apps.api.test_utils import ExamsAPITestCase
 from edx_exams.apps.core.api import (
     check_if_exam_timed_out,
     create_exam_attempt,
-    delete_exam_attempt,
     get_active_attempt_for_user,
     get_attempt_by_id,
     get_attempt_for_user_with_attempt_number_and_resource_id,
@@ -26,6 +25,7 @@ from edx_exams.apps.core.api import (
     get_exam_by_content_id,
     get_exam_url_path,
     is_exam_passed_due,
+    reset_exam_attempt,
     update_attempt_status
 )
 from edx_exams.apps.core.exceptions import (
@@ -624,9 +624,9 @@ class TestCreateExamAttempt(ExamsAPITestCase):
         self.assertIsNotNone(ExamAttempt.objects.get(user_id=user_id, exam_id=exam_id))
 
 
-class TestDeleteExamAttempt(ExamsAPITestCase):
+class TestResetExamAttempt(ExamsAPITestCase):
     """
-    Tests for the API utility function `delete_exam_attempt`
+    Tests for the API utility function `reset_exam_attempt`
     """
     def setUp(self):
         super().setUp()
@@ -635,7 +635,7 @@ class TestDeleteExamAttempt(ExamsAPITestCase):
         self.student_user = UserFactory()
         self.exam_attempt = ExamAttemptFactory(user=self.student_user, exam=self.exam)
 
-    def test_delete_exam_attempt(self):
+    def test_reset_exam_attempt(self):
         """
         Test that an exam attempt is deleted
         """
@@ -645,7 +645,7 @@ class TestDeleteExamAttempt(ExamsAPITestCase):
     @patch('edx_exams.apps.core.signals.signals.EXAM_ATTEMPT_RESET.send_event')
     def test_event_emitted(self, mock_event_send):
         """
-        Test that when an exam attempt is deleted, the EXAM_ATTEMPT_RESET event is emitted.
+        Test that when an exam attempt is reset, the EXAM_ATTEMPT_RESET event is emitted.
         """
         delete_exam_attempt(self.exam_attempt, self.user)
 
