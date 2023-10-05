@@ -78,7 +78,7 @@ def listen_for_exam_attempt_reset(sender, signal, **kwargs):  # pylint: disable=
     """
     get_producer().send(
         signal=EXAM_ATTEMPT_RESET,
-        topic='exam-attempt-reset',
+        topic=topic_name,
         event_key_field='exam_attempt.course_key',
         event_data={'exam_attempt': kwargs['exam_attempt']},
         event_metadata=kwargs['metadata'],
