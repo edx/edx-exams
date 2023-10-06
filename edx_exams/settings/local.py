@@ -134,3 +134,23 @@ ALLOWED_HOSTS = ['*']
 # Lastly, see if the developer has any local overrides.
 if os.path.isfile(join(dirname(abspath(__file__)), 'private.py')):
     from .private import *  # pylint: disable=import-error
+
+# EVENT BUS
+# Below are Django settings related to setting up the Open edX event bus.
+# Because the event bus requires a Docker based networking layer, as included in devstack, the event bus does not work
+# outside of a Docker container. Therefore, the settings related to networking are set to None, because this file is
+# used for the local application server. However, because these local Django settings are also used by Tutor, we include
+# sensible values for non-network related settings. Tutor users can override these settings when setting up the event
+# bus, including the network-related settings.
+
+EVENT_BUS_PRODUCER = 'edx_event_bus_kafka.create_producer'
+EVENT_BUS_CONSUMER = 'edx_event_bus_kafka.KafkaEventConsumer'
+EVENT_BUS_TOPIC_PREFIX = 'dev'
+EVENT_BUS_KAFKA_SCHEMA_REGISTRY_URL = None
+EVENT_BUS_KAFKA_BOOTSTRAP_SERVERS = None
+
+# The EVENT_BUS_PRODUCER_CONFIG Django setting introduced in openedx-events 8.6.0 does not work properly.
+# In order to unblock development, EVENT_BUS_PRODUCER_CONFIG should be set to the empty object. Signal handlers
+# should be added as before (i.e. versions <8.6.0).
+# Once openedx-events 8.6.0 is corrected, this Django setting should be set.
+EVENT_BUS_PRODUCER_CONFIG = {}

@@ -11,6 +11,7 @@ from django.conf import settings
 from django.utils import timezone
 from freezegun import freeze_time
 from opaque_keys.edx.keys import CourseKey, UsageKey
+from openedx_events.learning.data import ExamAttemptData, UserData, UserPersonalData
 
 from edx_exams.apps.api.test_utils import ExamsAPITestCase
 from edx_exams.apps.core.api import (
@@ -24,6 +25,7 @@ from edx_exams.apps.core.api import (
     get_exam_by_content_id,
     get_exam_url_path,
     is_exam_passed_due,
+    reset_exam_attempt,
     update_attempt_status
 )
 from edx_exams.apps.core.exceptions import (
@@ -34,7 +36,7 @@ from edx_exams.apps.core.exceptions import (
 )
 from edx_exams.apps.core.models import Exam, ExamAttempt
 from edx_exams.apps.core.statuses import ExamAttemptStatus
-from edx_exams.apps.core.test_utils.factories import ExamAttemptFactory, ExamFactory
+from edx_exams.apps.core.test_utils.factories import ExamAttemptFactory, ExamFactory, UserFactory
 
 test_start_time = datetime(2023, 11, 4, 11, 5, 23)
 test_time_limit_mins = 30
@@ -212,7 +214,7 @@ class TestUpdateAttemptStatus(ExamsAPITestCase):
             resource_id=str(uuid.uuid4()),
             course_id=self.course_id,
             provider=self.test_provider,
-            content_id='abcd1234',
+            content_id='block-v1:edX+test+2023+type@sequential+block@1111111111',
             exam_name='test_exam',
             exam_type='proctored',
             time_limit_mins=30,
@@ -267,7 +269,7 @@ class TestUpdateAttemptStatus(ExamsAPITestCase):
                 resource_id=str(uuid.uuid4()),
                 course_id=self.course_id,
                 provider=self.test_provider,
-                content_id='abcd1234',
+                content_id='block-v1:edX+test+2023+type@sequential+block@1111111111',
                 exam_name='test_exam',
                 exam_type='proctored',
                 time_limit_mins=30,
@@ -297,6 +299,43 @@ class TestUpdateAttemptStatus(ExamsAPITestCase):
             updated_attempt = ExamAttempt.get_attempt_by_id(attempt_id)
             self.assertEqual(updated_attempt.status, ExamAttemptStatus.submitted)
             self.assertEqual(updated_attempt.end_time, timezone.now())
+
+    @ddt.data(
+        ('EXAM_ATTEMPT_SUBMITTED', ExamAttemptStatus.submitted, True),
+        ('EXAM_ATTEMPT_VERIFIED', ExamAttemptStatus.verified, False),
+        ('EXAM_ATTEMPT_REJECTED', ExamAttemptStatus.rejected, False),
+        ('EXAM_ATTEMPT_ERRORED', ExamAttemptStatus.error, False)
+    )
+    @ddt.unpack
+    def test_attempt_event_emitted(self, event_name, status, expect_requesting_user):
+        """
+        Test that when an exam status is updated, the corresponding Open edX event is emitted.
+        """
+        patch_event = 'edx_exams.apps.core.signals.signals.{event_name}.send_event'.format(event_name=event_name)
+        with patch(patch_event) as mock_event_send:
+            update_attempt_status(self.exam_attempt.id, status)
+            self.assertEqual(mock_event_send.call_count, 1)
+
+            user_data = UserData(
+                id=self.user.id,
+                is_active=self.user.is_active,
+                pii=UserPersonalData(
+                    username=self.user.username,
+                    email=self.user.email,
+                    name=self.user.full_name
+                )
+            )
+            course_key = CourseKey.from_string(self.exam.course_id)
+            usage_key = UsageKey.from_string(self.exam.content_id)
+
+            expected_data = ExamAttemptData(
+                student_user=user_data,
+                course_key=course_key,
+                usage_key=usage_key,
+                exam_type=self.exam.exam_type,
+                requesting_user=user_data if expect_requesting_user else None,
+            )
+            mock_event_send.assert_called_with(exam_attempt=expected_data)
 
     def test_illegal_start(self):
         """
@@ -583,6 +622,62 @@ class TestCreateExamAttempt(ExamsAPITestCase):
 
         create_exam_attempt(exam_id, user_id)
         self.assertIsNotNone(ExamAttempt.objects.get(user_id=user_id, exam_id=exam_id))
+
+
+class TestResetExamAttempt(ExamsAPITestCase):
+    """
+    Tests for the API utility function `reset_exam_attempt`
+    """
+    def setUp(self):
+        super().setUp()
+
+        self.exam = ExamFactory()
+        self.student_user = UserFactory()
+        self.exam_attempt = ExamAttemptFactory(user=self.student_user, exam=self.exam)
+
+    def test_reset_exam_attempt(self):
+        """
+        Test that an exam attempt is deleted
+        """
+        reset_exam_attempt(self.exam_attempt, self.user)
+        self.assertFalse(ExamAttempt.objects.filter(id=self.exam_attempt.id).exists())
+
+    @patch('edx_exams.apps.core.signals.signals.EXAM_ATTEMPT_RESET.send_event')
+    def test_event_emitted(self, mock_event_send):
+        """
+        Test that when an exam attempt is reset, the EXAM_ATTEMPT_RESET event is emitted.
+        """
+        reset_exam_attempt(self.exam_attempt, self.user)
+
+        user_data = UserData(
+            id=self.student_user.id,
+            is_active=self.student_user.is_active,
+            pii=UserPersonalData(
+                username=self.student_user.username,
+                email=self.student_user.email,
+                name=self.student_user.full_name
+            )
+        )
+        requesting_user_data = UserData(
+            id=self.user.id,
+            is_active=self.user.is_active,
+            pii=UserPersonalData(
+                username=self.user.username,
+                email=self.user.email,
+                name=self.user.full_name
+            )
+        )
+        course_key = CourseKey.from_string(self.exam.course_id)
+        usage_key = UsageKey.from_string(self.exam.content_id)
+
+        expected_data = ExamAttemptData(
+            student_user=user_data,
+            course_key=course_key,
+            usage_key=usage_key,
+            exam_type=self.exam.exam_type,
+            requesting_user=requesting_user_data,
+        )
+        mock_event_send.assert_called_once_with(exam_attempt=expected_data)
 
 
 class TestGetExamByContentId(ExamsAPITestCase):

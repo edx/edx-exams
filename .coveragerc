@@ -6,6 +6,7 @@ omit =
     edx_exams/settings/*
     edx_exams/conf*
     edx_exams/docker_gunicorn_configuration.py
+    edx_exams/apps/core/signals/handlers.py
     *wsgi.py
     *migrations*
     *admin.py

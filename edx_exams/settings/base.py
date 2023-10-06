@@ -28,11 +28,13 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'edx_event_bus_kafka',
     'release_util',
     'drf_yasg',
     'edx_api_doc_tools',
     'lti_consumer.apps.LTIConsumerApp',
     'token_utils',
+    'openedx_events',
 )
 
 THIRD_PARTY_APPS = (
@@ -275,3 +277,6 @@ LOGGING = get_logger_config(debug=DEBUG)
 LEARNING_MICROFRONTEND_URL = None
 
 EXAMS_DASHBOARD_MFE_URL = None
+
+# Event Bus Settings
+EXAM_ATTEMPT_EVENTS_KAFKA_TOPIC_NAME = 'learning-exam-attempt-lifecycle'

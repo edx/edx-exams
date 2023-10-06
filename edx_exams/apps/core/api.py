@@ -17,6 +17,13 @@ from edx_exams.apps.core.exceptions import (
     ExamIllegalStatusTransition
 )
 from edx_exams.apps.core.models import Exam, ExamAttempt
+from edx_exams.apps.core.signals.signals import (
+    emit_exam_attempt_errored_event,
+    emit_exam_attempt_rejected_event,
+    emit_exam_attempt_reset_event,
+    emit_exam_attempt_submitted_event,
+    emit_exam_attempt_verified_event
+)
 from edx_exams.apps.core.statuses import ExamAttemptStatus
 
 log = logging.getLogger(__name__)
@@ -93,13 +100,68 @@ def update_attempt_status(attempt_id, to_status):
         attempt_obj.start_time = datetime.now(pytz.UTC)
         attempt_obj.allowed_time_limit_mins = _calculate_allowed_mins(attempt_obj.exam)
 
+    course_key = CourseKey.from_string(attempt_obj.exam.course_id)
+    usage_key = UsageKey.from_string(attempt_obj.exam.content_id)
+
     if to_status == ExamAttemptStatus.submitted:
         attempt_obj.end_time = datetime.now(pytz.UTC)
+
+        emit_exam_attempt_submitted_event(
+            attempt_obj.user,
+            course_key,
+            usage_key,
+            attempt_obj.exam.exam_type
+        )
+
+    if to_status == ExamAttemptStatus.verified:
+        emit_exam_attempt_verified_event(
+            attempt_obj.user,
+            course_key,
+            usage_key,
+            attempt_obj.exam.exam_type
+        )
+
+    if to_status == ExamAttemptStatus.rejected:
+        emit_exam_attempt_rejected_event(
+            attempt_obj.user,
+            course_key,
+            usage_key,
+            attempt_obj.exam.exam_type
+        )
+
+    if to_status == ExamAttemptStatus.error:
+        emit_exam_attempt_errored_event(
+            attempt_obj.user,
+            course_key,
+            usage_key,
+            attempt_obj.exam.exam_type
+        )
 
     attempt_obj.status = to_status
     attempt_obj.save()
 
     return attempt_id
+
+
+def reset_exam_attempt(attempt, requesting_user):
+    """
+    Reset an exam attempt
+    """
+    course_key = CourseKey.from_string(attempt.exam.course_id)
+    usage_key = UsageKey.from_string(attempt.exam.content_id)
+
+    log.info(
+        f'Resetting exam attempt for user_id={attempt.user.id} in exam={attempt.exam.id} '
+    )
+
+    attempt.delete()
+    emit_exam_attempt_reset_event(
+        attempt.user,
+        course_key,
+        usage_key,
+        attempt.exam.exam_type,
+        requesting_user
+    )
 
 
 def _allow_status_transition(attempt_obj, to_status):

@@ -365,7 +365,7 @@ class LtiStartProctoringTestCase(ExamsAPITestCase):
         super().setUp()
 
         self.course_id = 'course-v1:edx+test+f19'
-        self.content_id = '11111111'
+        self.content_id = 'block-v1:edX+test+2023+type@sequential+block@1111111111'
 
         self.exam = ExamFactory(
             course_id=self.course_id,

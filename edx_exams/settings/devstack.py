@@ -52,3 +52,17 @@ JWT_AUTH.update({
 })
 
 LMS_ROOT_URL = 'http://edx.devstack.lms:18000'
+
+# EVENT BUS
+
+EVENT_BUS_PRODUCER = 'edx_event_bus_kafka.create_producer'
+EVENT_BUS_CONSUMER = 'edx_event_bus_kafka.KafkaEventConsumer'
+EVENT_BUS_KAFKA_SCHEMA_REGISTRY_URL = 'http://edx.devstack.schema-registry:8081'
+EVENT_BUS_KAFKA_BOOTSTRAP_SERVERS = 'edx.devstack.kafka:29092'
+EVENT_BUS_TOPIC_PREFIX = 'dev'
+
+# The EVENT_BUS_PRODUCER_CONFIG Django setting introduced in openedx-events 8.6.0 does not work properly.
+# In order to unblock development, EVENT_BUS_PRODUCER_CONFIG should be set to the empty object. Signal handlers
+# should be added as before (i.e. versions <8.6.0).
+# Once openedx-events 8.6.0 is corrected, this Django setting should be set.
+EVENT_BUS_PRODUCER_CONFIG = {}

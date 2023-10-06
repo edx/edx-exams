@@ -19,26 +19,22 @@ astroid==2.15.8
     #   -r requirements/test.txt
     #   pylint
     #   pylint-celery
-async-timeout==4.0.3
-    # via
-    #   -r requirements/test.txt
-    #   redis
 attrs==23.1.0
     # via
     #   -r requirements/test.txt
     #   lti-consumer-xblock
     #   openedx-events
-babel==2.12.1
+babel==2.13.0
     # via sphinx
 bleach==6.0.0
     # via
     #   -r requirements/test.txt
     #   lti-consumer-xblock
-boto3==1.28.54
+boto3==1.28.59
     # via
     #   -r requirements/test.txt
     #   fs-s3fs
-botocore==1.31.54
+botocore==1.31.59
     # via
     #   -r requirements/test.txt
     #   boto3
@@ -49,12 +45,12 @@ certifi==2023.7.22
     # via
     #   -r requirements/test.txt
     #   requests
-cffi==1.15.1
+cffi==1.16.0
     # via
     #   -r requirements/test.txt
     #   cryptography
     #   pynacl
-charset-normalizer==3.2.0
+charset-normalizer==3.3.0
     # via
     #   -r requirements/test.txt
     #   requests
@@ -83,7 +79,7 @@ coreschema==0.0.4
     # via
     #   -r requirements/test.txt
     #   coreapi
-coverage[toml]==7.3.1
+coverage[toml]==7.3.2
     # via
     #   -r requirements/test.txt
     #   pytest-cov
@@ -91,11 +87,10 @@ cryptography==41.0.4
     # via
     #   -r requirements/test.txt
     #   pyjwt
-    #   secretstorage
     #   social-auth-core
 ddt==1.6.0
     # via -r requirements/test.txt
-defusedxml==0.7.1
+defusedxml==0.8.0rc2
     # via
     #   -r requirements/test.txt
     #   python3-openid
@@ -108,7 +103,7 @@ distlib==0.3.7
     # via
     #   -r requirements/test.txt
     #   virtualenv
-django==3.2.21
+django==3.2.22
     # via
     #   -c https://raw.githubusercontent.com/edx/edx-lint/master/edx_lint/files/common_constraints.txt
     #   -r requirements/test.txt
@@ -228,7 +223,7 @@ edx-drf-extensions==8.10.0
     # via -r requirements/test.txt
 edx-event-bus-kafka==5.5.0
     # via -r requirements/test.txt
-edx-event-bus-redis==0.3.1
+edx-event-bus-redis==0.3.2
     # via -r requirements/test.txt
 edx-lint==5.3.4
     # via -r requirements/test.txt
@@ -250,17 +245,13 @@ edx-toggles==5.1.0
     #   edx-event-bus-redis
 edx-token-utils==0.2.1
     # via -r requirements/test.txt
-exceptiongroup==1.1.3
-    # via
-    #   -r requirements/test.txt
-    #   pytest
 factory-boy==3.3.0
     # via -r requirements/test.txt
 faker==19.6.2
     # via
     #   -r requirements/test.txt
     #   factory-boy
-fastavro==1.8.3
+fastavro==1.8.4
     # via
     #   -r requirements/test.txt
     #   openedx-events
@@ -293,12 +284,8 @@ imagesize==1.4.1
     # via sphinx
 importlib-metadata==6.8.0
     # via
-    #   build
     #   keyring
-    #   sphinx
     #   twine
-importlib-resources==6.1.0
-    # via keyring
 inflection==0.5.1
     # via
     #   -r requirements/test.txt
@@ -317,10 +304,6 @@ itypes==1.2.0
     #   coreapi
 jaraco-classes==3.3.0
     # via keyring
-jeepney==0.8.0
-    # via
-    #   keyring
-    #   secretstorage
 jinja2==3.1.2
     # via
     #   -r requirements/test.txt
@@ -400,7 +383,7 @@ openedx-django-pyfs==3.4.0
     #   -r requirements/test.txt
     #   lti-consumer-xblock
     #   xblock
-openedx-events==8.6.0
+openedx-events==8.9.0
     # via
     #   -r requirements/test.txt
     #   edx-event-bus-kafka
@@ -409,7 +392,7 @@ openedx-filters==1.6.0
     # via
     #   -r requirements/test.txt
     #   lti-consumer-xblock
-packaging==23.1
+packaging==23.2
     # via
     #   -r requirements/test.txt
     #   build
@@ -423,7 +406,7 @@ pbr==5.11.1
     #   stevedore
 pkginfo==1.9.6
     # via twine
-platformdirs==3.10.0
+platformdirs==3.11.0
     # via
     #   -r requirements/test.txt
     #   pylint
@@ -469,7 +452,7 @@ pyjwt[crypto]==2.8.0
     #   edx-drf-extensions
     #   edx-rest-api-client
     #   social-auth-core
-pylint==2.17.6
+pylint==2.17.7
     # via
     #   -r requirements/test.txt
     #   edx-lint
@@ -526,7 +509,6 @@ python3-openid==3.2.0
 pytz==2023.3.post1
     # via
     #   -r requirements/test.txt
-    #   babel
     #   django
     #   djangorestframework
     #   drf-yasg
@@ -571,14 +553,12 @@ restructuredtext-lint==1.4.0
     # via doc8
 rfc3986==2.0.0
     # via twine
-rich==13.5.3
+rich==13.6.0
     # via twine
-s3transfer==0.6.2
+s3transfer==0.7.0
     # via
     #   -r requirements/test.txt
     #   boto3
-secretstorage==3.3.3
-    # via keyring
 semantic-version==2.10.0
     # via
     #   -r requirements/test.txt
@@ -621,17 +601,22 @@ sphinx==5.3.0
     # via
     #   -r requirements/doc.in
     #   edx-sphinx-theme
-sphinxcontrib-applehelp==1.0.4
+    #   sphinxcontrib-applehelp
+    #   sphinxcontrib-devhelp
+    #   sphinxcontrib-htmlhelp
+    #   sphinxcontrib-qthelp
+    #   sphinxcontrib-serializinghtml
+sphinxcontrib-applehelp==1.0.7
     # via sphinx
-sphinxcontrib-devhelp==1.0.2
+sphinxcontrib-devhelp==1.0.5
     # via sphinx
-sphinxcontrib-htmlhelp==2.0.1
+sphinxcontrib-htmlhelp==2.0.4
     # via sphinx
 sphinxcontrib-jsmath==1.0.1
     # via sphinx
-sphinxcontrib-qthelp==1.0.3
+sphinxcontrib-qthelp==1.0.6
     # via sphinx
-sphinxcontrib-serializinghtml==1.1.5
+sphinxcontrib-serializinghtml==1.1.9
     # via sphinx
 sqlparse==0.4.4
     # via
@@ -648,16 +633,6 @@ text-unidecode==1.3
     # via
     #   -r requirements/test.txt
     #   python-slugify
-tomli==2.0.1
-    # via
-    #   -r requirements/test.txt
-    #   build
-    #   coverage
-    #   doc8
-    #   pylint
-    #   pyproject-hooks
-    #   pytest
-    #   tox
 tomlkit==0.12.1
     # via
     #   -r requirements/test.txt
@@ -675,18 +650,13 @@ types-pyyaml==6.0.12.12
 typing-extensions==4.8.0
     # via
     #   -r requirements/test.txt
-    #   asgiref
-    #   astroid
     #   edx-opaque-keys
-    #   faker
-    #   pylint
-    #   rich
 uritemplate==4.1.1
     # via
     #   -r requirements/test.txt
     #   coreapi
     #   drf-yasg
-urllib3==1.26.16
+urllib3==1.26.17
     # via
     #   -r requirements/test.txt
     #   botocore
@@ -723,14 +693,12 @@ xblock[django]==1.8.0
     #   -r requirements/test.txt
     #   lti-consumer-xblock
     #   xblock-utils
-xblock-utils==3.4.1
+xblock-utils==4.0.0
     # via
     #   -r requirements/test.txt
     #   lti-consumer-xblock
 zipp==3.17.0
-    # via
-    #   importlib-metadata
-    #   importlib-resources
+    # via importlib-metadata
 
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools
