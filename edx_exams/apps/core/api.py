@@ -20,6 +20,7 @@ from edx_exams.apps.core.models import Exam, ExamAttempt
 from edx_exams.apps.core.signals.signals import (
     emit_exam_attempt_errored_event,
     emit_exam_attempt_rejected_event,
+    emit_exam_attempt_reset_event,
     emit_exam_attempt_submitted_event,
     emit_exam_attempt_verified_event
 )
@@ -140,6 +141,27 @@ def update_attempt_status(attempt_id, to_status):
     attempt_obj.save()
 
     return attempt_id
+
+
+def reset_exam_attempt(attempt, requesting_user):
+    """
+    Reset an exam attempt
+    """
+    course_key = CourseKey.from_string(attempt.exam.course_id)
+    usage_key = UsageKey.from_string(attempt.exam.content_id)
+
+    log.info(
+        f'Resetting exam attempt for user_id={attempt.user.id} in exam={attempt.exam.id} '
+    )
+
+    attempt.delete()
+    emit_exam_attempt_reset_event(
+        attempt.user,
+        course_key,
+        usage_key,
+        attempt.exam.exam_type,
+        requesting_user
+    )
 
 
 def _allow_status_transition(attempt_obj, to_status):

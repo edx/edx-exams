@@ -7,6 +7,7 @@ from openedx_events.event_bus import get_producer
 from openedx_events.learning.signals import (
     EXAM_ATTEMPT_ERRORED,
     EXAM_ATTEMPT_REJECTED,
+    EXAM_ATTEMPT_RESET,
     EXAM_ATTEMPT_SUBMITTED,
     EXAM_ATTEMPT_VERIFIED
 )
@@ -63,6 +64,20 @@ def listen_for_exam_attempt_errored(sender, signal, **kwargs):  # pylint: disabl
     """
     get_producer().send(
         signal=EXAM_ATTEMPT_ERRORED,
+        topic=topic_name,
+        event_key_field='exam_attempt.course_key',
+        event_data={'exam_attempt': kwargs['exam_attempt']},
+        event_metadata=kwargs['metadata'],
+    )
+
+
+@receiver(EXAM_ATTEMPT_RESET)
+def listen_for_exam_attempt_reset(sender, signal, **kwargs):  # pylint: disable=unused-argument
+    """
+    Publish EXAM_ATTEMPT_RESET signal onto the event bus
+    """
+    get_producer().send(
+        signal=EXAM_ATTEMPT_RESET,
         topic=topic_name,
         event_key_field='exam_attempt.course_key',
         event_data={'exam_attempt': kwargs['exam_attempt']},

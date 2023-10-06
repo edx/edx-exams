@@ -36,6 +36,7 @@ from edx_exams.apps.core.api import (
     get_exam_by_id,
     get_provider_by_exam_id,
     is_exam_passed_due,
+    reset_exam_attempt,
     update_attempt_status
 )
 from edx_exams.apps.core.exam_types import get_exam_type
@@ -626,7 +627,7 @@ class ExamAttemptView(ExamsAPIView):
             error = {'detail': error_msg}
             return Response(status=status.HTTP_403_FORBIDDEN, data=error)
 
-        exam_attempt.delete()
+        reset_exam_attempt(exam_attempt, request.user)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
