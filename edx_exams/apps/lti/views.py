@@ -292,7 +292,7 @@ def end_assessment(request, attempt_id):
 
     exam = attempt.exam
     resource_link_id = exam.resource_id
-    end_assessment_return = get_end_assessment_return(request.user.anonymous_user_id, resource_link_id)
+    end_assessment_return = get_end_assessment_return(request.user.id, resource_link_id)
 
     # If end_assessment_return was provided by the Proctoring Tool, and end_assessment was True, then the Assessment
     # Platform MUST send an End Assessment message to the Proctoring Tool. Otherwise, the Assessment Platform can
