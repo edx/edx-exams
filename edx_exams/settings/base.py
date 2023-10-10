@@ -280,3 +280,6 @@ EXAMS_DASHBOARD_MFE_URL = None
 
 # Event Bus Settings
 EXAM_ATTEMPT_EVENTS_KAFKA_TOPIC_NAME = 'learning-exam-attempt-lifecycle'
+
+# disable indexing on history_date
+SIMPLE_HISTORY_DATE_INDEX = False
