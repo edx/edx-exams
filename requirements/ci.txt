@@ -20,6 +20,8 @@ py==1.11.0
     # via tox
 six==1.16.0
     # via tox
+tomli==2.0.1
+    # via tox
 tox==3.28.0
     # via
     #   -c https://raw.githubusercontent.com/edx/edx-lint/master/edx_lint/files/common_constraints.txt
