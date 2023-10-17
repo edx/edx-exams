@@ -25,11 +25,11 @@ bleach==6.1.0
     # via
     #   -r requirements/base.txt
     #   lti-consumer-xblock
-boto3==1.28.62
+boto3==1.28.64
     # via
     #   -r requirements/base.txt
     #   fs-s3fs
-botocore==1.31.62
+botocore==1.31.64
     # via
     #   -r requirements/base.txt
     #   boto3
@@ -113,7 +113,7 @@ django-config-models==2.5.1
     # via
     #   -r requirements/base.txt
     #   lti-consumer-xblock
-django-cors-headers==4.2.0
+django-cors-headers==4.3.0
     # via -r requirements/base.txt
 django-crum==0.7.9
     # via
@@ -178,7 +178,7 @@ edx-django-utils==5.7.0
     #   edx-event-bus-redis
     #   edx-rest-api-client
     #   edx-toggles
-edx-drf-extensions==8.10.0
+edx-drf-extensions==8.12.0
     # via -r requirements/base.txt
 edx-event-bus-kafka==5.5.0
     # via -r requirements/base.txt
@@ -189,9 +189,10 @@ edx-opaque-keys[django]==2.5.1
     #   -r requirements/base.txt
     #   edx-ccx-keys
     #   edx-drf-extensions
+    #   edx-opaque-keys
     #   lti-consumer-xblock
     #   openedx-events
-edx-rest-api-client==5.6.0
+edx-rest-api-client==5.6.1
     # via -r requirements/base.txt
 edx-toggles==5.1.0
     # via
@@ -315,7 +316,7 @@ pbr==5.11.1
     # via
     #   -r requirements/base.txt
     #   stevedore
-psutil==5.9.5
+psutil==5.9.6
     # via
     #   -r requirements/base.txt
     #   edx-django-utils
@@ -340,6 +341,7 @@ pyjwt[crypto]==2.8.0
     #   edx-auth-backends
     #   edx-drf-extensions
     #   edx-rest-api-client
+    #   pyjwt
     #   social-auth-core
 pymemcache==4.0.0
     # via -r requirements/base.txt
@@ -429,7 +431,7 @@ slumber==0.7.1
     # via
     #   -r requirements/base.txt
     #   edx-rest-api-client
-social-auth-app-django==5.3.0
+social-auth-app-django==5.4.0
     # via
     #   -r requirements/base.txt
     #   edx-auth-backends
@@ -488,6 +490,7 @@ xblock[django]==1.8.1
     # via
     #   -r requirements/base.txt
     #   lti-consumer-xblock
+    #   xblock
     #   xblock-utils
 xblock-utils==4.0.0
     # via
