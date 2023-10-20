@@ -157,6 +157,9 @@ STATICFILES_DIRS = (
     root('static'),
 )
 
+# EMAIL CONFIGURATION
+DEFAULT_FROM_EMAIL: 'no-reply@example.com'
+
 # TEMPLATE CONFIGURATION
 # See: https://docs.djangoproject.com/en/2.2/ref/settings/#templates
 TEMPLATES = [
