@@ -1,5 +1,5 @@
 """
-Handles sending emails to users about proctoring status changes.
+Handles rendering templates and sending emails.
 """
 import logging
 
