@@ -35,7 +35,7 @@ def send_attempt_status_email(attempt):
 
     email_template = loader.get_template(email_template)
     course_url = f'{settings.LEARNING_MICROFRONTEND_URL}/course/{exam.course_id}'
-    contact_url = exam.provider.tech_support_email
+    contact_url = f'{settings.LMS_ROOT_URL}/support/contact_us'
 
     email_subject = f'Proctored exam {exam.exam_name} for user {attempt.user.username}'
     body = email_template.render({
@@ -54,7 +54,7 @@ def send_attempt_status_email(attempt):
 
     try:
         email.send()
-    except Exception as err: # pylint: disable=broad-except
+    except Exception as err:  # pylint: disable=broad-except
         log.error(
             'Error while sending proctoring status email for '
             f'user_id {attempt.user.id}, exam_id {exam.id}: {err}'
