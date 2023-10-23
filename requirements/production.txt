@@ -25,11 +25,12 @@ bleach==6.1.0
     # via
     #   -r requirements/base.txt
     #   lti-consumer-xblock
-boto3==1.28.64
+boto3==1.28.68
     # via
     #   -r requirements/base.txt
+    #   django-ses
     #   fs-s3fs
-botocore==1.31.64
+botocore==1.31.68
     # via
     #   -r requirements/base.txt
     #   boto3
@@ -43,7 +44,7 @@ cffi==1.16.0
     #   -r requirements/base.txt
     #   cryptography
     #   pynacl
-charset-normalizer==3.3.0
+charset-normalizer==3.3.1
     # via
     #   -r requirements/base.txt
     #   requests
@@ -85,6 +86,7 @@ django==3.2.22
     #   django-extensions
     #   django-filter
     #   django-model-utils
+    #   django-ses
     #   django-statici18n
     #   django-waffle
     #   djangorestframework
@@ -130,6 +132,8 @@ django-model-utils==4.3.1
     # via -r requirements/base.txt
 django-rest-swagger==2.2.0
     # via -r requirements/base.txt
+django-ses==3.5.0
+    # via -r requirements/production.in
 django-simple-history==3.4.0
     # via -r requirements/base.txt
 django-statici18n==2.4.0
@@ -279,7 +283,7 @@ mysqlclient==2.2.0
     # via
     #   -r requirements/base.txt
     #   -r requirements/production.in
-newrelic==9.1.0
+newrelic==9.1.1
     # via
     #   -r requirements/base.txt
     #   edx-django-utils
@@ -372,6 +376,7 @@ pytz==2023.3.post1
     # via
     #   -r requirements/base.txt
     #   django
+    #   django-ses
     #   djangorestframework
     #   drf-yasg
     #   xblock
@@ -464,7 +469,7 @@ uritemplate==4.1.1
     #   -r requirements/base.txt
     #   coreapi
     #   drf-yasg
-urllib3==1.26.17
+urllib3==1.26.18
     # via
     #   -r requirements/base.txt
     #   botocore
