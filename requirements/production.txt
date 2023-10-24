@@ -25,11 +25,11 @@ bleach==6.1.0
     # via
     #   -r requirements/base.txt
     #   lti-consumer-xblock
-boto3==1.28.64
+boto3==1.28.69
     # via
     #   -r requirements/base.txt
     #   fs-s3fs
-botocore==1.31.64
+botocore==1.31.69
     # via
     #   -r requirements/base.txt
     #   boto3
@@ -43,7 +43,7 @@ cffi==1.16.0
     #   -r requirements/base.txt
     #   cryptography
     #   pynacl
-charset-normalizer==3.3.0
+charset-normalizer==3.3.1
     # via
     #   -r requirements/base.txt
     #   requests
@@ -279,7 +279,7 @@ mysqlclient==2.2.0
     # via
     #   -r requirements/base.txt
     #   -r requirements/production.in
-newrelic==9.1.0
+newrelic==9.1.1
     # via
     #   -r requirements/base.txt
     #   edx-django-utils
@@ -464,7 +464,7 @@ uritemplate==4.1.1
     #   -r requirements/base.txt
     #   coreapi
     #   drf-yasg
-urllib3==1.26.17
+urllib3==1.26.18
     # via
     #   -r requirements/base.txt
     #   botocore

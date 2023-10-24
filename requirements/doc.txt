@@ -14,7 +14,7 @@ asgiref==3.7.2
     # via
     #   -r requirements/test.txt
     #   django
-astroid==2.15.8
+astroid==3.0.1
     # via
     #   -r requirements/test.txt
     #   pylint
@@ -28,17 +28,17 @@ attrs==23.1.0
     #   -r requirements/test.txt
     #   lti-consumer-xblock
     #   openedx-events
-babel==2.13.0
+babel==2.13.1
     # via sphinx
 bleach==6.1.0
     # via
     #   -r requirements/test.txt
     #   lti-consumer-xblock
-boto3==1.28.64
+boto3==1.28.69
     # via
     #   -r requirements/test.txt
     #   fs-s3fs
-botocore==1.31.64
+botocore==1.31.69
     # via
     #   -r requirements/test.txt
     #   boto3
@@ -54,7 +54,7 @@ cffi==1.16.0
     #   -r requirements/test.txt
     #   cryptography
     #   pynacl
-charset-normalizer==3.3.0
+charset-normalizer==3.3.1
     # via
     #   -r requirements/test.txt
     #   requests
@@ -229,7 +229,7 @@ edx-event-bus-kafka==5.5.0
     # via -r requirements/test.txt
 edx-event-bus-redis==0.3.2
     # via -r requirements/test.txt
-edx-lint==5.3.4
+edx-lint==5.3.6
     # via -r requirements/test.txt
 edx-opaque-keys[django]==2.5.1
     # via
@@ -256,7 +256,7 @@ exceptiongroup==1.1.3
     #   pytest
 factory-boy==3.3.0
     # via -r requirements/test.txt
-faker==19.10.0
+faker==19.11.0
     # via
     #   -r requirements/test.txt
     #   factory-boy
@@ -343,10 +343,6 @@ lazy==1.6
     #   -r requirements/test.txt
     #   lti-consumer-xblock
     #   xblock
-lazy-object-proxy==1.9.0
-    # via
-    #   -r requirements/test.txt
-    #   astroid
 lti-consumer-xblock==9.6.2
     # via -r requirements/test.txt
 lxml==4.9.3
@@ -380,7 +376,7 @@ more-itertools==10.1.0
     # via jaraco-classes
 mysqlclient==2.2.0
     # via -r requirements/test.txt
-newrelic==9.1.0
+newrelic==9.1.1
     # via
     #   -r requirements/test.txt
     #   edx-django-utils
@@ -471,7 +467,7 @@ pyjwt[crypto]==2.8.0
     #   edx-rest-api-client
     #   pyjwt
     #   social-auth-core
-pylint==2.17.7
+pylint==3.0.2
     # via
     #   -r requirements/test.txt
     #   edx-lint
@@ -482,7 +478,7 @@ pylint-celery==0.3
     # via
     #   -r requirements/test.txt
     #   edx-lint
-pylint-django==2.5.3
+pylint-django==2.5.5
     # via
     #   -r requirements/test.txt
     #   edx-lint
@@ -691,14 +687,14 @@ uritemplate==4.1.1
     #   -r requirements/test.txt
     #   coreapi
     #   drf-yasg
-urllib3==1.26.17
+urllib3==1.26.18
     # via
     #   -r requirements/test.txt
     #   botocore
     #   requests
     #   responses
     #   twine
-virtualenv==20.24.5
+virtualenv==20.24.6
     # via
     #   -r requirements/test.txt
     #   tox
@@ -719,10 +715,6 @@ webob==1.8.7
     # via
     #   -r requirements/test.txt
     #   xblock
-wrapt==1.15.0
-    # via
-    #   -r requirements/test.txt
-    #   astroid
 xblock[django]==1.8.1
     # via
     #   -r requirements/test.txt
