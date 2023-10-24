@@ -9,6 +9,7 @@ from django.conf import settings
 from django.utils import dateparse, timezone
 from opaque_keys.edx.keys import CourseKey, UsageKey
 
+from edx_exams.apps.core.email import send_attempt_status_email
 from edx_exams.apps.core.exam_types import OnboardingExamType, PracticeExamType, get_exam_type
 from edx_exams.apps.core.exceptions import (
     ExamAttemptAlreadyExists,
@@ -139,6 +140,8 @@ def update_attempt_status(attempt_id, to_status):
 
     attempt_obj.status = to_status
     attempt_obj.save()
+
+    send_attempt_status_email(attempt_obj)
 
     return attempt_id
 

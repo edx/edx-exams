@@ -53,3 +53,6 @@ DB_OVERRIDES = dict(
 
 for override, value in DB_OVERRIDES.items():
     DATABASES['default'][override] = value
+
+# EMAIL CONFIGURATION
+EMAIL_BACKEND = 'django_ses.SESBackend'

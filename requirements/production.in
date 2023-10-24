@@ -1,6 +1,7 @@
 # Packages required in a production environment
 -r base.txt
 
+django-ses
 gevent
 gunicorn
 mysqlclient
