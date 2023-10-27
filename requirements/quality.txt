@@ -30,11 +30,11 @@ bleach==6.1.0
     # via
     #   -r requirements/test.txt
     #   lti-consumer-xblock
-boto3==1.28.68
+boto3==1.28.73
     # via
     #   -r requirements/test.txt
     #   fs-s3fs
-botocore==1.31.68
+botocore==1.31.73
     # via
     #   -r requirements/test.txt
     #   boto3
@@ -82,10 +82,11 @@ coverage[toml]==7.3.2
     #   -r requirements/test.txt
     #   coverage
     #   pytest-cov
-cryptography==41.0.4
+cryptography==41.0.5
     # via
     #   -r requirements/test.txt
     #   pyjwt
+    #   secretstorage
     #   social-auth-core
 ddt==1.6.0
     # via -r requirements/test.txt
@@ -216,7 +217,7 @@ edx-event-bus-kafka==5.5.0
     # via -r requirements/test.txt
 edx-event-bus-redis==0.3.2
     # via -r requirements/test.txt
-edx-lint==5.3.4
+edx-lint==5.3.6
     # via
     #   -r requirements/quality.in
     #   -r requirements/test.txt
@@ -243,7 +244,7 @@ exceptiongroup==1.1.3
     #   pytest
 factory-boy==3.3.0
     # via -r requirements/test.txt
-faker==19.11.0
+faker==19.12.0
     # via
     #   -r requirements/test.txt
     #   factory-boy
@@ -251,7 +252,7 @@ fastavro==1.8.4
     # via
     #   -r requirements/test.txt
     #   openedx-events
-filelock==3.12.4
+filelock==3.13.0
     # via
     #   -r requirements/test.txt
     #   tox
@@ -301,6 +302,10 @@ itypes==1.2.0
     #   coreapi
 jaraco-classes==3.3.0
     # via keyring
+jeepney==0.8.0
+    # via
+    #   keyring
+    #   secretstorage
 jinja2==3.1.2
     # via
     #   -r requirements/test.txt
@@ -322,7 +327,7 @@ lazy==1.6
     #   -r requirements/test.txt
     #   lti-consumer-xblock
     #   xblock
-lti-consumer-xblock==9.6.2
+lti-consumer-xblock==9.7.0
     # via -r requirements/test.txt
 lxml==4.9.3
     # via
@@ -476,7 +481,7 @@ pynacl==1.5.0
     # via
     #   -r requirements/test.txt
     #   edx-django-utils
-pytest==7.4.2
+pytest==7.4.3
     # via
     #   -r requirements/test.txt
     #   pytest-cov
@@ -550,6 +555,8 @@ s3transfer==0.7.0
     # via
     #   -r requirements/test.txt
     #   boto3
+secretstorage==3.3.3
+    # via keyring
 semantic-version==2.10.0
     # via
     #   -r requirements/test.txt
