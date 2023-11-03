@@ -640,6 +640,9 @@ class LtiInstructorLaunchTest(ExamsAPITestCase):
                 resource_link_id=self.exam.resource_id,
                 external_user_id=str(self.course_staff_user.anonymous_user_id),
                 context_id=self.exam.course_id,
+                custom_parameters={
+                    'roster_url': 'http://test.exams:18740/lti/exam/1/instructor_tool/roster',
+                }
             )
         )
         self.assertEqual(response.status_code, 302)
