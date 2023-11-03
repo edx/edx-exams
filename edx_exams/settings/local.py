@@ -118,6 +118,7 @@ SESSION_COOKIE_SECURE = True
 SESSION_COOKIE_DOMAIN = 'localhost'
 
 ROOT_URL = 'http://localhost:18740'
+LTI_API_BASE = 'http://localhost:18740'
 LMS_ROOT_URL = 'http://localhost:18000'
 LEARNING_MICROFRONTEND_URL = 'http://localhost:2000'
 EXAMS_DASHBOARD_MFE_URL = 'http://localhost:2020'

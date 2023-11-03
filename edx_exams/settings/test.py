@@ -23,6 +23,7 @@ JWT_AUTH.update(
 )
 
 ROOT_URL = 'http://test.exams:18740'
+LTI_API_BASE = 'http://test.exams:18740'
 LMS_ROOT_URL = 'http://test.lms:18000'
 LEARNING_MICROFRONTEND_URL = 'http://test.learning:2000'
 

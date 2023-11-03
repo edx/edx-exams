@@ -7,9 +7,12 @@ import logging
 from decimal import Decimal
 from urllib.parse import urljoin
 
+from django.conf import settings
 from django.contrib.auth import login
+from django.http import JsonResponse
 from django.shortcuts import redirect
 from django.urls import reverse
+from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from edx_rest_framework_extensions.auth.jwt.authentication import JwtAuthentication
 from lti_consumer.api import get_end_assessment_return, get_lti_1p3_launch_start_url
@@ -25,6 +28,7 @@ from rest_framework.response import Response
 from edx_exams.apps.core.api import (
     get_attempt_by_id,
     get_attempt_for_user_with_attempt_number_and_resource_id,
+    get_exam_attempts,
     get_exam_by_id,
     get_exam_url_path,
     update_attempt_status
@@ -360,6 +364,38 @@ def launch_instructor_tool(request, exam_id):
         resource_link_id=exam.resource_id,
         external_user_id=str(user.anonymous_user_id),
         context_id=exam.course_id,
+        custom_parameters={
+            'roster_url': settings.LTI_API_BASE + reverse('lti:exam_roster', kwargs={'exam_id': exam.id}),
+        }
     )
 
+    # user is authenticated via JWT so use that to create a
+    # session with this service's authentication backend
+    request.user.backend = EDX_OAUTH_BACKEND
+    login(request, user)
+
     return redirect(get_lti_1p3_launch_start_url(launch_data))
+
+
+@csrf_exempt
+@require_http_methods(['GET'])
+def exam_roster(request, exam_id):
+    # pragma: no cover
+    """
+    Temporary endpoint to prove we can authenticate this request properly
+    """
+    user = request.user
+    exam = get_exam_by_id(exam_id)
+    if not user.is_staff and not user.has_course_staff_permission(exam.course_id):
+        return Response(status=status.HTTP_403_FORBIDDEN)
+
+    attempts = get_exam_attempts(exam_id)
+    attempts.select_related('user')
+
+    users = set(attempt.user for attempt in attempts)
+    roster = [
+        (user.anonymous_user_id, user.username)
+        for user in users
+    ]
+
+    return JsonResponse(roster, safe=False)
