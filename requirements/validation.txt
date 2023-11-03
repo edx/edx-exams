@@ -36,12 +36,12 @@ bleach==6.1.0
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   lti-consumer-xblock
-boto3==1.28.73
+boto3==1.28.74
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   fs-s3fs
-botocore==1.31.73
+botocore==1.31.74
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -318,12 +318,12 @@ faker==19.12.0
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   factory-boy
-fastavro==1.8.4
+fastavro==1.9.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   openedx-events
-filelock==3.13.0
+filelock==3.13.1
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -629,7 +629,7 @@ pytest-cov==4.1.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
-pytest-django==4.5.2
+pytest-django==4.6.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -761,7 +761,7 @@ social-auth-app-django==5.4.0
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   edx-auth-backends
-social-auth-core==4.4.2
+social-auth-core==4.5.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt

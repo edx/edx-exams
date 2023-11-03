@@ -16,9 +16,9 @@ attrs==23.1.0
     #   openedx-events
 bleach==6.1.0
     # via lti-consumer-xblock
-boto3==1.28.73
+boto3==1.28.74
     # via fs-s3fs
-botocore==1.31.73
+botocore==1.31.74
     # via
     #   boto3
     #   s3transfer
@@ -160,7 +160,7 @@ edx-toggles==5.1.0
     #   edx-event-bus-redis
 edx-token-utils==0.2.1
     # via -r requirements/base.in
-fastavro==1.8.4
+fastavro==1.9.0
     # via openedx-events
 fs==2.4.16
     # via
@@ -316,7 +316,7 @@ slumber==0.7.1
     # via edx-rest-api-client
 social-auth-app-django==5.4.0
     # via edx-auth-backends
-social-auth-core==4.4.2
+social-auth-core==4.5.0
     # via
     #   edx-auth-backends
     #   social-auth-app-django
