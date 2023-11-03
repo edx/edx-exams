@@ -341,7 +341,6 @@ def end_assessment(request, attempt_id):
 @authentication_classes((JwtAuthentication,))
 @permission_classes((IsAuthenticated,))
 def launch_instructor_tool(request, exam_id):
-    # pragma: no cover
     """
     View to initiate an LTI launch of the Instructor Tool for an exam.
     """
@@ -381,6 +380,7 @@ def launch_instructor_tool(request, exam_id):
 @csrf_exempt
 @require_http_methods(['GET'])
 def exam_roster(request, exam_id):
+    # pragma: no cover
     """
     Temporary endpoint to prove we can authenticate this request properly
     """
