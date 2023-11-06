@@ -82,11 +82,11 @@ Dashboard UI Loads Exam Attempts
 #. Filtering by username only should show exam attempts for that username
 #. Clicking the "Review Dashboard" link in the modal should load the review dashboard for your chosen Proctoring Software (e.g. Proctortrack or Proctorio)
 
-Can Reject/Verify "Second Review Required" attempts
+Can Reject/Verify "Review Required" attempts
 ---------------------------------------------------
 INSTRUCTIONS: Go into another exam and be suspiscious. Block your webcam, leave for a few seconds, make strange noises, open a bunch of tabs, watch some youtube, open wikipedia, ask chatgpt for the answer to life, etc. Note you will need to do this a couple of times
 
-#. Submit your suspiscious exam attempt, and check the exams dashboard. Assuming you were suspiscious enough, you should see a row that has a status of "Second Review Required" AND has a "Review Required" button for your attempt
+#. Submit your suspiscious exam attempt, and check the exams dashboard. Assuming you were suspiscious enough, you should see a row that has a status of "Review Required" AND has a "Review Required" button for your attempt
     #. NOTE: This exam attempt may appear with the status "Satisfied" if you are using Proctorio. This means Proctorio's system is still analyzing your attempt. If this happens, just wait a bit and refresh the page until the status changes to "Verified"
 #. Clicking the "Review Required" button should spawn a modal that says "Update review status"
 #. Clicking "Cancel" should close the modal
