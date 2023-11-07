@@ -62,7 +62,8 @@ Exam Flow Works With Proctoring Software Installed & Running
 #. Clicking "Yes end my proctored exam" should end the exam and directs you to a "You have submitted this proctored exam for review" page
 #. Clicking "Yes end my proctored exam" should also close your proctoring software automatically.
 #. In the course view, the exam you took should be marked as completed (with a green checkmark)
-
+#. We recommend that you repeat these steps several times using different users (which you may have to provision if developing locally)
+    - Alternatively, you can also create mock exam attempt data in your edx exams admin (If developing locally, this is located at http://localhost:18740/admin/core/examattempt/).
 
 Proctorio-Specific Tests
 ========================
@@ -76,7 +77,6 @@ Exam Flow Works as Expected
 #. In a separate exam, go through the setup again and on the "Sending you back to your exam." page, click "Return to Exam". Clicking this link should send you to another interstitial. (NOTE: Clicking this link is time-bound so make sure to click it fast)
 #. Clicking the "Return to Exam" button should direct you to a page titled "Important" w/ another header saying "Proctored Exam Rules", and a "Start Exam" Button
 
-
 Exams Dashboard
 ===============
 Expected Behavior: Calls to the ACS Endpoint work, instructors can review/reset exam attempts, and expected downstream effects (e.g. w/ completion, credits, certificates, etc) of modifying an exam attempt's status occur
@@ -87,8 +87,11 @@ Dashboard UI Loads Exam Attempts
 INSTRUCTIONS: In an incognito window, log in to a staff or instructor account Go to the course view for the course you are testing (the one with all the checkboxes and collapsable course sections), then navigating to the "Instructor" tab to get to the Instructor Dashboard, then navigating to the "Special Exams" tab within the Instructor dashboard.
 
 #. Clicking on the "Special Exams" tab should load the *new* version of the exams dashboard
-#. Clicking on the "Review Dashboard" tab within the exams dashboard should open a dashboard owned by your selected procotoring software (e.g. a Proctortrack or Proctorio dashboard for reviewing exam attempt details)
-#. Clicking the "Select An Exam" dropdown should show the list of exams for the course
+    - The old version has two collapsable sections titled "Allowance Section" and "Student Special Exam Attempts"
+    - The new version has a dropdown selector labelled "Select an Exam", with two tabs below it that say "Attempts" and "Review Dashboard"
+#. Clicking on the "Review Dashboard" tab within the exams dashboard should display a button labelled "View resource in a new window"
+#. Clicking this button should open a dashboard owned by your selected procotoring software (e.g. a Proctortrack or Proctorio dashboard for reviewing exam attempt details) in a new tab
+#. Return to the exams dashboard and select the "Attempts" tab. Clicking the "Select An Exam" dropdown should show the list of exams for the course
 #. Filtering by exam name in the exam selection dropdown should bring up the expected exams (e.g. querying "M4-M6" shows all the exams in that section)
 #. Selecting a specific exam (i.e. the ones you just took) should load the respective exam attempts for those exams
 #. The exam attempts should be in the expected status, e.g. successful attempts are submitted or verified, and the errored attempts are errored
