@@ -11,6 +11,7 @@ Proctoring Set Up Steps
 -----------------------
     - As of November 2023, there is a course available for testing in edX's staging environment at https://learning.stage.edx.org/course/course-v1:edx+PROC100+1T2023/home. You should be able to test using this course so long as you have access to both an instructor and learner account.
     - Otherwise, if you are developing on Open edX locally, then you should follow the instructions below
+   
     #. Find or create a test course that has proctoring enabled and an LTI proctoring provider chosen, where a verified track exists, and where the exams IDA waffle flag is enabled
         - The exams IDA waffle flag can be found/created in the LMS' Django Admin under "Waffle Flag Course Overrides"
         - If needed, you can make a new entry using "course_apps.exams_ida" as the waffle flag, the course ID, and by setting it to "Enabled"
@@ -62,8 +63,6 @@ Exam Flow Works With Proctoring Software Installed & Running
 #. Clicking "Yes end my proctored exam" should end the exam and directs you to a "You have submitted this proctored exam for review" page
 #. Clicking "Yes end my proctored exam" should also close your proctoring software automatically.
 #. In the course view, the exam you took should be marked as completed (with a green checkmark)
-#. We recommend that you repeat these steps several times using different users (which you may have to provision if developing locally)
-    - Alternatively, you can also create mock exam attempt data in your edx exams admin (If developing locally, this is located at http://localhost:18740/admin/core/examattempt/).
 
 Proctorio-Specific Tests
 ========================
@@ -84,7 +83,7 @@ NOTE: These instructions currently do not account for downstream effects involvi
 
 Dashboard UI Loads Exam Attempts
 --------------------------------
-INSTRUCTIONS: In an incognito window, log in to a staff or instructor account Go to the course view for the course you are testing (the one with all the checkboxes and collapsable course sections), then navigating to the "Instructor" tab to get to the Instructor Dashboard, then navigating to the "Special Exams" tab within the Instructor dashboard.
+INSTRUCTIONS: Create mock exam attempt data in your edx exams admin (If developing locally, this is located at http://localhost:18740/admin/core/examattempt/). In an incognito window, log in to a staff or instructor account Go to the course view for the course you are testing (the one with all the checkboxes and collapsable course sections), then navigating to the "Instructor" tab to get to the Instructor Dashboard, then navigating to the "Special Exams" tab within the Instructor dashboard.
 
 #. Clicking on the "Special Exams" tab should load the *new* version of the exams dashboard
     - The old version has two collapsable sections titled "Allowance Section" and "Student Special Exam Attempts"
