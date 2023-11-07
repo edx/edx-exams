@@ -91,13 +91,6 @@ Proctorio Received Review
 #. The Proctorio Gradebook should open in a new tab. Click on the latest entry in the Completed Attempts table, and make sure a recording of your webcam and desktop during your exam are present.
 #. This entry should also contain a column for suspicion level and alerts.
 
-Proctorio Marks Suspicious Activity
------------------------------------
-#. Go through steps 2-4 in the "Exam Flow With Proctorio Works as Expected" section.
-#. Start your exam, and do things that would be suspiscious to anyone watching a student taking an exam, e.g. block your webcam, leave the room for a few seconds, make strange noises, open a bunch of tabs, watch some youtube, open wikipedia, google the answer to life, etc.
-#. Proceed to fill out and complete your exam. Upon completion, return to the Proctorio Gradebook (see the "Proctorio Received Review" section).
-#. You should a row for your exam attempt, which ideally should have a suspicion level of that's at least greater than 10% (this may or may not be exact depending on how strict your Proctorio behavior settings are).
-
 Proctorio Error Handling Works as Expected
 ------------------------------------------
 #. Go through steps 2-4 in the "Exam Flow With Proctorio Works as Expected" section.
