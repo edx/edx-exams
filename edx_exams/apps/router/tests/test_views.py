@@ -101,7 +101,7 @@ class CourseExamsLegacyViewTest(ExamsAPITestCase):
                     'exam_name': 'test practice exam',
                     'exam_type': 'practice',
                     'backend': 'mockprock',
-                    'is_proctored': False,
+                    'is_proctored': True,
                     'is_practice_exam': True,
                 },
                 {
