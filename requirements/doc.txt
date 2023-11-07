@@ -34,11 +34,11 @@ bleach==6.1.0
     # via
     #   -r requirements/test.txt
     #   lti-consumer-xblock
-boto3==1.28.74
+boto3==1.28.79
     # via
     #   -r requirements/test.txt
     #   fs-s3fs
-botocore==1.31.74
+botocore==1.31.79
     # via
     #   -r requirements/test.txt
     #   boto3
@@ -54,7 +54,7 @@ cffi==1.16.0
     #   -r requirements/test.txt
     #   cryptography
     #   pynacl
-charset-normalizer==3.3.1
+charset-normalizer==3.3.2
     # via
     #   -r requirements/test.txt
     #   requests
@@ -109,7 +109,7 @@ distlib==0.3.7
     # via
     #   -r requirements/test.txt
     #   virtualenv
-django==3.2.22
+django==3.2.23
     # via
     #   -c requirements/common_constraints.txt
     #   -r requirements/test.txt
@@ -214,7 +214,7 @@ edx-ccx-keys==1.2.1
     #   lti-consumer-xblock
 edx-django-release-util==1.3.0
     # via -r requirements/test.txt
-edx-django-utils==5.7.0
+edx-django-utils==5.8.0
     # via
     #   -r requirements/test.txt
     #   django-config-models
@@ -223,7 +223,7 @@ edx-django-utils==5.7.0
     #   edx-event-bus-redis
     #   edx-rest-api-client
     #   edx-toggles
-edx-drf-extensions==8.12.0
+edx-drf-extensions==8.13.0
     # via -r requirements/test.txt
 edx-event-bus-kafka==5.5.0
     # via -r requirements/test.txt
@@ -256,7 +256,7 @@ exceptiongroup==1.1.3
     #   pytest
 factory-boy==3.3.0
     # via -r requirements/test.txt
-faker==19.12.0
+faker==19.13.0
     # via
     #   -r requirements/test.txt
     #   factory-boy
@@ -297,7 +297,7 @@ importlib-metadata==6.8.0
     #   keyring
     #   sphinx
     #   twine
-importlib-resources==6.1.0
+importlib-resources==6.1.1
     # via keyring
 inflection==0.5.1
     # via
@@ -342,8 +342,7 @@ lazy==1.6
     # via
     #   -r requirements/test.txt
     #   lti-consumer-xblock
-    #   xblock
-lti-consumer-xblock==9.7.0
+lti-consumer-xblock==9.8.0
     # via -r requirements/test.txt
 lxml==4.9.3
     # via
@@ -355,7 +354,6 @@ mako==1.2.4
     #   -r requirements/test.txt
     #   lti-consumer-xblock
     #   xblock
-    #   xblock-utils
 markdown-it-py==3.0.0
     # via rich
 markupsafe==2.1.3
@@ -396,8 +394,7 @@ openedx-django-pyfs==3.4.0
     # via
     #   -r requirements/test.txt
     #   lti-consumer-xblock
-    #   xblock
-openedx-events==9.0.0
+openedx-events==9.0.1
     # via
     #   -r requirements/test.txt
     #   edx-event-bus-kafka
@@ -565,7 +562,7 @@ requests-oauthlib==1.3.1
     #   social-auth-core
 requests-toolbelt==1.0.0
     # via twine
-responses==0.23.3
+responses==0.24.0
     # via -r requirements/test.txt
 restructuredtext-lint==1.4.0
     # via doc8
@@ -588,7 +585,6 @@ simplejson==3.19.2
     #   -r requirements/test.txt
     #   django-rest-swagger
     #   xblock
-    #   xblock-utils
 six==1.16.0
     # via
     #   -r requirements/test.txt
@@ -659,7 +655,7 @@ tomli==2.0.1
     #   pyproject-hooks
     #   pytest
     #   tox
-tomlkit==0.12.1
+tomlkit==0.12.2
     # via
     #   -r requirements/test.txt
     #   pylint
@@ -669,10 +665,6 @@ tox==3.28.0
     #   -r requirements/test.txt
 twine==4.0.2
     # via -r requirements/doc.in
-types-pyyaml==6.0.12.12
-    # via
-    #   -r requirements/test.txt
-    #   responses
 typing-extensions==4.8.0
     # via
     #   -r requirements/test.txt
@@ -706,7 +698,6 @@ web-fragments==2.1.0
     # via
     #   -r requirements/test.txt
     #   xblock
-    #   xblock-utils
 webencodings==0.5.1
     # via
     #   -r requirements/test.txt
@@ -715,13 +706,7 @@ webob==1.8.7
     # via
     #   -r requirements/test.txt
     #   xblock
-xblock[django]==1.8.1
-    # via
-    #   -r requirements/test.txt
-    #   lti-consumer-xblock
-    #   xblock
-    #   xblock-utils
-xblock-utils==4.0.0
+xblock==1.8.1
     # via
     #   -r requirements/test.txt
     #   lti-consumer-xblock
