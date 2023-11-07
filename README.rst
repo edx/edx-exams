@@ -59,6 +59,36 @@ Devstack Set Up
 
 You can use the make targets defined in the ``Makefile`` to interact with the running ``edx-exams`` Docker containers.
 
+LTI Configuration for Local Development
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In order to use edx-exams as the exams backend for your courses (and to get it to wor in general), you will also need to complete the following configuration steps:
+
+#. Add EXAMS_SERVICE_URL = 'http://host.docker.internal:18740/api/v1' to your cms and lms private.py environment.
+#. In your terminal, navigate to your 
+#. In your terminal, run the frontend-app-course-authoring MFE by navigating to the devstack folder and running large-u .
+#. Ensure that the exams IDA is enabled for your course. In your LMS' django admin's course waffle flag table (http://localhost:18000/admin/waffle_utils/waffleflagcourseoverridemodel/) add an entry:
+    #. Enter course_apps.exams_ida in the Waffle Flag field
+    #. Enter the course ID for the course ID field (e.g. something like course-v1:edX+COURSENAME+T2023
+    #. Override Choice should be Force On
+    #. Select the Enabled checkbox.
+#. At http://localhost:18740/admin/core/proctoringprovider/add/, add an entry for a proctoring provider:
+    #. Make the "name" something with no spaces, like "custom-proctor"
+    #. Set the "verbose name" to whatever you want, maybe something like "Custom Proctoring Service"
+    #. The LTI configuration id and Tech support phone & email are not relevant for local testing, so just set them all to "1”.
+#. From whatever root folder you keep your devstack folders in, navigate to edx-platform/cms/envs/
+    #. If you have not already, create a private.py file in this /envs/ directory
+    #. In this private.py file, add the line FEATURES['ENABLE_EXAM_SETTINGS_HTML_VIEW'] = True
+#. Again from whatever root folder you keep your devstack folders in, navigate to frontend-app-course-authoring/.env.development
+    #. Set the environment variable EXAMS_BASE_URL="http://localhost:18740"
+    #. You will need to reset the frontend-app-course-authoring MFE if it is running for this setting to work
+#. Setup the proctoring provider in your course in studio (settings dropdown > proctored exam settings)
+    #. Set proctored exams to enabled
+    #. Set the proctoring provider to the name you entered in step #3
+#. Create a new proctored exam: 13.3. Creating Proctored Exams — Building and Running an Open edX Course documentation 
+    #. The exam registration task that registers exams with the exams service requires that the subsection due date (i.e. exam due date) is set and/or the course end date is set. Be sure to do do this; otherwise, your exam will not be registered with the exams service.
+#. Publish the course
+#. Ensure your exam in successfully created in edx-exams at http://localhost:18740/admin/core/exam/
+
 Development Workflow
 ~~~~~~~~~~~~~~~~~~~~
 .. code-block::
