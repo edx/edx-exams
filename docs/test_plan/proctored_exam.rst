@@ -64,6 +64,7 @@ Exam Flow Works With Proctoring Software Installed & Running
 #. Clicking "Yes end my proctored exam" should also close your proctoring software automatically.
 #. In the course view, the exam you took should be marked as completed (with a green checkmark).
 
+
 Error Handling Works as Expected
 --------------------------------
 NOTE: If you are using Proctorio, then ignore this section and go to the "Proctorio Error Handling Works as Expected" section below.
@@ -90,6 +91,23 @@ Proctorio Received Review
 #. In an incognito window, log in to a staff or instructor account Go to the course view for the course you are testing (the one with all the checkboxes and collapsable course sections), then navigating to the "Instructor" tab to get to the Instructor Dashboard, then navigating to the "Special Exams" tab within the Instructor dashboard. You should see the exams dashboard, which has a tab labelled "Review Dashboard". Click the "Review Dashboard" tab and the click the button labelled "View resource in a new window".
 #. The Proctorio Gradebook should open in a new tab. Click on the latest entry in the Completed Attempts table, and make sure a recording of your webcam and desktop during your exam are present.
 #. This entry should also contain a column for suspicion level and alerts.
+
+Proctorio can update attempts without violations to "Verified"
+--------------------------------------------------------------
+#. Go through steps 2-4 in the "Exam Flow With Proctorio Works as Expected" section. Take the exam without doing anything suspicious like looking down at your phone or covering your webcam, then submit your exam.
+#. Naviagte to the exams dashboard, which you can do by logging into a staff or instructor account in an incognito window, going to the course view for the course you are testing (the one with all the checkboxes and collapsable course sections), then navigating to the "Instructor" tab to get to the Instructor Dashboard, then navigating to the "Special Exams" tab within the Instructor dashboard.
+#. An exam attempt with a status of "Verified" should appear and have a button/link at the end of their rows titled "Manual Review".
+    #. NOTE: This exam attempt may appear with the status "Satisfied" if you are using Proctorio. This means Proctorio's system is still analyzing your attempt. If this happens, just wait a bit and refresh the page until the status changes to "Verified".
+
+Proctorio can update attempts with violations to "Second Review Required"
+-------------------------------------------------------------------------
+#. Go through steps 2-4 in the "Exam Flow With Proctorio Works as Expected" section.
+#. Start your exam, and do things that would be suspiscious to anyone watching a student taking an exam, e.g. block your webcam, leave the room for a few seconds, make strange noises, open a bunch of tabs, watch some youtube, open wikipedia, google the answer to life, etc.
+#. Complete your exam. Upon completion, return to the Proctorio Gradebook (see the "Proctorio Received Review" section). You should a row for your exam attempt, which ideally should have a suspicion level of that's at least greater than 10% (this may or may not be exact depending on how strict your Proctorio behavior settings are).
+#. Naviagte to the exams dashboard as you did in step 2 of the Proctorio can update attempts without violations to "Verified" section.
+#. In the exams dashboard, should see a row that has a status of "Second Review Required" AND has a "Review Required" button for your attempt.
+    #. NOTE: This exam attempt may appear with the status "Satisfied" if you manually went through the exam using Proctorio. This means Proctorio's system is still analyzing your attempt. If this happens, just wait a bit and refresh the page until the status changes to "Verified".
+
 
 Proctorio Error Handling Works as Expected
 ------------------------------------------
@@ -121,13 +139,13 @@ SETUP INSTRUCTIONS: Create mock exam attempt data in your edx exams admin (If de
 #. Filtering by username only should show exam attempts for that username.
 #. Clicking the "Review Dashboard" link in the modal should load the review dashboard for your chosen Proctoring Software (e.g. Proctortrack or Proctorio).
 
-Can Reject/Verify "Review Required" attempts
---------------------------------------------
+Can Reject/Verify "Second Review Required" attempts
+---------------------------------------------------
 SETUP INSTRUCTIONS: Follow the instructions in the Proctorio Marks Suspicious Activity section, or as a faster alternative, you can change the create or modify exam attempts in edx-exams admin (If developing locally, this is located at http://localhost:18740/admin/core/examattempt/) to have a status of "second review required"
 
-#. In the exams dashboard, should see a row that has a status of "Review Required" AND has a "Review Required" button for your attempt.
+#. In the exams dashboard, should see a row that has a status of "Second Review Required" AND has a "Review Required" button for your attempt.
     #. NOTE: This exam attempt may appear with the status "Satisfied" if you manually went through the exam using Proctorio. This means Proctorio's system is still analyzing your attempt. If this happens, just wait a bit and refresh the page until the status changes to "Verified".
-#. Clicking the "Review Required" button should spawn a modal that says "Update review status".
+#. Clicking the "Second Review Required" button should spawn a modal that says "Update review status".
 #. Clicking "Cancel" should close the modal.
 #. Clicking "Verify" should mark attempt as verified the dashboard.
 #. Check the Gradebook (Instructor Dashboard -> Student Admin -> Gradebook) and check that the grade for the exam is 100.
