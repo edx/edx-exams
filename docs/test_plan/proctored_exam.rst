@@ -9,29 +9,29 @@ Helpful ReadTheDocs Pages
 
 Proctoring Set Up Steps
 -----------------------
-    - As of November 2023, there is a course available for testing in edX's staging environment at https://learning.stage.edx.org/course/course-v1:edx+PROC100+1T2023/home. You should be able to test using this course so long as you have access to both an instructor and learner account.
-    - Otherwise, if you are developing on Open edX locally, then you should follow the instructions below.
-   
-    #. Find or create a test course that has proctoring enabled and an LTI proctoring provider chosen, where a verified track exists, and where the exams IDA waffle flag is enabled.
-        - The exams IDA waffle flag can be found/created in the LMS' Django Admin under "Waffle Flag Course Overrides".
-        - If needed, you can make a new entry using "course_apps.exams_ida" as the waffle flag, the course ID, and by setting it to "Enabled".
-    #. Find or create two exam subsections with a type of 'Proctored exam' in your test course.
-        - This can be done by creating a subsection and clicking the 'Configure' button (should look like a gear), going to the "Advanced Tab", and selecting "Proctored".
-        - You MUST also set this subsection to be Graded as a Midterm or Final exam.
-        - This subsection should contain at least one unit with one gradeable block, e.g. a generic multiple choice question in order to test downstream effects to the gradebook.
+- As of November 2023, there is a course available for testing in edX's staging environment at https://learning.stage.edx.org/course/course-v1:edx+PROC100+1T2023/home. You should be able to test using this course so long as you have access to both an instructor and learner account.
+- Otherwise, if you are developing on Open edX locally, then you should follow the instructions below.
+
+#. Find or create a test course that has proctoring enabled and an LTI proctoring provider chosen, where a verified track exists, and where the exams IDA waffle flag is enabled.
+    - The exams IDA waffle flag can be found/created in the LMS' Django Admin under "Waffle Flag Course Overrides".
+    - If needed, you can make a new entry using "course_apps.exams_ida" as the waffle flag, the course ID, and by setting it to "Enabled".
+#. Find or create two exam subsections with a type of 'Proctored exam' in your test course.
+    - This can be done by creating a subsection and clicking the 'Configure' button (should look like a gear), going to the "Advanced Tab", and selecting "Proctored".
+    - You MUST also set this subsection to be Graded as a Midterm or Final exam.
+    - This subsection should contain at least one unit with one gradeable block, e.g. a generic multiple choice question in order to test downstream effects to the gradebook.
 
 User Set Up Steps
 -----------------
-    #. Use Google Chrome as your browser for these tests.
-    #. In your platform, log in with a non-staff learner account enrolled in the verified track for this course.
-        - The default credentials for local development are (Username=verified@example.com Password=edx).
-    #. As your non-staff user in your current window, and enroll in the course where you have set up your proctored exam.
-    #. In an incognito window, login into an account with staff or instructor level permissions.
-        - The default credentials for local development are (Username=edx@example.com Password=edx).
-    #. Visit your Support Tools page for managing enrollments. Enter the email for your non-staff user in the search bar. You should now see the option to change the enrollment track of that user. Change the enrollment track of the user to "verified" (choose any reason if prompted, it doesn't matter).
-        - Default local URL for changing enrollments is http://localhost:18000/support/enrollment.
-    #. In that same incognito window, while still signed into your staff or instructor level account, navigate to the exams dashboard.
-        - This can be found by going to the course view for the course you are testing (the one with all the checkboxes and collapsable course sections), then navigating to the "Instructor" tab to get to the Instructor Dashboard, then navigating to the "Special Exams" tab within the Instructor dashboard.
+#. Use Google Chrome as your browser for these tests.
+#. In your platform, log in with a non-staff learner account enrolled in the verified track for this course.
+    - The default credentials for local development are (Username=verified@example.com Password=edx).
+#. As your non-staff user in your current window, and enroll in the course where you have set up your proctored exam.
+#. In an incognito window, login into an account with staff or instructor level permissions.
+    - The default credentials for local development are (Username=edx@example.com Password=edx).
+#. Visit your Support Tools page for managing enrollments. Enter the email for your non-staff user in the search bar. You should now see the option to change the enrollment track of that user. Change the enrollment track of the user to "verified" (choose any reason if prompted, it doesn't matter).
+    - Default local URL for changing enrollments is http://localhost:18000/support/enrollment.
+#. In that same incognito window, while still signed into your staff or instructor level account, navigate to the exams dashboard.
+    - This can be found by going to the course view for the course you are testing (the one with all the checkboxes and collapsable course sections), then navigating to the "Instructor" tab to get to the Instructor Dashboard, then navigating to the "Special Exams" tab within the Instructor dashboard.
 
 Proctored Exam Flow
 ===================
