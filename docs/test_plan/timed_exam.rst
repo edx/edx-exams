@@ -10,6 +10,7 @@ Prerequisite steps:
     #. Find or create a test course with proctoring enabled and an LTI proctoring provider chosen
     #. Find or create a test course without an LTI proctoring provider chosen
     #. Find or create an exam section with a type of 'timed exam' in each course
+        #. This can be done by creating a subsection and clicking the 'Configure' button (should look like a gear), going to the "Advanced Tab", and selecting "Timed"
     #. Have a non-staff learner account enrolled in the verified track for both courses
 
 Timed Exam Access

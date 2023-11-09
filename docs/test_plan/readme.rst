@@ -15,3 +15,4 @@ Features
 --------
 `Exam Configuration <./exam_configuration.rst>`_
 `Timed Exams <./timed_exam.rst>`_
+`Proctored Exams <./proctored_exam.rst>`_
