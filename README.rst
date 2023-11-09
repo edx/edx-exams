@@ -61,14 +61,14 @@ You can use the make targets defined in the ``Makefile`` to interact with the ru
 
 LTI Configuration for Local Development
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-In order to use edx-exams as the exams backend for your courses (and to get it to wor in general), you will also need to complete the following configuration steps:
+In order to use edx-exams as the exams backend for your courses (and to get it to work in general), you will also need to complete the following configuration steps:
 
-#. Add EXAMS_SERVICE_URL = 'http://host.docker.internal:18740/api/v1' to your cms and lms private.py environment.
-#. In your terminal, navigate to your 
-#. In your terminal, run the frontend-app-course-authoring MFE by navigating to the devstack folder and running large-u .
+#. Add ``EXAMS_SERVICE_URL = 'http://host.docker.internal:18740/api/v1'`` to your cms and lms private.py environment settings file.
+#. Add ``EXAMS_BASE_URL='http://localhost:18740'`` to .env.development in frontend-app-learning.
+#. In your terminal, run the frontend-app-course-authoring MFE by navigating to the devstack folder and running ``make dev.up.large-and-slow``.
 #. Ensure that the exams IDA is enabled for your course. In your LMS' django admin's course waffle flag table (http://localhost:18000/admin/waffle_utils/waffleflagcourseoverridemodel/) add an entry:
-    #. Enter course_apps.exams_ida in the Waffle Flag field
-    #. Enter the course ID for the course ID field (e.g. something like course-v1:edX+COURSENAME+T2023
+    #. Enter ``course_apps.exams_ida`` in the Waffle Flag field
+    #. Enter the course ID for the course ID field (e.g. something like ``course-v1:edX+COURSENAME+T2023``)
     #. Override Choice should be Force On
     #. Select the Enabled checkbox.
 #. At http://localhost:18740/admin/core/proctoringprovider/add/, add an entry for a proctoring provider:
@@ -77,9 +77,9 @@ In order to use edx-exams as the exams backend for your courses (and to get it t
     #. The LTI configuration id and Tech support phone & email are not relevant for local testing, so just set them all to "1”.
 #. From whatever root folder you keep your devstack folders in, navigate to edx-platform/cms/envs/
     #. If you have not already, create a private.py file in this /envs/ directory
-    #. In this private.py file, add the line FEATURES['ENABLE_EXAM_SETTINGS_HTML_VIEW'] = True
+    #. In this private.py file, add the line ``FEATURES['ENABLE_EXAM_SETTINGS_HTML_VIEW'] = True``
 #. Again from whatever root folder you keep your devstack folders in, navigate to frontend-app-course-authoring/.env.development
-    #. Set the environment variable EXAMS_BASE_URL="http://localhost:18740"
+    #. Set the environment variable ``EXAMS_BASE_URL="http://localhost:18740"``
     #. You will need to reset the frontend-app-course-authoring MFE if it is running for this setting to work
 #. Setup the proctoring provider in your course in studio (settings dropdown > proctored exam settings)
     #. Set proctored exams to enabled
