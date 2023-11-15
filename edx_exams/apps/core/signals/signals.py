@@ -17,7 +17,7 @@ def _create_user_data(user):
     Helper function to create a UserData object.
     """
     user_data = UserData(
-        id=user.id,
+        id=user.lms_user_id,
         is_active=user.is_active,
         pii=UserPersonalData(
             username=user.username,

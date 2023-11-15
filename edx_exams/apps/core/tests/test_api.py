@@ -317,7 +317,7 @@ class TestUpdateAttemptStatus(ExamsAPITestCase):
             self.assertEqual(mock_event_send.call_count, 1)
 
             user_data = UserData(
-                id=self.user.id,
+                id=self.user.lms_user_id,
                 is_active=self.user.is_active,
                 pii=UserPersonalData(
                     username=self.user.username,
@@ -650,7 +650,7 @@ class TestResetExamAttempt(ExamsAPITestCase):
         reset_exam_attempt(self.exam_attempt, self.user)
 
         user_data = UserData(
-            id=self.student_user.id,
+            id=self.student_user.lms_user_id,
             is_active=self.student_user.is_active,
             pii=UserPersonalData(
                 username=self.student_user.username,
@@ -659,7 +659,7 @@ class TestResetExamAttempt(ExamsAPITestCase):
             )
         )
         requesting_user_data = UserData(
-            id=self.user.id,
+            id=self.user.lms_user_id,
             is_active=self.user.is_active,
             pii=UserPersonalData(
                 username=self.user.username,
