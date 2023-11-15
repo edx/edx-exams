@@ -13,9 +13,9 @@ DEFUALT_ATTEMPT_AMOUNT = 5
 
 def insert(manual_amount=None):
     exam = Exam.objects.get(
-        resource_id='2505b63c-1793-41e6-acf9-94007905cea9',
-        course_id='course-v1:edx+M3ISBEINGTESTED+WAHOO',
-        content_id='block-v1:edx+M3ISBEINGTESTED+WAHOO+type@sequential+block@37ba91669a0c415299b6c4f5165c8b3f',
+        resource_id='c661ca6c-ed08-42bd-bdc8-50c8c55ec6b1',
+        course_id='course-v1:edX+TEST101+2024',
+        content_id='block-v1:edX+TEST101+2024+type@sequential+block@0b1465cfce42435da197741b5a81600f',
     )
 
     print('EXAM:', exam)
@@ -33,7 +33,8 @@ def insert(manual_amount=None):
             user=user,
             exam=exam,
             attempt_number=1,
-            status=ExamAttemptStatus.second_review_required,
+            status=ExamAttemptStatus.error,
+            # status=ExamAttemptStatus.second_review_required,
             start_time=datetime.datetime.now() - datetime.timedelta(minutes=56),
             end_time=datetime.datetime.now(),
             allowed_time_limit_mins=60,
