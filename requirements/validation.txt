@@ -14,6 +14,7 @@ asgiref==3.7.2
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   django
+    #   django-cors-headers
 astroid==3.0.1
     # via
     #   -r requirements/quality.txt
@@ -36,18 +37,23 @@ bleach==6.1.0
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   lti-consumer-xblock
-boto3==1.28.79
+boto3==1.29.4
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   fs-s3fs
-botocore==1.31.79
+botocore==1.32.4
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   boto3
     #   s3transfer
-certifi==2023.7.22
+cachetools==5.3.2
+    # via
+    #   -r requirements/quality.txt
+    #   -r requirements/test.txt
+    #   tox
+certifi==2023.11.17
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -58,6 +64,11 @@ cffi==1.16.0
     #   -r requirements/test.txt
     #   cryptography
     #   pynacl
+chardet==5.2.0
+    # via
+    #   -r requirements/quality.txt
+    #   -r requirements/test.txt
+    #   tox
 charset-normalizer==3.3.2
     # via
     #   -r requirements/quality.txt
@@ -82,6 +93,11 @@ code-annotations==1.5.0
     #   -r requirements/test.txt
     #   edx-lint
     #   edx-toggles
+colorama==0.4.6
+    # via
+    #   -r requirements/quality.txt
+    #   -r requirements/test.txt
+    #   tox
 coreapi==2.3.3
     # via
     #   -r requirements/quality.txt
@@ -106,7 +122,7 @@ cryptography==41.0.5
     #   pyjwt
     #   secretstorage
     #   social-auth-core
-ddt==1.6.0
+ddt==1.7.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -157,7 +173,7 @@ django==3.2.23
     #   openedx-events
     #   openedx-filters
     #   social-auth-app-django
-django-appconf==1.0.5
+django-appconf==1.0.6
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -167,7 +183,7 @@ django-config-models==2.5.1
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   lti-consumer-xblock
-django-cors-headers==4.3.0
+django-cors-headers==4.3.1
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -185,7 +201,7 @@ django-extensions==3.2.3
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
-django-filter==23.3
+django-filter==23.4
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -265,7 +281,7 @@ edx-django-utils==5.8.0
     #   edx-event-bus-redis
     #   edx-rest-api-client
     #   edx-toggles
-edx-drf-extensions==8.13.0
+edx-drf-extensions==8.13.1
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -304,7 +320,7 @@ edx-token-utils==0.2.1
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
-exceptiongroup==1.1.3
+exceptiongroup==1.2.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -313,7 +329,7 @@ factory-boy==3.3.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
-faker==19.13.0
+faker==20.1.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -410,7 +426,7 @@ jsonfield==3.1.0
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   lti-consumer-xblock
-keyring==24.2.0
+keyring==24.3.0
     # via
     #   -r requirements/quality.txt
     #   twine
@@ -429,7 +445,7 @@ lxml==4.9.3
     #   -r requirements/test.txt
     #   lti-consumer-xblock
     #   xblock
-mako==1.2.4
+mako==1.3.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -467,7 +483,7 @@ mysqlclient==2.2.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
-newrelic==9.1.1
+newrelic==9.2.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -493,7 +509,7 @@ openedx-django-pyfs==3.4.0
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   lti-consumer-xblock
-openedx-events==9.0.1
+openedx-events==9.2.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -509,9 +525,10 @@ packaging==23.2
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   drf-yasg
+    #   pyproject-api
     #   pytest
     #   tox
-pbr==5.11.1
+pbr==6.0.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -525,6 +542,7 @@ platformdirs==3.11.0
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   pylint
+    #   tox
     #   virtualenv
 pluggy==1.3.0
     # via
@@ -537,11 +555,6 @@ psutil==5.9.6
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   edx-django-utils
-py==1.11.0
-    # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
-    #   tox
 pycodestyle==2.11.1
     # via -r requirements/quality.txt
 pycparser==2.21
@@ -557,7 +570,7 @@ pycryptodomex==3.19.0
     #   pyjwkest
 pydocstyle==6.3.0
     # via -r requirements/quality.txt
-pygments==2.16.1
+pygments==2.17.1
     # via
     #   -r requirements/quality.txt
     #   readme-renderer
@@ -616,6 +629,11 @@ pynacl==1.5.0
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   edx-django-utils
+pyproject-api==1.6.1
+    # via
+    #   -r requirements/quality.txt
+    #   -r requirements/test.txt
+    #   tox
 pytest==7.4.3
     # via
     #   -r requirements/quality.txt
@@ -626,7 +644,7 @@ pytest-cov==4.1.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
-pytest-django==4.6.0
+pytest-django==4.7.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -697,7 +715,7 @@ requests-toolbelt==1.0.0
     # via
     #   -r requirements/quality.txt
     #   twine
-responses==0.24.0
+responses==0.24.1
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -705,7 +723,7 @@ rfc3986==2.0.0
     # via
     #   -r requirements/quality.txt
     #   twine
-rich==13.6.0
+rich==13.7.0
     # via
     #   -r requirements/quality.txt
     #   twine
@@ -742,7 +760,6 @@ six==1.16.0
     #   fs-s3fs
     #   pyjwkest
     #   python-dateutil
-    #   tox
 slumber==0.7.1
     # via
     #   -r requirements/quality.txt
@@ -786,14 +803,15 @@ tomli==2.0.1
     #   -r requirements/test.txt
     #   coverage
     #   pylint
+    #   pyproject-api
     #   pytest
     #   tox
-tomlkit==0.12.2
+tomlkit==0.12.3
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   pylint
-tox==3.28.0
+tox==4.11.3
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
