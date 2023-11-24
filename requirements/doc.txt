@@ -31,15 +31,19 @@ attrs==23.1.0
     #   openedx-events
 babel==2.13.1
     # via sphinx
+backports-zoneinfo==0.2.1
+    # via
+    #   -r requirements/test.txt
+    #   django
 bleach==6.1.0
     # via
     #   -r requirements/test.txt
     #   lti-consumer-xblock
-boto3==1.29.4
+boto3==1.29.6
     # via
     #   -r requirements/test.txt
     #   fs-s3fs
-botocore==1.32.4
+botocore==1.32.6
     # via
     #   -r requirements/test.txt
     #   boto3
@@ -122,9 +126,9 @@ distlib==0.3.7
     # via
     #   -r requirements/test.txt
     #   virtualenv
-django==3.2.23
+django==4.2.7
     # via
-    #   -c requirements/common_constraints.txt
+    #   -c requirements/constraints.txt
     #   -r requirements/test.txt
     #   django-appconf
     #   django-config-models
@@ -456,7 +460,7 @@ pycryptodomex==3.19.0
     #   -r requirements/test.txt
     #   lti-consumer-xblock
     #   pyjwkest
-pygments==2.17.1
+pygments==2.17.2
     # via
     #   doc8
     #   readme-renderer
@@ -540,7 +544,6 @@ pytz==2023.3.post1
     # via
     #   -r requirements/test.txt
     #   babel
-    #   django
     #   djangorestframework
     #   drf-yasg
     #   xblock
@@ -700,7 +703,7 @@ urllib3==1.26.18
     #   requests
     #   responses
     #   twine
-virtualenv==20.24.6
+virtualenv==20.24.7
     # via
     #   -r requirements/test.txt
     #   tox
