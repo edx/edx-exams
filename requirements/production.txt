@@ -12,6 +12,7 @@ asgiref==3.7.2
     # via
     #   -r requirements/base.txt
     #   django
+    #   django-cors-headers
 async-timeout==4.0.3
     # via
     #   -r requirements/base.txt
@@ -29,17 +30,17 @@ bleach==6.1.0
     # via
     #   -r requirements/base.txt
     #   lti-consumer-xblock
-boto3==1.28.69
+boto3==1.29.6
     # via
     #   -r requirements/base.txt
     #   django-ses
     #   fs-s3fs
-botocore==1.31.69
+botocore==1.32.6
     # via
     #   -r requirements/base.txt
     #   boto3
     #   s3transfer
-certifi==2023.7.22
+certifi==2023.11.17
     # via
     #   -r requirements/base.txt
     #   requests
@@ -48,7 +49,7 @@ cffi==1.16.0
     #   -r requirements/base.txt
     #   cryptography
     #   pynacl
-charset-normalizer==3.3.1
+charset-normalizer==3.3.2
     # via
     #   -r requirements/base.txt
     #   requests
@@ -80,7 +81,7 @@ defusedxml==0.8.0rc2
     #   -r requirements/base.txt
     #   python3-openid
     #   social-auth-core
-django==4.2.6
+django==4.2.7
     # via
     #   -r requirements/base.txt
     #   django-appconf
@@ -111,7 +112,7 @@ django==4.2.6
     #   openedx-events
     #   openedx-filters
     #   social-auth-app-django
-django-appconf==1.0.5
+django-appconf==1.0.6
     # via
     #   -r requirements/base.txt
     #   django-statici18n
@@ -119,7 +120,7 @@ django-config-models==2.5.1
     # via
     #   -r requirements/base.txt
     #   lti-consumer-xblock
-django-cors-headers==4.3.0
+django-cors-headers==4.3.1
     # via -r requirements/base.txt
 django-crum==0.7.9
     # via
@@ -128,7 +129,7 @@ django-crum==0.7.9
     #   edx-toggles
 django-extensions==3.2.3
     # via -r requirements/base.txt
-django-filter==23.3
+django-filter==23.4
     # via
     #   -r requirements/base.txt
     #   lti-consumer-xblock
@@ -186,7 +187,7 @@ edx-django-utils==5.8.0
     #   edx-event-bus-redis
     #   edx-rest-api-client
     #   edx-toggles
-edx-drf-extensions==8.13.0
+edx-drf-extensions==8.13.1
     # via -r requirements/base.txt
 edx-event-bus-kafka==5.5.0
     # via -r requirements/base.txt
@@ -270,7 +271,7 @@ lxml==4.9.3
     #   -r requirements/base.txt
     #   lti-consumer-xblock
     #   xblock
-mako==1.2.4
+mako==1.3.0
     # via
     #   -r requirements/base.txt
     #   lti-consumer-xblock
@@ -285,7 +286,7 @@ mysqlclient==2.2.0
     # via
     #   -r requirements/base.txt
     #   -r requirements/production.in
-newrelic==9.1.1
+newrelic==9.2.0
     # via
     #   -r requirements/base.txt
     #   edx-django-utils
@@ -303,7 +304,7 @@ openedx-django-pyfs==3.4.0
     # via
     #   -r requirements/base.txt
     #   lti-consumer-xblock
-openedx-events==9.0.1
+openedx-events==9.2.0
     # via
     #   -r requirements/base.txt
     #   edx-event-bus-kafka
@@ -317,7 +318,7 @@ packaging==23.2
     #   -r requirements/base.txt
     #   drf-yasg
     #   gunicorn
-pbr==5.11.1
+pbr==6.0.0
     # via
     #   -r requirements/base.txt
     #   stevedore
@@ -376,6 +377,7 @@ python3-openid==3.2.0
 pytz==2023.3.post1
     # via
     #   -r requirements/base.txt
+    #   django-ses
     #   djangorestframework
     #   drf-yasg
     #   xblock
