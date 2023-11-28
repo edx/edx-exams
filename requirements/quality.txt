@@ -31,11 +31,11 @@ bleach==6.1.0
     # via
     #   -r requirements/test.txt
     #   lti-consumer-xblock
-boto3==1.29.4
+boto3==1.33.1
     # via
     #   -r requirements/test.txt
     #   fs-s3fs
-botocore==1.32.4
+botocore==1.33.1
     # via
     #   -r requirements/test.txt
     #   boto3
@@ -95,7 +95,7 @@ coverage[toml]==7.3.2
     #   -r requirements/test.txt
     #   coverage
     #   pytest-cov
-cryptography==41.0.5
+cryptography==41.0.7
     # via
     #   -r requirements/test.txt
     #   pyjwt
@@ -215,7 +215,7 @@ edx-ccx-keys==1.2.1
     #   lti-consumer-xblock
 edx-django-release-util==1.3.0
     # via -r requirements/test.txt
-edx-django-utils==5.8.0
+edx-django-utils==5.9.0
     # via
     #   -r requirements/test.txt
     #   django-config-models
@@ -224,7 +224,7 @@ edx-django-utils==5.8.0
     #   edx-event-bus-redis
     #   edx-rest-api-client
     #   edx-toggles
-edx-drf-extensions==8.13.1
+edx-drf-extensions==9.0.0
     # via -r requirements/test.txt
 edx-event-bus-kafka==5.5.0
     # via -r requirements/test.txt
@@ -286,7 +286,7 @@ future==0.18.3
     # via
     #   -r requirements/test.txt
     #   pyjwkest
-idna==3.4
+idna==3.6
     # via
     #   -r requirements/test.txt
     #   requests
@@ -442,7 +442,7 @@ pycryptodomex==3.19.0
     #   pyjwkest
 pydocstyle==6.3.0
     # via -r requirements/quality.in
-pygments==2.17.1
+pygments==2.17.2
     # via
     #   readme-renderer
     #   rich
@@ -564,7 +564,7 @@ rfc3986==2.0.0
     # via twine
 rich==13.7.0
     # via twine
-s3transfer==0.7.0
+s3transfer==0.8.0
     # via
     #   -r requirements/test.txt
     #   boto3
@@ -632,7 +632,7 @@ tomlkit==0.12.3
     # via
     #   -r requirements/test.txt
     #   pylint
-tox==4.11.3
+tox==4.11.4
     # via -r requirements/test.txt
 twine==4.0.2
     # via -r requirements/quality.in
@@ -657,7 +657,7 @@ urllib3==1.26.18
     #   requests
     #   responses
     #   twine
-virtualenv==20.24.6
+virtualenv==20.24.7
     # via
     #   -r requirements/test.txt
     #   tox
