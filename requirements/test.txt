@@ -30,11 +30,11 @@ bleach==6.1.0
     # via
     #   -r requirements/base.txt
     #   lti-consumer-xblock
-boto3==1.29.4
+boto3==1.33.1
     # via
     #   -r requirements/base.txt
     #   fs-s3fs
-botocore==1.32.4
+botocore==1.33.1
     # via
     #   -r requirements/base.txt
     #   boto3
@@ -86,7 +86,7 @@ coverage[toml]==7.3.2
     # via
     #   -r requirements/test.in
     #   pytest-cov
-cryptography==41.0.5
+cryptography==41.0.7
     # via
     #   -r requirements/base.txt
     #   pyjwt
@@ -198,7 +198,7 @@ edx-ccx-keys==1.2.1
     #   lti-consumer-xblock
 edx-django-release-util==1.3.0
     # via -r requirements/base.txt
-edx-django-utils==5.8.0
+edx-django-utils==5.9.0
     # via
     #   -r requirements/base.txt
     #   django-config-models
@@ -207,7 +207,7 @@ edx-django-utils==5.8.0
     #   edx-event-bus-redis
     #   edx-rest-api-client
     #   edx-toggles
-edx-drf-extensions==8.13.1
+edx-drf-extensions==9.0.0
     # via -r requirements/base.txt
 edx-event-bus-kafka==5.5.0
     # via -r requirements/base.txt
@@ -262,7 +262,7 @@ future==0.18.3
     # via
     #   -r requirements/base.txt
     #   pyjwkest
-idna==3.4
+idna==3.6
     # via
     #   -r requirements/base.txt
     #   requests
@@ -480,7 +480,7 @@ requests-oauthlib==1.3.1
     #   social-auth-core
 responses==0.24.1
     # via -r requirements/test.in
-s3transfer==0.7.0
+s3transfer==0.8.0
     # via
     #   -r requirements/base.txt
     #   boto3
@@ -541,7 +541,7 @@ tomli==2.0.1
     #   tox
 tomlkit==0.12.3
     # via pylint
-tox==4.11.3
+tox==4.11.4
     # via -r requirements/test.in
 typing-extensions==4.8.0
     # via
@@ -562,7 +562,7 @@ urllib3==1.26.18
     #   botocore
     #   requests
     #   responses
-virtualenv==20.24.6
+virtualenv==20.24.7
     # via tox
 walrus==0.9.3
     # via
