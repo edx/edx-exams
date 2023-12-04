@@ -665,3 +665,57 @@ class LtiInstructorLaunchTest(ExamsAPITestCase):
         response = self.client.get(self._get_launch_url(self.exam.id), **headers)
 
         self.assertEqual(response.status_code, 403)
+
+
+class ExamRosterTestCase(ExamsAPITestCase):
+    """
+    Test exam_roster()
+    """
+    def setUp(self):
+        super().setUp()
+        self.course_id = 'course-v1:edx+test+f19'
+        self.exam = ExamFactory(course_id=self.course_id)
+
+    def _get_response(self, exam_id):
+        """
+        GET roster endpoint
+        """
+        return self.client.get(reverse('lti:exam_roster', kwargs={'exam_id': exam_id}))
+
+    def test_course_staff_access(self):
+        """
+        Test the endpoint requires course staff access.
+        """
+        non_staff_user = UserFactory(password='test')
+        self.client.login(username=non_staff_user.username, password='test')
+        response = self._get_response(self.exam.id)
+        self.assertEqual(response.status_code, 403)
+
+        course_staff_user = UserFactory(password='test')
+        CourseStaffRole.objects.create(user=course_staff_user, course_id=self.course_id)
+        self.client.login(username=course_staff_user.username, password='test')
+        response = self._get_response(self.exam.id)
+        self.assertEqual(response.status_code, 200)
+
+    def test_get_roster(self):
+        """
+        Test endpoint returns the expected usernames.
+        """
+        # by convention we'd normally mock get_attempts but we need to test
+        # database behavior for select_related()
+        user1 = UserFactory(username='user1')
+        user2 = UserFactory(username='user2')
+        user3 = UserFactory(username='user3')
+        ExamAttemptFactory(exam=self.exam, user=user1)
+        ExamAttemptFactory(exam=self.exam, user=user2)
+        ExamAttemptFactory(exam=self.exam, user=user3)
+
+        with self.assertNumQueries(4):
+            response = self._get_response(self.exam.id)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), [
+            [str(user1.anonymous_user_id), 'user1'],
+            [str(user2.anonymous_user_id), 'user2'],
+            [str(user3.anonymous_user_id), 'user3'],
+        ])

@@ -378,19 +378,18 @@ def launch_instructor_tool(request, exam_id):
 
 
 @csrf_exempt
+@api_view(['GET'])
 @require_http_methods(['GET'])
 def exam_roster(request, exam_id):
-    # pragma: no cover
     """
-    Temporary endpoint to prove we can authenticate this request properly
+    Returns a list of users who have an attempt for the exam.
     """
     user = request.user
     exam = get_exam_by_id(exam_id)
     if not user.is_staff and not user.has_course_staff_permission(exam.course_id):
         return Response(status=status.HTTP_403_FORBIDDEN)
 
-    attempts = get_exam_attempts(exam_id)
-    attempts.select_related('user')
+    attempts = get_exam_attempts(exam_id).select_related('user')
 
     users = set(attempt.user for attempt in attempts)
     roster = [
