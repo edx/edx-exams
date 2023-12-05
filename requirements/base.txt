@@ -20,9 +20,9 @@ backports-zoneinfo==0.2.1
     # via django
 bleach==6.1.0
     # via lti-consumer-xblock
-boto3==1.33.1
+boto3==1.33.7
     # via fs-s3fs
-botocore==1.33.1
+botocore==1.33.7
     # via
     #   boto3
     #   s3transfer
@@ -97,7 +97,7 @@ django-crum==0.7.9
     #   edx-toggles
 django-extensions==3.2.3
     # via -r requirements/base.in
-django-filter==23.4
+django-filter==23.5
     # via lti-consumer-xblock
 django-model-utils==4.3.1
     # via -r requirements/base.in
@@ -193,7 +193,7 @@ jsonfield==3.1.0
     # via lti-consumer-xblock
 lazy==1.6
     # via lti-consumer-xblock
-lti-consumer-xblock==9.8.0
+lti-consumer-xblock==9.8.1
     # via -r requirements/base.in
 lxml==4.9.3
     # via
@@ -291,7 +291,7 @@ requests==2.31.0
     #   social-auth-core
 requests-oauthlib==1.3.1
     # via social-auth-core
-s3transfer==0.8.0
+s3transfer==0.8.2
     # via boto3
 semantic-version==2.10.0
     # via edx-drf-extensions
@@ -313,7 +313,7 @@ slumber==0.7.1
     # via edx-rest-api-client
 social-auth-app-django==5.4.0
     # via edx-auth-backends
-social-auth-core==4.5.0
+social-auth-core==4.5.1
     # via
     #   edx-auth-backends
     #   social-auth-app-django

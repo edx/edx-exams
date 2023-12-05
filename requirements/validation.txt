@@ -42,12 +42,12 @@ bleach==6.1.0
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   lti-consumer-xblock
-boto3==1.33.1
+boto3==1.33.7
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   fs-s3fs
-botocore==1.33.1
+botocore==1.33.7
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -125,6 +125,7 @@ cryptography==41.0.7
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   pyjwt
+    #   secretstorage
     #   social-auth-core
 ddt==1.7.0
     # via
@@ -205,7 +206,7 @@ django-extensions==3.2.3
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
-django-filter==23.4
+django-filter==23.5
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -349,7 +350,7 @@ filelock==3.13.1
     #   -r requirements/test.txt
     #   tox
     #   virtualenv
-freezegun==1.2.2
+freezegun==1.3.1
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -375,7 +376,7 @@ idna==3.6
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   requests
-importlib-metadata==6.8.0
+importlib-metadata==7.0.0
     # via
     #   -r requirements/quality.txt
     #   keyring
@@ -408,6 +409,11 @@ jaraco-classes==3.3.0
     # via
     #   -r requirements/quality.txt
     #   keyring
+jeepney==0.8.0
+    # via
+    #   -r requirements/quality.txt
+    #   keyring
+    #   secretstorage
 jinja2==3.1.2
     # via
     #   -r requirements/quality.txt
@@ -434,7 +440,7 @@ lazy==1.6
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   lti-consumer-xblock
-lti-consumer-xblock==9.8.0
+lti-consumer-xblock==9.8.1
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -536,7 +542,7 @@ pkginfo==1.9.6
     # via
     #   -r requirements/quality.txt
     #   twine
-platformdirs==3.11.0
+platformdirs==4.1.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -725,11 +731,15 @@ rich==13.7.0
     # via
     #   -r requirements/quality.txt
     #   twine
-s3transfer==0.8.0
+s3transfer==0.8.2
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   boto3
+secretstorage==3.3.3
+    # via
+    #   -r requirements/quality.txt
+    #   keyring
 semantic-version==2.10.0
     # via
     #   -r requirements/quality.txt
@@ -768,7 +778,7 @@ social-auth-app-django==5.4.0
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   edx-auth-backends
-social-auth-core==4.5.0
+social-auth-core==4.5.1
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -835,7 +845,7 @@ urllib3==1.26.18
     #   requests
     #   responses
     #   twine
-virtualenv==20.24.7
+virtualenv==20.25.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
