@@ -325,6 +325,8 @@ class CourseExamConfiguration(TimeStampedModel):
 
     allow_opt_out = models.BooleanField(default=False)
 
+    escalation_email = models.EmailField(null=True, blank=False)
+
     class Meta:
         """ Meta class for this Django model """
         db_table = 'exams_courseexamconfiguration'
@@ -343,7 +345,7 @@ class CourseExamConfiguration(TimeStampedModel):
 
     @classmethod
     @transaction.atomic
-    def create_or_update(cls, provider, course_id):
+    def create_or_update(cls, course_id, provider, escalation_email):
         """
         Helper method that decides whether to update existing or create new config.
 
@@ -351,40 +353,72 @@ class CourseExamConfiguration(TimeStampedModel):
         existing exams.
         """
         provider_name = provider.name if provider else None
+
+        # If the provider is set to None, then we must clear the escalation_email, regardless of the value provided.
+        if provider is None:
+            escalation_email = None
+
         existing_config = CourseExamConfiguration.get_configuration_for_course(course_id)
         if existing_config:
-            if existing_config.provider == provider:
-                # nothing to be done
-                log.info(f'Course exam configuration course_id={course_id} already has provider={provider_name}')
-                return
-            count = cls.update_course_config_provider(existing_config, provider)
-            log.info(f'Updated course exam configuration course_id={course_id} '
-                     + f'to provider={provider_name} and recreated {count} exams')
+            existing_provider = existing_config.provider
+
+            cls.update_course_config(existing_config, provider, escalation_email)
+
+            # If the provider is updated for a course, all existing exams have to be retired
+            # and duplicates made with the new provider.
+            if provider != existing_provider:
+                count = cls._sync_exams_with_new_provider(existing_config.course_id, provider)
+                log.info(f'Updated course exam configuration course_id={course_id} '
+                         + f'to provider={provider_name} and recreated {count} exams')
         else:
-            CourseExamConfiguration.objects.create(course_id=course_id, provider=provider)
-            log.info(f'Created course exam configuration course_id={course_id}, provider={provider_name}')
+            CourseExamConfiguration.objects.create(
+                course_id=course_id,
+                escalation_email=escalation_email,
+                provider=provider,
+            )
+            log.info(f'Created course exam configuration course_id={course_id}, provider={provider_name}, '
+                     + f'escalation_email={escalation_email}')
 
     @classmethod
-    def update_course_config_provider(cls, existing_config, new_provider):
+    def update_course_config(cls, existing_config, new_provider, escalation_email):
         """
-        If the provider is updated for a course, all existing exams have to be retired
-        and duplicates made with the new provider.
+        Update the provider and escalation_email fields of an instance of a CourseExamConfiguration model represented
+        by the existing_config parameter.
+
+        Parameters:
+        * existing_config: an instance of the CourseExamConfiguration model
+        * new_provider: an instance of the ProctoringProvider model; the provider to be set
+        * escalation_email: a string representing an email address; the escalation_email to be set
         """
-        with transaction.atomic():
-            exams = Exam.objects.filter(course_id=existing_config.course_id, is_active=True)
+        existing_config.provider = new_provider
+        existing_config.escalation_email = escalation_email
 
-            existing_config.provider = new_provider
-            existing_config.save()
+        existing_config.save()
 
-            # we could bulk update, but that would avoid any django save/update hooks
-            # that might be added to these objects later and the number of exams per course
-            # will not be high enough to worry about
-            for exam in exams:
-                # set the original inactive
-                exam.is_active = False
-                exam.save()
-                # use the original to stamp out an active duplicate with the new provider
-                exam.pk = None
-                exam.is_active = True
-                exam.provider = new_provider
-                exam.save()
+    @classmethod
+    def _sync_exams_with_new_provider(cls, course_id, new_provider):
+        """
+        For a particular course represented by the course_id argument, duplicate all the exams in the course with the
+        new proctoring provider. Set the originale exams to inactive and create new active exams with the new
+        proctoring provider and with all other fields of the original exams.
+
+        Parameters:
+        * course_id: a string representing the course ID
+        * provider: an instance of the ProctoringProvider model
+        """
+        exams = Exam.objects.filter(course_id=course_id, is_active=True)
+
+        # we could bulk update, but that would avoid any django save/update hooks
+        # that might be added to these objects later and the number of exams per course
+        # will not be high enough to worry about
+        for exam in exams:
+            # set the original inactive
+            exam.is_active = False
+            exam.save()
+            # use the original to stamp out an active duplicate with the new provider
+            exam.pk = None
+            exam.is_active = True
+            exam.provider = new_provider
+            exam.save()
+
+        return len(exams)

@@ -17,7 +17,7 @@ from edx_exams.apps.core.exceptions import (
     ExamDoesNotExist,
     ExamIllegalStatusTransition
 )
-from edx_exams.apps.core.models import Exam, ExamAttempt
+from edx_exams.apps.core.models import CourseExamConfiguration, Exam, ExamAttempt, ProctoringProvider
 from edx_exams.apps.core.signals.signals import (
     emit_exam_attempt_errored_event,
     emit_exam_attempt_rejected_event,
@@ -141,7 +141,8 @@ def update_attempt_status(attempt_id, to_status):
     attempt_obj.status = to_status
     attempt_obj.save()
 
-    send_attempt_status_email(attempt_obj)
+    escalation_email = get_escalation_email(exam_id)
+    send_attempt_status_email(attempt_obj, escalation_email)
 
     return attempt_id
 
@@ -422,3 +423,47 @@ def is_exam_passed_due(exam):
         due_date = dateparse.parse_datetime(due_date)
         return due_date <= datetime.now(pytz.UTC)
     return False
+
+
+def get_escalation_email(exam_id):
+    """
+    Return contact details for the course exam configuration. These details describe who learners should reach out to
+    for support with proctored exams.
+
+    Parameters:
+        * exam_id: the ID representing the exam
+
+    Returns:
+        * escalation_email: the escalation_email registered to the course in which the exam is configured, if there is
+                            one; else, None.
+    """
+    exam_obj = Exam.get_exam_by_id(exam_id)
+
+    try:
+        course_config = CourseExamConfiguration.objects.get(course_id=exam_obj.course_id)
+    except CourseExamConfiguration.DoesNotExist:
+        return None
+    else:
+        return course_config.escalation_email
+
+
+def create_or_update_course_exam_configuration(course_id, provider_name, escalation_email):
+    """
+    Create or update the exam configuration for a course specified by course_id. If the course exam configuration
+    does not yet exist, create one with the provider set to the provider associated with the provider_name and the
+    escalation_email set to the escalation_email.
+
+    Parameters:
+        * course_id: the ID representing the course
+        * provider_name: the name of the proctoring provider
+        * escalation_email: the escalation email
+    """
+    if provider_name is not None:
+        provider = ProctoringProvider.objects.get(name=provider_name)
+    else:
+        # If the provider is set to None, then we must clear the escalation_email,
+        # even if a non-null value is provided.
+        escalation_email = None
+        provider = None
+
+    CourseExamConfiguration.create_or_update(course_id, provider, escalation_email)

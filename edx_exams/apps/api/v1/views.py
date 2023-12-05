@@ -17,6 +17,8 @@ from token_utils.api import sign_token_for
 
 from edx_exams.apps.api.permissions import CourseStaffOrReadOnlyPermissions, CourseStaffUserPermissions
 from edx_exams.apps.api.serializers import (
+    CourseExamConfigurationReadSerializer,
+    CourseExamConfigurationWriteSerializer,
     ExamSerializer,
     InstructorViewAttemptSerializer,
     ProctoringProviderSerializer,
@@ -26,6 +28,7 @@ from edx_exams.apps.api.v1 import ExamsAPIView
 from edx_exams.apps.core.api import (
     check_if_exam_timed_out,
     create_exam_attempt,
+    create_or_update_course_exam_configuration,
     get_active_attempt_for_user,
     get_attempt_by_id,
     get_course_exams,
@@ -227,15 +230,19 @@ class CourseExamConfigurationsView(ExamsAPIView):
     **Returns**
     {
         'provider': 'test_provider',
+        'escalation_email': 'test@example.com',
     }
 
     HTTP PATCH
     Creates or updates a CourseExamConfiguration.
     Expected PATCH data: {
         'provider': 'test_provider',
+        'escalation_email': 'test@example.com',
     }
     **PATCH data Parameters**
-        * name: This is the name of the proctoring provider.
+        * provider: This is the name of the selected proctoring provider for the course.
+        * escalation_email: This is the email to which learners should send emails to escalate problems for the course.
+
     **Exceptions**
         * HTTP_400_BAD_REQUEST
     """
@@ -246,46 +253,32 @@ class CourseExamConfigurationsView(ExamsAPIView):
     def get(self, request, course_id):
         """
         Get exam configuration for a course
-
-        TODO: This view should use a serializer to ensure the read/write bodies are the same
-        once more fields are added.
         """
         try:
-            provider = CourseExamConfiguration.objects.get(course_id=course_id).provider
-        except ObjectDoesNotExist:
-            provider = None
+            configuration = CourseExamConfiguration.objects.get(course_id=course_id)
+        except CourseExamConfiguration.DoesNotExist:
+            # If configuration is set to None, then the provider is serialized to the empty string instead of None.
+            configuration = {}
 
-        return Response({
-            'provider': provider.name if provider else None
-        })
+        serializer = CourseExamConfigurationReadSerializer(configuration)
+        return Response(serializer.data)
 
     def patch(self, request, course_id):
         """
         Create/update course exam configuration.
         """
-        error = None
+        serializer = CourseExamConfigurationWriteSerializer(data=request.data)
 
-        # check that proctoring provider is in request
-        if 'provider' not in request.data:
-            error = {'detail': 'No proctoring provider name in request.'}
-        elif request.data.get('provider') is None:
-            provider = None
+        if serializer.is_valid():
+            validated_data = serializer.validated_data
+            create_or_update_course_exam_configuration(
+                course_id,
+                validated_data['provider'],
+                validated_data['escalation_email'],
+            )
+            return Response({}, status=status.HTTP_204_NO_CONTENT)
         else:
-            try:
-                provider = ProctoringProvider.objects.get(name=request.data['provider'])
-            # return 400 if proctoring provider does not exist
-            except ObjectDoesNotExist:
-                error = {'detail': 'Proctoring provider does not exist.'}
-
-        if not error:
-            CourseExamConfiguration.create_or_update(provider, course_id)
-            response_status = status.HTTP_204_NO_CONTENT
-            data = {}
-        else:
-            response_status = status.HTTP_400_BAD_REQUEST
-            data = error
-
-        return Response(status=response_status, data=data)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ProctoringProvidersView(ListAPIView):
