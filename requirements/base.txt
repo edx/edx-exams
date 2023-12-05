@@ -16,6 +16,8 @@ attrs==23.1.0
     # via
     #   lti-consumer-xblock
     #   openedx-events
+backports-zoneinfo==0.2.1
+    # via django
 bleach==6.1.0
     # via lti-consumer-xblock
 boto3==1.33.1
@@ -52,9 +54,9 @@ defusedxml==0.8.0rc2
     # via
     #   python3-openid
     #   social-auth-core
-django==3.2.23
+django==4.2.8
     # via
-    #   -c requirements/common_constraints.txt
+    #   -c requirements/constraints.txt
     #   -r requirements/base.in
     #   django-appconf
     #   django-config-models
@@ -267,7 +269,6 @@ python3-openid==3.2.0
 pytz==2023.3.post1
     # via
     #   -r requirements/base.in
-    #   django
     #   djangorestframework
     #   drf-yasg
     #   xblock

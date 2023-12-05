@@ -22,7 +22,6 @@ packaging==23.2
     #   tox
 platformdirs==3.11.0
     # via
-    #   -c requirements/common_constraints.txt
     #   tox
     #   virtualenv
 pluggy==1.3.0

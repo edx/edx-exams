@@ -26,6 +26,10 @@ attrs==23.1.0
     #   -r requirements/base.txt
     #   lti-consumer-xblock
     #   openedx-events
+backports-zoneinfo==0.2.1
+    # via
+    #   -r requirements/base.txt
+    #   django
 bleach==6.1.0
     # via
     #   -r requirements/base.txt
@@ -103,7 +107,7 @@ dill==0.3.7
 distlib==0.3.7
     # via virtualenv
     # via
-    #   -c requirements/common_constraints.txt
+    #   -c requirements/constraints.txt
     #   -r requirements/base.txt
     #   django-appconf
     #   django-config-models
@@ -360,7 +364,6 @@ pbr==6.0.0
     #   stevedore
 platformdirs==3.11.0
     # via
-    #   -c requirements/common_constraints.txt
     #   pylint
     #   tox
     #   virtualenv
@@ -447,7 +450,6 @@ python3-openid==3.2.0
 pytz==2023.3.post1
     # via
     #   -r requirements/base.txt
-    #   django
     #   djangorestframework
     #   drf-yasg
     #   xblock
