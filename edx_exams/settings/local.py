@@ -121,6 +121,7 @@ ROOT_URL = 'http://localhost:18740'
 LTI_API_BASE = 'http://localhost:18740'
 LMS_ROOT_URL = 'http://localhost:18000'
 LEARNING_MICROFRONTEND_URL = 'http://localhost:2000'
+LTI_CUSTOM_URL_CLAIM = 'http://localhost:2000'
 EXAMS_DASHBOARD_MFE_URL = 'http://localhost:2020'
 
 CORS_ORIGIN_WHITELIST = (

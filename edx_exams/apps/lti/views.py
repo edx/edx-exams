@@ -263,6 +263,10 @@ def start_proctoring(request, attempt_id):
         context_label=exam.content_id,
     )
 
+    # temporary addition for testing with Proctorio in stage
+    if settings.LTI_CUSTOM_URL_CLAIM:  # pragma: no cover
+        launch_data.custom_parameters['custom_url'] = settings.LTI_CUSTOM_URL_CLAIM
+
     return redirect(get_lti_1p3_launch_start_url(launch_data))
 
 
