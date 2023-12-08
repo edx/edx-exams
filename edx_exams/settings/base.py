@@ -280,6 +280,8 @@ LEARNING_MICROFRONTEND_URL = None
 
 EXAMS_DASHBOARD_MFE_URL = None
 
+LTI_CUSTOM_URL_CLAIM = None
+
 # Event Bus Settings
 EXAM_ATTEMPT_EVENTS_KAFKA_TOPIC_NAME = 'learning-exam-attempt-lifecycle'
 

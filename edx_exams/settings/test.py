@@ -26,6 +26,7 @@ ROOT_URL = 'http://test.exams:18740'
 LTI_API_BASE = 'http://test.exams:18740'
 LMS_ROOT_URL = 'http://test.lms:18000'
 LEARNING_MICROFRONTEND_URL = 'http://test.learning:2000'
+LTI_CUSTOM_URL_CLAIM = 'https://test.learning:2000/exam'
 
 TOKEN_SIGNING.update({
     'JWT_PRIVATE_SIGNING_JWK': '''{
