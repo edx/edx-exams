@@ -17,10 +17,12 @@ from edx_exams.apps.api.test_utils import ExamsAPITestCase
 from edx_exams.apps.core.api import (
     check_if_exam_timed_out,
     create_exam_attempt,
+    create_or_update_course_exam_configuration,
     get_active_attempt_for_user,
     get_attempt_by_id,
     get_attempt_for_user_with_attempt_number_and_resource_id,
     get_current_exam_attempt,
+    get_escalation_email,
     get_exam_attempt_time_remaining,
     get_exam_by_content_id,
     get_exam_url_path,
@@ -36,7 +38,13 @@ from edx_exams.apps.core.exceptions import (
 )
 from edx_exams.apps.core.models import Exam, ExamAttempt
 from edx_exams.apps.core.statuses import ExamAttemptStatus
-from edx_exams.apps.core.test_utils.factories import ExamAttemptFactory, ExamFactory, UserFactory
+from edx_exams.apps.core.test_utils.factories import (
+    CourseExamConfigurationFactory,
+    ExamAttemptFactory,
+    ExamFactory,
+    ProctoringProviderFactory,
+    UserFactory
+)
 
 test_start_time = datetime(2023, 11, 4, 11, 5, 23)
 test_time_limit_mins = 30
@@ -882,3 +890,90 @@ class TestIsExamPassedDue(ExamsAPITestCase):
             exam = {'due_date': None}
 
             self.assertFalse(is_exam_passed_due(exam))
+
+
+class TestGetEscalationEmail(ExamsAPITestCase):
+    """
+    Tests for the get_escalation_email API function.
+    """
+    def setUp(self):
+        super().setUp()
+
+        self.exam = ExamFactory(
+            provider=self.test_provider,
+        )
+
+    def test_get_escalation_email(self):
+        """
+        Test that the escalation is returned correctly when a course is configured to use exams.
+        """
+        expected_escalation_email = 'test@example.com'
+
+        CourseExamConfigurationFactory(
+            course_id=self.exam.course_id,
+            provider=self.test_provider,
+            escalation_email=expected_escalation_email,
+        )
+
+        escalation_email = get_escalation_email(self.exam.id)
+
+        self.assertEqual(escalation_email, expected_escalation_email)
+
+    def test_get_escalation_email_no_configuration(self):
+        """
+        Test that None is returned correctly when a course is not configured to use an exam.
+        """
+        self.assertEqual(get_escalation_email(self.exam.id), None)
+
+
+@ddt.ddt
+class TestCreateOrUpdateCourseExamConfiguration(ExamsAPITestCase):
+    """
+    Tests for the create_or_update_course_exam_configuration API function.
+
+    This API function is primarily a wrapper around the CourseExamConfiguration.create_or_update method, so the
+    majority of testing of that functionality is in the corresponding test file for that model.
+    """
+    def setUp(self):
+        super().setUp()
+
+        self.exam = ExamFactory(
+            provider=self.test_provider,
+        )
+
+    @ddt.data('test@example.com', '')
+    def test_create_or_update_course_exam_configuration_none_provider(self, escalation_email):
+        """
+        Test that the create_or_update_course_exam_configuration function correctly sets the provider to None and that
+        the function disregards any provided escalation_email, because it must be set to None.
+        """
+        expected_provider = None
+
+        config = CourseExamConfigurationFactory(
+            course_id=self.exam.course_id,
+            provider=self.test_provider,
+        )
+
+        create_or_update_course_exam_configuration(self.exam.course_id, expected_provider, escalation_email)
+
+        config.refresh_from_db()
+
+        self.assertEqual(config.provider, expected_provider)
+        self.assertEqual(config.escalation_email, None)
+
+    def test_create_or_update_course_exam_configuration_provider(self):
+        """
+        Test that the create_or_update_course_exam_configuration function correctly sets the provider to None.
+        """
+        expected_provider = ProctoringProviderFactory()
+
+        config = CourseExamConfigurationFactory(
+            course_id=self.exam.course_id,
+            provider=self.test_provider,
+        )
+
+        create_or_update_course_exam_configuration(self.exam.course_id, expected_provider.name, config.escalation_email)
+
+        config.refresh_from_db()
+
+        self.assertEqual(config.provider, expected_provider)

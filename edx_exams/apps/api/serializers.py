@@ -7,7 +7,14 @@ from rest_framework.fields import DateTimeField
 from edx_exams.apps.api.constants import ASSESSMENT_CONTROL_CODES
 from edx_exams.apps.core.api import get_exam_attempt_time_remaining, get_exam_url_path
 from edx_exams.apps.core.exam_types import EXAM_TYPES
-from edx_exams.apps.core.models import AssessmentControlResult, Exam, ExamAttempt, ProctoringProvider, User
+from edx_exams.apps.core.models import (
+    AssessmentControlResult,
+    CourseExamConfiguration,
+    Exam,
+    ExamAttempt,
+    ProctoringProvider,
+    User
+)
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -38,6 +45,67 @@ class ProctoringProviderSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProctoringProvider
         fields = ['name', 'verbose_name', 'lti_configuration_id']
+
+
+class CourseExamConfigurationWriteSerializer(serializers.ModelSerializer):
+    """
+    Serializer for writing to the CourseExamConfiguration model.
+
+    We have separate read and write serializers because the read serializer uses the name field of the provider instance
+    to populate the provider serializer field by using the source attribute. The write serializer, on the other hand,
+    accepts the name as the value for the provider field. If we use the same serializer, deserialized data gets
+    represented as {'provider': {'name': <provider>}}, which makes reading the data less clear.
+    """
+    provider = serializers.CharField(allow_null=True)
+    # The escalation_email is a nullable field, but we require that clients send us an escalation_email.
+    escalation_email = serializers.EmailField(allow_null=True, allow_blank=False, required=True)
+
+    class Meta:
+        model = CourseExamConfiguration
+        fields = ['provider', 'escalation_email']
+
+    def validate_provider(self, value):
+        """
+        Validate that the provider value corresponds to an existing ProctoringProvider. If the value is None,
+        the value is valid.
+        """
+        if value is not None:
+            try:
+                ProctoringProvider.objects.get(name=value)
+            # This exception is handled by the Django Rest Framework, so we don't want to use "raise from e" and risk
+            # getting the stack trace included in client facing errors.
+            except ProctoringProvider.DoesNotExist:
+                raise serializers.ValidationError('Proctoring provider does not exist.') from None
+            return value
+
+        return value
+
+    def validate(self, attrs):
+        """
+        Validate that escalalation_email is None if the provider is None.
+        """
+        if attrs.get('provider') is None and attrs.get('escalation_email') is not None:
+            raise serializers.ValidationError('Escalation email must be None when provider is None.')
+
+        return attrs
+
+
+class CourseExamConfigurationReadSerializer(serializers.ModelSerializer):
+    """
+    Serializer for reading from the CourseExamConfiguration model
+
+    We have separate read and write serializers because the read serializer uses the name field of the provider instance
+    to populate the provider serializer field by using the source attribute. The write serializer, on the other hand,
+    accepts the name as the value for the provider field. If we use the same serializer, deserialized data gets
+    represented as {'provider': {'name': <provider>}}, which makes reading the data less clear.
+    """
+    provider = serializers.CharField(source='provider.name', allow_null=True)
+    # The escalation_email is a nullable field, but we require that clients send us an escalation_email.
+    escalation_email = serializers.EmailField(allow_null=True, allow_blank=False, required=True)
+
+    class Meta:
+        model = CourseExamConfiguration
+        fields = ['provider', 'escalation_email']
 
 
 class ExamSerializer(serializers.ModelSerializer):

@@ -66,6 +66,7 @@ class CourseExamConfigurationFactory(DjangoModelFactory):
     course_id = 'course-v1:edX+Test+Test_Course'
     provider = factory.SubFactory(ProctoringProviderFactory)
     allow_opt_out = False
+    escalation_email = factory.Sequence('escalation{}@example.com'.format)
 
 
 class ExamFactory(DjangoModelFactory):
@@ -83,6 +84,7 @@ class ExamFactory(DjangoModelFactory):
     exam_type = 'proctored'
     time_limit_mins = 30
     due_date = datetime.datetime.now() + datetime.timedelta(days=1)
+    is_active = True
 
 
 class ExamAttemptFactory(DjangoModelFactory):

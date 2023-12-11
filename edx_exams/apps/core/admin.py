@@ -70,9 +70,9 @@ class ExamAttemptAdmin(admin.ModelAdmin):
 @admin.register(CourseExamConfiguration)
 class CourseExamConfigurationAdmin(admin.ModelAdmin):
     """ Admin configuration for the Course Exam Configuration model """
-    list_display = ('course_id', 'provider', 'allow_opt_out')
+    list_display = ('course_id', 'provider', 'allow_opt_out', 'escalation_email')
     readonly_fields = ('course_id', 'provider')
-    search_fields = ('course_id', 'provider__name', 'allow_opt_out')
+    search_fields = ('course_id', 'provider__name', 'allow_opt_out', 'escalation_email')
     ordering = ('course_id',)
 
 

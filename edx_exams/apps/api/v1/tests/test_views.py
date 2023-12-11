@@ -358,23 +358,46 @@ class CourseExamConfigurationsViewTests(ExamsAPITestCase):
         CourseStaffRole.objects.create(user=course_staff_user, course_id=self.course_id)
         response = self.patch_api(course_staff_user, {
             'provider': None,
+            'escalation_email': None,
         })
         self.assertEqual(204, response.status_code)
 
-    def test_patch_invalid_data(self):
+    @ddt.data(
+        {},
+        {'escalation_email': 'test@example.com'},
+        {'provider': 'test-provider'}
+    )
+    def test_patch_invalid_data_missing_data(self, data):
         """
-        Assert that endpoint returns 400 if provider is missing
+        Assert that endpoint returns 400 if any required parameter is missing
         """
-        data = {}
+        response = self.patch_api(self.user, data)
+        self.assertEqual(400, response.status_code)
+
+    def test_patch_invalid_data_escalation_email(self):
+        """
+        Assert that endpoint returns 400 if provider is None but escalation_email is not
+        """
+        data = {'provider': None, 'escalation_email': 'test@example.com'}
 
         response = self.patch_api(self.user, data)
         self.assertEqual(400, response.status_code)
 
-    def test_patch_invalid_provider(self):
+    def test_patch_invalid_data_invalid_escalation_email(self):
+        """
+        Assert that endpoint returns 400 if the escalation email is not a valid email.
+        """
+        data = {'provider': 'test_provider', 'escalation_email': 'test'}
+
+        response = self.patch_api(self.user, data)
+        self.assertEqual(400, response.status_code)
+
+    @ddt.data('nonexistent_provider', '')
+    def test_patch_invalid_provider(self, provider_name):
         """
         Assert endpoint returns 400 if provider is invalid
         """
-        data = {'provider': 'nonexistent_provider'}
+        data = {'provider': provider_name}
 
         response = self.patch_api(self.user, data)
         self.assertEqual(400, response.status_code)
@@ -392,7 +415,9 @@ class CourseExamConfigurationsViewTests(ExamsAPITestCase):
             verbose_name='testing_provider_2',
             lti_configuration_id='223456789'
         )
-        data = {'provider': provider.name}
+        escalation_email = 'test@example.com'
+
+        data = {'provider': provider.name, 'escalation_email': escalation_email}
 
         response = self.patch_api(self.user, data)
         self.assertEqual(204, response.status_code)
@@ -400,6 +425,7 @@ class CourseExamConfigurationsViewTests(ExamsAPITestCase):
 
         config = CourseExamConfiguration.get_configuration_for_course(self.course_id)
         self.assertEqual(config.provider, provider)
+        self.assertEqual(config.escalation_email, escalation_email)
 
     def test_patch_config_update_exams(self):
         """
@@ -441,12 +467,15 @@ class CourseExamConfigurationsViewTests(ExamsAPITestCase):
         exams = Exam.objects.filter(course_id=self.course_id, is_active=True)
         self.assertEqual(2, len(exams))
 
-        data = {'provider': provider.name}
+        escalation_email = 'test@example.com'
+
+        data = {'provider': provider.name, 'escalation_email': escalation_email}
         response = self.patch_api(self.user, data)
         self.assertEqual(204, response.status_code)
         self.assertEqual(len(CourseExamConfiguration.objects.all()), 1)
         config = CourseExamConfiguration.get_configuration_for_course(self.course_id)
         self.assertEqual(config.provider, provider)
+        self.assertEqual(config.escalation_email, escalation_email)
 
         exams = Exam.objects.filter(course_id=self.course_id, is_active=True)
         self.assertEqual(2, len(exams))
@@ -459,12 +488,13 @@ class CourseExamConfigurationsViewTests(ExamsAPITestCase):
             self.assertEqual(self.test_provider, exam.provider)
 
         # updating to the same provider is a do nothing, no new exams
-        data = {'provider': provider.name}
+        data = {'provider': provider.name, 'escalation_email': escalation_email}
         response = self.patch_api(self.user, data)
         self.assertEqual(204, response.status_code)
         self.assertEqual(len(CourseExamConfiguration.objects.all()), 1)
         config = CourseExamConfiguration.get_configuration_for_course(self.course_id)
         self.assertEqual(config.provider, provider)
+        self.assertEqual(config.escalation_email, escalation_email)
 
         exams = Exam.objects.filter(course_id=self.course_id, is_active=True)
         self.assertEqual(2, len(exams))
@@ -477,12 +507,13 @@ class CourseExamConfigurationsViewTests(ExamsAPITestCase):
             self.assertEqual(self.test_provider, exam.provider)
 
         # updating back to the original provider creates two new active exams, now 4 inactive
-        data = {'provider': self.test_provider.name}
+        data = {'provider': self.test_provider.name, 'escalation_email': 'test@example.com'}
         response = self.patch_api(self.user, data)
         self.assertEqual(204, response.status_code)
         self.assertEqual(len(CourseExamConfiguration.objects.all()), 1)
         config = CourseExamConfiguration.get_configuration_for_course(self.course_id)
         self.assertEqual(config.provider, self.test_provider)
+        self.assertEqual(config.escalation_email, escalation_email)
 
         exams = Exam.objects.filter(course_id=self.course_id, is_active=True)
         self.assertEqual(2, len(exams))
@@ -496,7 +527,8 @@ class CourseExamConfigurationsViewTests(ExamsAPITestCase):
         """
         Test that config is created
         """
-        data = {'provider': 'test_provider'}
+        escalation_email = 'test@example.com'
+        data = {'provider': 'test_provider', 'escalation_email': escalation_email}
 
         response = self.patch_api(self.user, data)
         self.assertEqual(204, response.status_code)
@@ -504,12 +536,13 @@ class CourseExamConfigurationsViewTests(ExamsAPITestCase):
 
         config = CourseExamConfiguration.get_configuration_for_course(self.course_id)
         self.assertEqual(config.provider, self.test_provider)
+        self.assertEqual(config.escalation_email, escalation_email)
 
     def test_patch_null_provider(self):
         """
         Assert provider can be explicitly set to null
         """
-        data = {'provider': None}
+        data = {'provider': None, 'escalation_email': None}
 
         response = self.patch_api(self.user, data)
         self.assertEqual(204, response.status_code)
@@ -517,6 +550,7 @@ class CourseExamConfigurationsViewTests(ExamsAPITestCase):
 
         config = CourseExamConfiguration.get_configuration_for_course(self.course_id)
         self.assertEqual(config.provider, None)
+        self.assertEqual(config.escalation_email, None)
 
     def test_get_config(self):
         """

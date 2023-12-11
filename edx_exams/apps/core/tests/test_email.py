@@ -1,13 +1,16 @@
 """
 Test email notifications for attempt status change
 """
+from itertools import product
 
 import ddt
 import mock
+from django.conf import settings
 from django.core import mail
 from django.test import TestCase
 
 from edx_exams.apps.core.api import update_attempt_status
+from edx_exams.apps.core.models import CourseExamConfiguration
 from edx_exams.apps.core.test_utils.factories import ExamAttemptFactory, ExamFactory, UserFactory
 
 
@@ -50,6 +53,36 @@ class TestEmail(TestCase):
         self.assertEqual(len(mail.outbox), 1)
         self.assertIn(self.started_attempt.user.email, mail.outbox[0].to)
         self.assertIn(expected_message, self._normalize_whitespace(mail.outbox[0].body))
+
+    @ddt.idata(
+        product(
+            ('verified', 'rejected'),
+            (True, False),
+        )
+    )
+    @ddt.unpack
+    def test_send_email_contact_url(self, status, has_escalation_email):
+        """
+        Test correct correct contact URL is included in emails for sent for statuses that trigger an email.
+        """
+        if has_escalation_email:
+            contact_url = 'test@example.com'
+            CourseExamConfiguration.objects.create(
+                course_id=self.proctored_exam.course_id,
+                escalation_email=contact_url,
+            )
+        else:
+            contact_url = f'{settings.LMS_ROOT_URL}/support/contact_us'
+
+        update_attempt_status(self.started_attempt.id, status)
+        self.assertEqual(len(mail.outbox), 1)
+
+        email_body = self._normalize_whitespace(mail.outbox[0].body)
+
+        self.assertIn(contact_url, email_body)
+
+        if has_escalation_email:
+            self.assertIn(f'mailto:{contact_url}', email_body)
 
     @mock.patch('edx_exams.apps.core.email.log.error')
     def test_send_email_failure(self, mock_log_error):

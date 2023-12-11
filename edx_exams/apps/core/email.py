@@ -13,7 +13,7 @@ from edx_exams.apps.core.statuses import ExamAttemptStatus
 log = logging.getLogger(__name__)
 
 
-def send_attempt_status_email(attempt):
+def send_attempt_status_email(attempt, escalation_email=None):
     """
     Send email for attempt status if necessary
     """
@@ -35,13 +35,21 @@ def send_attempt_status_email(attempt):
 
     email_template = loader.get_template(email_template)
     course_url = f'{settings.LEARNING_MICROFRONTEND_URL}/course/{exam.course_id}'
-    contact_url = f'{settings.LMS_ROOT_URL}/support/contact_us'
+
+    # If the course has a proctoring escalation email set, then use that rather than edX Support.
+    if escalation_email:
+        contact_url = f'mailto:{escalation_email}'
+        contact_url_text = escalation_email
+    else:
+        contact_url = f'{settings.LMS_ROOT_URL}/support/contact_us'
+        contact_url_text = contact_url
 
     email_subject = f'Proctored exam {exam.exam_name} for user {attempt.user.username}'
     body = email_template.render({
         'exam_name': exam.exam_name,
         'course_url': course_url,
         'contact_url': contact_url,
+        'contact_url_text': contact_url_text,
     })
 
     email = EmailMessage(
