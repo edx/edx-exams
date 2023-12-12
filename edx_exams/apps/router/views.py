@@ -85,7 +85,7 @@ class CourseExamAttemptLegacyView(APIView):
         )
 
 
-class CourseProviderSettingsLegacyView(APIView):
+class ProctoringSettingsLegacyView(APIView):
     """
     View to handle provider settings for exams managed by edx-proctoring
     """

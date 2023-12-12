@@ -1,6 +1,7 @@
 # Core requirements for using this application
 -c constraints.txt
 
+attrs
 Django         # Web application framework
 django-cors-headers
 django-extensions
