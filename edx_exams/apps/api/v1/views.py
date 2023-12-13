@@ -31,6 +31,7 @@ from edx_exams.apps.core.api import (
     create_or_update_course_exam_configuration,
     get_active_attempt_for_user,
     get_attempt_by_id,
+    get_course_exam_configuration_by_course_id,
     get_course_exams,
     get_current_exam_attempt,
     get_exam_attempt_time_remaining,
@@ -729,38 +730,44 @@ class CourseExamAttemptView(ExamsAPIView):
         return Response(data)
 
 
-class CourseProviderSettingsView(ExamsAPIView):
+class ProctoringSettingsView(ExamsAPIView):
     """
-    Endpoint for getting provider related settings.
+    Endpoint for getting a course/exam's proctoring settings, including course-wide settings like the escalation email
+    and exam-specific settings like provider settings.
 
     exam/provider_settings/course_id/{course_id}/exam_id/{exam_id}
 
     Supports:
         HTTP GET:
-            Returns provider specific information given an exam_id
+            Returns proctoring configuration settings given an exam_id
 
             {
                 provider_tech_support_email: '',
                 provider_tech_support_phone: '',
                 provider_name: 'test provider',
+                escalation_name: 'test@example.com',
             }
     """
 
     authentication_classes = (JwtAuthentication,)
     permission_classes = (IsAuthenticated,)
 
-    def get(self, request, course_id, exam_id):  # pylint: disable=unused-argument
+    def get(self, request, course_id, exam_id):
         """
-        HTTP GET handler. Returns provider specific information given an exam_id
+        HTTP GET handler. Returns exam configuration settings given an exam_id
 
-        The course_id is provided as a path parameter to account for the exams middleware
+        The course_id is provided as a path parameter to account for the exams ExamRequestMiddleware router.
         """
         provider = get_provider_by_exam_id(exam_id)
+        config_data = get_course_exam_configuration_by_course_id(course_id)
+
+        data = {}
 
         if provider:
-            return Response({
-                'provider_tech_support_email': provider.tech_support_email,
-                'provider_tech_support_phone': provider.tech_support_phone,
-                'provider_name': provider.verbose_name,
-            })
-        return Response({})
+            data['provider_tech_support_email'] = provider.tech_support_email
+            data['provider_tech_support_phone'] = provider.tech_support_phone
+            data['provider_name'] = provider.verbose_name
+
+        data['proctoring_escalation_email'] = config_data.escalation_email
+
+        return Response(data)

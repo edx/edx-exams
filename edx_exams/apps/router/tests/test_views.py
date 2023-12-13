@@ -284,7 +284,7 @@ class CourseProviderSettingsLegacyViewTest(ExamsAPITestCase):
         self.course_id = 'course-v1:edx+test+f19'
         self.exam_id = 2222
         self.url = reverse(
-            'api:v1:exam-provider-settings',
+            'api:v1:proctoring-settings',
             kwargs={'course_id': self.course_id, 'exam_id': self.exam_id}
         )
 

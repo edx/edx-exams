@@ -6,12 +6,12 @@ from edx_exams.apps.api.v1.views import (
     CourseExamAttemptView,
     CourseExamConfigurationsView,
     CourseExamsView,
-    CourseProviderSettingsView,
     ExamAccessTokensView,
     ExamAttemptView,
     InstructorAttemptsListView,
     LatestExamAttemptView,
-    ProctoringProvidersView
+    ProctoringProvidersView,
+    ProctoringSettingsView
 )
 from edx_exams.apps.core.constants import CONTENT_ID_PATTERN, COURSE_ID_PATTERN, EXAM_ID_PATTERN
 
@@ -65,7 +65,7 @@ urlpatterns = [
     ),
     re_path(
         fr'exam/provider_settings/course_id/{COURSE_ID_PATTERN}/exam_id/{EXAM_ID_PATTERN}',
-        CourseProviderSettingsView.as_view(),
-        name='exam-provider-settings'
+        ProctoringSettingsView.as_view(),
+        name='proctoring-settings'
     ),
 ]
