@@ -5,7 +5,7 @@ LTI Views
 
 import logging
 from decimal import Decimal
-from urllib.parse import urljoin
+from urllib.parse import urljoin, urlparse
 
 from django.conf import settings
 from django.contrib.auth import login
@@ -20,6 +20,7 @@ from lti_consumer.data import Lti1p3LaunchData, Lti1p3ProctoringLaunchData
 from lti_consumer.lti_1p3.extensions.rest_framework.authentication import Lti1p3ApiAuthentication
 from lti_consumer.lti_1p3.extensions.rest_framework.permissions import LtiProctoringAcsPermissions
 from lti_consumer.models import LtiConfiguration
+from lti_consumer.utils import get_lti_api_base
 from rest_framework import status
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.permissions import IsAuthenticated
@@ -36,7 +37,6 @@ from edx_exams.apps.core.api import (
 from edx_exams.apps.core.exceptions import ExamIllegalStatusTransition
 from edx_exams.apps.core.models import AssessmentControlResult, User
 from edx_exams.apps.core.statuses import ExamAttemptStatus
-from edx_exams.apps.lti.utils import get_lti_root
 
 log = logging.getLogger(__name__)
 
@@ -235,12 +235,12 @@ def start_proctoring(request, attempt_id):
     lti_config = LtiConfiguration.objects.get(id=lti_config_id)
 
     proctoring_start_assessment_url = urljoin(
-        get_lti_root(),
+        get_lti_api_base(),
         reverse('lti_consumer:lti_consumer.start_proctoring_assessment_endpoint')
     )
 
     assessment_control_url = urljoin(
-        get_lti_root(),
+        get_lti_api_base(),
         reverse('lti:acs', kwargs={'lti_config_id': lti_config_id}),
     )
 
@@ -261,11 +261,12 @@ def start_proctoring(request, attempt_id):
         proctoring_launch_data=proctoring_launch_data,
         context_id=exam.course_id,
         context_label=exam.content_id,
+        custom_parameters={
+            # The protocol is intentionally stripped from this url, the proctoring tool
+            # is appending https:// to anything we pass here. This is unavoidable at the moment.
+            'custom_url': urlparse(get_lti_api_base()).netloc + reverse('browser_lock'),
+        },
     )
-
-    # temporary addition for testing with Proctorio in stage
-    if settings.LTI_CUSTOM_URL_CLAIM:  # pragma: no cover
-        launch_data.custom_parameters['custom_url'] = settings.LTI_CUSTOM_URL_CLAIM
 
     return redirect(get_lti_1p3_launch_start_url(launch_data))
 

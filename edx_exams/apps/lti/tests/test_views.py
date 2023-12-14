@@ -14,6 +14,7 @@ from django.urls import reverse
 from lti_consumer.data import Lti1p3LaunchData, Lti1p3ProctoringLaunchData
 from lti_consumer.lti_1p3.extensions.rest_framework.authentication import Lti1p3ApiAuthentication
 from lti_consumer.models import LtiConfiguration, LtiProctoringConsumer
+from lti_consumer.utils import get_lti_api_base
 
 from edx_exams.apps.api.test_utils import ExamsAPITestCase, UserFactory
 from edx_exams.apps.core.models import AssessmentControlResult, CourseStaffRole
@@ -24,7 +25,6 @@ from edx_exams.apps.core.test_utils.factories import (
     ExamFactory,
     ProctoringProviderFactory
 )
-from edx_exams.apps.lti.utils import get_lti_root
 
 log = logging.getLogger(__name__)
 
@@ -404,7 +404,7 @@ class LtiStartProctoringTestCase(ExamsAPITestCase):
         self.client.get(self.url, **headers)
 
         expected_proctoring_start_assessment_url = urljoin(
-            get_lti_root(),
+            get_lti_api_base(),
             reverse('lti_consumer:lti_consumer.start_proctoring_assessment_endpoint')
         )
         expected_proctoring_launch_data = Lti1p3ProctoringLaunchData(
@@ -425,7 +425,7 @@ class LtiStartProctoringTestCase(ExamsAPITestCase):
             context_id=self.course_id,
             context_label=self.content_id,
             custom_parameters={
-                'custom_url': 'https://test.learning:2000/exam',
+                'custom_url': 'test.exams:18740/browser_lock/',
             },
         )
 
