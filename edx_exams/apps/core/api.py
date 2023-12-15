@@ -9,6 +9,7 @@ from django.conf import settings
 from django.utils import dateparse, timezone
 from opaque_keys.edx.keys import CourseKey, UsageKey
 
+from edx_exams.apps.core.data import CourseExamConfigurationData
 from edx_exams.apps.core.email import send_attempt_status_email
 from edx_exams.apps.core.exam_types import OnboardingExamType, PracticeExamType, get_exam_type
 from edx_exams.apps.core.exceptions import (
@@ -467,3 +468,28 @@ def create_or_update_course_exam_configuration(course_id, provider_name, escalat
         provider = None
 
     CourseExamConfiguration.create_or_update(course_id, provider, escalation_email)
+
+
+def get_course_exam_configuration_by_course_id(course_id):
+    """
+    Return an instance of the CourseExamConfigurationData class representing the course exam configuration associated
+    with the course ID.
+
+    Parameters:
+        * course_id: the ID representing the course
+
+    Returns:
+        * an instance of the CourseExamConfigurationData class, if the associated CourseExamConfiguration object exists;
+          else, None.
+    """
+    # TODO: When the legacy service is deprecated, we should add a try...except block here. Currently, there isn't
+    #       one because the router middleware will forward a request to the legacy service if there is no
+    #       CourseExamConfiguration associated for a course before this code ever runs. Adding a try...except block
+    #       here is just dead code.
+    config = CourseExamConfiguration.objects.select_related('provider').get(course_id=course_id)
+    return CourseExamConfigurationData(
+        course_id=config.course_id,
+        provider=config.provider.name,
+        allow_opt_out=config.allow_opt_out,
+        escalation_email=config.escalation_email,
+    )

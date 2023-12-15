@@ -120,7 +120,6 @@ cryptography==41.0.7
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   pyjwt
-    #   secretstorage
     #   social-auth-core
 ddt==1.7.0
     # via
@@ -404,11 +403,6 @@ jaraco-classes==3.3.0
     # via
     #   -r requirements/quality.txt
     #   keyring
-jeepney==0.8.0
-    # via
-    #   -r requirements/quality.txt
-    #   keyring
-    #   secretstorage
 jinja2==3.1.2
     # via
     #   -r requirements/quality.txt
@@ -732,10 +726,6 @@ s3transfer==0.8.2
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   boto3
-secretstorage==3.3.3
-    # via
-    #   -r requirements/quality.txt
-    #   keyring
 semantic-version==2.10.0
     # via
     #   -r requirements/quality.txt
