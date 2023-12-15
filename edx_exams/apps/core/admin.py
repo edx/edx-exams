@@ -3,8 +3,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import gettext_lazy as _
-
-from edx_exams.apps.lti.utils import get_lti_root
+from lti_consumer.utils import get_lti_api_base
 
 from .models import (
     AssessmentControlResult,
@@ -61,7 +60,10 @@ class ExamAttemptAdmin(admin.ModelAdmin):
 
     def change_view(self, request, object_id, form_url='', extra_context=None):
         extra_context = extra_context or {}
-        extra_context['LTI_ROOT'] = get_lti_root()
+        # technically this should be be using get_lti_view_base() but the
+        # setting behind that isn't available in edx-exams and we know they
+        # are the same in this service.
+        extra_context['LTI_ROOT'] = get_lti_api_base()
         return super().change_view(
             request, object_id, form_url, extra_context=extra_context,
         )
