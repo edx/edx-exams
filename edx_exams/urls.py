@@ -21,7 +21,7 @@ from auth_backends.urls import oauth2_urlpatterns
 from django.conf import settings
 from django.contrib import admin
 from django.urls import include, path
-from django.views.generic import RedirectView
+from django.views.generic import TemplateView
 from edx_api_doc_tools import make_api_info, make_docs_urls
 
 from edx_exams.apps.api import urls as api_urls
@@ -40,7 +40,7 @@ urlpatterns = oauth2_urlpatterns + [
     path('lti/', include('lti_consumer.plugin.urls')),
     # url for the exam inside the Proctorio browser extension the browser will fall through
     # to this redirect if the browser extension is not installed
-    path('browser_lock/', RedirectView.as_view(url='https://getproctorio.com'), name='browser_lock'),
+    path('browser_lock/', TemplateView.as_view(template_name='proctorio_download.html'), name='browser_lock'),
 ]
 
 if settings.DEBUG and os.environ.get('ENABLE_DJANGO_TOOLBAR', False):  # pragma: no cover
