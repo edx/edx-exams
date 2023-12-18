@@ -1,7 +1,7 @@
 import datetime
 
 from edx_exams.apps.core.models import ExamAttempt, Exam, AssessmentControlResult
-from edx_exams.apps.api.test_utils.factories import UserFactory
+from edx_exams.apps.core.test_utils.factories import UserFactory
 from edx_exams.apps.core.statuses import ExamAttemptStatus
 
 import string
