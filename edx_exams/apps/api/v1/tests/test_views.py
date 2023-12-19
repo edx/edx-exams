@@ -1730,6 +1730,7 @@ class ProctoringSettingsViewTest(ExamsAPITestCase):
             {
                 'provider_tech_support_email': self.test_provider.tech_support_email,
                 'provider_tech_support_phone': self.test_provider.tech_support_phone,
+                'provider_tech_support_url': self.test_provider.tech_support_url,
                 'provider_name': self.test_provider.verbose_name,
                 'proctoring_escalation_email': self.config.escalation_email,
             }

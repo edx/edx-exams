@@ -54,6 +54,7 @@ class ProctoringProviderFactory(DjangoModelFactory):
     lti_configuration_id = factory.Sequence('11{}'.format)
     tech_support_phone = '1118976309'
     tech_support_email = 'test@example.com'
+    tech_support_url = 'www.example.com'
 
 
 class CourseExamConfigurationFactory(DjangoModelFactory):

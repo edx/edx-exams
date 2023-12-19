@@ -744,6 +744,7 @@ class ProctoringSettingsView(ExamsAPIView):
             {
                 provider_tech_support_email: '',
                 provider_tech_support_phone: '',
+                provider_tech_support_site: '',
                 provider_name: 'test provider',
                 escalation_name: 'test@example.com',
             }
@@ -766,6 +767,7 @@ class ProctoringSettingsView(ExamsAPIView):
         if provider:
             data['provider_tech_support_email'] = provider.tech_support_email
             data['provider_tech_support_phone'] = provider.tech_support_phone
+            data['provider_tech_support_url'] = provider.tech_support_url
             data['provider_name'] = provider.verbose_name
 
         data['proctoring_escalation_email'] = config_data.escalation_email
