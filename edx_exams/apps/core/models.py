@@ -88,6 +88,8 @@ class ProctoringProvider(TimeStampedModel):
 
     tech_support_email = models.CharField(max_length=255, null=True)
 
+    tech_support_url = models.URLField(max_length=255, null=True)
+
     class Meta:
         """ Meta class for this Django model """
         db_table = 'exams_proctoringprovider'

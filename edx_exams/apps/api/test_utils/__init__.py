@@ -33,6 +33,7 @@ class ExamsAPITestCase(JwtMixin, APITestCase):
             lti_configuration_id='123456789',
             tech_support_phone='1118976309',
             tech_support_email='test@example.com',
+            tech_support_url='www.example.com',
         )
 
     def tearDown(self):
