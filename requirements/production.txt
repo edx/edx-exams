@@ -26,12 +26,12 @@ bleach==6.1.0
     # via
     #   -r requirements/base.txt
     #   lti-consumer-xblock
-boto3==1.33.12
+boto3==1.34.3
     # via
     #   -r requirements/base.txt
     #   django-ses
     #   fs-s3fs
-botocore==1.33.12
+botocore==1.34.3
     # via
     #   -r requirements/base.txt
     #   boto3
@@ -278,7 +278,7 @@ markupsafe==2.1.3
     #   jinja2
     #   mako
     #   xblock
-mysqlclient==2.2.0
+mysqlclient==2.2.1
     # via
     #   -r requirements/base.txt
     #   -r requirements/production.in
@@ -296,7 +296,7 @@ openapi-codec==1.3.2
     # via
     #   -r requirements/base.txt
     #   django-rest-swagger
-openedx-django-pyfs==3.4.0
+openedx-django-pyfs==3.4.1
     # via
     #   -r requirements/base.txt
     #   lti-consumer-xblock
@@ -318,7 +318,7 @@ pbr==6.0.0
     # via
     #   -r requirements/base.txt
     #   stevedore
-psutil==5.9.6
+psutil==5.9.7
     # via
     #   -r requirements/base.txt
     #   edx-django-utils
@@ -404,7 +404,7 @@ requests-oauthlib==1.3.1
     # via
     #   -r requirements/base.txt
     #   social-auth-core
-s3transfer==0.8.2
+s3transfer==0.9.0
     # via
     #   -r requirements/base.txt
     #   boto3
@@ -487,7 +487,7 @@ webob==1.8.7
     # via
     #   -r requirements/base.txt
     #   xblock
-xblock==1.8.1
+xblock==1.9.0
     # via
     #   -r requirements/base.txt
     #   lti-consumer-xblock
