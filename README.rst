@@ -158,7 +158,7 @@ Here is an example of a command to consume events from the ``learning-exam-attem
 
 .. code-block::
 
-    python3 manage.py ls consume_events -t learning-exam-attempt-lifecycle -g dev-lms
+    python3 manage.py lms consume_events -t learning-exam-attempt-lifecycle -g dev-lms
 
 When your event is successfully consumed, you should see logs like the following.
 
