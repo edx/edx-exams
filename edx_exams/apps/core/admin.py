@@ -98,6 +98,7 @@ class AssessmentControlResultAdmin(admin.ModelAdmin):
 @admin.register(CourseStaffRole)
 class CourseStaffRoleAdmin(admin.ModelAdmin):
     """ Admin configuration for the Course Staff Role model """
+    raw_id_fields = ('user',)
     list_display = ('user', 'course_id')
     list_filter = ('course_id',)
     search_fields = ('user__username', 'course_id')
