@@ -13,7 +13,7 @@ DEFUALT_ATTEMPT_AMOUNT = 5
 
 def insert(manual_amount=None):
     exam = Exam.objects.get(
-        resource_id='c661ca6c-ed08-42bd-bdc8-50c8c55ec6b1',
+        resource_id='a3152e48-5831-47a2-8a88-86a12158c9a2',
         course_id='course-v1:edX+TEST101+2024',
         content_id='block-v1:edX+TEST101+2024+type@sequential+block@0b1465cfce42435da197741b5a81600f',
     )
