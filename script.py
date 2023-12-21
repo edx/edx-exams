@@ -1,7 +1,6 @@
 import datetime
 
-from edx_exams.apps.core.models import ExamAttempt, Exam, AssessmentControlResult
-from edx_exams.apps.core.test_utils.factories import UserFactory
+from edx_exams.apps.core.models import ExamAttempt, Exam, AssessmentControlResult, User
 from edx_exams.apps.core.statuses import ExamAttemptStatus
 
 import string
@@ -27,8 +26,16 @@ def insert(manual_amount=None):
     for i in range(0, attempt_amount):
         N = 7
         username = ''.join(random.choices(string.ascii_letters, k=N))
-        user = UserFactory(username=username)
-
+        user = User.objects.create(
+            username=username,
+            email='username@example.com',
+            password='test',
+            first_name='Test',
+            last_name='Test',
+            full_name='Test Test',
+            is_superuser=False,
+            is_staff=False,
+        )
         attempt = ExamAttempt.objects.create(
             user=user,
             exam=exam,
