@@ -37,12 +37,12 @@ bleach==6.1.0
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   lti-consumer-xblock
-boto3==1.33.12
+boto3==1.34.7
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   fs-s3fs
-botocore==1.33.12
+botocore==1.34.7
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -109,7 +109,7 @@ coreschema==0.0.4
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   coreapi
-coverage[toml]==7.3.2
+coverage[toml]==7.3.4
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -120,6 +120,7 @@ cryptography==41.0.7
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   pyjwt
+    #   secretstorage
     #   social-auth-core
 ddt==1.7.0
     # via
@@ -328,12 +329,12 @@ factory-boy==3.3.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
-faker==20.1.0
+faker==21.0.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   factory-boy
-fastavro==1.9.1
+fastavro==1.9.2
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -344,7 +345,7 @@ filelock==3.13.1
     #   -r requirements/test.txt
     #   tox
     #   virtualenv
-freezegun==1.3.1
+freezegun==1.4.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -370,7 +371,7 @@ idna==3.6
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   requests
-importlib-metadata==7.0.0
+importlib-metadata==7.0.1
     # via
     #   -r requirements/quality.txt
     #   keyring
@@ -389,7 +390,7 @@ iniconfig==2.0.0
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   pytest
-isort==5.13.1
+isort==5.13.2
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -403,6 +404,11 @@ jaraco-classes==3.3.0
     # via
     #   -r requirements/quality.txt
     #   keyring
+jeepney==0.8.0
+    # via
+    #   -r requirements/quality.txt
+    #   keyring
+    #   secretstorage
 jinja2==3.1.2
     # via
     #   -r requirements/quality.txt
@@ -433,7 +439,7 @@ lti-consumer-xblock==9.8.1
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
-lxml==4.9.3
+lxml==4.9.4
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -473,7 +479,7 @@ more-itertools==10.1.0
     # via
     #   -r requirements/quality.txt
     #   jaraco-classes
-mysqlclient==2.2.0
+mysqlclient==2.2.1
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -498,7 +504,7 @@ openapi-codec==1.3.2
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   django-rest-swagger
-openedx-django-pyfs==3.4.0
+openedx-django-pyfs==3.4.1
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -544,7 +550,7 @@ pluggy==1.3.0
     #   -r requirements/test.txt
     #   pytest
     #   tox
-psutil==5.9.6
+psutil==5.9.7
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -721,11 +727,15 @@ rich==13.7.0
     # via
     #   -r requirements/quality.txt
     #   twine
-s3transfer==0.8.2
+s3transfer==0.10.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   boto3
+secretstorage==3.3.3
+    # via
+    #   -r requirements/quality.txt
+    #   keyring
 semantic-version==2.10.0
     # via
     #   -r requirements/quality.txt
@@ -856,7 +866,7 @@ webob==1.8.7
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   xblock
-xblock==1.8.1
+xblock==1.9.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
