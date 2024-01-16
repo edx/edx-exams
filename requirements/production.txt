@@ -26,12 +26,12 @@ bleach==6.1.0
     # via
     #   -r requirements/base.txt
     #   lti-consumer-xblock
-boto3==1.34.11
+boto3==1.34.19
     # via
     #   -r requirements/base.txt
     #   django-ses
     #   fs-s3fs
-botocore==1.34.11
+botocore==1.34.19
     # via
     #   -r requirements/base.txt
     #   boto3
@@ -183,7 +183,7 @@ edx-django-utils==5.9.0
     #   edx-event-bus-redis
     #   edx-rest-api-client
     #   edx-toggles
-edx-drf-extensions==9.0.1
+edx-drf-extensions==9.1.2
     # via -r requirements/base.txt
 edx-event-bus-kafka==5.5.0
     # via -r requirements/base.txt
@@ -206,7 +206,7 @@ edx-toggles==5.1.0
     #   edx-event-bus-redis
 edx-token-utils==0.2.1
     # via -r requirements/base.txt
-fastavro==1.9.2
+fastavro==1.9.3
     # via
     #   -r requirements/base.txt
     #   openedx-events
@@ -242,7 +242,7 @@ itypes==1.2.0
     # via
     #   -r requirements/base.txt
     #   coreapi
-jinja2==3.1.2
+jinja2==3.1.3
     # via
     #   -r requirements/base.txt
     #   code-annotations
@@ -262,7 +262,7 @@ lazy==1.6
     #   lti-consumer-xblock
 lti-consumer-xblock==9.8.1
     # via -r requirements/base.txt
-lxml==5.0.0
+lxml==5.1.0
     # via
     #   -r requirements/base.txt
     #   lti-consumer-xblock
@@ -282,7 +282,7 @@ mysqlclient==2.2.1
     # via
     #   -r requirements/base.txt
     #   -r requirements/production.in
-newrelic==9.3.0
+newrelic==9.5.0
     # via
     #   -r requirements/base.txt
     #   edx-django-utils
@@ -326,7 +326,7 @@ pycparser==2.21
     # via
     #   -r requirements/base.txt
     #   cffi
-pycryptodomex==3.19.1
+pycryptodomex==3.20.0
     # via
     #   -r requirements/base.txt
     #   lti-consumer-xblock
@@ -360,7 +360,7 @@ python-dateutil==2.8.2
     #   -r requirements/base.txt
     #   botocore
     #   xblock
-python-memcached==1.61
+python-memcached==1.62
     # via -r requirements/production.in
 python-slugify==8.0.1
     # via
@@ -486,7 +486,7 @@ webob==1.8.7
     # via
     #   -r requirements/base.txt
     #   xblock
-xblock==1.9.0
+xblock==1.9.1
     # via
     #   -r requirements/base.txt
     #   lti-consumer-xblock
