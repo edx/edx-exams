@@ -284,7 +284,7 @@ edx-drf-extensions==9.1.2
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
-edx-event-bus-kafka==5.5.0
+edx-event-bus-kafka==5.6.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -503,7 +503,7 @@ openedx-django-pyfs==3.4.1
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   lti-consumer-xblock
-openedx-events==9.2.0
+openedx-events==9.3.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
