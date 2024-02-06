@@ -65,6 +65,8 @@ class CourseStaffRole(TimeStampedModel):
 
     course_id = models.CharField(max_length=255, db_index=True)
 
+    role = models.CharField(max_length=255, null=True)
+
     class Meta:
         """ Meta class for this Django model """
         db_table = 'exams_coursestaffrole'

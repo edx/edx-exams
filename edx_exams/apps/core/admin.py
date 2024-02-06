@@ -99,7 +99,7 @@ class AssessmentControlResultAdmin(admin.ModelAdmin):
 class CourseStaffRoleAdmin(admin.ModelAdmin):
     """ Admin configuration for the Course Staff Role model """
     raw_id_fields = ('user',)
-    list_display = ('user', 'course_id')
+    list_display = ('user', 'course_id', 'role')
     list_filter = ('course_id',)
     search_fields = ('user__username', 'course_id')
     ordering = ('course_id',)
