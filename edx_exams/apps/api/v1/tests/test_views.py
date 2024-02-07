@@ -355,7 +355,8 @@ class CourseExamConfigurationsViewTests(ExamsAPITestCase):
         Verify course staff have write access
         """
         course_staff_user = UserFactory()
-        CourseStaffRole.objects.create(user=course_staff_user, course_id=self.course_id)
+        CourseStaffRole.objects.create(user=course_staff_user, course_id=self.course_id, role='staff')
+        CourseStaffRole.objects.create(user=course_staff_user, course_id=self.course_id, role='instructor')
         response = self.patch_api(course_staff_user, {
             'provider': None,
             'escalation_email': None,
