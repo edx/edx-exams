@@ -42,8 +42,8 @@ def insert(manual_amount=None):
             attempt_number=1,
             status=ExamAttemptStatus.error,
             # status=ExamAttemptStatus.second_review_required,
-            start_time=datetime.datetime.now() - datetime.timedelta(minutes=56),
-            end_time=datetime.datetime.now(),
+            # start_time=datetime.datetime.now() - datetime.timedelta(minutes=56),
+            # end_time=datetime.datetime.now(),
             allowed_time_limit_mins=60,
         )
 
