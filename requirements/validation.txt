@@ -37,12 +37,12 @@ bleach==6.1.0
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   lti-consumer-xblock
-boto3==1.34.44
+boto3==1.34.45
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   fs-s3fs
-botocore==1.34.44
+botocore==1.34.45
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -119,6 +119,7 @@ cryptography==42.0.3
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   pyjwt
+    #   secretstorage
     #   social-auth-core
 ddt==1.7.1
     # via
@@ -402,6 +403,11 @@ jaraco-classes==3.3.1
     # via
     #   -r requirements/quality.txt
     #   keyring
+jeepney==0.8.0
+    # via
+    #   -r requirements/quality.txt
+    #   keyring
+    #   secretstorage
 jinja2==3.1.3
     # via
     #   -r requirements/quality.txt
@@ -502,7 +508,7 @@ openedx-django-pyfs==3.5.0
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   lti-consumer-xblock
-openedx-events==9.5.1
+openedx-events==9.5.2
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -626,7 +632,7 @@ pyproject-api==1.6.1
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   tox
-pytest==8.0.0
+pytest==8.0.1
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -724,6 +730,10 @@ s3transfer==0.10.0
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   boto3
+secretstorage==3.3.3
+    # via
+    #   -r requirements/quality.txt
+    #   keyring
 semantic-version==2.10.0
     # via
     #   -r requirements/quality.txt
@@ -799,7 +809,7 @@ tomlkit==0.12.3
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   pylint
-tox==4.12.1
+tox==4.13.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
