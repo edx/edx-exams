@@ -1,0 +1,2 @@
+from script import insert
+insert(1)
