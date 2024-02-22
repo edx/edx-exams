@@ -26,10 +26,13 @@ def send_attempt_status_email(attempt, escalation_email=None):
 
     if attempt.status == ExamAttemptStatus.submitted:
         email_template = 'email/proctoring_attempt_submitted.html'
+        email_subject = 'Proctoring attempt submitted'
     elif attempt.status == ExamAttemptStatus.verified:
         email_template = 'email/proctoring_attempt_verified.html'
+        email_subject = 'Proctoring attempt verified'
     elif attempt.status == ExamAttemptStatus.rejected:
         email_template = 'email/proctoring_attempt_rejected.html'
+        email_subject = 'Proctoring attempt rejected'
     else:
         return  # do not send emails for other statuses
 
@@ -44,7 +47,6 @@ def send_attempt_status_email(attempt, escalation_email=None):
         contact_url = f'{settings.LMS_ROOT_URL}/support/contact_us'
         contact_url_text = contact_url
 
-    email_subject = f'Proctored exam {exam.exam_name} for user {attempt.user.username}'
     body = email_template.render({
         'exam_name': exam.exam_name,
         'course_url': course_url,
