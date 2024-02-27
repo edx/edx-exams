@@ -11,6 +11,7 @@ from factory.django import DjangoModelFactory
 from edx_exams.apps.core.models import (
     AssessmentControlResult,
     CourseExamConfiguration,
+    CourseStaffRole,
     Exam,
     ExamAttempt,
     ProctoringProvider
@@ -115,3 +116,15 @@ class AssessmentControlResultFactory(DjangoModelFactory):
     incident_time = datetime.datetime.now() - datetime.timedelta(hours=1)
     severity = 1
     reason_code = '1'
+
+
+class CourseStaffRoleFactory(DjangoModelFactory):
+    """
+    Factory to create course staff roles
+    """
+    class Meta:
+        model = CourseStaffRole
+
+    user = factory.SubFactory(UserFactory)
+    course_id = 'course-v1:edX+Test+Test_Course'
+    role = 'staff'
