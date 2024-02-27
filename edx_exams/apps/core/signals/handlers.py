@@ -105,7 +105,7 @@ def listen_for_course_access_role_added(sender, signal, **kwargs):  # pylint: di
     if role not in COURSE_STAFF_ROLES:
         return
 
-    user, created = User.objects.get_or_create(  # pylint: disable=unused-variable
+    user, _ = User.objects.get_or_create(
         username=user_data.pii.username,
         email=user_data.pii.email,
     )
