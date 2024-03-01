@@ -333,6 +333,8 @@ typing-extensions==4.9.0
     # via
     #   asgiref
     #   edx-opaque-keys
+unicodecsv==0.14.1
+    # via -r requirements/base.in
 uritemplate==4.1.1
     # via
     #   coreapi

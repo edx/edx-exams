@@ -819,6 +819,10 @@ typing-extensions==4.9.0
     #   faker
     #   pylint
     #   rich
+unicodecsv==0.14.1
+    # via
+    #   -r requirements/quality.txt
+    #   -r requirements/test.txt
 uritemplate==4.1.1
     # via
     #   -r requirements/quality.txt

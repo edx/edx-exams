@@ -462,6 +462,8 @@ typing-extensions==4.9.0
     #   -r requirements/base.txt
     #   asgiref
     #   edx-opaque-keys
+unicodecsv==0.14.1
+    # via -r requirements/base.txt
 uritemplate==4.1.1
     # via
     #   -r requirements/base.txt
