@@ -158,7 +158,7 @@ STATICFILES_DIRS = (
 )
 
 # EMAIL CONFIGURATION
-DEFAULT_FROM_EMAIL: 'no-reply@example.com'
+DEFAULT_FROM_EMAIL = 'no-reply@example.com'
 
 # TEMPLATE CONFIGURATION
 # See: https://docs.djangoproject.com/en/2.2/ref/settings/#templates
@@ -287,3 +287,26 @@ EXAM_ATTEMPT_EVENTS_KAFKA_TOPIC_NAME = 'learning-exam-attempt-lifecycle'
 
 # disable indexing on history_date
 SIMPLE_HISTORY_DATE_INDEX = False
+
+EVENT_BUS_PRODUCER_CONFIG = {
+    'org.openedx.learning.exam.attempt.submitted.v1': {
+        'learning-exam-attempt-lifecycle':
+            {'event_key_field': 'exam_attempt.course_key', 'enabled': False},
+    },
+    'org.openedx.learning.exam.attempt.rejected.v1': {
+        'learning-exam-attempt-lifecycle':
+            {'event_key_field': 'exam_attempt.course_key', 'enabled': False},
+    },
+    'org.openedx.learning.exam.attempt.verified.v1': {
+        'learning-exam-attempt-lifecycle':
+            {'event_key_field': 'exam_attempt.course_key', 'enabled': False},
+    },
+    'org.openedx.learning.exam.attempt.errored.v1': {
+        'learning-exam-attempt-lifecycle':
+            {'event_key_field': 'exam_attempt.course_key', 'enabled': False},
+    },
+    'org.openedx.learning.exam.attempt.reset.v1': {
+        'learning-exam-attempt-lifecycle':
+            {'event_key_field': 'exam_attempt.course_key', 'enabled': False},
+    },
+}

@@ -151,8 +151,17 @@ EVENT_BUS_TOPIC_PREFIX = 'dev'
 EVENT_BUS_KAFKA_SCHEMA_REGISTRY_URL = None
 EVENT_BUS_KAFKA_BOOTSTRAP_SERVERS = None
 
-# The EVENT_BUS_PRODUCER_CONFIG Django setting introduced in openedx-events 8.6.0 does not work properly.
-# In order to unblock development, EVENT_BUS_PRODUCER_CONFIG should be set to the empty object. Signal handlers
-# should be added as before (i.e. versions <8.6.0).
-# Once openedx-events 8.6.0 is corrected, this Django setting should be set.
-EVENT_BUS_PRODUCER_CONFIG = {}
+attempt_submitted_event_config = EVENT_BUS_PRODUCER_CONFIG['org.openedx.learning.exam.attempt.submitted.v1']
+attempt_submitted_event_config['learning-exam-attempt-lifecycle']['enabled'] = True
+
+attempt_rejected_event_config = EVENT_BUS_PRODUCER_CONFIG['org.openedx.learning.exam.attempt.rejected.v1']
+attempt_rejected_event_config['learning-exam-attempt-lifecycle']['enabled'] = True
+
+attempt_verified_event_config = EVENT_BUS_PRODUCER_CONFIG['org.openedx.learning.exam.attempt.verified.v1']
+attempt_verified_event_config['learning-exam-attempt-lifecycle']['enabled'] = True
+
+attempt_errored_event_config = EVENT_BUS_PRODUCER_CONFIG['org.openedx.learning.exam.attempt.errored.v1']
+attempt_errored_event_config['learning-exam-attempt-lifecycle']['enabled'] = True
+
+attempt_reset_event_config = EVENT_BUS_PRODUCER_CONFIG['org.openedx.learning.exam.attempt.reset.v1']
+attempt_reset_event_config['learning-exam-attempt-lifecycle']['enabled'] = True
