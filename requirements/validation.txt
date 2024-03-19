@@ -15,7 +15,8 @@ asgiref==3.7.2
     #   -r requirements/test.txt
     #   django
     #   django-cors-headers
-astroid==3.0.3
+    #   django-simple-history
+astroid==3.1.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -32,23 +33,29 @@ attrs==23.2.0
     #   -r requirements/test.txt
     #   lti-consumer-xblock
     #   openedx-events
+backports-zoneinfo==0.2.1
+    # via
+    #   -r requirements/quality.txt
+    #   -r requirements/test.txt
+    #   django
+    #   djangorestframework
 bleach==6.1.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   lti-consumer-xblock
-boto3==1.34.45
+boto3==1.34.65
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   fs-s3fs
-botocore==1.34.45
+botocore==1.34.65
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   boto3
     #   s3transfer
-cachetools==5.3.2
+cachetools==5.3.3
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -87,7 +94,7 @@ click-log==0.4.0
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   edx-lint
-code-annotations==1.6.0
+code-annotations==1.7.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -109,19 +116,19 @@ coreschema==0.0.4
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   coreapi
-coverage[toml]==7.4.1
+coverage[toml]==7.4.4
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   pytest-cov
-cryptography==42.0.3
+cryptography==42.0.5
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   pyjwt
     #   secretstorage
     #   social-auth-core
-ddt==1.7.1
+ddt==1.7.2
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -141,7 +148,7 @@ distlib==0.3.8
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   virtualenv
-django==3.2.24
+django==4.2.11
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -200,7 +207,7 @@ django-extensions==3.2.3
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
-django-filter==23.5
+django-filter==24.1
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -213,7 +220,7 @@ django-rest-swagger==2.2.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
-django-simple-history==3.4.0
+django-simple-history==3.5.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -229,7 +236,7 @@ django-waffle==4.1.0
     #   edx-django-utils
     #   edx-drf-extensions
     #   edx-toggles
-djangorestframework==3.14.0
+djangorestframework==3.15.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -270,7 +277,7 @@ edx-django-release-util==1.3.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
-edx-django-utils==5.10.1
+edx-django-utils==5.11.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -289,7 +296,7 @@ edx-event-bus-kafka==5.6.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
-edx-event-bus-redis==0.3.3
+edx-event-bus-redis==0.4.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -328,7 +335,7 @@ factory-boy==3.3.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
-faker==23.2.1
+faker==24.3.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -360,7 +367,7 @@ fs-s3fs==1.1.1
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   openedx-django-pyfs
-future==0.18.3
+future==1.0.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -370,12 +377,12 @@ idna==3.6
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   requests
-importlib-metadata==7.0.1
+importlib-metadata==6.11.0
     # via
     #   -r requirements/quality.txt
     #   keyring
     #   twine
-importlib-resources==6.1.1
+importlib-resources==6.3.1
     # via
     #   -r requirements/quality.txt
     #   keyring
@@ -425,7 +432,7 @@ jsonfield==3.1.0
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   lti-consumer-xblock
-keyring==24.3.0
+keyring==24.3.1
     # via
     #   -r requirements/quality.txt
     #   twine
@@ -482,7 +489,7 @@ mysqlclient==2.2.4
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
-newrelic==9.6.0
+newrelic==9.7.1
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -519,7 +526,7 @@ openedx-filters==1.6.0
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   lti-consumer-xblock
-packaging==23.2
+packaging==24.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -532,7 +539,7 @@ pbr==6.0.0
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   stevedore
-pkginfo==1.9.6
+pkginfo==1.10.0
     # via
     #   -r requirements/quality.txt
     #   twine
@@ -589,7 +596,7 @@ pyjwt[crypto]==2.8.0
     #   edx-drf-extensions
     #   edx-rest-api-client
     #   social-auth-core
-pylint==3.0.3
+pylint==3.1.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -632,7 +639,7 @@ pyproject-api==1.6.1
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   tox
-pytest==8.0.1
+pytest==8.1.1
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -646,7 +653,7 @@ pytest-django==4.8.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
-python-dateutil==2.8.2
+python-dateutil==2.9.0.post0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -668,8 +675,6 @@ pytz==2024.1
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
-    #   django
-    #   djangorestframework
     #   drf-yasg
     #   xblock
 pyyaml==6.0.1
@@ -681,11 +686,11 @@ pyyaml==6.0.1
     #   edx-django-release-util
     #   responses
     #   xblock
-readme-renderer==42.0
+readme-renderer==43.0
     # via
     #   -r requirements/quality.txt
     #   twine
-redis==5.0.1
+redis==5.0.3
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -704,7 +709,7 @@ requests==2.31.0
     #   slumber
     #   social-auth-core
     #   twine
-requests-oauthlib==1.3.1
+requests-oauthlib==1.4.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -721,11 +726,11 @@ rfc3986==2.0.0
     # via
     #   -r requirements/quality.txt
     #   twine
-rich==13.7.0
+rich==13.7.1
     # via
     #   -r requirements/quality.txt
     #   twine
-s3transfer==0.10.0
+s3transfer==0.10.1
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -783,7 +788,7 @@ sqlparse==0.4.4
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   django
-stevedore==5.1.0
+stevedore==5.2.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -804,18 +809,18 @@ tomli==2.0.1
     #   pyproject-api
     #   pytest
     #   tox
-tomlkit==0.12.3
+tomlkit==0.12.4
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   pylint
-tox==4.13.0
+tox==4.14.1
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
 twine==5.0.0
     # via -r requirements/quality.txt
-typing-extensions==4.9.0
+typing-extensions==4.10.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -839,7 +844,7 @@ urllib3==1.26.18
     #   requests
     #   responses
     #   twine
-virtualenv==20.25.0
+virtualenv==20.25.1
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -864,12 +869,12 @@ webob==1.8.7
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   xblock
-xblock==1.10.0
+xblock==2.0.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   lti-consumer-xblock
-zipp==3.17.0
+zipp==3.18.1
     # via
     #   -r requirements/quality.txt
     #   importlib-metadata
