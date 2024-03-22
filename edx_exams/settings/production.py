@@ -56,6 +56,3 @@ for override, value in DB_OVERRIDES.items():
 
 # EMAIL CONFIGURATION
 EMAIL_BACKEND = 'django_ses.SESBackend'
-
-if django.VERSION[0] >= 4:  # for greater than django 3.2 use schemes.
-    CSRF_TRUSTED_ORIGINS = CSRF_TRUSTED_ORIGINS_WITH_SCHEME
