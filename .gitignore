@@ -74,6 +74,7 @@ acceptance_tests.*.png
 # Override config files
 override.cfg
 private.py
+private.txt
 
 # JetBrains
 .idea
