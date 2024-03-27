@@ -1,6 +1,5 @@
 from os import environ
 
-import django
 import yaml
 
 from edx_exams.settings.base import *
