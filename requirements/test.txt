@@ -554,6 +554,8 @@ typing-extensions==4.9.0
     #   edx-opaque-keys
     #   faker
     #   pylint
+unicodecsv==0.14.1
+    # via -r requirements/base.txt
 uritemplate==4.1.1
     # via
     #   -r requirements/base.txt

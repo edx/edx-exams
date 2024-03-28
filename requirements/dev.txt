@@ -704,6 +704,8 @@ typing-extensions==4.9.0
     #   faker
     #   pylint
     #   rich
+unicodecsv==0.14.1
+    # via -r requirements/validation.txt
 uritemplate==4.1.1
     # via
     #   -r requirements/validation.txt
