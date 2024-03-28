@@ -61,10 +61,10 @@ class TestBulkAddCourseStaff(TestCase):
         with NamedTemporaryFile() as csv:
             csv = self._write_test_csv(csv, lines)
             call_command(self.command, f'--csv_path={csv.name}')
-            user = User.objects.filter(username=username, email=email)[0]
+            user = User.objects.filter(username=username, email=email)
             assert user.exists()
             assert CourseStaffRole.objects.filter(
-                user=user.id,
+                user=user[0].id,
                 course_id=self.course_id,
                 role=self.course_role,
             ).exists()
