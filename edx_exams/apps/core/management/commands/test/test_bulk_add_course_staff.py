@@ -4,7 +4,7 @@ from tempfile import NamedTemporaryFile
 from django.core.management import call_command
 from django.test import TestCase
 
-from edx_exams.apps.core.models import CourseStaffRole
+from edx_exams.apps.core.models import CourseStaffRole, User
 from edx_exams.apps.core.test_utils.factories import UserFactory
 
 
@@ -26,6 +26,7 @@ class TestBulkAddCourseStaff(TestCase):
         self.user.save()
 
         self.course_id = 'course-v1:edx+test+f19'
+        self.course_role = 'staff'
 
     def _write_test_csv(self, csv, lines):
         """ Write a test csv file with the lines provided """
@@ -42,18 +43,34 @@ class TestBulkAddCourseStaff(TestCase):
             call_command(self.command, f'--csv_path={csv.name}')
 
     def test_add_course_staff_with_existing_user(self):
-        lines = ['amy,amy@pond.com,staff,course-v1:edx+test+f19\n']
+        lines = [f'{self.user.username},{self.user.email},{self.course_role},{self.course_id}\n']
         with NamedTemporaryFile() as csv:
             csv = self._write_test_csv(csv, lines)
             call_command(self.command, f'--csv_path={csv.name}')
-            assert CourseStaffRole.objects.filter(user=self.user.id).exists()
+            assert User.objects.filter(
+                username=self.user.username,
+                email=self.user.email,
+            ).exists()
+            assert CourseStaffRole.objects.filter(
+                user=self.user.id,
+                course_id=self.course_id,
+                course_role=self.course_role,
+            ).exists()
 
     def test_add_course_staff_with_new_user(self):
-        lines = ['pam,pam@pond.com,staff,course-v1:edx+test+f20\n']
+        username = 'pam'
+        email = 'pam@pond.com'
+        lines = [f'{username},{email},{self.course_role},{self.course_id}\n']
         with NamedTemporaryFile() as csv:
             csv = self._write_test_csv(csv, lines)
             call_command(self.command, f'--csv_path={csv.name}')
-            assert CourseStaffRole.objects.filter(course_id='course-v1:edx+test+f20').count() == 1
+            user = User.objects.filter(username=username, email=email)[0]
+            assert user.exists()
+            assert CourseStaffRole.objects.filter(
+                user=user.id,
+                course_id=self.course_id,
+                course_role=self.course_role,
+            ).exists()
 
     def test_add_course_staff_with_not_default_batch_size(self):
         lines = ['pam,pam@pond.com,staff,course-v1:edx+test+f20\n',
