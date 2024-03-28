@@ -51,7 +51,7 @@ class TestBulkAddCourseStaff(TestCase):
             assert CourseStaffRole.objects.filter(
                 user=self.user.id,
                 course_id=self.course_id,
-                course_role=self.course_role,
+                role=self.course_role,
             ).exists()
 
     def test_add_course_staff_with_new_user(self):
@@ -66,7 +66,7 @@ class TestBulkAddCourseStaff(TestCase):
             assert CourseStaffRole.objects.filter(
                 user=user.id,
                 course_id=self.course_id,
-                course_role=self.course_role,
+                role=self.course_role,
             ).exists()
 
     def test_add_course_staff_with_not_default_batch_size(self):
