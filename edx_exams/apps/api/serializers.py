@@ -133,6 +133,9 @@ class ExamSerializer(serializers.ModelSerializer):
             'id', 'exam_name', 'course_id', 'content_id', 'time_limit_mins', 'due_date', 'exam_type',
             'hide_after_due', 'is_active'
         )
+        # since we use this to bulk create or update without a pk we cannot run the unique constraint
+        # validator on the model since it won't know which operation we are doing at validation time.
+        validators = []
 
     def validate_exam_type(self, value):
         """
