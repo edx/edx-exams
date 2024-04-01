@@ -10,13 +10,12 @@ appdirs==1.4.4
     # via
     #   -r requirements/test.txt
     #   fs
-asgiref==3.8.1
+asgiref==3.7.2
     # via
     #   -r requirements/test.txt
     #   django
     #   django-cors-headers
-    #   django-simple-history
-astroid==3.1.0
+astroid==3.0.3
     # via
     #   -r requirements/test.txt
     #   pylint
@@ -36,23 +35,22 @@ backports-zoneinfo==0.2.1
     # via
     #   -r requirements/test.txt
     #   django
-    #   djangorestframework
 bleach==6.1.0
     # via
     #   -r requirements/test.txt
     #   lti-consumer-xblock
-boto3==1.34.70
+boto3==1.34.45
     # via
     #   -r requirements/test.txt
     #   fs-s3fs
-botocore==1.34.70
+botocore==1.34.45
     # via
     #   -r requirements/test.txt
     #   boto3
     #   s3transfer
-build==1.1.1
+build==1.0.3
     # via -r requirements/doc.in
-cachetools==5.3.3
+cachetools==5.3.2
     # via
     #   -r requirements/test.txt
     #   tox
@@ -84,7 +82,7 @@ click-log==0.4.0
     # via
     #   -r requirements/test.txt
     #   edx-lint
-code-annotations==1.7.0
+code-annotations==1.6.0
     # via
     #   -r requirements/test.txt
     #   edx-lint
@@ -102,17 +100,16 @@ coreschema==0.0.4
     # via
     #   -r requirements/test.txt
     #   coreapi
-coverage[toml]==7.4.4
+coverage[toml]==7.4.1
     # via
     #   -r requirements/test.txt
     #   pytest-cov
-cryptography==42.0.5
+cryptography==42.0.3
     # via
     #   -r requirements/test.txt
     #   pyjwt
-    #   secretstorage
     #   social-auth-core
-ddt==1.7.2
+ddt==1.7.1
     # via -r requirements/test.txt
 defusedxml==0.8.0rc2
     # via
@@ -129,7 +126,7 @@ distlib==0.3.8
     #   virtualenv
 django==4.2.11
     # via
-    #   -c requirements/common_constraints.txt
+    #   -c requirements/constraints.txt
     #   -r requirements/test.txt
     #   django-appconf
     #   django-config-models
@@ -177,7 +174,7 @@ django-dynamic-fixture==4.0.1
     # via -r requirements/test.txt
 django-extensions==3.2.3
     # via -r requirements/test.txt
-django-filter==24.1
+django-filter==23.5
     # via
     #   -r requirements/test.txt
     #   lti-consumer-xblock
@@ -185,7 +182,7 @@ django-model-utils==4.4.0
     # via -r requirements/test.txt
 django-rest-swagger==2.2.0
     # via -r requirements/test.txt
-django-simple-history==3.5.0
+django-simple-history==3.4.0
     # via -r requirements/test.txt
 django-statici18n==2.4.0
     # via
@@ -197,7 +194,7 @@ django-waffle==4.1.0
     #   edx-django-utils
     #   edx-drf-extensions
     #   edx-toggles
-djangorestframework==3.15.1
+djangorestframework==3.14.0
     # via
     #   -r requirements/test.txt
     #   django-config-models
@@ -232,7 +229,7 @@ edx-ccx-keys==1.2.1
     #   lti-consumer-xblock
 edx-django-release-util==1.3.0
     # via -r requirements/test.txt
-edx-django-utils==5.11.0
+edx-django-utils==5.10.1
     # via
     #   -r requirements/test.txt
     #   django-config-models
@@ -248,7 +245,7 @@ edx-drf-extensions==9.1.2
     #   -r requirements/test.txt
 edx-event-bus-kafka==5.6.0
     # via -r requirements/test.txt
-edx-event-bus-redis==0.4.0
+edx-event-bus-redis==0.3.3
     # via -r requirements/test.txt
 edx-lint==5.3.6
     # via -r requirements/test.txt
@@ -276,7 +273,7 @@ exceptiongroup==1.2.0
     #   pytest
 factory-boy==3.3.0
     # via -r requirements/test.txt
-faker==24.4.0
+faker==23.2.1
     # via
     #   -r requirements/test.txt
     #   factory-boy
@@ -284,7 +281,7 @@ fastavro==1.9.4
     # via
     #   -r requirements/test.txt
     #   openedx-events
-filelock==3.13.3
+filelock==3.13.1
     # via
     #   -r requirements/test.txt
     #   tox
@@ -301,7 +298,7 @@ fs-s3fs==1.1.1
     # via
     #   -r requirements/test.txt
     #   openedx-django-pyfs
-future==1.0.0
+future==0.18.3
     # via
     #   -r requirements/test.txt
     #   pyjwkest
@@ -311,14 +308,13 @@ idna==3.6
     #   requests
 imagesize==1.4.1
     # via sphinx
-importlib-metadata==6.11.0
+importlib-metadata==7.0.1
     # via
-    #   -c requirements/common_constraints.txt
     #   build
     #   keyring
     #   sphinx
     #   twine
-importlib-resources==6.4.0
+importlib-resources==6.1.1
     # via keyring
 inflection==0.5.1
     # via
@@ -338,14 +334,6 @@ itypes==1.2.0
     #   coreapi
 jaraco-classes==3.3.1
     # via keyring
-jaraco-context==4.3.0
-    # via keyring
-jaraco-functools==4.0.0
-    # via keyring
-jeepney==0.8.0
-    # via
-    #   keyring
-    #   secretstorage
 jinja2==3.1.3
     # via
     #   -r requirements/test.txt
@@ -361,7 +349,7 @@ jsonfield==3.1.0
     # via
     #   -r requirements/test.txt
     #   lti-consumer-xblock
-keyring==25.0.0
+keyring==24.3.0
     # via twine
 lazy==1.6
     # via
@@ -396,16 +384,14 @@ mdurl==0.1.2
 mock==5.1.0
     # via -r requirements/test.txt
 more-itertools==10.2.0
-    # via
-    #   jaraco-classes
-    #   jaraco-functools
+    # via jaraco-classes
 mysqlclient==2.2.4
     # via -r requirements/test.txt
-newrelic==9.7.1
+newrelic==9.6.0
     # via
     #   -r requirements/test.txt
     #   edx-django-utils
-nh3==0.2.17
+nh3==0.2.15
     # via readme-renderer
 oauthlib==3.2.2
     # via
@@ -430,7 +416,7 @@ openedx-filters==1.6.0
     # via
     #   -r requirements/test.txt
     #   lti-consumer-xblock
-packaging==24.0
+packaging==23.2
     # via
     #   -r requirements/test.txt
     #   build
@@ -443,7 +429,7 @@ pbr==6.0.0
     # via
     #   -r requirements/test.txt
     #   stevedore
-pkginfo==1.10.0
+pkginfo==1.9.6
     # via twine
 platformdirs==4.2.0
     # via
@@ -488,7 +474,7 @@ pyjwt[crypto]==2.8.0
     #   edx-drf-extensions
     #   edx-rest-api-client
     #   social-auth-core
-pylint==3.1.0
+pylint==3.0.3
     # via
     #   -r requirements/test.txt
     #   edx-lint
@@ -524,16 +510,16 @@ pyproject-api==1.6.1
     #   tox
 pyproject-hooks==1.0.0
     # via build
-pytest==8.1.1
+pytest==8.0.1
     # via
     #   -r requirements/test.txt
     #   pytest-cov
     #   pytest-django
-pytest-cov==5.0.0
+pytest-cov==4.1.0
     # via -r requirements/test.txt
 pytest-django==4.8.0
     # via -r requirements/test.txt
-python-dateutil==2.9.0.post0
+python-dateutil==2.8.2
     # via
     #   -r requirements/test.txt
     #   botocore
@@ -552,6 +538,7 @@ pytz==2024.1
     # via
     #   -r requirements/test.txt
     #   babel
+    #   djangorestframework
     #   drf-yasg
     #   xblock
 pyyaml==6.0.1
@@ -562,9 +549,9 @@ pyyaml==6.0.1
     #   edx-django-release-util
     #   responses
     #   xblock
-readme-renderer==43.0
+readme-renderer==42.0
     # via twine
-redis==5.0.3
+redis==5.0.1
     # via
     #   -r requirements/test.txt
     #   walrus
@@ -582,7 +569,7 @@ requests==2.31.0
     #   social-auth-core
     #   sphinx
     #   twine
-requests-oauthlib==2.0.0
+requests-oauthlib==1.3.1
     # via
     #   -r requirements/test.txt
     #   social-auth-core
@@ -594,14 +581,12 @@ restructuredtext-lint==1.4.0
     # via doc8
 rfc3986==2.0.0
     # via twine
-rich==13.7.1
+rich==13.7.0
     # via twine
-s3transfer==0.10.1
+s3transfer==0.10.0
     # via
     #   -r requirements/test.txt
     #   boto3
-secretstorage==3.3.3
-    # via keyring
 semantic-version==2.10.0
     # via
     #   -r requirements/test.txt
@@ -659,7 +644,7 @@ sqlparse==0.4.4
     # via
     #   -r requirements/test.txt
     #   django
-stevedore==5.2.0
+stevedore==5.1.0
     # via
     #   -r requirements/test.txt
     #   code-annotations
@@ -681,15 +666,15 @@ tomli==2.0.1
     #   pyproject-hooks
     #   pytest
     #   tox
-tomlkit==0.12.4
+tomlkit==0.12.3
     # via
     #   -r requirements/test.txt
     #   pylint
-tox==4.14.2
+tox==4.13.0
     # via -r requirements/test.txt
 twine==5.0.0
     # via -r requirements/doc.in
-typing-extensions==4.10.0
+typing-extensions==4.9.0
     # via
     #   -r requirements/test.txt
     #   asgiref
@@ -710,7 +695,7 @@ urllib3==1.26.18
     #   requests
     #   responses
     #   twine
-virtualenv==20.25.1
+virtualenv==20.25.0
     # via
     #   -r requirements/test.txt
     #   tox
@@ -730,11 +715,11 @@ webob==1.8.7
     # via
     #   -r requirements/test.txt
     #   xblock
-xblock==3.0.0
+xblock==1.10.0
     # via
     #   -r requirements/test.txt
     #   lti-consumer-xblock
-zipp==3.18.1
+zipp==3.17.0
     # via
     #   importlib-metadata
     #   importlib-resources
