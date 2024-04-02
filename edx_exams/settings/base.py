@@ -251,7 +251,7 @@ TOKEN_SIGNING = {
 }
 
 # Carry fields from the JWT token and LMS user into the local user
-# Note: ENABLE_SET_REQUEST_USER_FOR_JWT_COOKIE applies a fix for 
+# Note: ENABLE_SET_REQUEST_USER_FOR_JWT_COOKIE applies a fix for
 # https://github.com/jpadilla/django-rest-framework-jwt/issues/45
 # However, we cannot use it in this service since the session user may
 # differ from the JWT user when performing LTI launches with multiple accounts
