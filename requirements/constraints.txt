@@ -10,5 +10,3 @@
 
 # Common constraints for edx repos
 -c common_constraints.txt
-
-edx-drf-extensions<10.0.0  # JWT changes in v10 break LTI authenication
