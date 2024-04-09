@@ -28,6 +28,10 @@ attrs==23.2.0
     #   -r requirements/validation.txt
     #   lti-consumer-xblock
     #   openedx-events
+backports-tarfile==1.0.0
+    # via
+    #   -r requirements/validation.txt
+    #   jaraco-context
 backports-zoneinfo==0.2.1
     # via
     #   -r requirements/validation.txt
@@ -37,11 +41,11 @@ bleach==6.1.0
     # via
     #   -r requirements/validation.txt
     #   lti-consumer-xblock
-boto3==1.34.75
+boto3==1.34.80
     # via
     #   -r requirements/validation.txt
     #   fs-s3fs
-botocore==1.34.75
+botocore==1.34.80
     # via
     #   -r requirements/validation.txt
     #   boto3
@@ -85,7 +89,7 @@ click-log==0.4.0
     # via
     #   -r requirements/validation.txt
     #   edx-lint
-code-annotations==1.7.0
+code-annotations==1.8.0
     # via
     #   -r requirements/validation.txt
     #   edx-lint
@@ -166,7 +170,7 @@ django-appconf==1.0.6
     # via
     #   -r requirements/validation.txt
     #   django-statici18n
-django-config-models==2.5.1
+django-config-models==2.7.0
     # via
     #   -r requirements/validation.txt
     #   lti-consumer-xblock
@@ -224,7 +228,7 @@ drf-yasg==1.21.7
     # via
     #   -r requirements/validation.txt
     #   edx-api-doc-tools
-edx-api-doc-tools==1.7.0
+edx-api-doc-tools==1.8.0
     # via -r requirements/validation.txt
 edx-auth-backends==4.3.0
     # via -r requirements/validation.txt
@@ -246,9 +250,9 @@ edx-django-utils==5.12.0
     #   openedx-events
 edx-drf-extensions==9.1.2
     # via -r requirements/validation.txt
-edx-event-bus-kafka==5.6.0
+edx-event-bus-kafka==5.7.0
     # via -r requirements/validation.txt
-edx-event-bus-redis==0.4.0
+edx-event-bus-redis==0.5.0
     # via -r requirements/validation.txt
 edx-i18n-tools==1.3.0
     # via -r requirements/dev.in
@@ -261,9 +265,9 @@ edx-opaque-keys[django]==2.5.1
     #   edx-drf-extensions
     #   lti-consumer-xblock
     #   openedx-events
-edx-rest-api-client==5.6.1
+edx-rest-api-client==5.7.0
     # via -r requirements/validation.txt
-edx-toggles==5.1.1
+edx-toggles==5.2.0
     # via
     #   -r requirements/validation.txt
     #   edx-event-bus-kafka
@@ -276,7 +280,7 @@ exceptiongroup==1.2.0
     #   pytest
 factory-boy==3.3.0
     # via -r requirements/validation.txt
-faker==24.4.0
+faker==24.7.1
     # via
     #   -r requirements/validation.txt
     #   factory-boy
@@ -340,7 +344,7 @@ jaraco-classes==3.4.0
     # via
     #   -r requirements/validation.txt
     #   keyring
-jaraco-context==4.3.0
+jaraco-context==5.3.0
     # via
     #   -r requirements/validation.txt
     #   keyring
@@ -378,7 +382,7 @@ lazy==1.6
     #   lti-consumer-xblock
 lti-consumer-xblock==9.8.3
     # via -r requirements/validation.txt
-lxml==5.2.0
+lxml==5.2.1
     # via
     #   -r requirements/validation.txt
     #   edx-i18n-tools
@@ -438,7 +442,7 @@ openedx-django-pyfs==3.6.0
     # via
     #   -r requirements/validation.txt
     #   lti-consumer-xblock
-openedx-events==9.6.0
+openedx-events==9.7.0
     # via
     #   -r requirements/validation.txt
     #   edx-event-bus-kafka
@@ -456,7 +460,7 @@ packaging==24.0
     #   pyproject-api
     #   pytest
     #   tox
-path==16.10.0
+path==16.14.0
     # via edx-i18n-tools
 pbr==6.0.0
     # via
@@ -715,7 +719,7 @@ tox==4.14.2
     # via -r requirements/validation.txt
 twine==5.0.0
     # via -r requirements/validation.txt
-typing-extensions==4.10.0
+typing-extensions==4.11.0
     # via
     #   -r requirements/validation.txt
     #   asgiref
@@ -744,7 +748,7 @@ walrus==0.9.3
     # via
     #   -r requirements/validation.txt
     #   edx-event-bus-redis
-web-fragments==2.1.0
+web-fragments==2.2.0
     # via
     #   -r requirements/validation.txt
     #   xblock
@@ -760,7 +764,7 @@ wheel==0.43.0
     # via
     #   -r requirements/pip-tools.txt
     #   pip-tools
-xblock==3.0.0
+xblock==3.1.0
     # via
     #   -r requirements/validation.txt
     #   lti-consumer-xblock
