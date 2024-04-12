@@ -32,12 +32,12 @@ bleach==6.1.0
     # via
     #   -r requirements/base.txt
     #   lti-consumer-xblock
-boto3==1.34.75
+boto3==1.34.80
     # via
     #   -r requirements/base.txt
     #   django-ses
     #   fs-s3fs
-botocore==1.34.75
+botocore==1.34.80
     # via
     #   -r requirements/base.txt
     #   boto3
@@ -60,7 +60,7 @@ click==8.1.7
     #   -r requirements/base.txt
     #   code-annotations
     #   edx-django-utils
-code-annotations==1.7.0
+code-annotations==1.8.0
     # via
     #   -r requirements/base.txt
     #   edx-toggles
@@ -118,7 +118,7 @@ django-appconf==1.0.6
     # via
     #   -r requirements/base.txt
     #   django-statici18n
-django-config-models==2.5.1
+django-config-models==2.7.0
     # via
     #   -r requirements/base.txt
     #   lti-consumer-xblock
@@ -170,7 +170,7 @@ drf-yasg==1.21.7
     # via
     #   -r requirements/base.txt
     #   edx-api-doc-tools
-edx-api-doc-tools==1.7.0
+edx-api-doc-tools==1.8.0
     # via -r requirements/base.txt
 edx-auth-backends==4.3.0
     # via -r requirements/base.txt
@@ -192,9 +192,9 @@ edx-django-utils==5.12.0
     #   openedx-events
 edx-drf-extensions==9.1.2
     # via -r requirements/base.txt
-edx-event-bus-kafka==5.6.0
+edx-event-bus-kafka==5.7.0
     # via -r requirements/base.txt
-edx-event-bus-redis==0.4.0
+edx-event-bus-redis==0.5.0
     # via -r requirements/base.txt
 edx-opaque-keys[django]==2.5.1
     # via
@@ -203,9 +203,9 @@ edx-opaque-keys[django]==2.5.1
     #   edx-drf-extensions
     #   lti-consumer-xblock
     #   openedx-events
-edx-rest-api-client==5.6.1
+edx-rest-api-client==5.7.0
     # via -r requirements/base.txt
-edx-toggles==5.1.1
+edx-toggles==5.2.0
     # via
     #   -r requirements/base.txt
     #   edx-event-bus-kafka
@@ -268,7 +268,7 @@ lazy==1.6
     #   lti-consumer-xblock
 lti-consumer-xblock==9.8.3
     # via -r requirements/base.txt
-lxml==5.2.0
+lxml==5.2.1
     # via
     #   -r requirements/base.txt
     #   lti-consumer-xblock
@@ -306,7 +306,7 @@ openedx-django-pyfs==3.6.0
     # via
     #   -r requirements/base.txt
     #   lti-consumer-xblock
-openedx-events==9.6.0
+openedx-events==9.7.0
     # via
     #   -r requirements/base.txt
     #   edx-event-bus-kafka
@@ -458,7 +458,7 @@ text-unidecode==1.3
     # via
     #   -r requirements/base.txt
     #   python-slugify
-typing-extensions==4.10.0
+typing-extensions==4.11.0
     # via
     #   -r requirements/base.txt
     #   asgiref
@@ -477,7 +477,7 @@ walrus==0.9.3
     # via
     #   -r requirements/base.txt
     #   edx-event-bus-redis
-web-fragments==2.1.0
+web-fragments==2.2.0
     # via
     #   -r requirements/base.txt
     #   xblock
@@ -489,7 +489,7 @@ webob==1.8.7
     # via
     #   -r requirements/base.txt
     #   xblock
-xblock==3.0.0
+xblock==3.1.0
     # via
     #   -r requirements/base.txt
     #   lti-consumer-xblock
