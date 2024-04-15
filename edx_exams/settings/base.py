@@ -64,8 +64,6 @@ MIDDLEWARE = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
-    # Forces JWT auth if edx JWT cookie exists
-    'edx_exams.apps.core.middleware.ForceJWTAuthMiddleware',
     'edx_rest_framework_extensions.auth.jwt.middleware.JwtAuthCookieMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -253,6 +251,11 @@ TOKEN_SIGNING = {
 }
 
 # Carry fields from the JWT token and LMS user into the local user
+# Note: ENABLE_SET_REQUEST_USER_FOR_JWT_COOKIE applies a fix for
+# https://github.com/jpadilla/django-rest-framework-jwt/issues/45
+# However, we cannot use it in this service since the session user may
+# differ from the JWT user when performing LTI launches with multiple accounts
+# in the same browser.
 EDX_DRF_EXTENSIONS = {
     "JWT_PAYLOAD_USER_ATTRIBUTE_MAPPING": {
         "administrator": "is_staff",
@@ -261,7 +264,7 @@ EDX_DRF_EXTENSIONS = {
         "user_id": "lms_user_id",
     },
     "OAUTH2_USER_INFO_URL": "http://127.0.0.1:8000/oauth2/user_info",
-    "ENABLE_SET_REQUEST_USER_FOR_JWT_COOKIE": True,
+    "ENABLE_SET_REQUEST_USER_FOR_JWT_COOKIE": False,
 }
 
 # Request the user's permissions in the ID token
