@@ -24,9 +24,9 @@ backports-zoneinfo==0.2.1
     #   djangorestframework
 bleach==6.1.0
     # via lti-consumer-xblock
-boto3==1.34.84
+boto3==1.34.92
     # via fs-s3fs
-botocore==1.34.84
+botocore==1.34.92
     # via
     #   boto3
     #   s3transfer
@@ -109,7 +109,7 @@ django-rest-swagger==2.2.0
     # via -r requirements/base.in
 django-simple-history==3.5.0
     # via -r requirements/base.in
-django-statici18n==2.4.0
+django-statici18n==2.5.0
     # via lti-consumer-xblock
 django-waffle==4.1.0
     # via
@@ -126,6 +126,8 @@ djangorestframework==3.15.1
     #   drf-yasg
     #   edx-api-doc-tools
     #   edx-drf-extensions
+dnspython==2.6.1
+    # via pymongo
 drf-jwt==1.19.2
     # via edx-drf-extensions
 drf-yasg==1.21.7
@@ -134,7 +136,7 @@ edx-api-doc-tools==1.8.0
     # via -r requirements/base.in
 edx-auth-backends==4.3.0
     # via -r requirements/base.in
-edx-ccx-keys==1.2.1
+edx-ccx-keys==1.3.0
     # via lti-consumer-xblock
 edx-django-release-util==1.4.0
     # via -r requirements/base.in
@@ -154,7 +156,7 @@ edx-event-bus-kafka==5.7.0
     # via -r requirements/base.in
 edx-event-bus-redis==0.5.0
     # via -r requirements/base.in
-edx-opaque-keys[django]==2.5.1
+edx-opaque-keys[django]==2.9.0
     # via
     #   -r requirements/base.in
     #   edx-ccx-keys
@@ -198,7 +200,7 @@ jsonfield==3.1.0
     # via lti-consumer-xblock
 lazy==1.6
     # via lti-consumer-xblock
-lti-consumer-xblock==9.8.3
+lti-consumer-xblock==9.11.0
     # via -r requirements/base.in
 lxml==5.2.1
     # via
@@ -215,7 +217,7 @@ markupsafe==2.1.5
     #   xblock
 mysqlclient==2.2.4
     # via -r requirements/base.in
-newrelic==9.8.0
+newrelic==9.9.0
     # via edx-django-utils
 oauthlib==3.2.2
     # via
@@ -226,7 +228,7 @@ openapi-codec==1.3.2
     # via django-rest-swagger
 openedx-django-pyfs==3.6.0
     # via lti-consumer-xblock
-openedx-events==9.9.1
+openedx-events==9.9.2
     # via
     #   -r requirements/base.in
     #   edx-event-bus-kafka
@@ -258,7 +260,7 @@ pyjwt[crypto]==2.8.0
     #   social-auth-core
 pymemcache==4.0.0
     # via -r requirements/base.in
-pymongo==3.13.0
+pymongo==4.4.0
     # via edx-opaque-keys
 pynacl==1.5.0
     # via edx-django-utils
@@ -281,7 +283,7 @@ pyyaml==6.0.1
     #   drf-yasg
     #   edx-django-release-util
     #   xblock
-redis==5.0.3
+redis==5.0.4
     # via walrus
 requests==2.31.0
     # via
@@ -314,9 +316,9 @@ six==1.16.0
     #   python-dateutil
 slumber==0.7.1
     # via edx-rest-api-client
-social-auth-app-django==5.4.0
+social-auth-app-django==5.4.1
     # via edx-auth-backends
-social-auth-core==4.5.3
+social-auth-core==4.5.4
     # via
     #   edx-auth-backends
     #   social-auth-app-django
@@ -349,7 +351,7 @@ webencodings==0.5.1
     # via bleach
 webob==1.8.7
     # via xblock
-xblock==3.1.0
+xblock==4.0.1
     # via lti-consumer-xblock
 
 # The following packages are considered to be unsafe in a requirements file:
