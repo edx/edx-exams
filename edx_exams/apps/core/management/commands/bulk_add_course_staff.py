@@ -68,6 +68,7 @@ class Command(BaseCommand):
         for row in reader:
             if row.get('username') not in users_existing:
                 users_to_create.append(row)
+                users_existing.add(row.get('username'))
 
         # bulk create users
         for i in range(0, len(users_to_create), batch_size):

@@ -117,3 +117,16 @@ class TestBulkAddCourseStaff(TestCase):
             csv = self._write_test_csv(csv, lines)
             with self.assertNumQueries(5 + num_lines):
                 call_command(self.command, f'--csv_path={csv.name}')
+
+    def test_dupe_user_csv(self):
+        """ Assert that the course staff roles are correctly created given duplicate users in csv """
+        username, email = 'pam', 'pam@pond.com'
+        course_id_2 = 'course-v1:edx+test+f21'
+        lines = [f'{username},{email},{self.course_role},{self.course_id}\n',
+                 f'{username},{email},{self.course_role},{course_id_2}\n']
+
+        with NamedTemporaryFile() as csv:
+            csv = self._write_test_csv(csv, lines)
+            call_command(self.command, f'--csv_path={csv.name}')
+            self._assert_user_and_role(username, email, self.course_role, self.course_id)
+            self._assert_user_and_role(username, email, self.course_role, course_id_2)
