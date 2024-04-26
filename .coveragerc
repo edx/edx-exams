@@ -1,6 +1,7 @@
 [run]
 branch = True
 data_file = .coverage
+relative_files = True
 source=edx_exams
 omit =
     edx_exams/settings/*
