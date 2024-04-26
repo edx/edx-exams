@@ -36,11 +36,11 @@ bleach==6.1.0
     # via
     #   -r requirements/base.txt
     #   lti-consumer-xblock
-boto3==1.34.84
+boto3==1.34.92
     # via
     #   -r requirements/base.txt
     #   fs-s3fs
-botocore==1.34.84
+botocore==1.34.92
     # via
     #   -r requirements/base.txt
     #   boto3
@@ -88,7 +88,7 @@ coreschema==0.0.4
     # via
     #   -r requirements/base.txt
     #   coreapi
-coverage[toml]==7.4.4
+coverage[toml]==7.5.0
     # via
     #   -r requirements/test.in
     #   pytest-cov
@@ -167,7 +167,7 @@ django-rest-swagger==2.2.0
     # via -r requirements/base.txt
 django-simple-history==3.5.0
     # via -r requirements/base.txt
-django-statici18n==2.4.0
+django-statici18n==2.5.0
     # via
     #   -r requirements/base.txt
     #   lti-consumer-xblock
@@ -186,6 +186,10 @@ djangorestframework==3.15.1
     #   drf-yasg
     #   edx-api-doc-tools
     #   edx-drf-extensions
+dnspython==2.6.1
+    # via
+    #   -r requirements/base.txt
+    #   pymongo
 drf-jwt==1.19.2
     # via
     #   -r requirements/base.txt
@@ -198,7 +202,7 @@ edx-api-doc-tools==1.8.0
     # via -r requirements/base.txt
 edx-auth-backends==4.3.0
     # via -r requirements/base.txt
-edx-ccx-keys==1.2.1
+edx-ccx-keys==1.3.0
     # via
     #   -r requirements/base.txt
     #   lti-consumer-xblock
@@ -222,7 +226,7 @@ edx-event-bus-redis==0.5.0
     # via -r requirements/base.txt
 edx-lint==5.3.6
     # via -r requirements/test.in
-edx-opaque-keys[django]==2.5.1
+edx-opaque-keys[django]==2.9.0
     # via
     #   -r requirements/base.txt
     #   edx-ccx-keys
@@ -238,11 +242,11 @@ edx-toggles==5.2.0
     #   edx-event-bus-redis
 edx-token-utils==0.2.1
     # via -r requirements/base.txt
-exceptiongroup==1.2.0
+exceptiongroup==1.2.1
     # via pytest
 factory-boy==3.3.0
     # via -r requirements/test.in
-faker==24.9.0
+faker==24.14.0
     # via factory-boy
 fastavro==1.9.4
     # via
@@ -252,7 +256,7 @@ filelock==3.13.4
     # via
     #   tox
     #   virtualenv
-freezegun==1.4.0
+freezegun==1.5.0
     # via -r requirements/test.in
 fs==2.4.16
     # via
@@ -302,7 +306,7 @@ lazy==1.6
     # via
     #   -r requirements/base.txt
     #   lti-consumer-xblock
-lti-consumer-xblock==9.8.3
+lti-consumer-xblock==9.11.0
     # via -r requirements/base.txt
 lxml==5.2.1
     # via
@@ -326,7 +330,7 @@ mock==5.1.0
     # via -r requirements/test.in
 mysqlclient==2.2.4
     # via -r requirements/base.txt
-newrelic==9.8.0
+newrelic==9.9.0
     # via
     #   -r requirements/base.txt
     #   edx-django-utils
@@ -344,7 +348,7 @@ openedx-django-pyfs==3.6.0
     # via
     #   -r requirements/base.txt
     #   lti-consumer-xblock
-openedx-events==9.9.1
+openedx-events==9.9.2
     # via
     #   -r requirements/base.txt
     #   edx-event-bus-kafka
@@ -364,12 +368,12 @@ pbr==6.0.0
     # via
     #   -r requirements/base.txt
     #   stevedore
-platformdirs==4.2.0
+platformdirs==4.2.1
     # via
     #   pylint
     #   tox
     #   virtualenv
-pluggy==1.4.0
+pluggy==1.5.0
     # via
     #   pytest
     #   tox
@@ -415,7 +419,7 @@ pylint-plugin-utils==0.8.2
     #   pylint-django
 pymemcache==4.0.0
     # via -r requirements/base.txt
-pymongo==3.13.0
+pymongo==4.4.0
     # via
     #   -r requirements/base.txt
     #   edx-opaque-keys
@@ -461,7 +465,7 @@ pyyaml==6.0.1
     #   edx-django-release-util
     #   responses
     #   xblock
-redis==5.0.3
+redis==5.0.4
     # via
     #   -r requirements/base.txt
     #   walrus
@@ -511,11 +515,11 @@ slumber==0.7.1
     # via
     #   -r requirements/base.txt
     #   edx-rest-api-client
-social-auth-app-django==5.4.0
+social-auth-app-django==5.4.1
     # via
     #   -r requirements/base.txt
     #   edx-auth-backends
-social-auth-core==4.5.3
+social-auth-core==4.5.4
     # via
     #   -r requirements/base.txt
     #   edx-auth-backends
@@ -564,7 +568,7 @@ urllib3==1.26.18
     #   botocore
     #   requests
     #   responses
-virtualenv==20.25.1
+virtualenv==20.26.0
     # via tox
 walrus==0.9.3
     # via
@@ -582,7 +586,7 @@ webob==1.8.7
     # via
     #   -r requirements/base.txt
     #   xblock
-xblock==3.1.0
+xblock==4.0.1
     # via
     #   -r requirements/base.txt
     #   lti-consumer-xblock
