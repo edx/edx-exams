@@ -24,9 +24,9 @@ backports-zoneinfo==0.2.1
     #   djangorestframework
 bleach==6.1.0
     # via lti-consumer-xblock
-boto3==1.34.94
+boto3==1.34.99
     # via fs-s3fs
-botocore==1.34.94
+botocore==1.34.99
     # via
     #   boto3
     #   s3transfer
@@ -50,7 +50,7 @@ coreapi==2.3.3
     #   openapi-codec
 coreschema==0.0.4
     # via coreapi
-cryptography==42.0.5
+cryptography==42.0.7
     # via
     #   pyjwt
     #   social-auth-core
@@ -103,7 +103,7 @@ django-extensions==3.2.3
     # via -r requirements/base.in
 django-filter==24.2
     # via lti-consumer-xblock
-django-model-utils==4.5.0
+django-model-utils==4.5.1
     # via -r requirements/base.in
 django-rest-swagger==2.2.0
     # via -r requirements/base.in
@@ -188,7 +188,7 @@ inflection==0.5.1
     # via drf-yasg
 itypes==1.2.0
     # via coreapi
-jinja2==3.1.3
+jinja2==3.1.4
     # via
     #   code-annotations
     #   coreschema
