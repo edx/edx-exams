@@ -14,7 +14,7 @@ asgiref==3.8.1
     #   django
     #   django-cors-headers
     #   django-simple-history
-astroid==3.2.0
+astroid==3.2.2
     # via
     #   -r requirements/validation.txt
     #   pylint
@@ -41,11 +41,11 @@ bleach==6.1.0
     # via
     #   -r requirements/validation.txt
     #   lti-consumer-xblock
-boto3==1.34.104
+boto3==1.34.109
     # via
     #   -r requirements/validation.txt
     #   fs-s3fs
-botocore==1.34.104
+botocore==1.34.109
     # via
     #   -r requirements/validation.txt
     #   boto3
@@ -480,7 +480,7 @@ pkginfo==1.10.0
     # via
     #   -r requirements/validation.txt
     #   twine
-platformdirs==4.2.1
+platformdirs==4.2.2
     # via
     #   -r requirements/validation.txt
     #   pylint
@@ -530,7 +530,7 @@ pyjwt[crypto]==2.8.0
     #   edx-drf-extensions
     #   edx-rest-api-client
     #   social-auth-core
-pylint==3.2.0
+pylint==3.2.2
     # via
     #   -r requirements/validation.txt
     #   edx-lint
@@ -569,7 +569,7 @@ pyproject-hooks==1.1.0
     #   -r requirements/pip-tools.txt
     #   build
     #   pip-tools
-pytest==8.2.0
+pytest==8.2.1
     # via
     #   -r requirements/validation.txt
     #   pytest-cov
@@ -724,7 +724,7 @@ tomlkit==0.12.5
     #   pylint
 tox==4.15.0
     # via -r requirements/validation.txt
-twine==5.0.0
+twine==5.1.0
     # via -r requirements/validation.txt
 typing-extensions==4.11.0
     # via
@@ -774,7 +774,7 @@ xblock==4.0.1
     # via
     #   -r requirements/validation.txt
     #   lti-consumer-xblock
-zipp==3.18.1
+zipp==3.18.2
     # via
     #   -r requirements/pip-tools.txt
     #   -r requirements/validation.txt

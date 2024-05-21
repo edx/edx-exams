@@ -14,7 +14,7 @@ asgiref==3.8.1
     #   django
     #   django-cors-headers
     #   django-simple-history
-astroid==3.2.0
+astroid==3.2.2
     # via
     #   pylint
     #   pylint-celery
@@ -36,11 +36,11 @@ bleach==6.1.0
     # via
     #   -r requirements/base.txt
     #   lti-consumer-xblock
-boto3==1.34.104
+boto3==1.34.109
     # via
     #   -r requirements/base.txt
     #   fs-s3fs
-botocore==1.34.104
+botocore==1.34.109
     # via
     #   -r requirements/base.txt
     #   boto3
@@ -369,7 +369,7 @@ pbr==6.0.0
     # via
     #   -r requirements/base.txt
     #   stevedore
-platformdirs==4.2.1
+platformdirs==4.2.2
     # via
     #   pylint
     #   tox
@@ -404,7 +404,7 @@ pyjwt[crypto]==2.8.0
     #   edx-drf-extensions
     #   edx-rest-api-client
     #   social-auth-core
-pylint==3.2.0
+pylint==3.2.2
     # via
     #   edx-lint
     #   pylint-celery
@@ -430,7 +430,7 @@ pynacl==1.5.0
     #   edx-django-utils
 pyproject-api==1.6.1
     # via tox
-pytest==8.2.0
+pytest==8.2.1
     # via
     #   pytest-cov
     #   pytest-django
