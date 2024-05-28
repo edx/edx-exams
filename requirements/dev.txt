@@ -41,11 +41,11 @@ bleach==6.1.0
     # via
     #   -r requirements/validation.txt
     #   lti-consumer-xblock
-boto3==1.34.109
+boto3==1.34.113
     # via
     #   -r requirements/validation.txt
     #   fs-s3fs
-botocore==1.34.109
+botocore==1.34.113
     # via
     #   -r requirements/validation.txt
     #   boto3
@@ -107,7 +107,7 @@ coreschema==0.0.4
     # via
     #   -r requirements/validation.txt
     #   coreapi
-coverage[toml]==7.5.1
+coverage[toml]==7.5.3
     # via
     #   -r requirements/validation.txt
     #   pytest-cov
@@ -181,7 +181,7 @@ django-crum==0.7.9
     #   -r requirements/validation.txt
     #   edx-django-utils
     #   edx-toggles
-django-debug-toolbar==4.3.0
+django-debug-toolbar==4.4.2
     # via -r requirements/dev.in
 django-dynamic-fixture==4.0.1
     # via -r requirements/validation.txt
@@ -195,7 +195,7 @@ django-model-utils==4.5.1
     # via -r requirements/validation.txt
 django-rest-swagger==2.2.0
     # via -r requirements/validation.txt
-django-simple-history==3.5.0
+django-simple-history==3.6.0
     # via -r requirements/validation.txt
 django-statici18n==2.5.0
     # via
@@ -243,7 +243,7 @@ edx-ccx-keys==1.3.0
     #   openedx-events
 edx-django-release-util==1.4.0
     # via -r requirements/validation.txt
-edx-django-utils==5.13.0
+edx-django-utils==5.14.1
     # via
     #   -r requirements/validation.txt
     #   django-config-models
@@ -285,7 +285,7 @@ exceptiongroup==1.2.1
     #   pytest
 factory-boy==3.3.0
     # via -r requirements/validation.txt
-faker==25.2.0
+faker==25.3.0
     # via
     #   -r requirements/validation.txt
     #   factory-boy
@@ -428,7 +428,7 @@ more-itertools==10.2.0
     #   jaraco-functools
 mysqlclient==2.2.4
     # via -r requirements/validation.txt
-newrelic==9.9.1
+newrelic==9.10.0
     # via
     #   -r requirements/validation.txt
     #   edx-django-utils
@@ -726,7 +726,7 @@ tox==4.15.0
     # via -r requirements/validation.txt
 twine==5.1.0
     # via -r requirements/validation.txt
-typing-extensions==4.11.0
+typing-extensions==4.12.0
     # via
     #   -r requirements/validation.txt
     #   asgiref
@@ -774,7 +774,7 @@ xblock==4.0.1
     # via
     #   -r requirements/validation.txt
     #   lti-consumer-xblock
-zipp==3.18.2
+zipp==3.19.0
     # via
     #   -r requirements/pip-tools.txt
     #   -r requirements/validation.txt

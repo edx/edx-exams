@@ -32,12 +32,12 @@ bleach==6.1.0
     # via
     #   -r requirements/base.txt
     #   lti-consumer-xblock
-boto3==1.34.109
+boto3==1.34.113
     # via
     #   -r requirements/base.txt
     #   django-ses
     #   fs-s3fs
-botocore==1.34.109
+botocore==1.34.113
     # via
     #   -r requirements/base.txt
     #   boto3
@@ -139,9 +139,9 @@ django-model-utils==4.5.1
     # via -r requirements/base.txt
 django-rest-swagger==2.2.0
     # via -r requirements/base.txt
-django-ses==4.0.0
+django-ses==4.1.0
     # via -r requirements/production.in
-django-simple-history==3.5.0
+django-simple-history==3.6.0
     # via -r requirements/base.txt
 django-statici18n==2.5.0
     # via
@@ -185,7 +185,7 @@ edx-ccx-keys==1.3.0
     #   openedx-events
 edx-django-release-util==1.4.0
     # via -r requirements/base.txt
-edx-django-utils==5.13.0
+edx-django-utils==5.14.1
     # via
     #   -r requirements/base.txt
     #   django-config-models
@@ -293,7 +293,7 @@ mysqlclient==2.2.4
     # via
     #   -r requirements/base.txt
     #   -r requirements/production.in
-newrelic==9.9.1
+newrelic==9.10.0
     # via
     #   -r requirements/base.txt
     #   edx-django-utils
@@ -463,7 +463,7 @@ text-unidecode==1.3
     # via
     #   -r requirements/base.txt
     #   python-slugify
-typing-extensions==4.11.0
+typing-extensions==4.12.0
     # via
     #   -r requirements/base.txt
     #   asgiref
@@ -500,7 +500,7 @@ xblock==4.0.1
     #   lti-consumer-xblock
 zope-event==5.0
     # via gevent
-zope-interface==6.4
+zope-interface==6.4.post2
     # via gevent
 
 # The following packages are considered to be unsafe in a requirements file:
