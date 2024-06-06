@@ -10,7 +10,6 @@ asgiref==3.8.1
     # via
     #   django
     #   django-cors-headers
-    #   django-simple-history
 async-timeout==4.0.3
     # via redis
 attrs==23.2.0
@@ -24,13 +23,13 @@ backports-zoneinfo==0.2.1
     #   djangorestframework
 bleach==6.1.0
     # via lti-consumer-xblock
-boto3==1.34.109
+boto3==1.34.118
     # via fs-s3fs
-botocore==1.34.109
+botocore==1.34.118
     # via
     #   boto3
     #   s3transfer
-certifi==2024.2.2
+certifi==2024.6.2
     # via requests
 cffi==1.16.0
     # via
@@ -69,6 +68,7 @@ django==4.2.13
     #   django-extensions
     #   django-filter
     #   django-model-utils
+    #   django-simple-history
     #   django-statici18n
     #   django-waffle
     #   djangorestframework
@@ -107,7 +107,7 @@ django-model-utils==4.5.1
     # via -r requirements/base.in
 django-rest-swagger==2.2.0
     # via -r requirements/base.in
-django-simple-history==3.5.0
+django-simple-history==3.7.0
     # via -r requirements/base.in
 django-statici18n==2.5.0
     # via lti-consumer-xblock
@@ -142,7 +142,7 @@ edx-ccx-keys==1.3.0
     #   openedx-events
 edx-django-release-util==1.4.0
     # via -r requirements/base.in
-edx-django-utils==5.13.0
+edx-django-utils==5.14.2
     # via
     #   -r requirements/base.in
     #   django-config-models
@@ -202,7 +202,7 @@ jsonfield==3.1.0
     # via lti-consumer-xblock
 lazy==1.6
     # via lti-consumer-xblock
-lti-consumer-xblock==9.11.0
+lti-consumer-xblock==9.11.2
     # via -r requirements/base.in
 lxml==5.2.2
     # via
@@ -219,7 +219,7 @@ markupsafe==2.1.5
     #   xblock
 mysqlclient==2.2.4
     # via -r requirements/base.in
-newrelic==9.9.1
+newrelic==9.10.0
     # via edx-django-utils
 oauthlib==3.2.2
     # via
@@ -333,7 +333,7 @@ stevedore==5.2.0
     #   edx-opaque-keys
 text-unidecode==1.3
     # via python-slugify
-typing-extensions==4.11.0
+typing-extensions==4.12.1
     # via
     #   asgiref
     #   edx-opaque-keys
