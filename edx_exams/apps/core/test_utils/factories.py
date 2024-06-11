@@ -53,6 +53,7 @@ class ProctoringProviderFactory(DjangoModelFactory):
     name = factory.Sequence('test_provider_{}'.format)
     verbose_name = factory.Sequence('Test Provider {}'.format)
     lti_configuration_id = factory.Sequence('11{}'.format)
+    org_key = None
     tech_support_phone = '1118976309'
     tech_support_email = 'test@example.com'
     tech_support_url = 'www.example.com'
