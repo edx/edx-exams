@@ -23,9 +23,9 @@ backports-zoneinfo==0.2.1
     #   djangorestframework
 bleach==6.1.0
     # via lti-consumer-xblock
-boto3==1.34.118
+boto3==1.34.123
     # via fs-s3fs
-botocore==1.34.118
+botocore==1.34.123
     # via
     #   boto3
     #   s3transfer
@@ -49,7 +49,7 @@ coreapi==2.3.3
     #   openapi-codec
 coreschema==0.0.4
     # via coreapi
-cryptography==42.0.7
+cryptography==42.0.8
     # via
     #   pyjwt
     #   social-auth-core
@@ -158,7 +158,7 @@ edx-event-bus-kafka==5.7.0
     # via -r requirements/base.in
 edx-event-bus-redis==0.5.0
     # via -r requirements/base.in
-edx-opaque-keys[django]==2.9.0
+edx-opaque-keys[django]==2.10.0
     # via
     #   -r requirements/base.in
     #   edx-ccx-keys
@@ -202,7 +202,7 @@ jsonfield==3.1.0
     # via lti-consumer-xblock
 lazy==1.6
     # via lti-consumer-xblock
-lti-consumer-xblock==9.11.2
+lti-consumer-xblock==9.11.3
     # via -r requirements/base.in
 lxml==5.2.2
     # via
@@ -237,7 +237,7 @@ openedx-events==9.10.0
     #   edx-event-bus-redis
 openedx-filters==1.8.1
     # via lti-consumer-xblock
-packaging==24.0
+packaging==24.1
     # via drf-yasg
 pbr==6.0.0
     # via stevedore
@@ -262,7 +262,7 @@ pyjwt[crypto]==2.8.0
     #   social-auth-core
 pymemcache==4.0.0
     # via -r requirements/base.in
-pymongo==4.4.0
+pymongo==4.7.3
     # via edx-opaque-keys
 pynacl==1.5.0
     # via edx-django-utils
@@ -285,7 +285,7 @@ pyyaml==6.0.1
     #   drf-yasg
     #   edx-django-release-util
     #   xblock
-redis==5.0.4
+redis==5.0.5
     # via walrus
 requests==2.31.0
     # via
@@ -333,7 +333,7 @@ stevedore==5.2.0
     #   edx-opaque-keys
 text-unidecode==1.3
     # via python-slugify
-typing-extensions==4.12.1
+typing-extensions==4.12.2
     # via
     #   asgiref
     #   edx-opaque-keys
