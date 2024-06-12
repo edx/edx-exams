@@ -86,6 +86,8 @@ class ProctoringProvider(TimeStampedModel):
 
     lti_configuration_id = models.CharField(max_length=255, db_index=True)
 
+    org_key = models.CharField(max_length=255, null=True)
+
     tech_support_phone = models.CharField(max_length=255, null=True)
 
     tech_support_email = models.CharField(max_length=255, null=True)

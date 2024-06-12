@@ -24,6 +24,7 @@ from edx_exams.apps.core.test_utils.factories import (
     CourseExamConfigurationFactory,
     ExamAttemptFactory,
     ExamFactory,
+    ProctoringProviderFactory,
     UserFactory
 )
 
@@ -583,20 +584,18 @@ class ProctoringProvidersViewTest(ExamsAPITestCase):
     Tests ProctoringProvidersView
     """
 
-    def get_response(self):
+    def get_response(self, org=None):
         """
         Helper function to make a get request
         """
         url = reverse('api:v1:proctoring-providers-list')
+        if org:
+            url += f'?org={org}'
         response = self.client.get(url)
         return response
 
     def test_proctoring_providers_list(self):
-        test_provider2 = ProctoringProvider.objects.create(
-            name='test_provider2',
-            verbose_name='testing_provider2',
-            lti_configuration_id='223456789'
-        )
+        test_provider2 = ProctoringProviderFactory()
         response = self.get_response()
         response_data_list = []
 
@@ -608,6 +607,23 @@ class ProctoringProvidersViewTest(ExamsAPITestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn(response_data_list[0], self.test_provider.name)
         self.assertIn(response_data_list[1], test_provider2.name)
+
+    def test_proctoring_providers_by_org(self):
+        org_provider = ProctoringProviderFactory.create(
+            org_key='edx'
+        )
+        other_org_provider = ProctoringProviderFactory.create(
+            org_key='other'
+        )
+        response = self.get_response(org='edx')
+
+        returned_providers = [item['name'] for item in response.data]
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data), 2)
+        self.assertIn(org_provider.name, returned_providers)
+        self.assertIn(self.test_provider.name, returned_providers)
+        self.assertNotIn(other_org_provider.name, returned_providers)
 
     def test_proctoring_providers_list_empty(self):
 

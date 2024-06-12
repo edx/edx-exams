@@ -5,6 +5,7 @@ import logging
 import uuid
 
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Q
 from django.utils import timezone
 from edx_api_doc_tools import path_parameter, schema
 from edx_rest_framework_extensions.auth.jwt.authentication import JwtAuthentication
@@ -296,7 +297,12 @@ class ProctoringProvidersView(ListAPIView):
     authentication_classes = (JwtAuthentication,)
     model = ProctoringProvider
     serializer_class = ProctoringProviderSerializer
-    queryset = ProctoringProvider.objects.all()
+
+    def get_queryset(self):
+        org_key = self.request.query_params.get('org', None)
+        if org_key:
+            return ProctoringProvider.objects.filter(Q(org_key=org_key) | Q(org_key=None))
+        return ProctoringProvider.objects.all()
 
 
 class ExamAccessTokensView(ExamsAPIView):
