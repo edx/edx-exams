@@ -23,9 +23,9 @@ backports-zoneinfo==0.2.1
     #   djangorestframework
 bleach==6.1.0
     # via lti-consumer-xblock
-boto3==1.34.123
+boto3==1.34.128
     # via fs-s3fs
-botocore==1.34.123
+botocore==1.34.128
     # via
     #   boto3
     #   s3transfer
@@ -219,7 +219,7 @@ markupsafe==2.1.5
     #   xblock
 mysqlclient==2.2.4
     # via -r requirements/base.in
-newrelic==9.10.0
+newrelic==9.11.0
     # via edx-django-utils
 oauthlib==3.2.2
     # via
@@ -235,7 +235,7 @@ openedx-events==9.10.0
     #   -r requirements/base.in
     #   edx-event-bus-kafka
     #   edx-event-bus-redis
-openedx-filters==1.8.1
+openedx-filters==1.9.0
     # via lti-consumer-xblock
 packaging==24.1
     # via drf-yasg
@@ -285,7 +285,7 @@ pyyaml==6.0.1
     #   drf-yasg
     #   edx-django-release-util
     #   xblock
-redis==5.0.5
+redis==5.0.6
     # via walrus
 requests==2.31.0
     # via
@@ -341,7 +341,7 @@ uritemplate==4.1.1
     # via
     #   coreapi
     #   drf-yasg
-urllib3==1.26.18
+urllib3==1.26.19
     # via
     #   botocore
     #   requests
