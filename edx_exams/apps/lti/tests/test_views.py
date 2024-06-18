@@ -142,7 +142,7 @@ class LtiAcsTestCase(ExamsAPITestCase):
                                 HTTP_AUTHORIZATION='Bearer {}'.format(token))
 
     # Test that an ACS result is created with the expected type
-    @ ddt.data(
+    @ddt.data(
         (ExamAttemptStatus.ready_to_start, 200),
         (ExamAttemptStatus.started, 200),
         (ExamAttemptStatus.ready_to_submit, 200),
@@ -154,10 +154,10 @@ class LtiAcsTestCase(ExamsAPITestCase):
         (ExamAttemptStatus.rejected, 400),
         (ExamAttemptStatus.expired, 400),
     )
-    @ ddt.unpack
-    @ patch.object(Lti1p3ApiAuthentication, 'authenticate', return_value=(AnonymousUser(), None))
-    @ patch('edx_exams.apps.lti.views.LtiProctoringAcsPermissions.has_permission')
-    @ patch('edx_exams.apps.lti.views.get_attempt_for_user_with_attempt_number_and_resource_id')
+    @ddt.unpack
+    @patch.object(Lti1p3ApiAuthentication, 'authenticate', return_value=(AnonymousUser(), None))
+    @patch('edx_exams.apps.lti.views.LtiProctoringAcsPermissions.has_permission')
+    @patch('edx_exams.apps.lti.views.get_attempt_for_user_with_attempt_number_and_resource_id')
     def test_acs_attempt_status(self,
                                 attempt_status,
                                 expected_response_status,
@@ -177,9 +177,9 @@ class LtiAcsTestCase(ExamsAPITestCase):
 
         self.assertEqual(response.status_code, expected_response_status)
 
-    @ patch.object(Lti1p3ApiAuthentication, 'authenticate', return_value=(AnonymousUser(), None))
-    @ patch('edx_exams.apps.lti.views.LtiProctoringAcsPermissions.has_permission')
-    @ patch('edx_exams.apps.lti.views.get_attempt_for_user_with_attempt_number_and_resource_id')
+    @patch.object(Lti1p3ApiAuthentication, 'authenticate', return_value=(AnonymousUser(), None))
+    @patch('edx_exams.apps.lti.views.LtiProctoringAcsPermissions.has_permission')
+    @patch('edx_exams.apps.lti.views.get_attempt_for_user_with_attempt_number_and_resource_id')
     def test_acs_no_attempt_found(self,
                                   mock_get_attempt,
                                   mock_permissions,
@@ -198,7 +198,7 @@ class LtiAcsTestCase(ExamsAPITestCase):
 
         self.assertEqual(response.status_code, 400)
 
-    @ ddt.data(
+    @ddt.data(
         ('user', ''),
         ('user', 'sub'),
         ('resource_link', ''),
@@ -206,10 +206,10 @@ class LtiAcsTestCase(ExamsAPITestCase):
         ('attempt_number', ''),
         ('action', ''),
     )
-    @ ddt.unpack
-    @ patch.object(Lti1p3ApiAuthentication, 'authenticate', return_value=(AnonymousUser(), None))
-    @ patch('edx_exams.apps.lti.views.LtiProctoringAcsPermissions.has_permission')
-    @ patch('edx_exams.apps.lti.views.get_attempt_for_user_with_attempt_number_and_resource_id')
+    @ddt.unpack
+    @patch.object(Lti1p3ApiAuthentication, 'authenticate', return_value=(AnonymousUser(), None))
+    @patch('edx_exams.apps.lti.views.LtiProctoringAcsPermissions.has_permission')
+    @patch('edx_exams.apps.lti.views.get_attempt_for_user_with_attempt_number_and_resource_id')
     def test_acs_base_parameter_missing_errors(self,
                                                acs_parameter,
                                                acs_sub_parameter,
@@ -242,15 +242,15 @@ class LtiAcsTestCase(ExamsAPITestCase):
         self.attempt.refresh_from_db()
         self.assertEqual(response.data, f'ERROR: required parameter \'{key_to_fail}\' was not found.')
 
-    @ ddt.data(
+    @ddt.data(
         ['reason_code'],
         ['incident_time'],
         ['incident_severity'],
     )
-    @ ddt.unpack
-    @ patch.object(Lti1p3ApiAuthentication, 'authenticate', return_value=(AnonymousUser(), None))
-    @ patch('edx_exams.apps.lti.views.LtiProctoringAcsPermissions.has_permission')
-    @ patch('edx_exams.apps.lti.views.get_attempt_for_user_with_attempt_number_and_resource_id')
+    @ddt.unpack
+    @patch.object(Lti1p3ApiAuthentication, 'authenticate', return_value=(AnonymousUser(), None))
+    @patch('edx_exams.apps.lti.views.LtiProctoringAcsPermissions.has_permission')
+    @patch('edx_exams.apps.lti.views.get_attempt_for_user_with_attempt_number_and_resource_id')
     def test_acs_terminate_parameter_errors(self,
                                             acs_parameter,
                                             mock_get_attempt,
@@ -277,9 +277,9 @@ class LtiAcsTestCase(ExamsAPITestCase):
         self.attempt.refresh_from_db()
         self.assertEqual(response.data, f'ERROR: required parameter \'{acs_parameter}\' was not found.')
 
-    @ patch.object(Lti1p3ApiAuthentication, 'authenticate', return_value=(AnonymousUser(), None))
-    @ patch('edx_exams.apps.lti.views.LtiProctoringAcsPermissions.has_permission')
-    @ patch('edx_exams.apps.lti.views.get_attempt_for_user_with_attempt_number_and_resource_id')
+    @patch.object(Lti1p3ApiAuthentication, 'authenticate', return_value=(AnonymousUser(), None))
+    @patch('edx_exams.apps.lti.views.LtiProctoringAcsPermissions.has_permission')
+    @patch('edx_exams.apps.lti.views.get_attempt_for_user_with_attempt_number_and_resource_id')
     def test_acs_invalid_action(self,
                                 mock_get_attempt,
                                 mock_permissions,
@@ -301,7 +301,7 @@ class LtiAcsTestCase(ExamsAPITestCase):
 
         self.assertEqual(response.status_code, 400)
 
-    @ ddt.data(
+    @ddt.data(
         # Testing reason codes with severity > 0.25
         ('0', '1.0', 'error'),
         ('1', '1.0', 'second_review_required'),
@@ -313,10 +313,10 @@ class LtiAcsTestCase(ExamsAPITestCase):
         ('1', '0.25', 'verified'),
         ('1', '0.1', 'verified'),
     )
-    @ ddt.unpack
-    @ patch.object(Lti1p3ApiAuthentication, 'authenticate', return_value=(AnonymousUser(), None))
-    @ patch('edx_exams.apps.lti.views.LtiProctoringAcsPermissions.has_permission')
-    @ patch('edx_exams.apps.lti.views.get_attempt_for_user_with_attempt_number_and_resource_id')
+    @ddt.unpack
+    @patch.object(Lti1p3ApiAuthentication, 'authenticate', return_value=(AnonymousUser(), None))
+    @patch('edx_exams.apps.lti.views.LtiProctoringAcsPermissions.has_permission')
+    @patch('edx_exams.apps.lti.views.get_attempt_for_user_with_attempt_number_and_resource_id')
     def test_acs_terminate(self,
                            reason_code,
                            incident_severity,
