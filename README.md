@@ -58,8 +58,9 @@
 | edx\_exams/apps/core/migrations/0023\_proctoringprovider\_tech\_support\_url.py     |        4 |        0 |        0 |        0 |    100% |           |
 | edx\_exams/apps/core/migrations/0024\_coursestaffrole\_role.py                      |        4 |        0 |        0 |        0 |    100% |           |
 | edx\_exams/apps/core/migrations/0025\_proctoringprovider\_org\_key.py               |        4 |        0 |        0 |        0 |    100% |           |
+| edx\_exams/apps/core/migrations/0026\_studentallowance.py                           |        8 |        0 |        0 |        0 |    100% |           |
 | edx\_exams/apps/core/migrations/\_\_init\_\_.py                                     |        0 |        0 |        0 |        0 |    100% |           |
-| edx\_exams/apps/core/models.py                                                      |      177 |        0 |       40 |       13 |     94% |35->34, 164->163, 220->219, 231->230, 242->241, 263->262, 275->274, 342->341, 352->354, 353->352, 354->353, 389->388, 405->404 |
+| edx\_exams/apps/core/models.py                                                      |      185 |        0 |       40 |       13 |     94% |35->34, 164->163, 220->219, 231->230, 242->241, 263->262, 275->274, 342->341, 352->354, 353->352, 354->353, 389->388, 405->404 |
 | edx\_exams/apps/core/rest\_utils.py                                                 |       11 |        0 |        2 |        0 |    100% |           |
 | edx\_exams/apps/core/signals/\_\_init\_\_.py                                        |        0 |        0 |        0 |        0 |    100% |           |
 | edx\_exams/apps/core/signals/signals.py                                             |       21 |        0 |        0 |        0 |    100% |           |
@@ -91,7 +92,7 @@
 | edx\_exams/apps/router/tests/test\_views.py                                         |      124 |        0 |       22 |        9 |     94% |69->68, 121->120, 138->137, 170->169, 193->192, 237->236, 250->249, 307->306, 318->317 |
 | edx\_exams/apps/router/views.py                                                     |       39 |        1 |        6 |        0 |     98% |        56 |
 | edx\_exams/urls.py                                                                  |       14 |        0 |        0 |        0 |    100% |           |
-|                                                                           **TOTAL** | **3457** |    **3** |  **802** |  **250** | **94%** |           |
+|                                                                           **TOTAL** | **3473** |    **3** |  **802** |  **250** | **94%** |           |
 
 
 ## Setup coverage badge
