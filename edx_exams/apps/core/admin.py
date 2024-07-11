@@ -12,6 +12,7 @@ from .models import (
     Exam,
     ExamAttempt,
     ProctoringProvider,
+    StudentAllowance,
     User
 )
 
@@ -103,3 +104,20 @@ class CourseStaffRoleAdmin(admin.ModelAdmin):
     list_filter = ('course_id',)
     search_fields = ('user__username', 'course_id')
     ordering = ('course_id',)
+
+
+@admin.register(StudentAllowance)
+class StudentAllowanceAdmin(admin.ModelAdmin):
+    """ Admin configuration for the Student Allowance model """
+    list_display = ('username', 'course_id', 'exam_name', 'extra_time_mins')
+    search_fields = ('user__username', 'exam__course_id', 'exam__exam_name')
+    ordering = ('-modified',)
+
+    def username(self, obj):
+        return obj.user.username
+
+    def exam_name(self, obj):
+        return obj.exam.exam_name
+
+    def course_id(self, obj):
+        return obj.exam.course_id
