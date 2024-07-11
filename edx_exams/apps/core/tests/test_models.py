@@ -4,11 +4,12 @@ from django.test import TestCase
 from django_dynamic_fixture import G
 from social_django.models import UserSocialAuth
 
-from edx_exams.apps.core.models import CourseExamConfiguration, Exam, User
+from edx_exams.apps.core.models import CourseExamConfiguration, Exam, User, StudentAllowance
 from edx_exams.apps.core.test_utils.factories import (
     CourseExamConfigurationFactory,
     ExamFactory,
-    ProctoringProviderFactory
+    ProctoringProviderFactory,
+    UserFactory,
 )
 
 
@@ -133,3 +134,20 @@ class CourseExamConfigurationTests(TestCase):
         new_config = CourseExamConfiguration.objects.get(course_id=other_course_id)
         self.assertEqual(new_config.provider, self.config.provider)
         self.assertEqual(new_config.escalation_email, self.escalation_email)
+
+
+class StudentAllowanceTests(TestCase):
+    """
+    StudentAllowance model tests.
+    """
+
+    def test_model(self):
+        """
+        TODO: temporary test for the sake of coverage.
+        This can be removed once this model is actually used in app code.
+        """
+        StudentAllowance.objects.create(
+            user=UserFactory(),
+            exam=ExamFactory(),
+            extra_time_mins=10,
+        )

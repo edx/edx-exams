@@ -428,3 +428,22 @@ class CourseExamConfiguration(TimeStampedModel):
             exam.save()
 
         return len(exams)
+
+
+class StudentAllowance(TimeStampedModel):
+    """
+    Allowance for extra time in an exam
+
+    .. no_pii:
+    """
+    user = models.ForeignKey(User, db_index=True, on_delete=models.CASCADE)
+
+    exam = models.ForeignKey(Exam, on_delete=models.CASCADE)
+
+    extra_time_mins = models.PositiveIntegerField()
+
+    class Meta:
+        """ Meta class for this Django model """
+        db_table = 'exams_studentallowance'
+        verbose_name = 'student allowance'
+        unique_together = ('user', 'exam')
