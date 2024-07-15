@@ -1800,7 +1800,7 @@ class AllowanceViewTests(ExamsAPITestCase):
         # course staff has access
         course_staff_user = UserFactory.create()
         CourseStaffRole.objects.create(user=course_staff_user, course_id=self.course_id)
-        response = self.get_api(course_staff_user, self.course_id)
+        response = self.request_api('get', course_staff_user, self.course_id)
         self.assertEqual(response.status_code, 200)
 
     def test_get_allowances(self):
@@ -1808,12 +1808,7 @@ class AllowanceViewTests(ExamsAPITestCase):
         Test that the endpoint returns allowances for the requested course
         and only the requested course
         """
-        other_exam_in_course = ExamFactory.create(
-            course_id=self.exam.course_id,
-        )
-        another_course_exam = ExamFactory.create(
-            course_id='course-v1:edx+another+course',
-        )
+        other_exam_in_course = ExamFactory.create(course_id=self.exam.course_id)
         StudentAllowanceFactory.create(
             exam=self.exam,
             user=self.user,
@@ -1823,7 +1818,7 @@ class AllowanceViewTests(ExamsAPITestCase):
             user=self.user,
         )
         StudentAllowanceFactory.create(
-            exam=another_course_exam,
+            exam=ExamFactory.create(course_id='course-v1:edx+another+course'),
             user=self.user,
         )
 
@@ -1848,3 +1843,11 @@ class AllowanceViewTests(ExamsAPITestCase):
             'username': self.user.username,
             'extra_time_mins': 30,
         })
+
+    def test_get_empty_response(self):
+        """
+        Test that the endpoint returns an empty list if no allowances exist
+        """
+        response = self.request_api('get', self.user, 'course-v1:edx+no+allowances')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data, [])
