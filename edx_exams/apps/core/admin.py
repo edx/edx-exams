@@ -109,6 +109,7 @@ class CourseStaffRoleAdmin(admin.ModelAdmin):
 @admin.register(StudentAllowance)
 class StudentAllowanceAdmin(admin.ModelAdmin):
     """ Admin configuration for the Student Allowance model """
+    raw_id_fields = ('user', 'exam')
     list_display = ('username', 'course_id', 'exam_name', 'extra_time_mins')
     search_fields = ('user__username', 'exam__course_id', 'exam__exam_name')
     ordering = ('-modified',)
