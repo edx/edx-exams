@@ -15,7 +15,7 @@ from edx_exams.apps.core.models import (
     Exam,
     ExamAttempt,
     ProctoringProvider,
-    StudentAllowance,
+    StudentAllowance
 )
 from edx_exams.apps.core.statuses import ExamAttemptStatus
 
