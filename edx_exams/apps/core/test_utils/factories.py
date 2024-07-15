@@ -14,7 +14,8 @@ from edx_exams.apps.core.models import (
     CourseStaffRole,
     Exam,
     ExamAttempt,
-    ProctoringProvider
+    ProctoringProvider,
+    StudentAllowance,
 )
 from edx_exams.apps.core.statuses import ExamAttemptStatus
 
@@ -129,3 +130,15 @@ class CourseStaffRoleFactory(DjangoModelFactory):
     user = factory.SubFactory(UserFactory)
     course_id = 'course-v1:edX+Test+Test_Course'
     role = 'staff'
+
+
+class StudentAllowanceFactory(DjangoModelFactory):
+    """
+    Factory to create allowances
+    """
+    class Meta:
+        model = StudentAllowance
+
+    user = factory.SubFactory(UserFactory)
+    exam = factory.SubFactory(ExamFactory)
+    extra_time_mins = 30

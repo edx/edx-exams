@@ -280,3 +280,29 @@ class InstructorViewAttemptSerializer(serializers.ModelSerializer):
             'allowed_time_limit_mins', 'exam_type', 'exam_display_name', 'username',
             'proctored_review',
         )
+
+
+class AllowanceSerializer(serializers.ModelSerializer):
+    """
+    Serializer for the Allowance model
+    """
+
+    # directly from the Allowance Model
+    id = serializers.IntegerField(required=False)
+    exam_id = serializers.IntegerField()
+    user_id = serializers.IntegerField()
+    extra_time_mins = serializers.IntegerField()
+
+    # custom fields based on related models
+    username = serializers.CharField(source='user.username')
+    exam_name = serializers.CharField(source='exam.exam_name')
+
+    class Meta:
+        """
+        Meta Class
+        """
+        model = ExamAttempt
+
+        fields = (
+            'id', 'exam_id', 'user_id', 'extra_time_mins', 'username', 'exam_name'
+        )
