@@ -5,6 +5,7 @@ import uuid
 from django.contrib.auth.models import AbstractUser
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models, transaction
+from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from model_utils.models import TimeStampedModel
 from simple_history.models import HistoricalRecords
@@ -447,3 +448,11 @@ class StudentAllowance(TimeStampedModel):
         db_table = 'exams_studentallowance'
         verbose_name = 'student allowance'
         unique_together = ('user', 'exam')
+
+    @classmethod
+    def get_allowances_for_course(cls, course_id):
+        """
+        Returns all the allowances for a course.
+        """
+        filtered_query = Q(exam__course_id=course_id)
+        return cls.objects.filter(filtered_query)

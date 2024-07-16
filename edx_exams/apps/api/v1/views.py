@@ -18,6 +18,7 @@ from token_utils.api import sign_token_for
 
 from edx_exams.apps.api.permissions import CourseStaffOrReadOnlyPermissions, CourseStaffUserPermissions
 from edx_exams.apps.api.serializers import (
+    AllowanceSerializer,
     CourseExamConfigurationReadSerializer,
     CourseExamConfigurationWriteSerializer,
     ExamSerializer,
@@ -45,7 +46,7 @@ from edx_exams.apps.core.api import (
     update_attempt_status
 )
 from edx_exams.apps.core.exam_types import get_exam_type
-from edx_exams.apps.core.models import CourseExamConfiguration, Exam, ExamAttempt, ProctoringProvider
+from edx_exams.apps.core.models import CourseExamConfiguration, Exam, ExamAttempt, ProctoringProvider, StudentAllowance
 from edx_exams.apps.core.statuses import ExamAttemptStatus
 from edx_exams.apps.router.interop import get_active_exam_attempt
 
@@ -779,3 +780,25 @@ class ProctoringSettingsView(ExamsAPIView):
         data['proctoring_escalation_email'] = config_data.escalation_email
 
         return Response(data)
+
+
+class AllowanceView(ExamsAPIView):
+    """
+    Endpoint for getting allowances in a course
+
+    /exams/course_id/{course_id}/allowances
+
+    Supports:
+        HTTP GET:
+            Returns a list of allowances for a course.
+    """
+
+    authentication_classes = (JwtAuthentication,)
+    permission_classes = (CourseStaffUserPermissions,)
+
+    def get(self, request, course_id):
+        """
+        HTTP GET handler. Returns a list of allowances for a course.
+        """
+        allowances = StudentAllowance.get_allowances_for_course(course_id)
+        return Response(AllowanceSerializer(allowances, many=True).data)

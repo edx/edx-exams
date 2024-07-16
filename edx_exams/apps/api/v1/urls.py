@@ -3,6 +3,7 @@
 from django.urls import path, re_path
 
 from edx_exams.apps.api.v1.views import (
+    AllowanceView,
     CourseExamAttemptView,
     CourseExamConfigurationsView,
     CourseExamsView,
@@ -18,6 +19,11 @@ from edx_exams.apps.core.constants import COURSE_ID_PATTERN, EXAM_ID_PATTERN, US
 app_name = 'v1'
 
 urlpatterns = [
+    re_path(
+        fr'exams/course_id/{COURSE_ID_PATTERN}/allowances',
+        AllowanceView.as_view(),
+        name='course-allowances'
+    ),
     re_path(
         fr'exams/course_id/{COURSE_ID_PATTERN}',
         CourseExamsView.as_view(),

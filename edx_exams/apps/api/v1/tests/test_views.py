@@ -25,6 +25,7 @@ from edx_exams.apps.core.test_utils.factories import (
     ExamAttemptFactory,
     ExamFactory,
     ProctoringProviderFactory,
+    StudentAllowanceFactory,
     UserFactory
 )
 
@@ -1752,3 +1753,101 @@ class ProctoringSettingsViewTest(ExamsAPITestCase):
                 'proctoring_escalation_email': self.config.escalation_email,
             }
         )
+
+
+class AllowanceViewTests(ExamsAPITestCase):
+    """
+    Tests AllowanceView
+    """
+
+    def setUp(self):
+        super().setUp()
+
+        self.course_id = 'course-v1:edx+test+f19'
+        self.exam = ExamFactory(
+            course_id=self.course_id,
+        )
+
+    def request_api(self, method, user, course_id):
+        """
+        Helper function to make API request
+        """
+        assert method in ['get']
+        headers = self.build_jwt_headers(user)
+        url = reverse(
+            'api:v1:course-allowances',
+            kwargs={'course_id': course_id}
+        )
+
+        return getattr(self.client, method)(url, **headers)
+
+    def test_auth_required(self):
+        """
+        Test endpoint requires authentication and a staff user
+        """
+
+        # no auth
+        response = self.client.get(
+            reverse('api:v1:course-allowances', kwargs={'course_id': self.course_id}),
+        )
+        self.assertEqual(response.status_code, 401)
+
+        # no permissions
+        user = UserFactory.create(is_staff=False)
+        response = self.request_api('get', user, self.course_id)
+        self.assertEqual(response.status_code, 403)
+
+        # course staff has access
+        course_staff_user = UserFactory.create()
+        CourseStaffRole.objects.create(user=course_staff_user, course_id=self.course_id)
+        response = self.request_api('get', course_staff_user, self.course_id)
+        self.assertEqual(response.status_code, 200)
+
+    def test_get_allowances(self):
+        """
+        Test that the endpoint returns allowances for the requested course
+        and only the requested course
+        """
+        other_exam_in_course = ExamFactory.create(course_id=self.exam.course_id)
+        StudentAllowanceFactory.create(
+            exam=self.exam,
+            user=self.user,
+        )
+        StudentAllowanceFactory.create(
+            exam=other_exam_in_course,
+            user=self.user,
+        )
+        StudentAllowanceFactory.create(
+            exam=ExamFactory.create(course_id='course-v1:edx+another+course'),
+            user=self.user,
+        )
+
+        response = self.request_api('get', self.user, self.exam.course_id)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data), 2)
+
+        response.data.sort(key=lambda x: x['id'])
+        self.assertDictEqual(response.data[0], {
+            'id': 1,
+            'exam_id': self.exam.id,
+            'user_id': self.user.id,
+            'exam_name': self.exam.exam_name,
+            'username': self.user.username,
+            'extra_time_mins': 30,
+        })
+        self.assertDictEqual(response.data[1], {
+            'id': 2,
+            'exam_id': other_exam_in_course.id,
+            'user_id': self.user.id,
+            'exam_name': other_exam_in_course.exam_name,
+            'username': self.user.username,
+            'extra_time_mins': 30,
+        })
+
+    def test_get_empty_response(self):
+        """
+        Test that the endpoint returns an empty list if no allowances exist
+        """
+        response = self.request_api('get', self.user, 'course-v1:edx+no+allowances')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data, [])
