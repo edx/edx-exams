@@ -4,11 +4,13 @@ from django.test import TestCase
 from django_dynamic_fixture import G
 from social_django.models import UserSocialAuth
 
-from edx_exams.apps.core.models import CourseExamConfiguration, Exam, User
+from edx_exams.apps.core.models import CourseExamConfiguration, Exam, StudentAllowance, User
 from edx_exams.apps.core.test_utils.factories import (
     CourseExamConfigurationFactory,
     ExamFactory,
-    ProctoringProviderFactory
+    ProctoringProviderFactory,
+    StudentAllowanceFactory,
+    UserFactory
 )
 
 
@@ -133,3 +135,35 @@ class CourseExamConfigurationTests(TestCase):
         new_config = CourseExamConfiguration.objects.get(course_id=other_course_id)
         self.assertEqual(new_config.provider, self.config.provider)
         self.assertEqual(new_config.escalation_email, self.escalation_email)
+
+
+class StudentAllowanceTests(TestCase):
+    """
+    StudentAllowance model tests.
+    """
+
+    def setUp(self):
+        super().setUp()
+
+        self.course_id = 'course-v1:edX+Test+Test_Course'
+        self.exam = ExamFactory(course_id=self.course_id)
+
+    def test_get_allowance_for_user(self):
+        user = UserFactory()
+        user_2 = UserFactory()
+        allowance = StudentAllowanceFactory(user=user, exam=self.exam)
+
+        self.assertEqual(StudentAllowance.get_allowance_for_user(self.exam.id, user.id), allowance)
+        self.assertIsNone(StudentAllowance.get_allowance_for_user(self.exam.id, user_2.id))
+
+    def test_get_allowances_for_course(self):
+        user = UserFactory()
+        user_2 = UserFactory()
+        exam_other_course = ExamFactory(course_id='course-v1:edX+Test+Test_Course_Other')
+        allowance = StudentAllowanceFactory(user=user, exam=self.exam)
+        allowance_2 = StudentAllowanceFactory(user=user_2, exam=self.exam)
+        StudentAllowanceFactory(user=user, exam=exam_other_course)
+
+        self.assertEqual(
+            set(StudentAllowance.get_allowances_for_course(self.course_id)), set([allowance, allowance_2])
+        )

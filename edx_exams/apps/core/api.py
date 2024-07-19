@@ -18,7 +18,7 @@ from edx_exams.apps.core.exceptions import (
     ExamDoesNotExist,
     ExamIllegalStatusTransition
 )
-from edx_exams.apps.core.models import CourseExamConfiguration, Exam, ExamAttempt, ProctoringProvider
+from edx_exams.apps.core.models import CourseExamConfiguration, Exam, ExamAttempt, ProctoringProvider, StudentAllowance
 from edx_exams.apps.core.signals.signals import (
     emit_exam_attempt_errored_event,
     emit_exam_attempt_rejected_event,
@@ -100,7 +100,7 @@ def update_attempt_status(attempt_id, to_status):
             raise ExamIllegalStatusTransition(error_msg)
 
         attempt_obj.start_time = datetime.now(pytz.UTC)
-        attempt_obj.allowed_time_limit_mins = _calculate_allowed_mins(attempt_obj.exam)
+        attempt_obj.allowed_time_limit_mins = _calculate_allowed_mins(attempt_obj.user, attempt_obj.exam)
 
     course_key = CourseKey.from_string(attempt_obj.exam.course_id)
     usage_key = UsageKey.from_string(attempt_obj.exam.content_id)
@@ -210,14 +210,18 @@ def _check_exam_is_allowed_to_start(attempt_obj, user_id):
     return True, ''
 
 
-def _calculate_allowed_mins(exam):
+def _calculate_allowed_mins(user, exam):
     """
     Calculate the allowed minutes for an attempt, taking due date into account
     If an exam's duration + start time exceeds the due date, return the remaining time between
     due date and the current time
     """
     due_datetime = exam.due_date
+    allowance = StudentAllowance.get_allowance_for_user(user.id, exam.id)
     allowed_time_limit_mins = exam.time_limit_mins
+
+    if allowance:
+        allowed_time_limit_mins += allowance.extra_time_mins
 
     if due_datetime:
         current_datetime = datetime.now(pytz.UTC)

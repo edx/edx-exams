@@ -456,3 +456,14 @@ class StudentAllowance(TimeStampedModel):
         """
         filtered_query = Q(exam__course_id=course_id)
         return cls.objects.filter(filtered_query)
+
+    @classmethod
+    def get_allowance_for_user(cls, user_id, exam_id):
+        """
+        Returns the allowance for a user in an exam.
+        """
+        try:
+            allowance = cls.objects.get(user_id=user_id, exam_id=exam_id)
+        except cls.DoesNotExist:
+            allowance = None
+        return allowance

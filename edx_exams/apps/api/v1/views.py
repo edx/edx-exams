@@ -711,6 +711,7 @@ class CourseExamAttemptView(ExamsAPIView):
             return Response(data)
 
         serialized_exam = ExamSerializer(exam).data
+        allowance = StudentAllowance.get_allowance_for_user(request.user.id, exam.id)
 
         exam_type_class = get_exam_type(exam.exam_type)
 
@@ -718,13 +719,18 @@ class CourseExamAttemptView(ExamsAPIView):
         serialized_exam['type'] = exam.exam_type
         serialized_exam['is_proctored'] = exam_type_class.is_proctored
         serialized_exam['is_practice_exam'] = exam_type_class.is_practice
-        # total time is equivalent to time_limit_mins for now because allowances are not yet supported
-        serialized_exam['total_time'] = exam.time_limit_mins
         # timed exams will have None as a backend
         serialized_exam['backend'] = exam.provider.verbose_name if exam.provider is not None else None
 
         serialized_exam['passed_due_date'] = is_exam_passed_due(serialized_exam)
+
+        if allowance is not None:
+            serialized_exam['total_time'] = exam.time_limit_mins + allowance.extra_time_mins
+        else:
+            serialized_exam['total_time'] = exam.time_limit_mins
+
         exam_attempt = get_current_exam_attempt(request.user.id, exam.id)
+
         if exam_attempt is not None:
             exam_attempt = check_if_exam_timed_out(exam_attempt)
 
