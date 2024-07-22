@@ -289,13 +289,23 @@ class AllowanceSerializer(serializers.ModelSerializer):
 
     # directly from the Allowance Model
     id = serializers.IntegerField(required=False)
-    exam_id = serializers.IntegerField()
-    user_id = serializers.IntegerField()
-    extra_time_mins = serializers.IntegerField()
+    exam_id = serializers.IntegerField(required=True)
+    user_id = serializers.IntegerField(required=False)
+    extra_time_mins = serializers.IntegerField(required=True)
 
     # custom fields based on related models
-    username = serializers.CharField(source='user.username')
-    exam_name = serializers.CharField(source='exam.exam_name')
+    username = serializers.CharField(source='user.username', required=False)
+    exam_name = serializers.CharField(source='exam.exam_name', required=False)
+    email = serializers.CharField(source='user.email', required=False)
+
+    # add custom validator, serializer should have either username or email
+    def validate(self, attrs):
+        """
+        Verify that either username or email is provided
+        """
+        if not (attrs.get('user', {}).get('username') or attrs.get('user', {}).get('email')):
+            raise serializers.ValidationError({'username': 'username or email must be provided'})
+        return attrs
 
     class Meta:
         """
@@ -304,5 +314,5 @@ class AllowanceSerializer(serializers.ModelSerializer):
         model = ExamAttempt
 
         fields = (
-            'id', 'exam_id', 'user_id', 'extra_time_mins', 'username', 'exam_name'
+            'id', 'exam_id', 'user_id', 'extra_time_mins', 'username', 'exam_name', 'email'
         )

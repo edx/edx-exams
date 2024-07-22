@@ -96,3 +96,5 @@ docs/_build/
 
 # Temp reports file
 reports/
+
+requirements/private.txt
