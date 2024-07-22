@@ -1634,6 +1634,20 @@ class CourseExamAttemptViewTest(ExamsAPITestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response_exam, expected_data)
 
+    def test_user_has_allowance(self):
+        """
+        Test that if user has an allowance, the total time is calculated correctly
+        """
+        StudentAllowanceFactory.create(
+            user=self.user,
+            exam=self.exam,
+            extra_time_mins=30
+        )
+
+        response = self.get_api(self.user, self.course_id, self.content_id)
+        response_exam = response.data['exam']
+        self.assertEqual(response_exam['total_time'], self.exam.time_limit_mins + 30)
+
     def test_active_attempt(self):
         """
         Test that if attempt exists, it is returned as part of the exam object

@@ -43,6 +43,7 @@ from edx_exams.apps.core.test_utils.factories import (
     ExamAttemptFactory,
     ExamFactory,
     ProctoringProviderFactory,
+    StudentAllowanceFactory,
     UserFactory
 )
 
@@ -260,6 +261,22 @@ class TestUpdateAttemptStatus(ExamsAPITestCase):
             self.assertEqual(updated_attempt.status, ExamAttemptStatus.started)
             self.assertEqual(updated_attempt.start_time, timezone.now())
             self.assertEqual(updated_attempt.allowed_time_limit_mins, self.exam.time_limit_mins)
+
+    def test_start_attempt_with_time_allowance(self):
+        """
+        Test starting an exam with a time allowance grants the correct amount of time
+        """
+        with freeze_time(timezone.now()):
+            StudentAllowanceFactory.create(
+                user=self.user,
+                exam=self.exam,
+                extra_time_mins=10
+            )
+            attempt_id = update_attempt_status(self.exam_attempt.id, ExamAttemptStatus.started)
+            updated_attempt = ExamAttempt.get_attempt_by_id(attempt_id)
+            self.assertEqual(updated_attempt.status, ExamAttemptStatus.started)
+            self.assertEqual(updated_attempt.start_time, timezone.now())
+            self.assertEqual(updated_attempt.allowed_time_limit_mins, self.exam.time_limit_mins + 10)
 
     @ddt.data(
         True,
