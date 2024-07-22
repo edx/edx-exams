@@ -46,7 +46,14 @@ from edx_exams.apps.core.api import (
     update_attempt_status
 )
 from edx_exams.apps.core.exam_types import get_exam_type
-from edx_exams.apps.core.models import CourseExamConfiguration, Exam, ExamAttempt, ProctoringProvider, StudentAllowance
+from edx_exams.apps.core.models import (
+    CourseExamConfiguration,
+    Exam,
+    ExamAttempt,
+    ProctoringProvider,
+    StudentAllowance,
+    User
+)
 from edx_exams.apps.core.statuses import ExamAttemptStatus
 from edx_exams.apps.router.interop import get_active_exam_attempt
 
@@ -790,13 +797,25 @@ class ProctoringSettingsView(ExamsAPIView):
 
 class AllowanceView(ExamsAPIView):
     """
-    Endpoint for getting allowances in a course
+    Endpoint for the StudentAllowance
 
     /exams/course_id/{course_id}/allowances
 
     Supports:
         HTTP GET:
             Returns a list of allowances for a course.
+        HTTP POST:
+            Create one or more allowances
+
+    Expected POST data: [{
+        "username": "test_user",
+        "exam_id": 1234,
+        "extra_time_mins": 30,
+    }]
+    **POST data Parameters**
+        * username OR email: username or email for which to create or update an allowance.
+        * exam_id: ID of the exam for which to create or update an allowance
+        * extra_time_mins: Extra time (in minutes) that a student is allotted for an exam.
     """
 
     authentication_classes = (JwtAuthentication,)
@@ -808,3 +827,40 @@ class AllowanceView(ExamsAPIView):
         """
         allowances = StudentAllowance.get_allowances_for_course(course_id)
         return Response(AllowanceSerializer(allowances, many=True).data)
+
+    def post(self, request, course_id):  # pylint: disable=unused-argument
+        """
+        HTTP POST handler. Creates allowances based on the given list.
+        """
+        allowances = request.data
+
+        serializer = AllowanceSerializer(data=allowances, many=True)
+
+        if serializer.is_valid():
+            # We expect the number of allowances in each request to be small. Should they increase,
+            # we should not query within the loop, and instead refactor this to optimize
+            # the DB calls.
+            allowance_objects = [
+                StudentAllowance(
+                    user=(
+                        User.objects.get(username=allowance['username'])
+                        if allowance.get('username')
+                        else User.objects.get(email=allowance['email'])
+                    ),
+                    exam=Exam.objects.get(id=allowance['exam_id']),
+                    extra_time_mins=allowance['extra_time_mins']
+                )
+                for allowance in allowances
+            ]
+            StudentAllowance.objects.bulk_create(
+                allowance_objects,
+                update_conflicts=True,
+                unique_fields=['user', 'exam'],
+                update_fields=['extra_time_mins']
+            )
+
+            return Response(status=status.HTTP_200_OK)
+        else:
+            response_status = status.HTTP_400_BAD_REQUEST
+            data = {'detail': 'Invalid data', 'errors': serializer.errors}
+            return Response(status=response_status, data=data)

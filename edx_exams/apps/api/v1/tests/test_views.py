@@ -17,7 +17,14 @@ from edx_exams.apps.api.serializers import ExamSerializer, StudentAttemptSeriali
 from edx_exams.apps.api.test_utils import ExamsAPITestCase
 from edx_exams.apps.core.exam_types import get_exam_type
 from edx_exams.apps.core.exceptions import ExamAttemptOnPastDueExam, ExamIllegalStatusTransition
-from edx_exams.apps.core.models import CourseExamConfiguration, CourseStaffRole, Exam, ExamAttempt, ProctoringProvider
+from edx_exams.apps.core.models import (
+    CourseExamConfiguration,
+    CourseStaffRole,
+    Exam,
+    ExamAttempt,
+    ProctoringProvider,
+    StudentAllowance
+)
 from edx_exams.apps.core.statuses import ExamAttemptStatus
 from edx_exams.apps.core.test_utils.factories import (
     AssessmentControlResultFactory,
@@ -1782,18 +1789,21 @@ class AllowanceViewTests(ExamsAPITestCase):
             course_id=self.course_id,
         )
 
-    def request_api(self, method, user, course_id):
+    def request_api(self, method, user, course_id, data=None):
         """
         Helper function to make API request
         """
-        assert method in ['get']
+        assert method in ['get', 'post']
         headers = self.build_jwt_headers(user)
         url = reverse(
             'api:v1:course-allowances',
             kwargs={'course_id': course_id}
         )
 
-        return getattr(self.client, method)(url, **headers)
+        if data:
+            return getattr(self.client, method)(url, json.dumps(data), **headers, content_type='application/json')
+        else:
+            return getattr(self.client, method)(url, **headers)
 
     def test_auth_required(self):
         """
@@ -1847,6 +1857,7 @@ class AllowanceViewTests(ExamsAPITestCase):
             'user_id': self.user.id,
             'exam_name': self.exam.exam_name,
             'username': self.user.username,
+            'email': self.user.email,
             'extra_time_mins': 30,
         })
         self.assertDictEqual(response.data[1], {
@@ -1855,6 +1866,7 @@ class AllowanceViewTests(ExamsAPITestCase):
             'user_id': self.user.id,
             'exam_name': other_exam_in_course.exam_name,
             'username': self.user.username,
+            'email': self.user.email,
             'extra_time_mins': 30,
         })
 
@@ -1865,3 +1877,62 @@ class AllowanceViewTests(ExamsAPITestCase):
         response = self.request_api('get', self.user, 'course-v1:edx+no+allowances')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data, [])
+
+    def test_post_allowances(self):
+        """
+        Test that the endpoint creates allowances for the given request data
+        """
+        other_exam_in_course = ExamFactory.create(course_id=self.exam.course_id)
+        other_user = UserFactory()
+        StudentAllowanceFactory.create(
+            exam=self.exam,
+            user=self.user,
+            extra_time_mins=30,
+        )
+        StudentAllowanceFactory.create(
+            exam=other_exam_in_course,
+            user=self.user,
+            extra_time_mins=30,
+        )
+
+        request_data = [
+            {'exam_id': self.exam.id, 'username': self.user.username, 'extra_time_mins': 45},
+            {'exam_id': other_exam_in_course.id, 'username': self.user.username, 'extra_time_mins': 45},
+            {'exam_id': other_exam_in_course.id, 'email': other_user.email, 'extra_time_mins': 45},
+        ]
+
+        response = self.request_api('post', self.user, self.exam.course_id, data=request_data)
+        self.assertEqual(response.status_code, 200)
+
+        course_allowances = StudentAllowance.objects.all()
+        self.assertEqual(len(course_allowances), 3)
+
+        self.assertEqual(len(StudentAllowance.objects.filter(user_id=self.user.id)), 2)
+        self.assertEqual(len(StudentAllowance.objects.filter(extra_time_mins=45)), 3)
+
+    def test_post_allowances_empty(self):
+        """
+        Test that 400 response is returned for empty list
+        """
+        response = self.request_api('post', self.user, self.exam.course_id, data=[])
+        self.assertEqual(response.status_code, 400)
+
+    def test_post_invalid_field_value(self):
+        """
+        Test that 400 response is returned if serializer is invalid due to incorrect field type
+        """
+        request_data = [
+            {'exam_id': self.exam.id, 'username': self.user.username, 'extra_time_mins': 'yyyy'},
+        ]
+        response = self.request_api('post', self.user, self.exam.course_id, data=request_data)
+        self.assertEqual(response.status_code, 400)
+
+    def test_post_invalid_missing_user(self):
+        """
+        Test that 400 response is returned if serializer is invalid due to missing required field
+        """
+        request_data = [
+            {'exam_id': self.exam.id, 'extra_time_mins': 45},
+        ]
+        response = self.request_api('post', self.user, self.exam.course_id, data=request_data)
+        self.assertEqual(response.status_code, 400)
