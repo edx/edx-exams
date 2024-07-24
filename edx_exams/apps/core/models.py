@@ -73,6 +73,11 @@ class CourseStaffRole(TimeStampedModel):
         db_table = 'exams_coursestaffrole'
         verbose_name = 'course staff role'
 
+        constraints = [
+            models.UniqueConstraint(fields=['user', 'course_id', 'role'],
+                                    name='unique_course_staff_role')
+        ]
+
 
 class ProctoringProvider(TimeStampedModel):
     """
