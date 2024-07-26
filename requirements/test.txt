@@ -13,7 +13,7 @@ asgiref==3.8.1
     #   -r requirements/base.txt
     #   django
     #   django-cors-headers
-astroid==3.2.2
+astroid==3.2.4
     # via
     #   pylint
     #   pylint-celery
@@ -35,16 +35,16 @@ bleach==6.1.0
     # via
     #   -r requirements/base.txt
     #   lti-consumer-xblock
-boto3==1.34.141
+boto3==1.34.149
     # via
     #   -r requirements/base.txt
     #   fs-s3fs
-botocore==1.34.141
+botocore==1.34.149
     # via
     #   -r requirements/base.txt
     #   boto3
     #   s3transfer
-cachetools==5.3.3
+cachetools==5.4.0
     # via tox
 certifi==2024.7.4
     # via
@@ -87,11 +87,11 @@ coreschema==0.0.4
     # via
     #   -r requirements/base.txt
     #   coreapi
-coverage[toml]==7.5.4
+coverage[toml]==7.6.0
     # via
     #   -r requirements/test.in
     #   pytest-cov
-cryptography==42.0.8
+cryptography==43.0.0
     # via
     #   -r requirements/base.txt
     #   pyjwt
@@ -225,7 +225,7 @@ edx-event-bus-kafka==5.7.0
     # via -r requirements/base.txt
 edx-event-bus-redis==0.5.0
     # via -r requirements/base.txt
-edx-lint==5.3.6
+edx-lint==5.3.7
     # via -r requirements/test.in
 edx-opaque-keys[django]==2.10.0
     # via
@@ -243,7 +243,7 @@ edx-toggles==5.2.0
     #   edx-event-bus-redis
 edx-token-utils==0.2.1
     # via -r requirements/base.txt
-exceptiongroup==1.2.1
+exceptiongroup==1.2.2
     # via pytest
 factory-boy==3.3.0
     # via -r requirements/test.in
@@ -331,7 +331,7 @@ mock==5.1.0
     # via -r requirements/test.in
 mysqlclient==2.2.4
     # via -r requirements/base.txt
-newrelic==9.11.0
+newrelic==9.12.0
     # via
     #   -r requirements/base.txt
     #   edx-django-utils
@@ -404,7 +404,7 @@ pyjwt[crypto]==2.8.0
     #   edx-drf-extensions
     #   edx-rest-api-client
     #   social-auth-core
-pylint==3.2.5
+pylint==3.2.6
     # via
     #   edx-lint
     #   pylint-celery
@@ -430,7 +430,7 @@ pynacl==1.5.0
     #   edx-django-utils
 pyproject-api==1.7.1
     # via tox
-pytest==8.2.2
+pytest==8.3.2
     # via
     #   pytest-cov
     #   pytest-django
@@ -516,7 +516,7 @@ slumber==0.7.1
     # via
     #   -r requirements/base.txt
     #   edx-rest-api-client
-social-auth-app-django==5.4.1
+social-auth-app-django==5.4.2
     # via
     #   -r requirements/base.txt
     #   edx-auth-backends
@@ -525,7 +525,7 @@ social-auth-core==4.5.4
     #   -r requirements/base.txt
     #   edx-auth-backends
     #   social-auth-app-django
-sqlparse==0.5.0
+sqlparse==0.5.1
     # via
     #   -r requirements/base.txt
     #   django
@@ -546,7 +546,7 @@ tomli==2.0.1
     #   pyproject-api
     #   pytest
     #   tox
-tomlkit==0.12.5
+tomlkit==0.13.0
     # via pylint
 tox==4.16.0
     # via -r requirements/test.in
@@ -586,7 +586,7 @@ webob==1.8.7
     # via
     #   -r requirements/base.txt
     #   xblock
-xblock==4.0.1
+xblock==5.0.0
     # via
     #   -r requirements/base.txt
     #   lti-consumer-xblock
