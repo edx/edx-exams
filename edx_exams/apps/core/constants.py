@@ -18,3 +18,5 @@ COURSE_ID_PATTERN = rf'(?P<course_id>({INTERNAL_COURSE_KEY_PATTERN}|{EXTERNAL_CO
 USAGE_KEY_PATTERN = r'(?P<content_id>(?:i4x://?[^/]+/[^/]+/[^/]+/[^@]+(?:@[^/]+)?)|(?:[^/]+))'
 
 EXAM_ID_PATTERN = r'(?P<exam_id>\d+)'
+
+ATTEMPT_ID_PATTERN = r'(?P<attempt_id>\d+)'

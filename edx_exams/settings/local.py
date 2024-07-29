@@ -130,6 +130,12 @@ CORS_ORIGIN_WHITELIST = (
     EXAMS_DASHBOARD_MFE_URL,
 )
 
+CSRF_TRUSTED_ORIGINS = (
+    'http://localhost:2001',
+    LEARNING_MICROFRONTEND_URL,
+    EXAMS_DASHBOARD_MFE_URL,
+)
+
 ALLOWED_HOSTS = ['*']
 
 #####################################################################

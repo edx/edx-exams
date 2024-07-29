@@ -828,7 +828,21 @@ class AllowanceView(ExamsAPIView):
         allowances = StudentAllowance.get_allowances_for_course(course_id)
         return Response(AllowanceSerializer(allowances, many=True).data)
 
-    def post(self, request, course_id):  # pylint: disable=unused-argument
+    def delete(self, request, course_id, allowance_id):
+        """
+        HTTP DELETE handler. Deletes all allowances for a course.
+        """
+        try:
+            StudentAllowance.objects.get(id=allowance_id, exam__course_id=course_id).delete()
+        except StudentAllowance.DoesNotExist:
+            return Response(
+                status=status.HTTP_404_NOT_FOUND,
+                data={'detail': f'Allowance with id={allowance_id} does not exist.'}
+            )
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    def post(self, request, course_id):
         """
         HTTP POST handler. Creates allowances based on the given list.
         """
@@ -840,24 +854,31 @@ class AllowanceView(ExamsAPIView):
             # We expect the number of allowances in each request to be small. Should they increase,
             # we should not query within the loop, and instead refactor this to optimize
             # the DB calls.
-            allowance_objects = [
-                StudentAllowance(
-                    user=(
-                        User.objects.get(username=allowance['username'])
-                        if allowance.get('username')
-                        else User.objects.get(email=allowance['email'])
-                    ),
-                    exam=Exam.objects.get(id=allowance['exam_id']),
-                    extra_time_mins=allowance['extra_time_mins']
+            try:
+                allowance_objects = [
+                    StudentAllowance(
+                        user=(
+                            User.objects.get(username=allowance['username'])
+                            if allowance.get('username')
+                            else User.objects.get(email=allowance['email'])
+                        ),
+                        exam=Exam.objects.get(id=allowance['exam_id'], course_id=course_id),
+                        extra_time_mins=allowance['extra_time_mins']
+                    )
+                    for allowance in allowances
+                ]
+            except Exam.DoesNotExist:
+                return Response(
+                    status=status.HTTP_400_BAD_REQUEST,
+                    data={'detail': 'Exam does not exist'}
                 )
-                for allowance in allowances
-            ]
-            StudentAllowance.objects.bulk_create(
-                allowance_objects,
-                update_conflicts=True,
-                unique_fields=['user', 'exam'],
-                update_fields=['extra_time_mins']
-            )
+            except User.DoesNotExist:
+                return Response(
+                    status=status.HTTP_400_BAD_REQUEST,
+                    data={'detail': 'Learner with username/email not found'}
+                )
+
+            StudentAllowance.bulk_create_or_update(allowance_objects)
 
             return Response(status=status.HTTP_200_OK)
         else:
