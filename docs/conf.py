@@ -15,6 +15,7 @@ import os
 import re
 import sys
 from subprocess import check_call
+import datetime
 
 import sphinx_book_theme
 
@@ -90,8 +91,8 @@ top_level_doc = 'index'
 
 # General information about the project.
 project = 'edx_exams'
-copyright = 'COPYRIGHT'  # pylint: disable=redefined-builtin
-author = 'AUTHOR'
+copyright = '{year}, edX Inc.'.format(year=datetime.datetime.now().year)  # pylint: disable=redefined-builtin
+author = 'edx-org'
 project_title = 'edx_exams'
 documentation_title = f"{project_title}"
 
