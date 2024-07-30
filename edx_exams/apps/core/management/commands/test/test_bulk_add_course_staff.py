@@ -5,7 +5,7 @@ from django.core.management import call_command
 from django.test import TestCase
 
 from edx_exams.apps.core.models import CourseStaffRole, User
-from edx_exams.apps.core.test_utils.factories import UserFactory
+from edx_exams.apps.core.test_utils.factories import CourseStaffRoleFactory, UserFactory
 
 
 class TestBulkAddCourseStaff(TestCase):
@@ -90,8 +90,27 @@ class TestBulkAddCourseStaff(TestCase):
                  'sam,sam@pond.com,staff,course-v1:edx+test+f20\n']
         with NamedTemporaryFile() as csv:
             csv = self._write_test_csv(csv, lines)
-            with self.assertNumQueries(9):
+            with self.assertNumQueries(8):
                 call_command(self.command, f'--csv_path={csv.name}', '--batch_size=1')
+
+    def test_add_course_staff_with_batch_size_larger_than_list(self):
+        """ Assert that the number of queries is correct given batch size larger than lines """
+        lines = ['pam,pam@pond.com,staff,course-v1:edx+test+f20\n',
+                 'sam,sam@pond.com,staff,course-v1:edx+test+f20\n']
+        with NamedTemporaryFile() as csv:
+            csv = self._write_test_csv(csv, lines)
+            with self.assertNumQueries(6):
+                call_command(self.command, f'--csv_path={csv.name}', '--batch_size=3')
+
+    def test_add_course_staff_with_batch_size_smaller_than_list(self):
+        """ Assert that the number of queries is correct given batch size smaller than lines """
+        lines = ['pam,pam@pond.com,staff,course-v1:edx+test+f20\n',
+                 'sam,sam@pond.com,staff,course-v1:edx+test+f20\n'
+                 'tam,tam@pond.com,staff,course-v1:edx+test+f20\n']
+        with NamedTemporaryFile() as csv:
+            csv = self._write_test_csv(csv, lines)
+            with self.assertNumQueries(9):
+                call_command(self.command, f'--csv_path={csv.name}', '--batch_size=2')
 
     def test_add_course_staff_with_not_default_batch_delay(self):
         username, email = 'pam', 'pam@pond.com'
@@ -106,8 +125,8 @@ class TestBulkAddCourseStaff(TestCase):
 
     def test_num_queries_correct(self):
         """
-        Assert the number of queries to be 5 + 1 * number of lines:
-        2 for savepoint/release savepoint, 1 to get existing usernames,
+        Assert the number of queries to be 4 + 1 * number of lines:
+        2 for savepoint/release savepoint
         1 to bulk create users, 1 to bulk create course role
         1 for each user (to get user)
         """
@@ -115,7 +134,7 @@ class TestBulkAddCourseStaff(TestCase):
         lines = [f'pam{i},pam{i}@pond.com,staff,course-v1:edx+test+f20\n' for i in range(num_lines)]
         with NamedTemporaryFile() as csv:
             csv = self._write_test_csv(csv, lines)
-            with self.assertNumQueries(5 + num_lines):
+            with self.assertNumQueries(4 + num_lines):
                 call_command(self.command, f'--csv_path={csv.name}')
 
     def test_dupe_user_csv(self):
@@ -130,3 +149,32 @@ class TestBulkAddCourseStaff(TestCase):
             call_command(self.command, f'--csv_path={csv.name}')
             self._assert_user_and_role(username, email, self.course_role, self.course_id)
             self._assert_user_and_role(username, email, self.course_role, course_id_2)
+
+    def test_existing_course_staff_csv(self):
+        """ Assert that the course staff role are correctly created given already existing course staff roles in csv """
+        course_existing = 'course-v1:edx+test+f24'
+        CourseStaffRoleFactory.create(
+            user=self.user,
+            course_id=course_existing,
+            role=self.course_role,
+        )
+        lines = [f'{self.user.username},{self.user.email},{self.course_role},{course_existing}\n']
+        with NamedTemporaryFile() as csv:
+            csv = self._write_test_csv(csv, lines)
+            call_command(self.command, f'--csv_path={csv.name}')
+            self._assert_user_and_role(self.user.username, self.user.email, self.course_role, course_existing)
+
+    def test_dupe_course_staff_csv(self):
+        """ Assert that the course staff role are correctly created given dupe course staff roles in csv """
+        course_existing = 'course-v1:edx+test+f24'
+        CourseStaffRoleFactory.create(
+            user=self.user,
+            course_id=course_existing,
+            role=self.course_role,
+        )
+        lines = [f'{self.user.username},{self.user.email},{self.course_role},{course_existing}\n',
+                 f'{self.user.username},{self.user.email},{self.course_role},{course_existing}\n']
+        with NamedTemporaryFile() as csv:
+            csv = self._write_test_csv(csv, lines)
+            call_command(self.command, f'--csv_path={csv.name}')
+            self._assert_user_and_role(self.user.username, self.user.email, self.course_role, course_existing)
