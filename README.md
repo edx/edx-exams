@@ -30,9 +30,9 @@
 | edx\_exams/apps/core/exceptions.py                                                    |        7 |        0 |        0 |        0 |    100% |           |
 | edx\_exams/apps/core/management/\_\_init\_\_.py                                       |        0 |        0 |        0 |        0 |    100% |           |
 | edx\_exams/apps/core/management/commands/\_\_init\_\_.py                              |        0 |        0 |        0 |        0 |    100% |           |
-| edx\_exams/apps/core/management/commands/bulk\_add\_course\_staff.py                  |       35 |        0 |       16 |        2 |     96% |48->47, 56->59 |
+| edx\_exams/apps/core/management/commands/bulk\_add\_course\_staff.py                  |       27 |        0 |       10 |        2 |     95% |48->47, 56->59 |
 | edx\_exams/apps/core/management/commands/test/\_\_init\_\_.py                         |        0 |        0 |        0 |        0 |    100% |           |
-| edx\_exams/apps/core/management/commands/test/test\_bulk\_add\_course\_staff.py       |       84 |        0 |       22 |       10 |     91% |51->exit, 62->exit, 70->exit, 81->exit, 91->exit, 93->91, 101->exit, 116->exit, 118->116, 128->exit |
+| edx\_exams/apps/core/management/commands/test/test\_bulk\_add\_course\_staff.py       |      112 |        0 |       34 |       16 |     89% |51->exit, 62->exit, 70->exit, 81->exit, 91->exit, 93->91, 100->exit, 102->100, 110->exit, 112->110, 120->exit, 135->exit, 137->135, 147->exit, 162->exit, 177->exit |
 | edx\_exams/apps/core/migrations/0001\_initial.py                                      |        8 |        0 |        0 |        0 |    100% |           |
 | edx\_exams/apps/core/migrations/0002\_create\_exam\_models.py                         |        8 |        0 |        0 |        0 |    100% |           |
 | edx\_exams/apps/core/migrations/0003\_allow\_null\_provider.py                        |        5 |        0 |        0 |        0 |    100% |           |
@@ -93,7 +93,7 @@
 | edx\_exams/apps/router/tests/test\_views.py                                           |      124 |        0 |       22 |        9 |     94% |69->68, 121->120, 138->137, 170->169, 193->192, 237->236, 250->249, 307->306, 318->317 |
 | edx\_exams/apps/router/views.py                                                       |       39 |        1 |        6 |        0 |     98% |        56 |
 | edx\_exams/urls.py                                                                    |       14 |        0 |        0 |        0 |    100% |           |
-|                                                                             **TOTAL** | **3625** |    **3** |  **820** |  **253** | **94%** |           |
+|                                                                             **TOTAL** | **3645** |    **3** |  **826** |  **259** | **94%** |           |
 
 
 ## Setup coverage badge
