@@ -1900,6 +1900,18 @@ class AllowanceViewTests(ExamsAPITestCase):
         response = self.request_api('delete', self.user, self.exam.course_id, allowance_id=19)
         self.assertEqual(response.status_code, 404)
 
+    def test_delete_not_allowed(self):
+        """
+        Test that 404 is returned if the allowance is not for the authorized course
+        """
+        other_course_id = 'course-v1:edx+another+course'
+        allowance = StudentAllowanceFactory.create(
+            exam=ExamFactory.create(course_id=other_course_id),
+            user=self.user,
+        )
+        response = self.request_api('delete', self.user, self.exam.course_id, allowance_id=allowance.id)
+        self.assertEqual(response.status_code, 404)
+
     def test_post_allowances(self):
         """
         Test that the endpoint creates allowances for the given request data
@@ -1955,6 +1967,21 @@ class AllowanceViewTests(ExamsAPITestCase):
         """
         request_data = [
             {'exam_id': self.exam.id, 'extra_time_mins': 45},
+        ]
+        response = self.request_api('post', self.user, self.exam.course_id, data=request_data)
+        self.assertEqual(response.status_code, 400)
+
+    def test_post_unauthorized_course(self):
+        """
+        Test that an error is returned when atttempting to create an allowance for
+        an exam in a different course.
+        """
+        other_course_id = 'course-v1:edx+another+course'
+        other_course_exam = ExamFactory.create(course_id=other_course_id)
+
+        request_data = [
+            {'exam_id': self.exam.id, 'username': self.user.username, 'extra_time_mins': 45},
+            {'exam_id': other_course_exam.id, 'username': self.user.username, 'extra_time_mins': 45},
         ]
         response = self.request_api('post', self.user, self.exam.course_id, data=request_data)
         self.assertEqual(response.status_code, 400)
