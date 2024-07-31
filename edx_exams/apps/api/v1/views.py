@@ -828,6 +828,22 @@ class AllowanceView(ExamsAPIView):
         allowances = StudentAllowance.get_allowances_for_course(course_id)
         return Response(AllowanceSerializer(allowances, many=True).data)
 
+    def delete(self, request, course_id, allowance_id):  # pylint: disable=unused-argument
+        """
+        HTTP DELETE handler. Deletes all allowances for a course.
+
+        TODO: both this and the POST endpoint should be limiting operations by course_id
+        """
+        try:
+            StudentAllowance.objects.get(id=allowance_id).delete()
+        except StudentAllowance.DoesNotExist:
+            return Response(
+                status=status.HTTP_404_NOT_FOUND,
+                data={'detail': f'Allowance with id={allowance_id} does not exist.'}
+            )
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
     def post(self, request, course_id):  # pylint: disable=unused-argument
         """
         HTTP POST handler. Creates allowances based on the given list.

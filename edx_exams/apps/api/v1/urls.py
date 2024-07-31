@@ -20,6 +20,11 @@ app_name = 'v1'
 
 urlpatterns = [
     re_path(
+        fr'exams/course_id/{COURSE_ID_PATTERN}/allowances/(?P<allowance_id>\d+)',
+        AllowanceView.as_view(),
+        name='course-allowance'
+    ),
+    re_path(
         fr'exams/course_id/{COURSE_ID_PATTERN}/allowances',
         AllowanceView.as_view(),
         name='course-allowances'

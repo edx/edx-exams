@@ -1789,16 +1789,18 @@ class AllowanceViewTests(ExamsAPITestCase):
             course_id=self.course_id,
         )
 
-    def request_api(self, method, user, course_id, data=None):
+    def request_api(self, method, user, course_id, data=None, allowance_id=None):
         """
         Helper function to make API request
         """
-        assert method in ['get', 'post']
+        assert method in ['get', 'post', 'delete']
         headers = self.build_jwt_headers(user)
         url = reverse(
             'api:v1:course-allowances',
             kwargs={'course_id': course_id}
         )
+        if allowance_id:
+            url = f'{url}/{allowance_id}'
 
         if data:
             return getattr(self.client, method)(url, json.dumps(data), **headers, content_type='application/json')
@@ -1877,6 +1879,26 @@ class AllowanceViewTests(ExamsAPITestCase):
         response = self.request_api('get', self.user, 'course-v1:edx+no+allowances')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data, [])
+
+    def test_delete(self):
+        """
+        Test that the endpoint deletes an allowance
+        """
+        allowance = StudentAllowanceFactory.create(
+            exam=self.exam,
+            user=self.user,
+        )
+
+        response = self.request_api('delete', self.user, self.exam.course_id, allowance_id=allowance.id)
+        self.assertEqual(response.status_code, 204)
+        self.assertFalse(StudentAllowance.objects.filter(id=allowance.id).exists())
+
+    def test_delete_not_found(self):
+        """
+        Test that 404 is returned if allowance does not exist
+        """
+        response = self.request_api('delete', self.user, self.exam.course_id, allowance_id=19)
+        self.assertEqual(response.status_code, 404)
 
     def test_post_allowances(self):
         """
