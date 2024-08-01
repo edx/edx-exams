@@ -472,3 +472,14 @@ class StudentAllowance(TimeStampedModel):
         except cls.DoesNotExist:
             allowance = None
         return allowance
+
+    @classmethod
+    def get_allowance_by_id(cls, allowance_id):
+        """
+        Return StudentAllowance for a given id
+        """
+        try:
+            allowance = cls.objects.get(id=allowance_id)
+        except cls.DoesNotExist:
+            allowance = None
+        return allowance

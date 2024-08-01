@@ -32,6 +32,7 @@ from edx_exams.apps.core.api import (
     create_exam_attempt,
     create_or_update_course_exam_configuration,
     get_active_attempt_for_user,
+    get_allowance_by_id,
     get_attempt_by_id,
     get_course_exam_configuration_by_course_id,
     get_course_exams,
@@ -885,3 +886,33 @@ class AllowanceView(ExamsAPIView):
             response_status = status.HTTP_400_BAD_REQUEST
             data = {'detail': 'Invalid data', 'errors': serializer.errors}
             return Response(status=response_status, data=data)
+
+    def put(self, request, allowance_id):
+        """
+        HTTP PUT handler to update student allowance based on allowance id
+        /exams/allowance/<allowance_id>
+
+        Parameters:
+            request: The request object
+            allowance_id: The unique identifier for the student allowance.
+
+        Returns:
+            A Response object containing the `student_allowance_id`.
+        """
+        # todo: is it okay to use model class method here? or better to create function in api?
+        allowance = StudentAllowance.get_allowance_by_id(allowance_id)
+        extra_time_mins = request.data.get('extra_time_mins')
+
+        # todo: handle not existing allowance, 400 error
+        if not allowance:
+            return Response(
+                status=status.HTTP_400_BAD_REQUEST,
+                data={'detail': f'Allowance with allowance_id={allowance_id} does not exit.'}
+            )
+
+        serializer = AllowanceSerializer(data=)
+
+        # todo: edit allowance
+        # todo: handle error
+        allowance.update(extra_time_mins=extra_time_mins)
+
