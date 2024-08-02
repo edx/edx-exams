@@ -807,6 +807,8 @@ class AllowanceView(ExamsAPIView):
             Returns a list of allowances for a course.
         HTTP POST:
             Create one or more allowances
+        HTTP PUT:
+            Update an allowance
 
     Expected POST data: [{
         "username": "test_user",
@@ -817,6 +819,16 @@ class AllowanceView(ExamsAPIView):
         * username OR email: username or email for which to create or update an allowance.
         * exam_id: ID of the exam for which to create or update an allowance
         * extra_time_mins: Extra time (in minutes) that a student is allotted for an exam.
+
+    PUT Path Parameters
+        'allowance_id': The unique identifier for the student allowance.
+
+    PUT data Parameters
+        'extra_time_mins': The extra time in minutes for the student allowance.
+
+    PUT Response Values
+        {'student_allowance_id': <allowance_id>}: The allowance id of the student allowance being updated
+
     """
 
     authentication_classes = (JwtAuthentication,)
@@ -890,7 +902,7 @@ class AllowanceView(ExamsAPIView):
     def put(self, request, allowance_id):
         """
         HTTP PUT handler to update student allowance based on allowance id
-        /exams/allowance/<allowance_id>
+        /exams/allowances/<allowance_id>
 
         Parameters:
             request: The request object
@@ -903,14 +915,11 @@ class AllowanceView(ExamsAPIView):
         allowance = StudentAllowance.get_allowance_by_id(allowance_id)
         extra_time_mins = request.data.get('extra_time_mins')
 
-        # todo: handle not existing allowance, 400 error
         if not allowance:
             return Response(
                 status=status.HTTP_400_BAD_REQUEST,
                 data={'detail': f'Allowance with allowance_id={allowance_id} does not exit.'}
             )
-
-        serializer = AllowanceSerializer(data=)
 
         # todo: edit allowance
         # todo: handle error

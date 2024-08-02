@@ -14,13 +14,13 @@ from edx_exams.apps.api.v1.views import (
     ProctoringProvidersView,
     ProctoringSettingsView
 )
-from edx_exams.apps.core.constants import COURSE_ID_PATTERN, EXAM_ID_PATTERN, USAGE_KEY_PATTERN
+from edx_exams.apps.core.constants import ALLOWANCE_ID_PATTERN, COURSE_ID_PATTERN, EXAM_ID_PATTERN, USAGE_KEY_PATTERN
 
 app_name = 'v1'
 
 urlpatterns = [
     re_path(
-        fr'exams/course_id/{COURSE_ID_PATTERN}/allowances/(?P<allowance_id>\d+)',
+        fr'exams/course_id/{COURSE_ID_PATTERN}/allowances/{ALLOWANCE_ID_PATTERN}',
         AllowanceView.as_view(),
         name='course-allowance'
     ),

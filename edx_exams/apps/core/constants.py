@@ -20,3 +20,5 @@ USAGE_KEY_PATTERN = r'(?P<content_id>(?:i4x://?[^/]+/[^/]+/[^/]+/[^@]+(?:@[^/]+)
 EXAM_ID_PATTERN = r'(?P<exam_id>\d+)'
 
 ATTEMPT_ID_PATTERN = r'(?P<attempt_id>\d+)'
+
+ALLOWANCE_ID_PATTERN = r'(?P<allowance_id>\d+)'
