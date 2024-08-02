@@ -32,7 +32,6 @@ from edx_exams.apps.core.api import (
     create_exam_attempt,
     create_or_update_course_exam_configuration,
     get_active_attempt_for_user,
-    get_allowance_by_id,
     get_attempt_by_id,
     get_course_exam_configuration_by_course_id,
     get_course_exams,
@@ -923,5 +922,6 @@ class AllowanceView(ExamsAPIView):
 
         # todo: edit allowance
         # todo: handle error
+        # todo: return correct response object
         allowance.update(extra_time_mins=extra_time_mins)
 
