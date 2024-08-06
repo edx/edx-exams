@@ -4,7 +4,7 @@ import logging
 import time
 
 from django.core.management.base import BaseCommand
-from django.db import transaction
+from django.db import IntegrityError, transaction
 
 from edx_exams.apps.core.models import CourseStaffRole, User
 
@@ -63,34 +63,31 @@ class Command(BaseCommand):
         Add the given set of course staff provided in csv
         """
         reader = list(csv.DictReader(csv_file))
+        users = {}
 
-        # bulk create users
         for i in range(0, len(reader), batch_size):
-            User.objects.bulk_create(
-                (User(
-                    username=row.get('username'),
-                    email=row.get('email'),
-                ) for row in reader[i:i + batch_size]),
-                ignore_conflicts=True,
-            )
-            CourseStaffRole.objects.bulk_create(
-                (CourseStaffRole(
-                    user=User.objects.get(username=row.get('username')),
-                    course_id=row.get('course_id'),
-                    role=row.get('role'),
-                ) for row in reader[i:i + batch_size]),
-                ignore_conflicts=True,
-            )
+            users_list = []
+            for row in reader[i:i + batch_size]:
+                username = row.get('username')
+                email = row.get('email')
+                try:
+                    users_list.append(User.objects.get_or_create(username=row.get('username'), email=row.get('email')))
+                except IntegrityError:
+                    logger.warning(
+                        f'User with username={username} and email={email} was not created due to an existing duplicate '
+                        f'user with username.'
+                    )
+                    continue
+            users_dict = {(u.username, u) for (u, c) in users_list}
+            users.update(users_dict)
             time.sleep(batch_delay)
 
-        # bulk create course staff
-        # for i in range(0, len(reader), batch_size):
-        #     CourseStaffRole.objects.bulk_create(
-        #         (CourseStaffRole(
-        #             user=User.objects.get(username=row.get('username')),
-        #             course_id=row.get('course_id'),
-        #             role=row.get('role'),
-        #         ) for row in reader[i:i + batch_size]),
-        #         ignore_conflicts=True,
-        #     )
-        #     time.sleep(batch_delay)
+        CourseStaffRole.objects.bulk_create(
+            (CourseStaffRole(
+                user=users.get(row.get('username')),
+                course_id=row.get('course_id'),
+                role=row.get('role'),
+            ) for row in reader),
+            ignore_conflicts=True,
+            batch_size=batch_size,
+        )
