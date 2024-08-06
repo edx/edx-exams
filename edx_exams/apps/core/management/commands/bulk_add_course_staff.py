@@ -75,8 +75,6 @@ class Command(BaseCommand):
             )
             time.sleep(batch_delay)
 
-        # bulk create course staff
-        for i in range(0, len(reader), batch_size):
             CourseStaffRole.objects.bulk_create(
                 (CourseStaffRole(
                     user=User.objects.get(username=row.get('username')),
@@ -86,3 +84,15 @@ class Command(BaseCommand):
                 ignore_conflicts=True,
             )
             time.sleep(batch_delay)
+
+        # bulk create course staff
+        # for i in range(0, len(reader), batch_size):
+            # CourseStaffRole.objects.bulk_create(
+            #     (CourseStaffRole(
+            #         user=User.objects.get(username=row.get('username')),
+            #         course_id=row.get('course_id'),
+            #         role=row.get('role'),
+            #     ) for row in reader[i:i + batch_size]),
+            #     ignore_conflicts=True,
+            # )
+            # time.sleep(batch_delay)
