@@ -873,12 +873,7 @@ class AllowanceView(ExamsAPIView):
                     data={'detail': 'Exam does not exist'}
                 )
 
-            StudentAllowance.objects.bulk_create(
-                allowance_objects,
-                update_conflicts=True,
-                unique_fields=['user', 'exam'],
-                update_fields=['extra_time_mins']
-            )
+            StudentAllowance.bulk_create_or_update(allowance_objects)
 
             return Response(status=status.HTTP_200_OK)
         else:

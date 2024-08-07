@@ -4,7 +4,7 @@ import uuid
 
 from django.contrib.auth.models import AbstractUser
 from django.core.exceptions import ObjectDoesNotExist
-from django.db import models, transaction
+from django.db import connection, models, transaction
 from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from model_utils.models import TimeStampedModel
@@ -453,6 +453,26 @@ class StudentAllowance(TimeStampedModel):
         db_table = 'exams_studentallowance'
         verbose_name = 'student allowance'
         unique_together = ('user', 'exam')
+
+    @classmethod
+    def bulk_create_or_update(cls, allowances):
+        """
+        Create or update multiple allowances.
+
+        SQLite and Postgres have an additional requirement for bulk_create
+        when using update_conflicts=True. This app expects to run on MySQL
+        however our tests run on SQLite where 'unique_fields' is needed.
+        """
+        unique_fields = None
+        if connection.features.supports_update_conflicts_with_target:
+            unique_fields = ['user', 'exam']
+
+        cls.objects.bulk_create(
+            allowances,
+            update_conflicts=True,
+            unique_fields=unique_fields,
+            update_fields=['extra_time_mins'],
+        )
 
     @classmethod
     def get_allowances_for_course(cls, course_id):

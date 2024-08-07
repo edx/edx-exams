@@ -148,6 +148,24 @@ class StudentAllowanceTests(TestCase):
         self.course_id = 'course-v1:edX+Test+Test_Course'
         self.exam = ExamFactory(course_id=self.course_id)
 
+    def test_bulk_create_or_update(self):
+        """
+        Test bulk_create_or_update can create new allowances and update existing ones.
+        """
+        conflict_user = UserFactory()
+        conflict_allowance = StudentAllowanceFactory(user=conflict_user, exam=self.exam, extra_time_mins=66)
+        allowances = [
+            StudentAllowance(user=conflict_user, exam=self.exam, extra_time_mins=19),
+            StudentAllowance(user=UserFactory(), exam=self.exam, extra_time_mins=29),
+            StudentAllowance(user=UserFactory(), exam=self.exam, extra_time_mins=39),
+        ]
+
+        self.assertEqual(StudentAllowance.objects.count(), 1)
+        StudentAllowance.bulk_create_or_update(allowances)
+        self.assertEqual(StudentAllowance.objects.count(), 3)
+        conflict_allowance.refresh_from_db()
+        self.assertEqual(conflict_allowance.extra_time_mins, 19)
+
     def test_get_allowance_for_user(self):
         user = UserFactory()
         user_2 = UserFactory()
