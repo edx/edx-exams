@@ -15,8 +15,9 @@ import os
 import re
 import sys
 from subprocess import check_call
+import datetime
 
-import edx_theme
+import sphinx_book_theme
 
 
 def get_version(*file_paths):
@@ -59,7 +60,7 @@ VERSION = get_version('../edx_exams', '__init__.py')
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    'edx_theme',
+    'sphinx_book_theme',
     'sphinx.ext.autodoc',
     'sphinx.ext.doctest',
     'sphinx.ext.intersphinx',
@@ -90,8 +91,8 @@ top_level_doc = 'index'
 
 # General information about the project.
 project = 'edx_exams'
-copyright = edx_theme.COPYRIGHT  # pylint: disable=redefined-builtin
-author = edx_theme.AUTHOR
+copyright = '{year}, edX Inc.'.format(year=datetime.datetime.now().year)  # pylint: disable=redefined-builtin
+author = 'edx-org'
 project_title = 'edx_exams'
 documentation_title = f"{project_title}"
 
@@ -172,16 +173,13 @@ todo_include_todos = False
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 
-html_theme = 'edx_theme'
+html_theme = 'sphinx_book_theme'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
 #
 # html_theme_options = {}
-
-# Add any paths that contain custom themes here, relative to this directory.
-html_theme_path = [edx_theme.get_html_theme_path()]
 
 # The name for this set of Sphinx documents.
 # "<project> v<release> documentation" by default.
