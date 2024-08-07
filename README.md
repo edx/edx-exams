@@ -61,7 +61,7 @@
 | edx\_exams/apps/core/migrations/0026\_studentallowance.py                             |        8 |        0 |        0 |        0 |    100% |           |
 | edx\_exams/apps/core/migrations/0027\_coursestaffrole\_unique\_course\_staff\_role.py |        4 |        0 |        0 |        0 |    100% |           |
 | edx\_exams/apps/core/migrations/\_\_init\_\_.py                                       |        0 |        0 |        0 |        0 |    100% |           |
-| edx\_exams/apps/core/models.py                                                        |      198 |        0 |       44 |       15 |     94% |36->35, 170->169, 226->225, 237->236, 248->247, 269->268, 281->280, 348->347, 358->360, 359->358, 360->359, 395->394, 411->410, 458->457, 466->465 |
+| edx\_exams/apps/core/models.py                                                        |      204 |        0 |       48 |       17 |     93% |36->35, 170->169, 226->225, 237->236, 248->247, 269->268, 281->280, 348->347, 358->360, 359->358, 360->359, 395->394, 411->410, 458->457, 467->470, 478->477, 486->485 |
 | edx\_exams/apps/core/rest\_utils.py                                                   |       11 |        0 |        2 |        0 |    100% |           |
 | edx\_exams/apps/core/signals/\_\_init\_\_.py                                          |        0 |        0 |        0 |        0 |    100% |           |
 | edx\_exams/apps/core/signals/signals.py                                               |       21 |        0 |        0 |        0 |    100% |           |
@@ -72,7 +72,7 @@
 | edx\_exams/apps/core/tests/test\_context\_processors.py                               |        8 |        0 |        2 |        1 |     90% |    14->13 |
 | edx\_exams/apps/core/tests/test\_email.py                                             |       57 |        0 |       26 |       10 |     88% |36->35, 42->48, 47->42, 48->47, 57->64, 63->57, 64->63, 88->87, 92->94, 105->97 |
 | edx\_exams/apps/core/tests/test\_handlers.py                                          |       54 |        0 |       20 |        8 |     89% |51->50, 68->67, 79->89, 88->79, 89->88, 105->113, 112->105, 113->112 |
-| edx\_exams/apps/core/tests/test\_models.py                                            |       91 |        0 |        6 |        0 |    100% |           |
+| edx\_exams/apps/core/tests/test\_models.py                                            |      100 |        0 |        6 |        0 |    100% |           |
 | edx\_exams/apps/core/tests/test\_views.py                                             |       37 |        0 |        6 |        3 |     93% |25->exit, 49->48, 55->54 |
 | edx\_exams/apps/core/views.py                                                         |       42 |        0 |        8 |        1 |     98% |    48->39 |
 | edx\_exams/apps/lti/\_\_init\_\_.py                                                   |        0 |        0 |        0 |        0 |    100% |           |
@@ -93,7 +93,7 @@
 | edx\_exams/apps/router/tests/test\_views.py                                           |      124 |        0 |       22 |        9 |     94% |69->68, 121->120, 138->137, 170->169, 193->192, 237->236, 250->249, 307->306, 318->317 |
 | edx\_exams/apps/router/views.py                                                       |       39 |        1 |        6 |        0 |     98% |        56 |
 | edx\_exams/urls.py                                                                    |       14 |        0 |        0 |        0 |    100% |           |
-|                                                                             **TOTAL** | **3676** |    **3** |  **828** |  **259** | **94%** |           |
+|                                                                             **TOTAL** | **3691** |    **3** |  **832** |  **261** | **94%** |           |
 
 
 ## Setup coverage badge

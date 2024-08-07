@@ -67,7 +67,7 @@
             <a id="nextFileLink" class="nav" href="z_48dc7f5fd95c8ca7_api_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.6.0">coverage.py v7.6.0</a>,
-            created at 2024-08-02 13:32 +0000
+            created at 2024-08-07 13:01 +0000
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -957,18 +957,13 @@
     <p class="pln"><span class="n"><a id="t873" href="#t873">873</a></span><span class="t">                    <span class="nam">data</span><span class="op">=</span><span class="op">{</span><span class="str">'detail'</span><span class="op">:</span> <span class="str">'Exam does not exist'</span><span class="op">}</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t874" href="#t874">874</a></span><span class="t">                <span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t875" href="#t875">875</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t876" href="#t876">876</a></span><span class="t">            <span class="nam">StudentAllowance</span><span class="op">.</span><span class="nam">objects</span><span class="op">.</span><span class="nam">bulk_create</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t877" href="#t877">877</a></span><span class="t">                <span class="nam">allowance_objects</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t878" href="#t878">878</a></span><span class="t">                <span class="nam">update_conflicts</span><span class="op">=</span><span class="key">True</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t879" href="#t879">879</a></span><span class="t">                <span class="nam">unique_fields</span><span class="op">=</span><span class="op">[</span><span class="str">'user'</span><span class="op">,</span> <span class="str">'exam'</span><span class="op">]</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t880" href="#t880">880</a></span><span class="t">                <span class="nam">update_fields</span><span class="op">=</span><span class="op">[</span><span class="str">'extra_time_mins'</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t881" href="#t881">881</a></span><span class="t">            <span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t882" href="#t882">882</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t883" href="#t883">883</a></span><span class="t">            <span class="key">return</span> <span class="nam">Response</span><span class="op">(</span><span class="nam">status</span><span class="op">=</span><span class="nam">status</span><span class="op">.</span><span class="nam">HTTP_200_OK</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t884" href="#t884">884</a></span><span class="t">        <span class="key">else</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t885" href="#t885">885</a></span><span class="t">            <span class="nam">response_status</span> <span class="op">=</span> <span class="nam">status</span><span class="op">.</span><span class="nam">HTTP_400_BAD_REQUEST</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t886" href="#t886">886</a></span><span class="t">            <span class="nam">data</span> <span class="op">=</span> <span class="op">{</span><span class="str">'detail'</span><span class="op">:</span> <span class="str">'Invalid data'</span><span class="op">,</span> <span class="str">'errors'</span><span class="op">:</span> <span class="nam">serializer</span><span class="op">.</span><span class="nam">errors</span><span class="op">}</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t887" href="#t887">887</a></span><span class="t">            <span class="key">return</span> <span class="nam">Response</span><span class="op">(</span><span class="nam">status</span><span class="op">=</span><span class="nam">response_status</span><span class="op">,</span> <span class="nam">data</span><span class="op">=</span><span class="nam">data</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t876" href="#t876">876</a></span><span class="t">            <span class="nam">StudentAllowance</span><span class="op">.</span><span class="nam">bulk_create_or_update</span><span class="op">(</span><span class="nam">allowance_objects</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t877" href="#t877">877</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t878" href="#t878">878</a></span><span class="t">            <span class="key">return</span> <span class="nam">Response</span><span class="op">(</span><span class="nam">status</span><span class="op">=</span><span class="nam">status</span><span class="op">.</span><span class="nam">HTTP_200_OK</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t879" href="#t879">879</a></span><span class="t">        <span class="key">else</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t880" href="#t880">880</a></span><span class="t">            <span class="nam">response_status</span> <span class="op">=</span> <span class="nam">status</span><span class="op">.</span><span class="nam">HTTP_400_BAD_REQUEST</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t881" href="#t881">881</a></span><span class="t">            <span class="nam">data</span> <span class="op">=</span> <span class="op">{</span><span class="str">'detail'</span><span class="op">:</span> <span class="str">'Invalid data'</span><span class="op">,</span> <span class="str">'errors'</span><span class="op">:</span> <span class="nam">serializer</span><span class="op">.</span><span class="nam">errors</span><span class="op">}</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t882" href="#t882">882</a></span><span class="t">            <span class="key">return</span> <span class="nam">Response</span><span class="op">(</span><span class="nam">status</span><span class="op">=</span><span class="nam">response_status</span><span class="op">,</span> <span class="nam">data</span><span class="op">=</span><span class="nam">data</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
 </main>
 <footer>
     <div class="content">
@@ -978,7 +973,7 @@
             <a class="nav" href="z_48dc7f5fd95c8ca7_api_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.6.0">coverage.py v7.6.0</a>,
-            created at 2024-08-02 13:32 +0000
+            created at 2024-08-07 13:01 +0000
         </p>
     </div>
 </footer>

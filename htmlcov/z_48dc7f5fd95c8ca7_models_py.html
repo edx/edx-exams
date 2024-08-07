@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Coverage for edx_exams/apps/core/models.py: 94%</title>
+    <title>Coverage for edx_exams/apps/core/models.py: 93%</title>
     <link rel="icon" sizes="32x32" href="favicon_32_cb_58284776.png">
     <link rel="stylesheet" href="style_cb_8e611ae1.css" type="text/css">
     <script src="coverage_html_cb_6fb7b396.js" defer></script>
@@ -12,7 +12,7 @@
     <div class="content">
         <h1>
             <span class="text">Coverage for </span><b>edx_exams/apps/core/models.py</b>:
-            <span class="pc_cov">94%</span>
+            <span class="pc_cov">93%</span>
         </h1>
         <aside id="help_panel_wrapper">
             <input id="help_panel_state" type="checkbox">
@@ -55,11 +55,11 @@
             </div>
         </aside>
         <h2>
-            <span class="text">198 statements &nbsp;</span>
-            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">198<span class="text"> run</span></button>
+            <span class="text">204 statements &nbsp;</span>
+            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">204<span class="text"> run</span></button>
             <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">0<span class="text"> missing</span></button>
             <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">4<span class="text"> excluded</span></button>
-            <button type="button" class="par run show_par button_toggle_par" value="par" data-shortcut="p" title="Toggle lines partially run">15<span class="text"> partial</span></button>
+            <button type="button" class="par run show_par button_toggle_par" value="par" data-shortcut="p" title="Toggle lines partially run">17<span class="text"> partial</span></button>
         </h2>
         <p class="text">
             <a id="prevFileLink" class="nav" href="z_6ad59dd103a3ad53_0027_coursestaffrole_unique_course_staff_role_py.html">&#xab; prev</a> &nbsp; &nbsp;
@@ -67,7 +67,7 @@
             <a id="nextFileLink" class="nav" href="z_48dc7f5fd95c8ca7_rest_utils_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.6.0">coverage.py v7.6.0</a>,
-            created at 2024-08-02 13:32 +0000
+            created at 2024-08-07 13:01 +0000
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -88,7 +88,7 @@
     <p class="pln"><span class="n"><a id="t4" href="#t4">4</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t5" href="#t5">5</a></span><span class="t"><span class="key">from</span> <span class="nam">django</span><span class="op">.</span><span class="nam">contrib</span><span class="op">.</span><span class="nam">auth</span><span class="op">.</span><span class="nam">models</span> <span class="key">import</span> <span class="nam">AbstractUser</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t6" href="#t6">6</a></span><span class="t"><span class="key">from</span> <span class="nam">django</span><span class="op">.</span><span class="nam">core</span><span class="op">.</span><span class="nam">exceptions</span> <span class="key">import</span> <span class="nam">ObjectDoesNotExist</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t7" href="#t7">7</a></span><span class="t"><span class="key">from</span> <span class="nam">django</span><span class="op">.</span><span class="nam">db</span> <span class="key">import</span> <span class="nam">models</span><span class="op">,</span> <span class="nam">transaction</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t7" href="#t7">7</a></span><span class="t"><span class="key">from</span> <span class="nam">django</span><span class="op">.</span><span class="nam">db</span> <span class="key">import</span> <span class="nam">connection</span><span class="op">,</span> <span class="nam">models</span><span class="op">,</span> <span class="nam">transaction</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t8" href="#t8">8</a></span><span class="t"><span class="key">from</span> <span class="nam">django</span><span class="op">.</span><span class="nam">db</span><span class="op">.</span><span class="nam">models</span> <span class="key">import</span> <span class="nam">Q</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t9" href="#t9">9</a></span><span class="t"><span class="key">from</span> <span class="nam">django</span><span class="op">.</span><span class="nam">utils</span><span class="op">.</span><span class="nam">translation</span> <span class="key">import</span> <span class="nam">gettext_lazy</span> <span class="key">as</span> <span class="nam">_</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t10" href="#t10">10</a></span><span class="t"><span class="key">from</span> <span class="nam">model_utils</span><span class="op">.</span><span class="nam">models</span> <span class="key">import</span> <span class="nam">TimeStampedModel</span>&nbsp;</span><span class="r"></span></p>
@@ -539,23 +539,43 @@
     <p class="run"><span class="n"><a id="t455" href="#t455">455</a></span><span class="t">        <span class="nam">unique_together</span> <span class="op">=</span> <span class="op">(</span><span class="str">'user'</span><span class="op">,</span> <span class="str">'exam'</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t456" href="#t456">456</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t457" href="#t457">457</a></span><span class="t">    <span class="op">@</span><span class="nam">classmethod</span>&nbsp;</span><span class="r"></span></p>
-    <p class="par run show_par"><span class="n"><a id="t458" href="#t458">458</a></span><span class="t">    <span class="key">def</span> <span class="nam">get_allowances_for_course</span><span class="op">(</span><span class="nam">cls</span><span class="op">,</span> <span class="nam">course_id</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"><span class="annotate short">458&#x202F;&#x219B;&#x202F;457</span><span class="annotate long">line 458 didn't jump to line 457</span></span></p>
+    <p class="par run show_par"><span class="n"><a id="t458" href="#t458">458</a></span><span class="t">    <span class="key">def</span> <span class="nam">bulk_create_or_update</span><span class="op">(</span><span class="nam">cls</span><span class="op">,</span> <span class="nam">allowances</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"><span class="annotate short">458&#x202F;&#x219B;&#x202F;457</span><span class="annotate long">line 458 didn't jump to line 457</span></span></p>
     <p class="pln"><span class="n"><a id="t459" href="#t459">459</a></span><span class="t">        <span class="str">"""</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t460" href="#t460">460</a></span><span class="t"><span class="str">        Returns all the allowances for a course.</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t461" href="#t461">461</a></span><span class="t"><span class="str">        """</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t462" href="#t462">462</a></span><span class="t">        <span class="nam">filtered_query</span> <span class="op">=</span> <span class="nam">Q</span><span class="op">(</span><span class="nam">exam__course_id</span><span class="op">=</span><span class="nam">course_id</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t463" href="#t463">463</a></span><span class="t">        <span class="key">return</span> <span class="nam">cls</span><span class="op">.</span><span class="nam">objects</span><span class="op">.</span><span class="nam">filter</span><span class="op">(</span><span class="nam">filtered_query</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t464" href="#t464">464</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t465" href="#t465">465</a></span><span class="t">    <span class="op">@</span><span class="nam">classmethod</span>&nbsp;</span><span class="r"></span></p>
-    <p class="par run show_par"><span class="n"><a id="t466" href="#t466">466</a></span><span class="t">    <span class="key">def</span> <span class="nam">get_allowance_for_user</span><span class="op">(</span><span class="nam">cls</span><span class="op">,</span> <span class="nam">user_id</span><span class="op">,</span> <span class="nam">exam_id</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"><span class="annotate short">466&#x202F;&#x219B;&#x202F;465</span><span class="annotate long">line 466 didn't jump to line 465</span></span></p>
-    <p class="pln"><span class="n"><a id="t467" href="#t467">467</a></span><span class="t">        <span class="str">"""</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t468" href="#t468">468</a></span><span class="t"><span class="str">        Returns the allowance for a user in an exam.</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t469" href="#t469">469</a></span><span class="t"><span class="str">        """</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t470" href="#t470">470</a></span><span class="t">        <span class="key">try</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t471" href="#t471">471</a></span><span class="t">            <span class="nam">allowance</span> <span class="op">=</span> <span class="nam">cls</span><span class="op">.</span><span class="nam">objects</span><span class="op">.</span><span class="nam">get</span><span class="op">(</span><span class="nam">user_id</span><span class="op">=</span><span class="nam">user_id</span><span class="op">,</span> <span class="nam">exam_id</span><span class="op">=</span><span class="nam">exam_id</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t472" href="#t472">472</a></span><span class="t">        <span class="key">except</span> <span class="nam">cls</span><span class="op">.</span><span class="nam">DoesNotExist</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t473" href="#t473">473</a></span><span class="t">            <span class="nam">allowance</span> <span class="op">=</span> <span class="key">None</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t474" href="#t474">474</a></span><span class="t">        <span class="key">return</span> <span class="nam">allowance</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t460" href="#t460">460</a></span><span class="t"><span class="str">        Create or update multiple allowances.</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t461" href="#t461">461</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t462" href="#t462">462</a></span><span class="t"><span class="str">        SQLite and Postgres have an additional requirement for bulk_create</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t463" href="#t463">463</a></span><span class="t"><span class="str">        when using update_conflicts=True. This app expects to run on MySQL</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t464" href="#t464">464</a></span><span class="t"><span class="str">        however our tests run on SQLite where 'unique_fields' is needed.</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t465" href="#t465">465</a></span><span class="t"><span class="str">        """</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t466" href="#t466">466</a></span><span class="t">        <span class="nam">unique_fields</span> <span class="op">=</span> <span class="key">None</span>&nbsp;</span><span class="r"></span></p>
+    <p class="par run show_par"><span class="n"><a id="t467" href="#t467">467</a></span><span class="t">        <span class="key">if</span> <span class="nam">connection</span><span class="op">.</span><span class="nam">features</span><span class="op">.</span><span class="nam">supports_update_conflicts_with_target</span><span class="op">:</span>&nbsp;</span><span class="r"><span class="annotate short">467&#x202F;&#x219B;&#x202F;470</span><span class="annotate long">line 467 didn't jump to line 470 because the condition on line 467 was always true</span></span></p>
+    <p class="run"><span class="n"><a id="t468" href="#t468">468</a></span><span class="t">            <span class="nam">unique_fields</span> <span class="op">=</span> <span class="op">[</span><span class="str">'user'</span><span class="op">,</span> <span class="str">'exam'</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t469" href="#t469">469</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t470" href="#t470">470</a></span><span class="t">        <span class="nam">cls</span><span class="op">.</span><span class="nam">objects</span><span class="op">.</span><span class="nam">bulk_create</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t471" href="#t471">471</a></span><span class="t">            <span class="nam">allowances</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t472" href="#t472">472</a></span><span class="t">            <span class="nam">update_conflicts</span><span class="op">=</span><span class="key">True</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t473" href="#t473">473</a></span><span class="t">            <span class="nam">unique_fields</span><span class="op">=</span><span class="nam">unique_fields</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t474" href="#t474">474</a></span><span class="t">            <span class="nam">update_fields</span><span class="op">=</span><span class="op">[</span><span class="str">'extra_time_mins'</span><span class="op">]</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t475" href="#t475">475</a></span><span class="t">        <span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t476" href="#t476">476</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t477" href="#t477">477</a></span><span class="t">    <span class="op">@</span><span class="nam">classmethod</span>&nbsp;</span><span class="r"></span></p>
+    <p class="par run show_par"><span class="n"><a id="t478" href="#t478">478</a></span><span class="t">    <span class="key">def</span> <span class="nam">get_allowances_for_course</span><span class="op">(</span><span class="nam">cls</span><span class="op">,</span> <span class="nam">course_id</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"><span class="annotate short">478&#x202F;&#x219B;&#x202F;477</span><span class="annotate long">line 478 didn't jump to line 477</span></span></p>
+    <p class="pln"><span class="n"><a id="t479" href="#t479">479</a></span><span class="t">        <span class="str">"""</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t480" href="#t480">480</a></span><span class="t"><span class="str">        Returns all the allowances for a course.</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t481" href="#t481">481</a></span><span class="t"><span class="str">        """</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t482" href="#t482">482</a></span><span class="t">        <span class="nam">filtered_query</span> <span class="op">=</span> <span class="nam">Q</span><span class="op">(</span><span class="nam">exam__course_id</span><span class="op">=</span><span class="nam">course_id</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t483" href="#t483">483</a></span><span class="t">        <span class="key">return</span> <span class="nam">cls</span><span class="op">.</span><span class="nam">objects</span><span class="op">.</span><span class="nam">filter</span><span class="op">(</span><span class="nam">filtered_query</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t484" href="#t484">484</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t485" href="#t485">485</a></span><span class="t">    <span class="op">@</span><span class="nam">classmethod</span>&nbsp;</span><span class="r"></span></p>
+    <p class="par run show_par"><span class="n"><a id="t486" href="#t486">486</a></span><span class="t">    <span class="key">def</span> <span class="nam">get_allowance_for_user</span><span class="op">(</span><span class="nam">cls</span><span class="op">,</span> <span class="nam">user_id</span><span class="op">,</span> <span class="nam">exam_id</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"><span class="annotate short">486&#x202F;&#x219B;&#x202F;485</span><span class="annotate long">line 486 didn't jump to line 485</span></span></p>
+    <p class="pln"><span class="n"><a id="t487" href="#t487">487</a></span><span class="t">        <span class="str">"""</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t488" href="#t488">488</a></span><span class="t"><span class="str">        Returns the allowance for a user in an exam.</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t489" href="#t489">489</a></span><span class="t"><span class="str">        """</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t490" href="#t490">490</a></span><span class="t">        <span class="key">try</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t491" href="#t491">491</a></span><span class="t">            <span class="nam">allowance</span> <span class="op">=</span> <span class="nam">cls</span><span class="op">.</span><span class="nam">objects</span><span class="op">.</span><span class="nam">get</span><span class="op">(</span><span class="nam">user_id</span><span class="op">=</span><span class="nam">user_id</span><span class="op">,</span> <span class="nam">exam_id</span><span class="op">=</span><span class="nam">exam_id</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t492" href="#t492">492</a></span><span class="t">        <span class="key">except</span> <span class="nam">cls</span><span class="op">.</span><span class="nam">DoesNotExist</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t493" href="#t493">493</a></span><span class="t">            <span class="nam">allowance</span> <span class="op">=</span> <span class="key">None</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t494" href="#t494">494</a></span><span class="t">        <span class="key">return</span> <span class="nam">allowance</span>&nbsp;</span><span class="r"></span></p>
 </main>
 <footer>
     <div class="content">
@@ -565,7 +585,7 @@
             <a class="nav" href="z_48dc7f5fd95c8ca7_rest_utils_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.6.0">coverage.py v7.6.0</a>,
-            created at 2024-08-02 13:32 +0000
+            created at 2024-08-07 13:01 +0000
         </p>
     </div>
 </footer>
