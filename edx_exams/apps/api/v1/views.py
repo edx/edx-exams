@@ -872,6 +872,11 @@ class AllowanceView(ExamsAPIView):
                     status=status.HTTP_400_BAD_REQUEST,
                     data={'detail': 'Exam does not exist'}
                 )
+            except User.DoesNotExist:
+                return Response(
+                    status=status.HTTP_400_BAD_REQUEST,
+                    data={'detail': 'Learner with username/email not found'}
+                )
 
             StudentAllowance.bulk_create_or_update(allowance_objects)
 
