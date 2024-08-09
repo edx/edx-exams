@@ -1961,12 +1961,22 @@ class AllowanceViewTests(ExamsAPITestCase):
         response = self.request_api('post', self.user, self.exam.course_id, data=request_data)
         self.assertEqual(response.status_code, 400)
 
-    def test_post_invalid_missing_user(self):
+    def test_post_missing_user(self):
         """
         Test that 400 response is returned if serializer is invalid due to missing required field
         """
         request_data = [
             {'exam_id': self.exam.id, 'extra_time_mins': 45},
+        ]
+        response = self.request_api('post', self.user, self.exam.course_id, data=request_data)
+        self.assertEqual(response.status_code, 400)
+
+    def test_post_invalid_user(self):
+        """
+        Test that 400 response is returned if a username/email does not exist
+        """
+        request_data = [
+            {'exam_id': self.exam.id, 'username': 'junk', 'extra_time_mins': 45},
         ]
         response = self.request_api('post', self.user, self.exam.course_id, data=request_data)
         self.assertEqual(response.status_code, 400)
