@@ -92,13 +92,13 @@ class ProctoringProvider(TimeStampedModel):
 
     lti_configuration_id = models.CharField(max_length=255, db_index=True)
 
-    org_key = models.CharField(max_length=255, null=True)
+    org_key = models.CharField(max_length=255, null=True, blank=True)
 
-    tech_support_phone = models.CharField(max_length=255, null=True)
+    tech_support_phone = models.CharField(max_length=255, null=True, blank=True)
 
-    tech_support_email = models.CharField(max_length=255, null=True)
+    tech_support_email = models.CharField(max_length=255, null=True, blank=True)
 
-    tech_support_url = models.URLField(max_length=255, null=True)
+    tech_support_url = models.URLField(max_length=255, null=True, blank=True)
 
     class Meta:
         """ Meta class for this Django model """
@@ -140,7 +140,7 @@ class Exam(TimeStampedModel):
     time_limit_mins = models.PositiveIntegerField()
 
     # Due date is a deadline to finish the exam
-    due_date = models.DateTimeField(null=True)
+    due_date = models.DateTimeField(null=True, blank=True)
 
     # Whether to hide this exam after the due date
     hide_after_due = models.BooleanField(default=False)
@@ -208,9 +208,9 @@ class ExamAttempt(TimeStampedModel):
 
     status = models.CharField(max_length=64, choices=[(status, status) for status in STATUS_CHOICES])
 
-    start_time = models.DateTimeField(null=True)
+    start_time = models.DateTimeField(null=True, blank=True)
 
-    end_time = models.DateTimeField(null=True)
+    end_time = models.DateTimeField(null=True, blank=True)
 
     allowed_time_limit_mins = models.IntegerField(null=True)
 
