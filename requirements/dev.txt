@@ -40,11 +40,11 @@ bleach==6.1.0
     # via
     #   -r requirements/validation.txt
     #   lti-consumer-xblock
-boto3==1.35.1
+boto3==1.35.6
     # via
     #   -r requirements/validation.txt
     #   fs-s3fs
-botocore==1.35.1
+botocore==1.35.6
     # via
     #   -r requirements/validation.txt
     #   boto3
@@ -261,7 +261,7 @@ edx-event-bus-redis==0.5.0
     # via -r requirements/validation.txt
 edx-i18n-tools==1.6.2
     # via -r requirements/dev.in
-edx-lint==5.3.7
+edx-lint==5.4.0
     # via -r requirements/validation.txt
 edx-opaque-keys[django]==2.10.0
     # via
@@ -285,7 +285,7 @@ exceptiongroup==1.2.2
     #   pytest
 factory-boy==3.3.1
     # via -r requirements/validation.txt
-faker==27.0.0
+faker==28.0.0
     # via
     #   -r requirements/validation.txt
     #   factory-boy
@@ -314,18 +314,18 @@ future==1.0.0
     # via
     #   -r requirements/validation.txt
     #   pyjwkest
-idna==3.7
+idna==3.8
     # via
     #   -r requirements/validation.txt
     #   requests
-importlib-metadata==8.3.0
+importlib-metadata==8.4.0
     # via
     #   -r requirements/pip-tools.txt
     #   -r requirements/validation.txt
     #   build
     #   keyring
     #   twine
-importlib-resources==6.4.3
+importlib-resources==6.4.4
     # via
     #   -r requirements/validation.txt
     #   keyring
@@ -443,11 +443,11 @@ openapi-codec==1.3.2
     # via
     #   -r requirements/validation.txt
     #   django-rest-swagger
-openedx-django-pyfs==3.6.0
+openedx-django-pyfs==3.7.0
     # via
     #   -r requirements/validation.txt
     #   lti-consumer-xblock
-openedx-events==9.11.0
+openedx-events==9.12.0
     # via
     #   -r requirements/validation.txt
     #   edx-event-bus-kafka
@@ -467,7 +467,7 @@ packaging==24.1
     #   tox
 path==16.16.0
     # via edx-i18n-tools
-pbr==6.0.0
+pbr==6.1.0
     # via
     #   -r requirements/validation.txt
     #   stevedore
@@ -639,7 +639,7 @@ rfc3986==2.0.0
     # via
     #   -r requirements/validation.txt
     #   twine
-rich==13.7.1
+rich==13.8.0
     # via
     #   -r requirements/validation.txt
     #   twine
@@ -694,7 +694,7 @@ sqlparse==0.5.1
     #   -r requirements/validation.txt
     #   django
     #   django-debug-toolbar
-stevedore==5.2.0
+stevedore==5.3.0
     # via
     #   -r requirements/validation.txt
     #   code-annotations
@@ -771,7 +771,7 @@ xblock==5.1.0
     # via
     #   -r requirements/validation.txt
     #   lti-consumer-xblock
-zipp==3.20.0
+zipp==3.20.1
     # via
     #   -r requirements/pip-tools.txt
     #   -r requirements/validation.txt
