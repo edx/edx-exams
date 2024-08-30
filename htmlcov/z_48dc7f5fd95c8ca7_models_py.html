@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Coverage for edx_exams/apps/core/models.py: 93%</title>
+    <title>Coverage for edx_exams/apps/core/models.py: 99%</title>
     <link rel="icon" sizes="32x32" href="favicon_32_cb_58284776.png">
     <link rel="stylesheet" href="style_cb_8e611ae1.css" type="text/css">
     <script src="coverage_html_cb_6fb7b396.js" defer></script>
@@ -12,7 +12,7 @@
     <div class="content">
         <h1>
             <span class="text">Coverage for </span><b>edx_exams/apps/core/models.py</b>:
-            <span class="pc_cov">93%</span>
+            <span class="pc_cov">99%</span>
         </h1>
         <aside id="help_panel_wrapper">
             <input id="help_panel_state" type="checkbox">
@@ -59,7 +59,7 @@
             <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">204<span class="text"> run</span></button>
             <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">0<span class="text"> missing</span></button>
             <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">4<span class="text"> excluded</span></button>
-            <button type="button" class="par run show_par button_toggle_par" value="par" data-shortcut="p" title="Toggle lines partially run">17<span class="text"> partial</span></button>
+            <button type="button" class="par run show_par button_toggle_par" value="par" data-shortcut="p" title="Toggle lines partially run">1<span class="text"> partial</span></button>
         </h2>
         <p class="text">
             <a id="prevFileLink" class="nav" href="z_6ad59dd103a3ad53_0028_admin_optional_fields_py.html">&#xab; prev</a> &nbsp; &nbsp;
@@ -67,7 +67,7 @@
             <a id="nextFileLink" class="nav" href="z_48dc7f5fd95c8ca7_rest_utils_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.6.1">coverage.py v7.6.1</a>,
-            created at 2024-08-29 15:11 +0000
+            created at 2024-08-30 14:32 +0000
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -117,7 +117,7 @@
     <p class="run"><span class="n"><a id="t33" href="#t33">33</a></span><span class="t">    <span class="nam">anonymous_user_id</span> <span class="op">=</span> <span class="nam">models</span><span class="op">.</span><span class="nam">UUIDField</span><span class="op">(</span><span class="nam">default</span><span class="op">=</span><span class="nam">uuid</span><span class="op">.</span><span class="nam">uuid4</span><span class="op">,</span> <span class="nam">editable</span><span class="op">=</span><span class="key">False</span><span class="op">,</span> <span class="nam">unique</span><span class="op">=</span><span class="key">True</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t34" href="#t34">34</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t35" href="#t35">35</a></span><span class="t">    <span class="op">@</span><span class="nam">property</span>&nbsp;</span><span class="r"></span></p>
-    <p class="par run show_par"><span class="n"><a id="t36" href="#t36">36</a></span><span class="t">    <span class="key">def</span> <span class="nam">access_token</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"><span class="annotate short">36&#x202F;&#x219B;&#x202F;35</span><span class="annotate long">line 36 didn't jump to line 35</span></span></p>
+    <p class="run"><span class="n"><a id="t36" href="#t36">36</a></span><span class="t">    <span class="key">def</span> <span class="nam">access_token</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t37" href="#t37">37</a></span><span class="t">        <span class="str">"""</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t38" href="#t38">38</a></span><span class="t"><span class="str">        Returns an OAuth2 access token for this user, if one exists; otherwise None.</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t39" href="#t39">39</a></span><span class="t"><span class="str">        Assumes user has authenticated at least once with the OAuth2 provider (LMS).</span>&nbsp;</span><span class="r"></span></p>
@@ -251,7 +251,7 @@
     <p class="exc show_exc"><span class="n"><a id="t167" href="#t167">167</a></span><span class="t">        <span class="key">return</span> <span class="nam">self</span><span class="op">.</span><span class="nam">exam_name</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t168" href="#t168">168</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t169" href="#t169">169</a></span><span class="t">    <span class="op">@</span><span class="nam">classmethod</span>&nbsp;</span><span class="r"></span></p>
-    <p class="par run show_par"><span class="n"><a id="t170" href="#t170">170</a></span><span class="t">    <span class="key">def</span> <span class="nam">get_exam_by_id</span><span class="op">(</span><span class="nam">cls</span><span class="op">,</span> <span class="nam">exam_id</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"><span class="annotate short">170&#x202F;&#x219B;&#x202F;169</span><span class="annotate long">line 170 didn't jump to line 169</span></span></p>
+    <p class="run"><span class="n"><a id="t170" href="#t170">170</a></span><span class="t">    <span class="key">def</span> <span class="nam">get_exam_by_id</span><span class="op">(</span><span class="nam">cls</span><span class="op">,</span> <span class="nam">exam_id</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t171" href="#t171">171</a></span><span class="t">        <span class="str">"""</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t172" href="#t172">172</a></span><span class="t"><span class="str">        Return Exam for a given id</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t173" href="#t173">173</a></span><span class="t"><span class="str">        """</span>&nbsp;</span><span class="r"></span></p>
@@ -307,7 +307,7 @@
     <p class="run"><span class="n"><a id="t223" href="#t223">223</a></span><span class="t">        <span class="nam">verbose_name</span> <span class="op">=</span> <span class="str">'exam attempt'</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t224" href="#t224">224</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t225" href="#t225">225</a></span><span class="t">    <span class="op">@</span><span class="nam">classmethod</span>&nbsp;</span><span class="r"></span></p>
-    <p class="par run show_par"><span class="n"><a id="t226" href="#t226">226</a></span><span class="t">    <span class="key">def</span> <span class="nam">get_current_exam_attempt</span><span class="op">(</span><span class="nam">cls</span><span class="op">,</span> <span class="nam">user_id</span><span class="op">,</span> <span class="nam">exam_id</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"><span class="annotate short">226&#x202F;&#x219B;&#x202F;225</span><span class="annotate long">line 226 didn't jump to line 225</span></span></p>
+    <p class="run"><span class="n"><a id="t226" href="#t226">226</a></span><span class="t">    <span class="key">def</span> <span class="nam">get_current_exam_attempt</span><span class="op">(</span><span class="nam">cls</span><span class="op">,</span> <span class="nam">user_id</span><span class="op">,</span> <span class="nam">exam_id</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t227" href="#t227">227</a></span><span class="t">        <span class="str">"""</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t228" href="#t228">228</a></span><span class="t"><span class="str">        Given a user and exam, get the user's latest exam attempt, if exists.</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t229" href="#t229">229</a></span><span class="t"><span class="str">        """</span>&nbsp;</span><span class="r"></span></p>
@@ -318,7 +318,7 @@
     <p class="run"><span class="n"><a id="t234" href="#t234">234</a></span><span class="t">        <span class="key">return</span> <span class="nam">exam_attempt</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t235" href="#t235">235</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t236" href="#t236">236</a></span><span class="t">    <span class="op">@</span><span class="nam">classmethod</span>&nbsp;</span><span class="r"></span></p>
-    <p class="par run show_par"><span class="n"><a id="t237" href="#t237">237</a></span><span class="t">    <span class="key">def</span> <span class="nam">get_attempt_by_id</span><span class="op">(</span><span class="nam">cls</span><span class="op">,</span> <span class="nam">attempt_id</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"><span class="annotate short">237&#x202F;&#x219B;&#x202F;236</span><span class="annotate long">line 237 didn't jump to line 236</span></span></p>
+    <p class="run"><span class="n"><a id="t237" href="#t237">237</a></span><span class="t">    <span class="key">def</span> <span class="nam">get_attempt_by_id</span><span class="op">(</span><span class="nam">cls</span><span class="op">,</span> <span class="nam">attempt_id</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t238" href="#t238">238</a></span><span class="t">        <span class="str">"""</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t239" href="#t239">239</a></span><span class="t"><span class="str">        Return ExamAttempt for a given id</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t240" href="#t240">240</a></span><span class="t"><span class="str">        """</span>&nbsp;</span><span class="r"></span></p>
@@ -329,7 +329,7 @@
     <p class="run"><span class="n"><a id="t245" href="#t245">245</a></span><span class="t">        <span class="key">return</span> <span class="nam">attempt</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t246" href="#t246">246</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t247" href="#t247">247</a></span><span class="t">    <span class="op">@</span><span class="nam">classmethod</span>&nbsp;</span><span class="r"></span></p>
-    <p class="par run show_par"><span class="n"><a id="t248" href="#t248">248</a></span><span class="t">    <span class="key">def</span> <span class="nam">get_active_attempt_for_user</span><span class="op">(</span><span class="nam">cls</span><span class="op">,</span> <span class="nam">user_id</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"><span class="annotate short">248&#x202F;&#x219B;&#x202F;247</span><span class="annotate long">line 248 didn't jump to line 247</span></span></p>
+    <p class="run"><span class="n"><a id="t248" href="#t248">248</a></span><span class="t">    <span class="key">def</span> <span class="nam">get_active_attempt_for_user</span><span class="op">(</span><span class="nam">cls</span><span class="op">,</span> <span class="nam">user_id</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t249" href="#t249">249</a></span><span class="t">        <span class="str">"""</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t250" href="#t250">250</a></span><span class="t"><span class="str">        Return currently running attempt associated with a given user_id</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t251" href="#t251">251</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
@@ -350,7 +350,7 @@
     <p class="run"><span class="n"><a id="t266" href="#t266">266</a></span><span class="t">            <span class="key">return</span> <span class="key">None</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t267" href="#t267">267</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t268" href="#t268">268</a></span><span class="t">    <span class="op">@</span><span class="nam">classmethod</span>&nbsp;</span><span class="r"></span></p>
-    <p class="par run show_par"><span class="n"><a id="t269" href="#t269">269</a></span><span class="t">    <span class="key">def</span> <span class="nam">check_no_other_active_attempts_for_user</span><span class="op">(</span><span class="nam">cls</span><span class="op">,</span> <span class="nam">user_id</span><span class="op">,</span> <span class="nam">attempt_id</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"><span class="annotate short">269&#x202F;&#x219B;&#x202F;268</span><span class="annotate long">line 269 didn't jump to line 268</span></span></p>
+    <p class="run"><span class="n"><a id="t269" href="#t269">269</a></span><span class="t">    <span class="key">def</span> <span class="nam">check_no_other_active_attempts_for_user</span><span class="op">(</span><span class="nam">cls</span><span class="op">,</span> <span class="nam">user_id</span><span class="op">,</span> <span class="nam">attempt_id</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t270" href="#t270">270</a></span><span class="t">        <span class="str">"""</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t271" href="#t271">271</a></span><span class="t"><span class="str">        Return true if no active exam attempts exist for the user</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t272" href="#t272">272</a></span><span class="t"><span class="str">        Return false otherwise</span>&nbsp;</span><span class="r"></span></p>
@@ -362,7 +362,7 @@
     <p class="run"><span class="n"><a id="t278" href="#t278">278</a></span><span class="t">            <span class="key">return</span> <span class="key">True</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t279" href="#t279">279</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t280" href="#t280">280</a></span><span class="t">    <span class="op">@</span><span class="nam">classmethod</span>&nbsp;</span><span class="r"></span></p>
-    <p class="par run show_par"><span class="n"><a id="t281" href="#t281">281</a></span><span class="t">    <span class="key">def</span> <span class="nam">get_attempt_for_user_with_attempt_number_and_resource_id</span><span class="op">(</span><span class="nam">cls</span><span class="op">,</span> <span class="nam">user_id</span><span class="op">,</span> <span class="nam">attempt_number</span><span class="op">,</span> <span class="nam">resource_id</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"><span class="annotate short">281&#x202F;&#x219B;&#x202F;280</span><span class="annotate long">line 281 didn't jump to line 280</span></span></p>
+    <p class="run"><span class="n"><a id="t281" href="#t281">281</a></span><span class="t">    <span class="key">def</span> <span class="nam">get_attempt_for_user_with_attempt_number_and_resource_id</span><span class="op">(</span><span class="nam">cls</span><span class="op">,</span> <span class="nam">user_id</span><span class="op">,</span> <span class="nam">attempt_number</span><span class="op">,</span> <span class="nam">resource_id</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t282" href="#t282">282</a></span><span class="t">        <span class="str">"""</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t283" href="#t283">283</a></span><span class="t"><span class="str">        Retrieve an attempt in an exam described by resource_id for a user described by user_id with a particular</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t284" href="#t284">284</a></span><span class="t"><span class="str">        attempt number described by attempt_number.</span>&nbsp;</span><span class="r"></span></p>
@@ -429,7 +429,7 @@
     <p class="run"><span class="n"><a id="t345" href="#t345">345</a></span><span class="t">        <span class="nam">verbose_name</span> <span class="op">=</span> <span class="str">'course exam configuration'</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t346" href="#t346">346</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t347" href="#t347">347</a></span><span class="t">    <span class="op">@</span><span class="nam">classmethod</span>&nbsp;</span><span class="r"></span></p>
-    <p class="par run show_par"><span class="n"><a id="t348" href="#t348">348</a></span><span class="t">    <span class="key">def</span> <span class="nam">get_configuration_for_course</span><span class="op">(</span><span class="nam">cls</span><span class="op">,</span> <span class="nam">course_id</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"><span class="annotate short">348&#x202F;&#x219B;&#x202F;347</span><span class="annotate long">line 348 didn't jump to line 347</span></span></p>
+    <p class="run"><span class="n"><a id="t348" href="#t348">348</a></span><span class="t">    <span class="key">def</span> <span class="nam">get_configuration_for_course</span><span class="op">(</span><span class="nam">cls</span><span class="op">,</span> <span class="nam">course_id</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t349" href="#t349">349</a></span><span class="t">        <span class="str">"""</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t350" href="#t350">350</a></span><span class="t"><span class="str">        Return exam configuration for a course</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t351" href="#t351">351</a></span><span class="t"><span class="str">        """</span>&nbsp;</span><span class="r"></span></p>
@@ -439,9 +439,9 @@
     <p class="run"><span class="n"><a id="t355" href="#t355">355</a></span><span class="t">            <span class="nam">configuration</span> <span class="op">=</span> <span class="key">None</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t356" href="#t356">356</a></span><span class="t">        <span class="key">return</span> <span class="nam">configuration</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t357" href="#t357">357</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="par run show_par"><span class="n"><a id="t358" href="#t358">358</a></span><span class="t">    <span class="op">@</span><span class="nam">classmethod</span>&nbsp;</span><span class="r"><span class="annotate short">358&#x202F;&#x219B;&#x202F;360</span><span class="annotate long">line 358 didn't jump to line 360</span></span></p>
-    <p class="par run show_par"><span class="n"><a id="t359" href="#t359">359</a></span><span class="t">    <span class="op">@</span><span class="nam">transaction</span><span class="op">.</span><span class="nam">atomic</span>&nbsp;</span><span class="r"><span class="annotate short">359&#x202F;&#x219B;&#x202F;358</span><span class="annotate long">line 359 didn't jump to line 358</span></span></p>
-    <p class="par run show_par"><span class="n"><a id="t360" href="#t360">360</a></span><span class="t">    <span class="key">def</span> <span class="nam">create_or_update</span><span class="op">(</span><span class="nam">cls</span><span class="op">,</span> <span class="nam">course_id</span><span class="op">,</span> <span class="nam">provider</span><span class="op">,</span> <span class="nam">escalation_email</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"><span class="annotate short">360&#x202F;&#x219B;&#x202F;359</span><span class="annotate long">line 360 didn't jump to line 359</span></span></p>
+    <p class="run"><span class="n"><a id="t358" href="#t358">358</a></span><span class="t">    <span class="op">@</span><span class="nam">classmethod</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t359" href="#t359">359</a></span><span class="t">    <span class="op">@</span><span class="nam">transaction</span><span class="op">.</span><span class="nam">atomic</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t360" href="#t360">360</a></span><span class="t">    <span class="key">def</span> <span class="nam">create_or_update</span><span class="op">(</span><span class="nam">cls</span><span class="op">,</span> <span class="nam">course_id</span><span class="op">,</span> <span class="nam">provider</span><span class="op">,</span> <span class="nam">escalation_email</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t361" href="#t361">361</a></span><span class="t">        <span class="str">"""</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t362" href="#t362">362</a></span><span class="t"><span class="str">        Helper method that decides whether to update existing or create new config.</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t363" href="#t363">363</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
@@ -476,7 +476,7 @@
     <p class="pln"><span class="n"><a id="t392" href="#t392">392</a></span><span class="t">                     <span class="op">+</span> <span class="fst">f'</span><span class="fst">escalation_email=</span><span class="op">{</span><span class="nam">escalation_email</span><span class="op">}</span><span class="fst">'</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t393" href="#t393">393</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t394" href="#t394">394</a></span><span class="t">    <span class="op">@</span><span class="nam">classmethod</span>&nbsp;</span><span class="r"></span></p>
-    <p class="par run show_par"><span class="n"><a id="t395" href="#t395">395</a></span><span class="t">    <span class="key">def</span> <span class="nam">update_course_config</span><span class="op">(</span><span class="nam">cls</span><span class="op">,</span> <span class="nam">existing_config</span><span class="op">,</span> <span class="nam">new_provider</span><span class="op">,</span> <span class="nam">escalation_email</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"><span class="annotate short">395&#x202F;&#x219B;&#x202F;394</span><span class="annotate long">line 395 didn't jump to line 394</span></span></p>
+    <p class="run"><span class="n"><a id="t395" href="#t395">395</a></span><span class="t">    <span class="key">def</span> <span class="nam">update_course_config</span><span class="op">(</span><span class="nam">cls</span><span class="op">,</span> <span class="nam">existing_config</span><span class="op">,</span> <span class="nam">new_provider</span><span class="op">,</span> <span class="nam">escalation_email</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t396" href="#t396">396</a></span><span class="t">        <span class="str">"""</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t397" href="#t397">397</a></span><span class="t"><span class="str">        Update the provider and escalation_email fields of an instance of a CourseExamConfiguration model represented</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t398" href="#t398">398</a></span><span class="t"><span class="str">        by the existing_config parameter.</span>&nbsp;</span><span class="r"></span></p>
@@ -492,7 +492,7 @@
     <p class="run"><span class="n"><a id="t408" href="#t408">408</a></span><span class="t">        <span class="nam">existing_config</span><span class="op">.</span><span class="nam">save</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t409" href="#t409">409</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t410" href="#t410">410</a></span><span class="t">    <span class="op">@</span><span class="nam">classmethod</span>&nbsp;</span><span class="r"></span></p>
-    <p class="par run show_par"><span class="n"><a id="t411" href="#t411">411</a></span><span class="t">    <span class="key">def</span> <span class="nam">_sync_exams_with_new_provider</span><span class="op">(</span><span class="nam">cls</span><span class="op">,</span> <span class="nam">course_id</span><span class="op">,</span> <span class="nam">new_provider</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"><span class="annotate short">411&#x202F;&#x219B;&#x202F;410</span><span class="annotate long">line 411 didn't jump to line 410</span></span></p>
+    <p class="run"><span class="n"><a id="t411" href="#t411">411</a></span><span class="t">    <span class="key">def</span> <span class="nam">_sync_exams_with_new_provider</span><span class="op">(</span><span class="nam">cls</span><span class="op">,</span> <span class="nam">course_id</span><span class="op">,</span> <span class="nam">new_provider</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t412" href="#t412">412</a></span><span class="t">        <span class="str">"""</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t413" href="#t413">413</a></span><span class="t"><span class="str">        For a particular course represented by the course_id argument, duplicate all the exams in the course with the</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t414" href="#t414">414</a></span><span class="t"><span class="str">        new proctoring provider. Set the originale exams to inactive and create new active exams with the new</span>&nbsp;</span><span class="r"></span></p>
@@ -539,7 +539,7 @@
     <p class="run"><span class="n"><a id="t455" href="#t455">455</a></span><span class="t">        <span class="nam">unique_together</span> <span class="op">=</span> <span class="op">(</span><span class="str">'user'</span><span class="op">,</span> <span class="str">'exam'</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t456" href="#t456">456</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t457" href="#t457">457</a></span><span class="t">    <span class="op">@</span><span class="nam">classmethod</span>&nbsp;</span><span class="r"></span></p>
-    <p class="par run show_par"><span class="n"><a id="t458" href="#t458">458</a></span><span class="t">    <span class="key">def</span> <span class="nam">bulk_create_or_update</span><span class="op">(</span><span class="nam">cls</span><span class="op">,</span> <span class="nam">allowances</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"><span class="annotate short">458&#x202F;&#x219B;&#x202F;457</span><span class="annotate long">line 458 didn't jump to line 457</span></span></p>
+    <p class="run"><span class="n"><a id="t458" href="#t458">458</a></span><span class="t">    <span class="key">def</span> <span class="nam">bulk_create_or_update</span><span class="op">(</span><span class="nam">cls</span><span class="op">,</span> <span class="nam">allowances</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t459" href="#t459">459</a></span><span class="t">        <span class="str">"""</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t460" href="#t460">460</a></span><span class="t"><span class="str">        Create or update multiple allowances.</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t461" href="#t461">461</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
@@ -559,7 +559,7 @@
     <p class="pln"><span class="n"><a id="t475" href="#t475">475</a></span><span class="t">        <span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t476" href="#t476">476</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t477" href="#t477">477</a></span><span class="t">    <span class="op">@</span><span class="nam">classmethod</span>&nbsp;</span><span class="r"></span></p>
-    <p class="par run show_par"><span class="n"><a id="t478" href="#t478">478</a></span><span class="t">    <span class="key">def</span> <span class="nam">get_allowances_for_course</span><span class="op">(</span><span class="nam">cls</span><span class="op">,</span> <span class="nam">course_id</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"><span class="annotate short">478&#x202F;&#x219B;&#x202F;477</span><span class="annotate long">line 478 didn't jump to line 477</span></span></p>
+    <p class="run"><span class="n"><a id="t478" href="#t478">478</a></span><span class="t">    <span class="key">def</span> <span class="nam">get_allowances_for_course</span><span class="op">(</span><span class="nam">cls</span><span class="op">,</span> <span class="nam">course_id</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t479" href="#t479">479</a></span><span class="t">        <span class="str">"""</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t480" href="#t480">480</a></span><span class="t"><span class="str">        Returns all the allowances for a course.</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t481" href="#t481">481</a></span><span class="t"><span class="str">        """</span>&nbsp;</span><span class="r"></span></p>
@@ -567,7 +567,7 @@
     <p class="run"><span class="n"><a id="t483" href="#t483">483</a></span><span class="t">        <span class="key">return</span> <span class="nam">cls</span><span class="op">.</span><span class="nam">objects</span><span class="op">.</span><span class="nam">filter</span><span class="op">(</span><span class="nam">filtered_query</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t484" href="#t484">484</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t485" href="#t485">485</a></span><span class="t">    <span class="op">@</span><span class="nam">classmethod</span>&nbsp;</span><span class="r"></span></p>
-    <p class="par run show_par"><span class="n"><a id="t486" href="#t486">486</a></span><span class="t">    <span class="key">def</span> <span class="nam">get_allowance_for_user</span><span class="op">(</span><span class="nam">cls</span><span class="op">,</span> <span class="nam">user_id</span><span class="op">,</span> <span class="nam">exam_id</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"><span class="annotate short">486&#x202F;&#x219B;&#x202F;485</span><span class="annotate long">line 486 didn't jump to line 485</span></span></p>
+    <p class="run"><span class="n"><a id="t486" href="#t486">486</a></span><span class="t">    <span class="key">def</span> <span class="nam">get_allowance_for_user</span><span class="op">(</span><span class="nam">cls</span><span class="op">,</span> <span class="nam">user_id</span><span class="op">,</span> <span class="nam">exam_id</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t487" href="#t487">487</a></span><span class="t">        <span class="str">"""</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t488" href="#t488">488</a></span><span class="t"><span class="str">        Returns the allowance for a user in an exam.</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t489" href="#t489">489</a></span><span class="t"><span class="str">        """</span>&nbsp;</span><span class="r"></span></p>
@@ -585,7 +585,7 @@
             <a class="nav" href="z_48dc7f5fd95c8ca7_rest_utils_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.6.1">coverage.py v7.6.1</a>,
-            created at 2024-08-29 15:11 +0000
+            created at 2024-08-30 14:32 +0000
         </p>
     </div>
 </footer>
