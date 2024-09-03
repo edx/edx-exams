@@ -99,8 +99,11 @@ def update_attempt_status(attempt_id, to_status):
         if not allowed_to_start:
             raise ExamIllegalStatusTransition(error_msg)
 
-        attempt_obj.start_time = datetime.now(pytz.UTC)
-        attempt_obj.allowed_time_limit_mins = _calculate_allowed_mins(attempt_obj.user, attempt_obj.exam)
+        # Once start time, and end time by extension, has been set further transitions to started
+        # must not update this value
+        if not attempt_obj.start_time:
+            attempt_obj.start_time = datetime.now(pytz.UTC)
+            attempt_obj.allowed_time_limit_mins = _calculate_allowed_mins(attempt_obj.user, attempt_obj.exam)
 
     course_key = CourseKey.from_string(attempt_obj.exam.course_id)
     usage_key = UsageKey.from_string(attempt_obj.exam.content_id)
