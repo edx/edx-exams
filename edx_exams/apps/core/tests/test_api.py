@@ -407,6 +407,21 @@ class TestUpdateAttemptStatus(ExamsAPITestCase):
             update_attempt_status(self.exam_attempt.id, ExamAttemptStatus.started)
         self.assertIn('another exam attempt is currently active!', str(exc.exception))
 
+    def test_ready_to_submit_to_started(self):
+        """
+        Test transition to started after initial start time has been set. This should not
+        alter the existing start time.
+        """
+        with freeze_time(timezone.now()):
+            self.exam_attempt.status = ExamAttemptStatus.ready_to_submit
+            self.exam_attempt.start_time = timezone.now()-timedelta(minutes=10)
+            self.exam_attempt.allowed_time_limit_mins = 30
+            self.exam_attempt.save()
+
+            update_attempt_status(self.exam_attempt.id, ExamAttemptStatus.started)
+            self.exam_attempt.refresh_from_db()
+            self.assertEqual(self.exam_attempt.start_time, timezone.now()-timedelta(minutes=10))
+
 
 class TestGetAttemptById(ExamsAPITestCase):
     """

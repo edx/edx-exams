@@ -90,7 +90,7 @@ class TestBulkAddCourseStaff(TestCase):
                  'sam,sam@pond.com,staff,course-v1:edx+test+f20\n']
         with NamedTemporaryFile() as csv:
             csv = self._write_test_csv(csv, lines)
-            with self.assertNumQueries(8):
+            with self.assertNumQueries(12):
                 call_command(self.command, f'--csv_path={csv.name}', '--batch_size=1')
 
     def test_add_course_staff_with_batch_size_larger_than_list(self):
@@ -99,7 +99,7 @@ class TestBulkAddCourseStaff(TestCase):
                  'sam,sam@pond.com,staff,course-v1:edx+test+f20\n']
         with NamedTemporaryFile() as csv:
             csv = self._write_test_csv(csv, lines)
-            with self.assertNumQueries(6):
+            with self.assertNumQueries(11):
                 call_command(self.command, f'--csv_path={csv.name}', '--batch_size=3')
 
     def test_add_course_staff_with_batch_size_smaller_than_list(self):
@@ -109,7 +109,7 @@ class TestBulkAddCourseStaff(TestCase):
                  'tam,tam@pond.com,staff,course-v1:edx+test+f20\n']
         with NamedTemporaryFile() as csv:
             csv = self._write_test_csv(csv, lines)
-            with self.assertNumQueries(9):
+            with self.assertNumQueries(16):
                 call_command(self.command, f'--csv_path={csv.name}', '--batch_size=2')
 
     def test_add_course_staff_with_not_default_batch_delay(self):
@@ -125,16 +125,16 @@ class TestBulkAddCourseStaff(TestCase):
 
     def test_num_queries_correct(self):
         """
-        Assert the number of queries to be 4 + 1 * number of lines:
+        Assert the number of queries to be 2 + 1 * number of lines:
         2 for savepoint/release savepoint
-        1 to bulk create users, 1 to bulk create course role
-        1 for each user (to get user)
+        1 to bulk create course role
+        4 for each user (to get user, and savepoints)
         """
         num_lines = 20
         lines = [f'pam{i},pam{i}@pond.com,staff,course-v1:edx+test+f20\n' for i in range(num_lines)]
         with NamedTemporaryFile() as csv:
             csv = self._write_test_csv(csv, lines)
-            with self.assertNumQueries(4 + num_lines):
+            with self.assertNumQueries(3 + 4 * num_lines):
                 call_command(self.command, f'--csv_path={csv.name}')
 
     def test_dupe_user_csv(self):
