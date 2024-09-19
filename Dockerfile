@@ -24,25 +24,50 @@ MAINTAINER sre@edx.org
 
 # make; necessary to provision the container
 
+# ENV variables for Python 3.12 support
+ARG PYTHON_VERSION=3.12
+ENV TZ=UTC
+ENV TERM=xterm-256color
+ENV DEBIAN_FRONTEND=noninteractive
+
+# software-properties-common is needed to setup Python 3.12 env
+RUN apt-get update && \
+  apt-get install -y software-properties-common && \
+  apt-add-repository -y ppa:deadsnakes/ppa
+
 # If you add a package here please include a comment above describing what it is used for
 RUN apt-get update && apt-get -qy install --no-install-recommends \
+ build-essential \
  language-pack-en \
  locales \
- python3.8 \
- python3-pip \
  libmysqlclient-dev \
  pkg-config \
  libssl-dev \
- python3-dev \
  gcc \
  make \
- git
+ git \
+ curl \
+ python3-pip \
+ python${PYTHON_VERSION} \
+ python${PYTHON_VERSION}-dev \
+ python${PYTHON_VERSION}-distutils 
 
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 RUN pip install --upgrade pip setuptools
 # delete apt package lists because we do not need them inflating our image
 RUN rm -rf /var/lib/apt/lists/*
 
+# need to use virtualenv pypi package with Python 3.12
+RUN curl -sS https://bootstrap.pypa.io/get-pip.py | python${PYTHON_VERSION}
+RUN pip install virtualenv
+
+# Create virtual environment with Python 3.12
+ENV VIRTUAL_ENV=/edx/venvs/edx-exams
+RUN virtualenv -p python${PYTHON_VERSION} $VIRTUAL_ENV
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+
+# python is python3
 RUN ln -s /usr/bin/python3 /usr/bin/python
 
 RUN locale-gen en_US.UTF-8
