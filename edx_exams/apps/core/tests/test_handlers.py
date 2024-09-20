@@ -155,3 +155,29 @@ class TestCourseRoleEvents(TestCase):
             roles,
             ['instructor']
         )
+
+    def test_course_access_role_email_change(self):
+        """
+        Test that if a user updates their email, additional course staff roles are able to be added.
+        """
+        role_event_data = self._get_event_data(self.course_id, self.existing_user.username, 'staff')
+        event_metadata = self._get_event_metadata(COURSE_ACCESS_ROLE_ADDED)
+        event_kwargs = {
+            'course_access_role_data': role_event_data,
+            'metadata': event_metadata,
+        }
+        listen_for_course_access_role_added(None, COURSE_ACCESS_ROLE_ADDED, **event_kwargs)
+
+        self.existing_user.email = 'updated_email@example.com'
+        self.existing_user.save()
+
+        other_course = 'course-v1:another-course-2024'
+        role_event_data = self._get_event_data(other_course, self.existing_user.username, 'staff')
+        event_metadata = self._get_event_metadata(COURSE_ACCESS_ROLE_ADDED)
+        event_kwargs = {
+            'course_access_role_data': role_event_data,
+            'metadata': event_metadata,
+        }
+        listen_for_course_access_role_added(None, COURSE_ACCESS_ROLE_ADDED, **event_kwargs)
+
+        self.assertEqual(len(CourseStaffRole.objects.filter(user=self.existing_user)), 2)
