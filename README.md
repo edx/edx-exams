@@ -72,7 +72,7 @@
 | edx\_exams/apps/core/tests/test\_api.py                                               |      352 |        0 |       88 |        0 |    100% |           |
 | edx\_exams/apps/core/tests/test\_context\_processors.py                               |        8 |        0 |        2 |        0 |    100% |           |
 | edx\_exams/apps/core/tests/test\_email.py                                             |       57 |        0 |       26 |        0 |    100% |           |
-| edx\_exams/apps/core/tests/test\_handlers.py                                          |       54 |        0 |       20 |        0 |    100% |           |
+| edx\_exams/apps/core/tests/test\_handlers.py                                          |       67 |        0 |       20 |        0 |    100% |           |
 | edx\_exams/apps/core/tests/test\_models.py                                            |      100 |        0 |        6 |        0 |    100% |           |
 | edx\_exams/apps/core/tests/test\_views.py                                             |       37 |        0 |        6 |        0 |    100% |           |
 | edx\_exams/apps/core/views.py                                                         |       42 |        0 |        8 |        0 |    100% |           |
@@ -94,7 +94,7 @@
 | edx\_exams/apps/router/tests/test\_views.py                                           |      124 |        0 |       22 |        0 |    100% |           |
 | edx\_exams/apps/router/views.py                                                       |       39 |        1 |        6 |        0 |     98% |        56 |
 | edx\_exams/urls.py                                                                    |       14 |        0 |        0 |        0 |    100% |           |
-|                                                                             **TOTAL** | **3722** |    **6** |  **838** |    **2** | **99%** |           |
+|                                                                             **TOTAL** | **3735** |    **6** |  **838** |    **2** | **99%** |           |
 
 
 ## Setup coverage badge
