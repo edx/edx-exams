@@ -13,7 +13,7 @@ asgiref==3.8.1
     #   -r requirements/base.txt
     #   django
     #   django-cors-headers
-astroid==3.2.4
+astroid==3.3.4
     # via
     #   pylint
     #   pylint-celery
@@ -26,11 +26,11 @@ bleach==6.1.0
     # via
     #   -r requirements/base.txt
     #   lti-consumer-xblock
-boto3==1.35.22
+boto3==1.35.25
     # via
     #   -r requirements/base.txt
     #   fs-s3fs
-botocore==1.35.22
+botocore==1.35.25
     # via
     #   -r requirements/base.txt
     #   boto3
@@ -236,7 +236,7 @@ edx-token-utils==0.2.1
     # via -r requirements/base.txt
 factory-boy==3.3.1
     # via -r requirements/test.in
-faker==28.4.1
+faker==29.0.0
     # via factory-boy
 fastavro==1.9.7
     # via
@@ -343,7 +343,7 @@ openedx-events==9.14.1
     #   -r requirements/base.txt
     #   edx-event-bus-kafka
     #   edx-event-bus-redis
-openedx-filters==1.9.0
+openedx-filters==1.10.0
     # via
     #   -r requirements/base.txt
     #   lti-consumer-xblock
@@ -393,7 +393,7 @@ pyjwt[crypto]==2.9.0
     #   edx-drf-extensions
     #   edx-rest-api-client
     #   social-auth-core
-pylint==3.2.7
+pylint==3.3.1
     # via
     #   edx-lint
     #   pylint-celery

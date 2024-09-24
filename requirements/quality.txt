@@ -13,7 +13,7 @@ asgiref==3.8.1
     #   -r requirements/test.txt
     #   django
     #   django-cors-headers
-astroid==3.2.4
+astroid==3.3.4
     # via
     #   -r requirements/test.txt
     #   pylint
@@ -27,11 +27,11 @@ bleach==6.1.0
     # via
     #   -r requirements/test.txt
     #   lti-consumer-xblock
-boto3==1.35.22
+boto3==1.35.25
     # via
     #   -r requirements/test.txt
     #   fs-s3fs
-botocore==1.35.22
+botocore==1.35.25
     # via
     #   -r requirements/test.txt
     #   boto3
@@ -94,6 +94,7 @@ cryptography==43.0.1
     # via
     #   -r requirements/test.txt
     #   pyjwt
+    #   secretstorage
     #   social-auth-core
 ddt==1.7.2
     # via -r requirements/test.txt
@@ -253,7 +254,7 @@ edx-token-utils==0.2.1
     # via -r requirements/test.txt
 factory-boy==3.3.1
     # via -r requirements/test.txt
-faker==28.4.1
+faker==29.0.0
     # via
     #   -r requirements/test.txt
     #   factory-boy
@@ -311,6 +312,10 @@ jaraco-context==6.0.1
     # via keyring
 jaraco-functools==4.0.2
     # via keyring
+jeepney==0.8.0
+    # via
+    #   keyring
+    #   secretstorage
 jinja2==3.1.4
     # via
     #   -r requirements/test.txt
@@ -325,7 +330,7 @@ jsonfield==3.1.0
     # via
     #   -r requirements/test.txt
     #   lti-consumer-xblock
-keyring==25.4.0
+keyring==25.4.1
     # via twine
 lazy==1.6
     # via
@@ -390,7 +395,7 @@ openedx-events==9.14.1
     #   -r requirements/test.txt
     #   edx-event-bus-kafka
     #   edx-event-bus-redis
-openedx-filters==1.9.0
+openedx-filters==1.10.0
     # via
     #   -r requirements/test.txt
     #   lti-consumer-xblock
@@ -452,7 +457,7 @@ pyjwt[crypto]==2.9.0
     #   edx-drf-extensions
     #   edx-rest-api-client
     #   social-auth-core
-pylint==3.2.7
+pylint==3.3.1
     # via
     #   -r requirements/test.txt
     #   edx-lint
@@ -557,6 +562,8 @@ s3transfer==0.10.2
     # via
     #   -r requirements/test.txt
     #   boto3
+secretstorage==3.3.3
+    # via keyring
 semantic-version==2.10.0
     # via
     #   -r requirements/test.txt
