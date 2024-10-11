@@ -12,7 +12,7 @@ on:
 
 jobs:
   call-upgrade-python-requirements-workflow:
-    uses: openedx/.github/.github/workflows/upgrade-python-requirements.yml@master
+    uses: Zacharis278/.github/.github/workflows/upgrade-python-requirements.yml@master
     with:
       branch: ${{ github.event.inputs.branch || 'main' }}
       # python_version: "3.12"
