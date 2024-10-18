@@ -380,16 +380,16 @@ class CourseExamConfiguration(TimeStampedModel):
             # and duplicates made with the new provider.
             if provider != existing_provider:
                 count = cls._sync_exams_with_new_provider(existing_config.course_id, provider)
-                log.info(f'Updated course exam configuration course_id={course_id} '
-                         + f'to provider={provider_name} and recreated {count} exams')
+                log.info('Updated course exam configuration course_id=%s to provider=%s and recreated %d exams',
+                         course_id, provider_name, count)
         else:
             CourseExamConfiguration.objects.create(
                 course_id=course_id,
                 escalation_email=escalation_email,
                 provider=provider,
             )
-            log.info(f'Created course exam configuration course_id={course_id}, provider={provider_name}, '
-                     + f'escalation_email={escalation_email}')
+            log.info('Created course exam configuration course_id=%s, provider=%s, escalation_email=%s',
+                     course_id, provider_name, escalation_email)
 
     @classmethod
     def update_course_config(cls, existing_config, new_provider, escalation_email):

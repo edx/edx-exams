@@ -158,6 +158,7 @@ class LtiAcsTestCase(ExamsAPITestCase):
     @patch.object(Lti1p3ApiAuthentication, 'authenticate', return_value=(AnonymousUser(), None))
     @patch('edx_exams.apps.lti.views.LtiProctoringAcsPermissions.has_permission')
     @patch('edx_exams.apps.lti.views.get_attempt_for_user_with_attempt_number_and_resource_id')
+    # pylint: disable=too-many-positional-arguments
     def test_acs_attempt_status(self,
                                 attempt_status,
                                 expected_response_status,
@@ -210,6 +211,7 @@ class LtiAcsTestCase(ExamsAPITestCase):
     @patch.object(Lti1p3ApiAuthentication, 'authenticate', return_value=(AnonymousUser(), None))
     @patch('edx_exams.apps.lti.views.LtiProctoringAcsPermissions.has_permission')
     @patch('edx_exams.apps.lti.views.get_attempt_for_user_with_attempt_number_and_resource_id')
+    # pylint: disable=too-many-positional-arguments
     def test_acs_base_parameter_missing_errors(self,
                                                acs_parameter,
                                                acs_sub_parameter,
@@ -317,6 +319,7 @@ class LtiAcsTestCase(ExamsAPITestCase):
     @patch.object(Lti1p3ApiAuthentication, 'authenticate', return_value=(AnonymousUser(), None))
     @patch('edx_exams.apps.lti.views.LtiProctoringAcsPermissions.has_permission')
     @patch('edx_exams.apps.lti.views.get_attempt_for_user_with_attempt_number_and_resource_id')
+    # pylint: disable=too-many-positional-arguments
     def test_acs_terminate(self,
                            reason_code,
                            incident_severity,

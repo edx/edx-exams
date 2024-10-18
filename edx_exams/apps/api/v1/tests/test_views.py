@@ -1789,6 +1789,7 @@ class AllowanceViewTests(ExamsAPITestCase):
             course_id=self.course_id,
         )
 
+    # pylint: disable=too-many-positional-arguments
     def request_api(self, method, user, course_id, data=None, allowance_id=None):
         """
         Helper function to make API request
