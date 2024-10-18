@@ -67,7 +67,7 @@
             <a id="nextFileLink" class="nav" href="z_48dc7f5fd95c8ca7_rest_utils_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.6.3">coverage.py v7.6.3</a>,
-            created at 2024-10-18 14:27 +0000
+            created at 2024-10-18 21:36 +0000
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -464,16 +464,16 @@
     <p class="pln"><span class="n"><a id="t380" href="#t380">380</a></span><span class="t">            <span class="com"># and duplicates made with the new provider.</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t381" href="#t381">381</a></span><span class="t">            <span class="key">if</span> <span class="nam">provider</span> <span class="op">!=</span> <span class="nam">existing_provider</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t382" href="#t382">382</a></span><span class="t">                <span class="nam">count</span> <span class="op">=</span> <span class="nam">cls</span><span class="op">.</span><span class="nam">_sync_exams_with_new_provider</span><span class="op">(</span><span class="nam">existing_config</span><span class="op">.</span><span class="nam">course_id</span><span class="op">,</span> <span class="nam">provider</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t383" href="#t383">383</a></span><span class="t">                <span class="nam">log</span><span class="op">.</span><span class="nam">info</span><span class="op">(</span><span class="fst">f'</span><span class="fst">Updated course exam configuration course_id=</span><span class="op">{</span><span class="nam">course_id</span><span class="op">}</span><span class="fst"> </span><span class="fst">'</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t384" href="#t384">384</a></span><span class="t">                         <span class="op">+</span> <span class="fst">f'</span><span class="fst">to provider=</span><span class="op">{</span><span class="nam">provider_name</span><span class="op">}</span><span class="fst"> and recreated </span><span class="op">{</span><span class="nam">count</span><span class="op">}</span><span class="fst"> exams</span><span class="fst">'</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t383" href="#t383">383</a></span><span class="t">                <span class="nam">log</span><span class="op">.</span><span class="nam">info</span><span class="op">(</span><span class="str">'Updated course exam configuration course_id=%s to provider=%s and recreated %d exams'</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t384" href="#t384">384</a></span><span class="t">                         <span class="nam">course_id</span><span class="op">,</span> <span class="nam">provider_name</span><span class="op">,</span> <span class="nam">count</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t385" href="#t385">385</a></span><span class="t">        <span class="key">else</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t386" href="#t386">386</a></span><span class="t">            <span class="nam">CourseExamConfiguration</span><span class="op">.</span><span class="nam">objects</span><span class="op">.</span><span class="nam">create</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t387" href="#t387">387</a></span><span class="t">                <span class="nam">course_id</span><span class="op">=</span><span class="nam">course_id</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t388" href="#t388">388</a></span><span class="t">                <span class="nam">escalation_email</span><span class="op">=</span><span class="nam">escalation_email</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t389" href="#t389">389</a></span><span class="t">                <span class="nam">provider</span><span class="op">=</span><span class="nam">provider</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t390" href="#t390">390</a></span><span class="t">            <span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t391" href="#t391">391</a></span><span class="t">            <span class="nam">log</span><span class="op">.</span><span class="nam">info</span><span class="op">(</span><span class="fst">f'</span><span class="fst">Created course exam configuration course_id=</span><span class="op">{</span><span class="nam">course_id</span><span class="op">}</span><span class="fst">, provider=</span><span class="op">{</span><span class="nam">provider_name</span><span class="op">}</span><span class="fst">, </span><span class="fst">'</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t392" href="#t392">392</a></span><span class="t">                     <span class="op">+</span> <span class="fst">f'</span><span class="fst">escalation_email=</span><span class="op">{</span><span class="nam">escalation_email</span><span class="op">}</span><span class="fst">'</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t391" href="#t391">391</a></span><span class="t">            <span class="nam">log</span><span class="op">.</span><span class="nam">info</span><span class="op">(</span><span class="str">'Created course exam configuration course_id=%s, provider=%s, escalation_email=%s'</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t392" href="#t392">392</a></span><span class="t">                     <span class="nam">course_id</span><span class="op">,</span> <span class="nam">provider_name</span><span class="op">,</span> <span class="nam">escalation_email</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t393" href="#t393">393</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t394" href="#t394">394</a></span><span class="t">    <span class="op">@</span><span class="nam">classmethod</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t395" href="#t395">395</a></span><span class="t">    <span class="key">def</span> <span class="nam">update_course_config</span><span class="op">(</span><span class="nam">cls</span><span class="op">,</span> <span class="nam">existing_config</span><span class="op">,</span> <span class="nam">new_provider</span><span class="op">,</span> <span class="nam">escalation_email</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
@@ -585,7 +585,7 @@
             <a class="nav" href="z_48dc7f5fd95c8ca7_rest_utils_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.6.3">coverage.py v7.6.3</a>,
-            created at 2024-10-18 14:27 +0000
+            created at 2024-10-18 21:36 +0000
         </p>
     </div>
 </footer>
