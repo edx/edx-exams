@@ -16,23 +16,23 @@
 | edx\_exams/apps/api/urls.py                                                           |        4 |        0 |        0 |        0 |    100% |           |
 | edx\_exams/apps/api/v1/\_\_init\_\_.py                                                |       15 |        0 |        4 |        0 |    100% |           |
 | edx\_exams/apps/api/v1/tests/\_\_init\_\_.py                                          |        0 |        0 |        0 |        0 |    100% |           |
-| edx\_exams/apps/api/v1/tests/test\_views.py                                           |      825 |        0 |      158 |        0 |    100% |           |
+| edx\_exams/apps/api/v1/tests/test\_views.py                                           |      825 |        0 |       30 |        0 |    100% |           |
 | edx\_exams/apps/api/v1/urls.py                                                        |        5 |        0 |        0 |        0 |    100% |           |
-| edx\_exams/apps/api/v1/views.py                                                       |      278 |        0 |       80 |        0 |    100% |           |
+| edx\_exams/apps/api/v1/views.py                                                       |      278 |        0 |       66 |        0 |    100% |           |
 | edx\_exams/apps/core/\_\_init\_\_.py                                                  |        0 |        0 |        0 |        0 |    100% |           |
 | edx\_exams/apps/core/api.py                                                           |      172 |        0 |       44 |        0 |    100% |           |
 | edx\_exams/apps/core/apps.py                                                          |        5 |        0 |        0 |        0 |    100% |           |
 | edx\_exams/apps/core/constants.py                                                     |        9 |        0 |        0 |        0 |    100% |           |
 | edx\_exams/apps/core/context\_processors.py                                           |        3 |        0 |        0 |        0 |    100% |           |
-| edx\_exams/apps/core/data.py                                                          |        7 |        0 |        2 |        0 |    100% |           |
+| edx\_exams/apps/core/data.py                                                          |        7 |        0 |        0 |        0 |    100% |           |
 | edx\_exams/apps/core/email.py                                                         |       36 |        0 |       10 |        0 |    100% |           |
 | edx\_exams/apps/core/exam\_types.py                                                   |       35 |        0 |        4 |        0 |    100% |           |
 | edx\_exams/apps/core/exceptions.py                                                    |        7 |        0 |        0 |        0 |    100% |           |
 | edx\_exams/apps/core/management/\_\_init\_\_.py                                       |        0 |        0 |        0 |        0 |    100% |           |
 | edx\_exams/apps/core/management/commands/\_\_init\_\_.py                              |        0 |        0 |        0 |        0 |    100% |           |
-| edx\_exams/apps/core/management/commands/bulk\_add\_course\_staff.py                  |       38 |        3 |       10 |        0 |     94% |     75-80 |
+| edx\_exams/apps/core/management/commands/bulk\_add\_course\_staff.py                  |       38 |        3 |        4 |        0 |     93% |     75-80 |
 | edx\_exams/apps/core/management/commands/test/\_\_init\_\_.py                         |        0 |        0 |        0 |        0 |    100% |           |
-| edx\_exams/apps/core/management/commands/test/test\_bulk\_add\_course\_staff.py       |      112 |        0 |       34 |        0 |    100% |           |
+| edx\_exams/apps/core/management/commands/test/test\_bulk\_add\_course\_staff.py       |      112 |        0 |        2 |        0 |    100% |           |
 | edx\_exams/apps/core/migrations/0001\_initial.py                                      |        8 |        0 |        0 |        0 |    100% |           |
 | edx\_exams/apps/core/migrations/0002\_create\_exam\_models.py                         |        8 |        0 |        0 |        0 |    100% |           |
 | edx\_exams/apps/core/migrations/0003\_allow\_null\_provider.py                        |        5 |        0 |        0 |        0 |    100% |           |
@@ -62,39 +62,39 @@
 | edx\_exams/apps/core/migrations/0027\_coursestaffrole\_unique\_course\_staff\_role.py |        4 |        0 |        0 |        0 |    100% |           |
 | edx\_exams/apps/core/migrations/0028\_admin\_optional\_fields.py                      |        4 |        0 |        0 |        0 |    100% |           |
 | edx\_exams/apps/core/migrations/\_\_init\_\_.py                                       |        0 |        0 |        0 |        0 |    100% |           |
-| edx\_exams/apps/core/models.py                                                        |      204 |        0 |       48 |        1 |     99% |  467->470 |
+| edx\_exams/apps/core/models.py                                                        |      204 |        0 |       10 |        1 |     99% |  467->470 |
 | edx\_exams/apps/core/rest\_utils.py                                                   |       11 |        0 |        2 |        0 |    100% |           |
 | edx\_exams/apps/core/signals/\_\_init\_\_.py                                          |        0 |        0 |        0 |        0 |    100% |           |
 | edx\_exams/apps/core/signals/signals.py                                               |       21 |        0 |        0 |        0 |    100% |           |
-| edx\_exams/apps/core/statuses.py                                                      |       29 |        0 |        8 |        0 |    100% |           |
+| edx\_exams/apps/core/statuses.py                                                      |       29 |        0 |        2 |        0 |    100% |           |
 | edx\_exams/apps/core/test\_utils/factories.py                                         |       77 |        0 |        0 |        0 |    100% |           |
 | edx\_exams/apps/core/tests/\_\_init\_\_.py                                            |        0 |        0 |        0 |        0 |    100% |           |
-| edx\_exams/apps/core/tests/test\_api.py                                               |      352 |        0 |       88 |        0 |    100% |           |
-| edx\_exams/apps/core/tests/test\_context\_processors.py                               |        8 |        0 |        2 |        0 |    100% |           |
-| edx\_exams/apps/core/tests/test\_email.py                                             |       57 |        0 |       26 |        0 |    100% |           |
-| edx\_exams/apps/core/tests/test\_handlers.py                                          |       67 |        0 |       20 |        0 |    100% |           |
+| edx\_exams/apps/core/tests/test\_api.py                                               |      352 |        0 |        0 |        0 |    100% |           |
+| edx\_exams/apps/core/tests/test\_context\_processors.py                               |        8 |        0 |        0 |        0 |    100% |           |
+| edx\_exams/apps/core/tests/test\_email.py                                             |       57 |        0 |        4 |        0 |    100% |           |
+| edx\_exams/apps/core/tests/test\_handlers.py                                          |       67 |        0 |        2 |        0 |    100% |           |
 | edx\_exams/apps/core/tests/test\_models.py                                            |      100 |        0 |        6 |        0 |    100% |           |
-| edx\_exams/apps/core/tests/test\_views.py                                             |       37 |        0 |        6 |        0 |    100% |           |
-| edx\_exams/apps/core/views.py                                                         |       42 |        0 |        8 |        0 |    100% |           |
+| edx\_exams/apps/core/tests/test\_views.py                                             |       37 |        0 |        0 |        0 |    100% |           |
+| edx\_exams/apps/core/views.py                                                         |       42 |        0 |        4 |        0 |    100% |           |
 | edx\_exams/apps/lti/\_\_init\_\_.py                                                   |        0 |        0 |        0 |        0 |    100% |           |
 | edx\_exams/apps/lti/apps.py                                                           |        6 |        0 |        0 |        0 |    100% |           |
 | edx\_exams/apps/lti/migrations/\_\_init\_\_.py                                        |        0 |        0 |        0 |        0 |    100% |           |
 | edx\_exams/apps/lti/signals/\_\_init\_\_.py                                           |        0 |        0 |        0 |        0 |    100% |           |
-| edx\_exams/apps/lti/signals/handlers.py                                               |       23 |        0 |        6 |        0 |    100% |           |
+| edx\_exams/apps/lti/signals/handlers.py                                               |       23 |        0 |        4 |        0 |    100% |           |
 | edx\_exams/apps/lti/signals/tests/\_\_init\_\_.py                                     |        0 |        0 |        0 |        0 |    100% |           |
-| edx\_exams/apps/lti/signals/tests/test\_handlers.py                                   |       54 |        0 |       14 |        0 |    100% |           |
+| edx\_exams/apps/lti/signals/tests/test\_handlers.py                                   |       54 |        0 |        0 |        0 |    100% |           |
 | edx\_exams/apps/lti/tests/\_\_init\_\_.py                                             |        0 |        0 |        0 |        0 |    100% |           |
-| edx\_exams/apps/lti/tests/test\_views.py                                              |      272 |        0 |       84 |        0 |    100% |           |
+| edx\_exams/apps/lti/tests/test\_views.py                                              |      272 |        0 |        4 |        0 |    100% |           |
 | edx\_exams/apps/lti/urls.py                                                           |        4 |        0 |        0 |        0 |    100% |           |
-| edx\_exams/apps/lti/views.py                                                          |      166 |        0 |       78 |        0 |    100% |           |
+| edx\_exams/apps/lti/views.py                                                          |      166 |        0 |       28 |        0 |    100% |           |
 | edx\_exams/apps/router/\_\_init\_\_.py                                                |        0 |        0 |        0 |        0 |    100% |           |
 | edx\_exams/apps/router/interop.py                                                     |       58 |        0 |        8 |        0 |    100% |           |
 | edx\_exams/apps/router/middleware.py                                                  |       18 |        0 |        4 |        0 |    100% |           |
-| edx\_exams/apps/router/tests/test\_interop.py                                         |       70 |        0 |       42 |        0 |    100% |           |
-| edx\_exams/apps/router/tests/test\_views.py                                           |      124 |        0 |       22 |        0 |    100% |           |
+| edx\_exams/apps/router/tests/test\_interop.py                                         |       70 |        0 |        0 |        0 |    100% |           |
+| edx\_exams/apps/router/tests/test\_views.py                                           |      124 |        0 |        0 |        0 |    100% |           |
 | edx\_exams/apps/router/views.py                                                       |       39 |        1 |        6 |        0 |     98% |        56 |
 | edx\_exams/urls.py                                                                    |       14 |        0 |        0 |        0 |    100% |           |
-|                                                                             **TOTAL** | **3735** |    **6** |  **838** |    **2** | **99%** |           |
+|                                                                             **TOTAL** | **3735** |    **6** |  **262** |    **2** | **99%** |           |
 
 
 ## Setup coverage badge
