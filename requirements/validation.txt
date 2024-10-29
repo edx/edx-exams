@@ -6,140 +6,140 @@
 #
 appdirs==1.4.4
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   fs
 asgiref==3.8.1
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   django
     #   django-cors-headers
 astroid==3.3.5
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   pylint
     #   pylint-celery
 attrs==24.2.0
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   lti-consumer-xblock
     #   openedx-events
 bleach==6.1.0
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   lti-consumer-xblock
-boto3==1.35.45
+boto3==1.35.50
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   fs-s3fs
-botocore==1.35.45
+botocore==1.35.50
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   boto3
     #   s3transfer
 cachetools==5.5.0
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   tox
 certifi==2024.8.30
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   requests
 cffi==1.17.1
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   cryptography
     #   pynacl
 chardet==5.2.0
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   tox
 charset-normalizer==3.4.0
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   requests
 click==8.1.7
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   click-log
     #   code-annotations
     #   edx-django-utils
     #   edx-lint
 click-log==0.4.0
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   edx-lint
 code-annotations==1.8.0
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   edx-lint
     #   edx-toggles
 colorama==0.4.6
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   tox
 coreapi==2.3.3
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   django-rest-swagger
     #   openapi-codec
 coreschema==0.0.4
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   coreapi
 coverage[toml]==7.6.4
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   pytest-cov
 cryptography==43.0.3
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   pyjwt
     #   secretstorage
     #   social-auth-core
 ddt==1.7.2
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
 defusedxml==0.8.0rc2
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   python3-openid
     #   social-auth-core
 dill==0.3.9
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   pylint
 distlib==0.3.9
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   virtualenv
 django==4.2.16
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   django-appconf
     #   django-config-models
     #   django-cors-headers
@@ -170,65 +170,65 @@ django==4.2.16
     #   social-auth-app-django
 django-appconf==1.0.6
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   django-statici18n
 django-config-models==2.7.0
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   lti-consumer-xblock
-django-cors-headers==4.5.0
+django-cors-headers==4.6.0
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
 django-crum==0.7.9
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   edx-django-utils
     #   edx-toggles
 django-dynamic-fixture==4.0.1
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
 django-extensions==3.2.3
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
 django-filter==24.3
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   lti-consumer-xblock
 django-model-utils==5.0.0
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
 django-rest-swagger==2.2.0
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
 django-simple-history==3.7.0
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
 django-statici18n==2.5.0
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   lti-consumer-xblock
 django-waffle==4.1.0
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   edx-django-utils
     #   edx-drf-extensions
     #   edx-toggles
 djangorestframework==3.15.2
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   django-config-models
     #   django-rest-swagger
     #   drf-jwt
@@ -237,45 +237,45 @@ djangorestframework==3.15.2
     #   edx-drf-extensions
 dnspython==2.7.0
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   pymongo
 docutils==0.21.2
     # via
-    #   -r requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   readme-renderer
 drf-jwt==1.19.2
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   edx-drf-extensions
 drf-yasg==1.21.8
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   edx-api-doc-tools
 edx-api-doc-tools==2.0.0
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
 edx-auth-backends==4.4.0
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
 edx-ccx-keys==1.3.0
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   lti-consumer-xblock
     #   openedx-events
 edx-django-release-util==1.4.0
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
 edx-django-utils==7.0.0
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   django-config-models
     #   edx-drf-extensions
     #   edx-event-bus-kafka
@@ -283,308 +283,308 @@ edx-django-utils==7.0.0
     #   edx-rest-api-client
     #   edx-toggles
     #   openedx-events
-edx-drf-extensions==10.4.0
+edx-drf-extensions==10.5.0
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
-edx-event-bus-kafka==5.8.1
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
+edx-event-bus-kafka==6.0.0
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
 edx-event-bus-redis==0.5.1
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
-edx-lint==5.4.0
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
+edx-lint==5.4.1
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
 edx-opaque-keys[django]==2.11.0
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   edx-ccx-keys
     #   edx-drf-extensions
     #   lti-consumer-xblock
     #   openedx-events
 edx-rest-api-client==6.0.0
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
 edx-toggles==5.2.0
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   edx-event-bus-kafka
     #   edx-event-bus-redis
 edx-token-utils==0.2.1
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
 factory-boy==3.3.1
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
-faker==30.8.0
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
+faker==30.8.1
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   factory-boy
 fastavro==1.9.7
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   openedx-events
 filelock==3.16.1
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   tox
     #   virtualenv
 freezegun==1.5.1
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
 fs==2.4.16
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   fs-s3fs
     #   openedx-django-pyfs
     #   xblock
 fs-s3fs==1.1.1
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   openedx-django-pyfs
 future==1.0.0
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   pyjwkest
 idna==3.10
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   requests
 importlib-metadata==8.5.0
     # via
-    #   -r requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   twine
 inflection==0.5.1
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   drf-yasg
 iniconfig==2.0.0
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   pytest
 isort==5.13.2
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   pylint
 itypes==1.2.0
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   coreapi
 jaraco-classes==3.4.0
     # via
-    #   -r requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   keyring
 jaraco-context==6.0.1
     # via
-    #   -r requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   keyring
 jaraco-functools==4.1.0
     # via
-    #   -r requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   keyring
 jeepney==0.8.0
     # via
-    #   -r requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   keyring
     #   secretstorage
 jinja2==3.1.4
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   code-annotations
     #   coreschema
 jmespath==1.0.1
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   boto3
     #   botocore
 jsonfield==3.1.0
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   lti-consumer-xblock
-keyring==25.4.1
+keyring==25.5.0
     # via
-    #   -r requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   twine
 lazy==1.6
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   lti-consumer-xblock
 lti-consumer-xblock==9.11.3
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
 lxml==5.3.0
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   lti-consumer-xblock
     #   xblock
 mako==1.3.6
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   lti-consumer-xblock
     #   xblock
 markdown-it-py==3.0.0
     # via
-    #   -r requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   rich
 markupsafe==3.0.2
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   jinja2
     #   mako
     #   xblock
 mccabe==0.7.0
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   pylint
 mdurl==0.1.2
     # via
-    #   -r requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   markdown-it-py
 mock==5.1.0
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
 more-itertools==10.5.0
     # via
-    #   -r requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   jaraco-classes
     #   jaraco-functools
 mysqlclient==2.2.5
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
 newrelic==10.2.0
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   edx-django-utils
 nh3==0.2.18
     # via
-    #   -r requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   readme-renderer
 oauthlib==3.2.2
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   lti-consumer-xblock
     #   requests-oauthlib
     #   social-auth-core
 openapi-codec==1.3.2
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   django-rest-swagger
 openedx-django-pyfs==3.7.0
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   lti-consumer-xblock
 openedx-events==9.15.0
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   edx-event-bus-kafka
     #   edx-event-bus-redis
 openedx-filters==1.11.0
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   lti-consumer-xblock
 packaging==24.1
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   drf-yasg
     #   pyproject-api
     #   pytest
     #   tox
 pbr==6.1.0
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   stevedore
 pkginfo==1.10.0
     # via
-    #   -r requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   twine
 platformdirs==4.3.6
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   pylint
     #   tox
     #   virtualenv
 pluggy==1.5.0
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   pytest
     #   tox
 psutil==6.1.0
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   edx-django-utils
 pycodestyle==2.12.1
-    # via -r requirements/quality.txt
+    # via -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
 pycparser==2.22
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   cffi
 pycryptodomex==3.21.0
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   lti-consumer-xblock
     #   pyjwkest
 pydocstyle==6.3.0
-    # via -r requirements/quality.txt
+    # via -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
 pygments==2.18.0
     # via
-    #   -r requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   readme-renderer
     #   rich
 pyjwkest==1.4.2
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   edx-token-utils
     #   lti-consumer-xblock
 pyjwt[crypto]==2.9.0
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   drf-jwt
     #   edx-auth-backends
     #   edx-drf-extensions
@@ -592,89 +592,89 @@ pyjwt[crypto]==2.9.0
     #   social-auth-core
 pylint==3.3.1
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   edx-lint
     #   pylint-celery
     #   pylint-django
     #   pylint-plugin-utils
 pylint-celery==0.3
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   edx-lint
 pylint-django==2.6.1
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   edx-lint
 pylint-plugin-utils==0.8.2
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   pylint-celery
     #   pylint-django
 pymemcache==4.0.0
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
 pymongo==4.10.1
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   edx-opaque-keys
 pynacl==1.5.0
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   edx-django-utils
 pyproject-api==1.8.0
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   tox
 pytest==8.3.3
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   pytest-cov
     #   pytest-django
 pytest-cov==5.0.0
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
 pytest-django==4.9.0
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
 python-dateutil==2.9.0.post0
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   botocore
     #   faker
     #   freezegun
     #   xblock
 python-slugify==8.0.4
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   code-annotations
 python3-openid==3.2.0
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   social-auth-core
 pytz==2024.2
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   drf-yasg
     #   xblock
 pyyaml==6.0.2
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   code-annotations
     #   drf-yasg
     #   edx-django-release-util
@@ -682,17 +682,17 @@ pyyaml==6.0.2
     #   xblock
 readme-renderer==44.0
     # via
-    #   -r requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   twine
-redis==5.1.1
+redis==5.2.0
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   walrus
 requests==2.32.3
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   coreapi
     #   edx-drf-extensions
     #   edx-rest-api-client
@@ -704,49 +704,49 @@ requests==2.32.3
     #   twine
 requests-oauthlib==2.0.0
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   social-auth-core
 requests-toolbelt==1.0.0
     # via
-    #   -r requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   twine
 responses==0.25.3
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
 rfc3986==2.0.0
     # via
-    #   -r requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   twine
-rich==13.9.2
+rich==13.9.3
     # via
-    #   -r requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   twine
 s3transfer==0.10.3
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   boto3
 secretstorage==3.3.3
     # via
-    #   -r requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   keyring
 semantic-version==2.10.0
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   edx-drf-extensions
 simplejson==3.19.3
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   django-rest-swagger
     #   xblock
 six==1.16.0
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   bleach
     #   edx-auth-backends
     #   edx-ccx-keys
@@ -758,100 +758,100 @@ six==1.16.0
     #   python-dateutil
 snowballstemmer==2.2.0
     # via
-    #   -r requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   pydocstyle
 social-auth-app-django==5.4.2
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   edx-auth-backends
 social-auth-core==4.5.4
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   edx-auth-backends
     #   social-auth-app-django
 sqlparse==0.5.1
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   django
 stevedore==5.3.0
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   code-annotations
     #   edx-django-utils
     #   edx-opaque-keys
 text-unidecode==1.3
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   python-slugify
 tomlkit==0.13.2
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   pylint
 tox==4.23.2
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
 twine==5.1.1
-    # via -r requirements/quality.txt
+    # via -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
 typing-extensions==4.12.2
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   edx-opaque-keys
     #   faker
 uritemplate==4.1.1
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   coreapi
     #   drf-yasg
 urllib3==2.2.3
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   botocore
     #   requests
     #   responses
     #   twine
-virtualenv==20.27.0
+virtualenv==20.27.1
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   tox
 walrus==0.9.4
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   edx-event-bus-redis
 web-fragments==2.2.0
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   xblock
 webencodings==0.5.1
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   bleach
-webob==1.8.8
+webob==1.8.9
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   xblock
 xblock==5.1.0
     # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   lti-consumer-xblock
 zipp==3.20.2
     # via
-    #   -r requirements/quality.txt
+    #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   importlib-metadata
 
 # The following packages are considered to be unsafe in a requirements file:
