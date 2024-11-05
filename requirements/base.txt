@@ -15,11 +15,11 @@ attrs==24.2.0
     #   -r requirements/base.in
     #   lti-consumer-xblock
     #   openedx-events
-bleach==6.1.0
+bleach==6.2.0
     # via lti-consumer-xblock
-boto3==1.35.45
+boto3==1.35.54
     # via fs-s3fs
-botocore==1.35.45
+botocore==1.35.54
     # via
     #   boto3
     #   s3transfer
@@ -53,7 +53,7 @@ defusedxml==0.8.0rc2
     #   social-auth-core
 django==4.2.16
     # via
-    #   -c requirements/common_constraints.txt
+    #   -c /home/runner/work/edx-exams/edx-exams/requirements/common_constraints.txt
     #   -r requirements/base.in
     #   django-appconf
     #   django-config-models
@@ -87,7 +87,7 @@ django-appconf==1.0.6
     # via django-statici18n
 django-config-models==2.7.0
     # via lti-consumer-xblock
-django-cors-headers==4.5.0
+django-cors-headers==4.6.0
     # via -r requirements/base.in
 django-crum==0.7.9
     # via
@@ -146,9 +146,9 @@ edx-django-utils==7.0.0
     #   edx-rest-api-client
     #   edx-toggles
     #   openedx-events
-edx-drf-extensions==10.4.0
+edx-drf-extensions==10.5.0
     # via -r requirements/base.in
-edx-event-bus-kafka==5.8.1
+edx-event-bus-kafka==6.0.0
     # via -r requirements/base.in
 edx-event-bus-redis==0.5.1
     # via -r requirements/base.in
@@ -279,7 +279,7 @@ pyyaml==6.0.2
     #   drf-yasg
     #   edx-django-release-util
     #   xblock
-redis==5.1.1
+redis==5.2.0
     # via walrus
 requests==2.32.3
     # via
@@ -301,7 +301,6 @@ simplejson==3.19.3
     #   xblock
 six==1.16.0
     # via
-    #   bleach
     #   edx-auth-backends
     #   edx-ccx-keys
     #   edx-django-release-util
@@ -340,7 +339,7 @@ web-fragments==2.2.0
     # via xblock
 webencodings==0.5.1
     # via bleach
-webob==1.8.8
+webob==1.8.9
     # via xblock
 xblock==5.1.0
     # via lti-consumer-xblock
