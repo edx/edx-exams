@@ -31,11 +31,11 @@ bleach==6.2.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   lti-consumer-xblock
-boto3==1.35.58
+boto3==1.35.69
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   fs-s3fs
-botocore==1.35.58
+botocore==1.35.69
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   boto3
@@ -74,7 +74,7 @@ click-log==0.4.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   edx-lint
-code-annotations==1.8.0
+code-annotations==2.0.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   edx-lint
@@ -92,7 +92,7 @@ coreschema==0.0.4
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   coreapi
-coverage[toml]==7.6.4
+coverage[toml]==7.6.8
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   pytest-cov
@@ -182,7 +182,7 @@ django-statici18n==2.5.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   lti-consumer-xblock
-django-waffle==4.1.0
+django-waffle==4.2.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   edx-django-utils
@@ -228,7 +228,7 @@ edx-ccx-keys==1.3.0
     #   openedx-events
 edx-django-release-util==1.4.0
     # via -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
-edx-django-utils==7.0.0
+edx-django-utils==7.0.1
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   django-config-models
@@ -266,7 +266,7 @@ edx-token-utils==0.2.1
     # via -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
 factory-boy==3.3.1
     # via -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
-faker==30.8.2
+faker==33.0.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   factory-boy
@@ -350,7 +350,7 @@ lazy==1.6
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   lti-consumer-xblock
-lti-consumer-xblock==9.11.3
+lti-consumer-xblock==9.12.0
     # via -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
 lxml==5.3.0
     # via
@@ -382,9 +382,9 @@ more-itertools==10.5.0
     # via
     #   jaraco-classes
     #   jaraco-functools
-mysqlclient==2.2.5
+mysqlclient==2.2.6
     # via -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
-newrelic==10.2.0
+newrelic==10.3.1
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   edx-django-utils
@@ -463,7 +463,7 @@ pyjwkest==1.4.2
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   edx-token-utils
     #   lti-consumer-xblock
-pyjwt[crypto]==2.9.0
+pyjwt[crypto]==2.10.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   drf-jwt
@@ -577,7 +577,7 @@ rfc3986==2.0.0
     # via twine
 rich==13.9.4
     # via twine
-s3transfer==0.10.3
+s3transfer==0.10.4
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   boto3
@@ -631,11 +631,11 @@ sphinxcontrib-qthelp==2.0.0
     # via sphinx
 sphinxcontrib-serializinghtml==2.0.0
     # via sphinx
-sqlparse==0.5.1
+sqlparse==0.5.2
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   django
-stevedore==5.3.0
+stevedore==5.4.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   code-annotations
@@ -671,7 +671,7 @@ urllib3==2.2.3
     #   requests
     #   responses
     #   twine
-virtualenv==20.27.1
+virtualenv==20.28.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   tox
