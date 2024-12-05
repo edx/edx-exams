@@ -150,33 +150,14 @@ start-devstack: ## run a local development copy of the server
 open-devstack: ## open a shell on the server started by start-devstack
 	docker exec -it edx_exams /edx/app/edx-exams/devstack.sh open
 
-pkg-devstack: ## build the edx_exams image from the latest configuration and code
-	docker build -t edx_exams:latest -f docker/build/edx-exams/Dockerfile git://github.com/edx/configuration
-
 detect_changed_source_translations: ## check if translation files are up-to-date
 	cd edx_exams && i18n_tool changed
 
 validate_translations: fake_translations detect_changed_source_translations ## install fake translations and check if translation files are up-to-date
 
-docker_build:
-	docker build . -f Dockerfile -t openedx/edx_exams
-
-travis_docker_tag: docker_build
-	docker tag openedx/edx_exams openedx/edx_exams:$$TRAVIS_COMMIT
-
-travis_docker_auth:
-	echo "$$DOCKER_PASSWORD" | docker login -u "$$DOCKER_USERNAME" --password-stdin
-
-travis_docker_push: travis_docker_tag travis_docker_auth ## push to docker hub
-	docker push 'openedx/edx_exams:latest'
-	docker push "openedx/edx_exams:$$TRAVIS_COMMIT"
-
 # devstack-themed shortcuts
 dev.up: # Starts all containers
 	docker-compose up -d
-
-dev.up.build:
-	docker-compose up -d --build
 
 dev.down: # Kills containers and all of their data that isn't in volumes
 	docker-compose down
@@ -198,19 +179,6 @@ db-shell: # Run the app shell as root, enter the app's database
 
 %-attach:
 	docker attach edx_exams.$*
-
-github_docker_build:
-	docker build . -f Dockerfile --target app -t openedx/edx_exams
-
-github_docker_tag: github_docker_build
-	docker tag openedx/edx_exams openedx/edx_exams:${GITHUB_SHA}
-
-github_docker_auth:
-	echo "$$DOCKERHUB_PASSWORD" | docker login -u "$$DOCKERHUB_USERNAME" --password-stdin
-
-github_docker_push: github_docker_tag github_docker_auth ## push to docker hub
-	docker push 'openedx/edx_exams:latest'
-	docker push "openedx/edx_exams:${GITHUB_SHA}"
 
 selfcheck: ## check that the Makefile is well-formed
 	@echo "The Makefile is well-formed."
