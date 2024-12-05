@@ -27,11 +27,11 @@ bleach==6.2.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   lti-consumer-xblock
-boto3==1.35.58
+boto3==1.35.73
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   fs-s3fs
-botocore==1.35.58
+botocore==1.35.73
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   boto3
@@ -68,7 +68,7 @@ click-log==0.4.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   edx-lint
-code-annotations==1.8.0
+code-annotations==2.0.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   edx-lint
@@ -86,11 +86,11 @@ coreschema==0.0.4
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   coreapi
-coverage[toml]==7.6.4
+coverage[toml]==7.6.8
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   pytest-cov
-cryptography==43.0.3
+cryptography==44.0.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   pyjwt
@@ -172,11 +172,11 @@ django-rest-swagger==2.2.0
     # via -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
 django-simple-history==3.7.0
     # via -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
-django-statici18n==2.5.0
+django-statici18n==2.6.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   lti-consumer-xblock
-django-waffle==4.1.0
+django-waffle==4.2.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   edx-django-utils
@@ -209,14 +209,14 @@ edx-api-doc-tools==2.0.0
     # via -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
 edx-auth-backends==4.4.0
     # via -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
-edx-ccx-keys==1.3.0
+edx-ccx-keys==2.0.2
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   lti-consumer-xblock
     #   openedx-events
 edx-django-release-util==1.4.0
     # via -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
-edx-django-utils==7.0.0
+edx-django-utils==7.0.1
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   django-config-models
@@ -254,7 +254,7 @@ edx-token-utils==0.2.1
     # via -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
 factory-boy==3.3.1
     # via -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
-faker==30.8.2
+faker==33.1.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   factory-boy
@@ -287,8 +287,6 @@ idna==3.10
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   requests
-importlib-metadata==8.5.0
-    # via twine
 inflection==0.5.1
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
@@ -336,7 +334,7 @@ lazy==1.6
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   lti-consumer-xblock
-lti-consumer-xblock==9.11.3
+lti-consumer-xblock==9.12.0
     # via -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
 lxml==5.3.0
     # via
@@ -368,13 +366,13 @@ more-itertools==10.5.0
     # via
     #   jaraco-classes
     #   jaraco-functools
-mysqlclient==2.2.5
+mysqlclient==2.2.6
     # via -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
-newrelic==10.2.0
+newrelic==10.3.1
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   edx-django-utils
-nh3==0.2.18
+nh3==0.2.19
     # via readme-renderer
 oauthlib==3.2.2
     # via
@@ -406,11 +404,12 @@ packaging==24.2
     #   pyproject-api
     #   pytest
     #   tox
+    #   twine
 pbr==6.1.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   stevedore
-pkginfo==1.10.0
+pkginfo==1.12.0
     # via twine
 platformdirs==4.3.6
     # via
@@ -449,7 +448,7 @@ pyjwkest==1.4.2
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   edx-token-utils
     #   lti-consumer-xblock
-pyjwt[crypto]==2.9.0
+pyjwt[crypto]==2.10.1
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   drf-jwt
@@ -457,7 +456,7 @@ pyjwt[crypto]==2.9.0
     #   edx-drf-extensions
     #   edx-rest-api-client
     #   social-auth-core
-pylint==3.3.1
+pylint==3.3.2
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   edx-lint
@@ -491,7 +490,7 @@ pyproject-api==1.8.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   tox
-pytest==8.3.3
+pytest==8.3.4
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   pytest-cov
@@ -558,7 +557,7 @@ rfc3986==2.0.0
     # via twine
 rich==13.9.4
     # via twine
-s3transfer==0.10.3
+s3transfer==0.10.4
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   boto3
@@ -595,11 +594,11 @@ social-auth-core==4.5.4
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   edx-auth-backends
     #   social-auth-app-django
-sqlparse==0.5.1
+sqlparse==0.5.2
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   django
-stevedore==5.3.0
+stevedore==5.4.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   code-annotations
@@ -615,7 +614,7 @@ tomlkit==0.13.2
     #   pylint
 tox==4.23.2
     # via -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
-twine==5.1.1
+twine==6.0.1
     # via -r requirements/quality.in
 typing-extensions==4.12.2
     # via
@@ -634,7 +633,7 @@ urllib3==2.2.3
     #   requests
     #   responses
     #   twine
-virtualenv==20.27.1
+virtualenv==20.28.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   tox
@@ -658,8 +657,6 @@ xblock==5.1.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   lti-consumer-xblock
-zipp==3.21.0
-    # via importlib-metadata
 
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools
