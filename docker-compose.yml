@@ -19,7 +19,7 @@ services:
 
   app:
     # Uncomment this line to use the official edx_exams base image
-    image: openedx/edx_exams
+    image: edxops/edx_exams
 
     container_name: edx_exams.app
     volumes:
