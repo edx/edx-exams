@@ -17,9 +17,9 @@ attrs==24.3.0
     #   openedx-events
 bleach==6.2.0
     # via lti-consumer-xblock
-boto3==1.35.82
+boto3==1.35.93
     # via fs-s3fs
-botocore==1.35.82
+botocore==1.35.93
     # via
     #   boto3
     #   s3transfer
@@ -29,9 +29,9 @@ cffi==1.17.1
     # via
     #   cryptography
     #   pynacl
-charset-normalizer==3.4.0
+charset-normalizer==3.4.1
     # via requests
-click==8.1.7
+click==8.1.8
     # via
     #   code-annotations
     #   edx-django-utils
@@ -167,7 +167,7 @@ edx-toggles==5.2.0
     #   edx-event-bus-redis
 edx-token-utils==0.2.1
     # via -r requirements/base.in
-fastavro==1.9.7
+fastavro==1.10.0
     # via openedx-events
 fs==2.4.16
     # via
@@ -184,7 +184,7 @@ inflection==0.5.1
     # via drf-yasg
 itypes==1.2.0
     # via coreapi
-jinja2==3.1.4
+jinja2==3.1.5
     # via
     #   code-annotations
     #   coreschema
@@ -196,7 +196,7 @@ jsonfield==3.1.0
     # via lti-consumer-xblock
 lazy==1.6
     # via lti-consumer-xblock
-lti-consumer-xblock==9.12.0
+lti-consumer-xblock==9.12.1
     # via -r requirements/base.in
 lxml==5.3.0
     # via
@@ -235,7 +235,7 @@ packaging==24.2
     # via drf-yasg
 pbr==6.1.0
     # via stevedore
-psutil==6.1.0
+psutil==6.1.1
     # via edx-django-utils
 pycparser==2.22
     # via cffi
@@ -331,6 +331,7 @@ uritemplate==4.1.1
     #   drf-yasg
 urllib3==2.2.3
     # via
+    #   -c /home/runner/work/edx-exams/edx-exams/requirements/common_constraints.txt
     #   botocore
     #   requests
 walrus==0.9.4
