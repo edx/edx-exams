@@ -17,9 +17,9 @@ attrs==24.3.0
     #   openedx-events
 bleach==6.2.0
     # via lti-consumer-xblock
-boto3==1.35.82
+boto3==1.35.99
     # via fs-s3fs
-botocore==1.35.82
+botocore==1.35.99
     # via
     #   boto3
     #   s3transfer
@@ -29,13 +29,13 @@ cffi==1.17.1
     # via
     #   cryptography
     #   pynacl
-charset-normalizer==3.4.0
+charset-normalizer==3.4.1
     # via requests
-click==8.1.7
+click==8.1.8
     # via
     #   code-annotations
     #   edx-django-utils
-code-annotations==2.1.0
+code-annotations==2.2.0
     # via edx-toggles
 coreapi==2.3.3
     # via
@@ -51,7 +51,7 @@ defusedxml==0.8.0rc2
     # via
     #   python3-openid
     #   social-auth-core
-django==4.2.17
+django==4.2.18
     # via
     #   -c /home/runner/work/edx-exams/edx-exams/requirements/common_constraints.txt
     #   -r requirements/base.in
@@ -167,7 +167,7 @@ edx-toggles==5.2.0
     #   edx-event-bus-redis
 edx-token-utils==0.2.1
     # via -r requirements/base.in
-fastavro==1.9.7
+fastavro==1.10.0
     # via openedx-events
 fs==2.4.16
     # via
@@ -184,7 +184,7 @@ inflection==0.5.1
     # via drf-yasg
 itypes==1.2.0
     # via coreapi
-jinja2==3.1.4
+jinja2==3.1.5
     # via
     #   code-annotations
     #   coreschema
@@ -196,7 +196,7 @@ jsonfield==3.1.0
     # via lti-consumer-xblock
 lazy==1.6
     # via lti-consumer-xblock
-lti-consumer-xblock==9.12.0
+lti-consumer-xblock==9.13.1
     # via -r requirements/base.in
 lxml==5.3.0
     # via
@@ -211,7 +211,7 @@ markupsafe==3.0.2
     #   jinja2
     #   mako
     #   xblock
-mysqlclient==2.2.6
+mysqlclient==2.2.7
     # via -r requirements/base.in
 newrelic==10.4.0
     # via edx-django-utils
@@ -224,7 +224,7 @@ openapi-codec==1.3.2
     # via django-rest-swagger
 openedx-django-pyfs==3.7.0
     # via lti-consumer-xblock
-openedx-events==9.15.0
+openedx-events==9.15.1
     # via
     #   -r requirements/base.in
     #   edx-event-bus-kafka
@@ -235,7 +235,7 @@ packaging==24.2
     # via drf-yasg
 pbr==6.1.0
     # via stevedore
-psutil==6.1.0
+psutil==6.1.1
     # via edx-django-utils
 pycparser==2.22
     # via cffi
@@ -253,6 +253,7 @@ pyjwt[crypto]==2.10.1
     #   edx-auth-backends
     #   edx-drf-extensions
     #   edx-rest-api-client
+    #   lti-consumer-xblock
     #   social-auth-core
 pymemcache==4.0.0
     # via -r requirements/base.in
@@ -331,6 +332,7 @@ uritemplate==4.1.1
     #   drf-yasg
 urllib3==2.2.3
     # via
+    #   -c /home/runner/work/edx-exams/edx-exams/requirements/common_constraints.txt
     #   botocore
     #   requests
 walrus==0.9.4
