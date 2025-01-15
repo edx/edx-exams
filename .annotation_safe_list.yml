@@ -41,8 +41,6 @@ waffle.Sample:
   ".. no_pii:": "This model has no PII"
 waffle.Switch:
   ".. no_pii:": "This model has no PII"
-lti_consumer.LtiDlContentItem:
-  ".. no_pii:": "This model has no PII"
 
 # Automatically generated models that cannot be annotated
 core.HistoricalExam:
