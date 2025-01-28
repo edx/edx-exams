@@ -18,7 +18,7 @@ astroid==3.3.8
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   pylint
     #   pylint-celery
-attrs==24.3.0
+attrs==25.1.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   lti-consumer-xblock
@@ -27,16 +27,16 @@ bleach==6.2.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   lti-consumer-xblock
-boto3==1.36.2
+boto3==1.36.7
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   fs-s3fs
-botocore==1.36.2
+botocore==1.36.7
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   boto3
     #   s3transfer
-cachetools==5.5.0
+cachetools==5.5.1
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   tox
@@ -170,7 +170,7 @@ django-model-utils==5.0.0
     # via -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
 django-rest-swagger==2.2.0
     # via -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
-django-simple-history==3.7.0
+django-simple-history==3.8.0
     # via -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
 django-statici18n==2.6.0
     # via
@@ -232,7 +232,7 @@ edx-event-bus-kafka==6.0.0
     # via -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
 edx-event-bus-redis==0.5.1
     # via -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
-edx-lint==5.4.1
+edx-lint==5.6.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   -r requirements/quality.in
@@ -254,7 +254,7 @@ edx-token-utils==0.2.1
     # via -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
 factory-boy==3.3.1
     # via -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
-faker==33.3.1
+faker==35.0.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   factory-boy
@@ -262,7 +262,7 @@ fastavro==1.10.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   openedx-events
-filelock==3.16.1
+filelock==3.17.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   tox
@@ -283,6 +283,8 @@ future==1.0.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   pyjwkest
+id==1.5.0
+    # via twine
 idna==3.10
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
@@ -295,7 +297,7 @@ iniconfig==2.0.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   pytest
-isort==5.13.2
+isort==6.0.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   -r requirements/quality.in
@@ -334,7 +336,7 @@ lazy==1.6
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   lti-consumer-xblock
-lti-consumer-xblock==9.13.1
+lti-consumer-xblock==9.13.2
     # via -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
 lxml==5.3.0
     # via
@@ -409,8 +411,6 @@ pbr==6.1.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   stevedore
-pkginfo==1.12.0
-    # via twine
 platformdirs==4.3.6
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
@@ -457,7 +457,7 @@ pyjwt[crypto]==2.10.1
     #   edx-rest-api-client
     #   lti-consumer-xblock
     #   social-auth-core
-pylint==3.3.3
+pylint==3.3.4
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   edx-lint
@@ -487,7 +487,7 @@ pynacl==1.5.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   edx-django-utils
-pyproject-api==1.8.0
+pyproject-api==1.9.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   tox
@@ -540,6 +540,7 @@ requests==2.32.3
     #   coreapi
     #   edx-drf-extensions
     #   edx-rest-api-client
+    #   id
     #   pyjwkest
     #   requests-oauthlib
     #   requests-toolbelt
@@ -558,7 +559,7 @@ rfc3986==2.0.0
     # via twine
 rich==13.9.4
     # via twine
-s3transfer==0.11.1
+s3transfer==0.11.2
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   boto3
@@ -613,9 +614,9 @@ tomlkit==0.13.2
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   pylint
-tox==4.23.2
+tox==4.24.1
     # via -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
-twine==6.0.1
+twine==6.1.0
     # via -r requirements/quality.in
 typing-extensions==4.12.2
     # via
@@ -655,7 +656,7 @@ webob==1.8.9
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   xblock
-xblock==5.1.0
+xblock==5.1.1
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   lti-consumer-xblock
