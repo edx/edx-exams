@@ -12,7 +12,8 @@ from edx_exams.apps.api.v1.views import (
     InstructorAttemptsListView,
     LatestExamAttemptView,
     ProctoringProvidersView,
-    ProctoringSettingsView
+    ProctoringSettingsView,
+    UserOnboardingView
 )
 from edx_exams.apps.core.constants import COURSE_ID_PATTERN, EXAM_ID_PATTERN, USAGE_KEY_PATTERN
 
@@ -78,5 +79,10 @@ urlpatterns = [
         fr'exam/provider_settings/course_id/{COURSE_ID_PATTERN}/exam_id/{EXAM_ID_PATTERN}',
         ProctoringSettingsView.as_view(),
         name='proctoring-settings'
+    ),
+    re_path(
+        fr'student/course_id/{COURSE_ID_PATTERN}/onboarding',
+        UserOnboardingView.as_view(),
+        name='student-onboarding'
     ),
 ]

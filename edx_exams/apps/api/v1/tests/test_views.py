@@ -1996,3 +1996,46 @@ class AllowanceViewTests(ExamsAPITestCase):
         ]
         response = self.request_api('post', self.user, self.exam.course_id, data=request_data)
         self.assertEqual(response.status_code, 400)
+
+
+class UserOnboardingViewTest(ExamsAPITestCase):
+    """
+    Tests UserOnboardingView
+    """
+    def setUp(self):
+        super().setUp()
+
+        self.course_id = 'course-v1:edx+test+f19'
+        CourseExamConfigurationFactory.create(course_id=self.course_id)
+
+    def get_api(self):
+        """
+        Helper function to make patch request to the API
+        """
+
+        headers = self.build_jwt_headers(self.user)
+        url = reverse(
+            'api:v1:student-onboarding',
+            kwargs={'course_id': self.course_id}
+        )
+
+        return self.client.get(url, **headers)
+
+    def test_auth_required(self):
+        """
+        Test endpoint requires authentication
+        """
+
+        # no auth
+        response = self.client.get(
+            reverse('api:v1:student-onboarding', kwargs={'course_id': self.course_id}),
+        )
+        self.assertEqual(response.status_code, 401)
+
+    def test_404_response(self):
+        """
+        Test that endpoint returns 404 response
+        """
+
+        response = self.get_api()
+        self.assertEqual(response.status_code, 404)

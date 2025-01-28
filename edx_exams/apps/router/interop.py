@@ -18,6 +18,7 @@ LMS_PROCTORED_EXAM_ACTIVE_ATTEMPT_API_TPL = 'proctored_exam/active_attempt?user_
 LMS_PROCTORED_EXAM_ATTEMPT_DATA_API_TPL = 'proctored_exam/attempt/course_id/{}?content_id={}&user_id={}'
 LMS_PROCTORED_EXAM_ATTEMPT_API = 'proctored_exam/attempt'
 LMS_PROCTORED_EXAM_PROVIDER_SETTINGS_API_TPL = 'proctored_exam/settings/exam_id/{}/'
+LMS_PROCTORED_EXAM_ONBOARDING_DATA_API_TPL = 'user_onboarding/status?is_learning_mfe=true&course_id={}'
 
 log = logging.getLogger(__name__)
 
@@ -78,6 +79,27 @@ def get_provider_settings(exam_id):
     response_data = _get_json_data(response)
     if response.status_code != status.HTTP_200_OK:
         log.error(f'Failed to get provider settings, response was {response.content}')
+
+    return response_data, response.status_code
+
+
+def get_user_onboarding_data(course_id, username=None):
+    """
+    Get user onboarding data given a course_id and optional username
+    """
+    template = LMS_PROCTORED_EXAM_ONBOARDING_DATA_API_TPL
+
+    if username:
+        template += '&username={}'
+        path = template.format(course_id, username)
+    else:
+        path = template.format(course_id)
+
+    response = _make_proctoring_request(path, 'GET')
+
+    response_data = _get_json_data(response)
+    if response.status_code != status.HTTP_200_OK:
+        log.error(f'Failed to get onboarding data, response was {response.content}')
 
     return response_data, response.status_code
 

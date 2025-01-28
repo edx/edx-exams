@@ -885,3 +885,21 @@ class AllowanceView(ExamsAPIView):
             response_status = status.HTTP_400_BAD_REQUEST
             data = {'detail': 'Invalid data', 'errors': serializer.errors}
             return Response(status=response_status, data=data)
+
+
+class UserOnboardingView(ExamsAPIView):
+    """
+    Endpoint to retrieve onboarding data. Note that onboarding exams are not currently supported
+    in edx-exams, but this endpoint has been created for middleware requests to edx-proctoring
+
+    student/course_id/{course_id}/onboarding
+    """
+
+    authentication_classes = (JwtAuthentication,)
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request, course_id):  # pylint: disable=unused-argument
+        """
+        HTTP GET handler. Returns a 404 as onboarding is not currently supported in the edx-exams service.
+        """
+        return Response(status=status.HTTP_404_NOT_FOUND)
