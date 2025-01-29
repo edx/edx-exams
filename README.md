@@ -16,9 +16,9 @@
 | edx\_exams/apps/api/urls.py                                                           |        4 |        0 |        0 |        0 |    100% |           |
 | edx\_exams/apps/api/v1/\_\_init\_\_.py                                                |       15 |        0 |        4 |        0 |    100% |           |
 | edx\_exams/apps/api/v1/tests/\_\_init\_\_.py                                          |        0 |        0 |        0 |        0 |    100% |           |
-| edx\_exams/apps/api/v1/tests/test\_views.py                                           |      825 |        0 |       30 |        0 |    100% |           |
+| edx\_exams/apps/api/v1/tests/test\_views.py                                           |      840 |        0 |       30 |        0 |    100% |           |
 | edx\_exams/apps/api/v1/urls.py                                                        |        5 |        0 |        0 |        0 |    100% |           |
-| edx\_exams/apps/api/v1/views.py                                                       |      278 |        0 |       66 |        0 |    100% |           |
+| edx\_exams/apps/api/v1/views.py                                                       |      283 |        0 |       66 |        0 |    100% |           |
 | edx\_exams/apps/core/\_\_init\_\_.py                                                  |        0 |        0 |        0 |        0 |    100% |           |
 | edx\_exams/apps/core/api.py                                                           |      172 |        0 |       44 |        0 |    100% |           |
 | edx\_exams/apps/core/apps.py                                                          |        5 |        0 |        0 |        0 |    100% |           |
@@ -88,13 +88,13 @@
 | edx\_exams/apps/lti/urls.py                                                           |        4 |        0 |        0 |        0 |    100% |           |
 | edx\_exams/apps/lti/views.py                                                          |      166 |        0 |       28 |        0 |    100% |           |
 | edx\_exams/apps/router/\_\_init\_\_.py                                                |        0 |        0 |        0 |        0 |    100% |           |
-| edx\_exams/apps/router/interop.py                                                     |       58 |        0 |        8 |        0 |    100% |           |
+| edx\_exams/apps/router/interop.py                                                     |       70 |        0 |       12 |        0 |    100% |           |
 | edx\_exams/apps/router/middleware.py                                                  |       18 |        0 |        4 |        0 |    100% |           |
-| edx\_exams/apps/router/tests/test\_interop.py                                         |       70 |        0 |        0 |        0 |    100% |           |
-| edx\_exams/apps/router/tests/test\_views.py                                           |      124 |        0 |        0 |        0 |    100% |           |
-| edx\_exams/apps/router/views.py                                                       |       39 |        1 |        6 |        0 |     98% |        56 |
+| edx\_exams/apps/router/tests/test\_interop.py                                         |       82 |        0 |        2 |        0 |    100% |           |
+| edx\_exams/apps/router/tests/test\_views.py                                           |      150 |        0 |        0 |        0 |    100% |           |
+| edx\_exams/apps/router/views.py                                                       |       46 |        1 |        6 |        0 |     98% |        61 |
 | edx\_exams/urls.py                                                                    |       14 |        0 |        0 |        0 |    100% |           |
-|                                                                             **TOTAL** | **3735** |    **6** |  **262** |    **2** | **99%** |           |
+|                                                                             **TOTAL** | **3812** |    **6** |  **268** |    **2** | **99%** |           |
 
 
 ## Setup coverage badge

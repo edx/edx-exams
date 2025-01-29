@@ -55,8 +55,8 @@
             </div>
         </aside>
         <h2>
-            <span class="text">278 statements &nbsp;</span>
-            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">278<span class="text"> run</span></button>
+            <span class="text">283 statements &nbsp;</span>
+            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">283<span class="text"> run</span></button>
             <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">0<span class="text"> missing</span></button>
             <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">0<span class="text"> excluded</span></button>
             <button type="button" class="par run show_par button_toggle_par" value="par" data-shortcut="p" title="Toggle lines partially run">0<span class="text"> partial</span></button>
@@ -67,7 +67,7 @@
             <a id="nextFileLink" class="nav" href="z_48dc7f5fd95c8ca7_api_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.6.4">coverage.py v7.6.4</a>,
-            created at 2025-01-24 14:49 +0000
+            created at 2025-01-29 16:38 +0000
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -969,6 +969,24 @@
     <p class="run"><span class="n"><a id="t885" href="#t885">885</a></span><span class="t">            <span class="nam">response_status</span> <span class="op">=</span> <span class="nam">status</span><span class="op">.</span><span class="nam">HTTP_400_BAD_REQUEST</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t886" href="#t886">886</a></span><span class="t">            <span class="nam">data</span> <span class="op">=</span> <span class="op">{</span><span class="str">'detail'</span><span class="op">:</span> <span class="str">'Invalid data'</span><span class="op">,</span> <span class="str">'errors'</span><span class="op">:</span> <span class="nam">serializer</span><span class="op">.</span><span class="nam">errors</span><span class="op">}</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t887" href="#t887">887</a></span><span class="t">            <span class="key">return</span> <span class="nam">Response</span><span class="op">(</span><span class="nam">status</span><span class="op">=</span><span class="nam">response_status</span><span class="op">,</span> <span class="nam">data</span><span class="op">=</span><span class="nam">data</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t888" href="#t888">888</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t889" href="#t889">889</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t890" href="#t890">890</a></span><span class="t"><span class="key">class</span> <span class="nam">UserOnboardingView</span><span class="op">(</span><span class="nam">ExamsAPIView</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t891" href="#t891">891</a></span><span class="t">    <span class="str">"""</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t892" href="#t892">892</a></span><span class="t"><span class="str">    Endpoint to retrieve onboarding data. Note that onboarding exams are not currently supported</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t893" href="#t893">893</a></span><span class="t"><span class="str">    in edx-exams, but this endpoint has been created for middleware requests to edx-proctoring</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t894" href="#t894">894</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t895" href="#t895">895</a></span><span class="t"><span class="str">    student/course_id/{course_id}/onboarding</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t896" href="#t896">896</a></span><span class="t"><span class="str">    """</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t897" href="#t897">897</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t898" href="#t898">898</a></span><span class="t">    <span class="nam">authentication_classes</span> <span class="op">=</span> <span class="op">(</span><span class="nam">JwtAuthentication</span><span class="op">,</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t899" href="#t899">899</a></span><span class="t">    <span class="nam">permission_classes</span> <span class="op">=</span> <span class="op">(</span><span class="nam">IsAuthenticated</span><span class="op">,</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t900" href="#t900">900</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t901" href="#t901">901</a></span><span class="t">    <span class="key">def</span> <span class="nam">get</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="nam">request</span><span class="op">,</span> <span class="nam">course_id</span><span class="op">)</span><span class="op">:</span>  <span class="com"># pylint: disable=unused-argument</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t902" href="#t902">902</a></span><span class="t">        <span class="str">"""</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t903" href="#t903">903</a></span><span class="t"><span class="str">        HTTP GET handler. Returns a 404 as onboarding is not currently supported in the edx-exams service.</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t904" href="#t904">904</a></span><span class="t"><span class="str">        """</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t905" href="#t905">905</a></span><span class="t">        <span class="key">return</span> <span class="nam">Response</span><span class="op">(</span><span class="nam">status</span><span class="op">=</span><span class="nam">status</span><span class="op">.</span><span class="nam">HTTP_404_NOT_FOUND</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
 </main>
 <footer>
     <div class="content">
@@ -978,7 +996,7 @@
             <a class="nav" href="z_48dc7f5fd95c8ca7_api_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.6.4">coverage.py v7.6.4</a>,
-            created at 2025-01-24 14:49 +0000
+            created at 2025-01-29 16:38 +0000
         </p>
     </div>
 </footer>
