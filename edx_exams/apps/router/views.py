@@ -13,7 +13,12 @@ from rest_framework.views import APIView
 
 from edx_exams.apps.api.permissions import CourseStaffUserPermissions
 from edx_exams.apps.core.exam_types import get_exam_type
-from edx_exams.apps.router.interop import get_provider_settings, get_student_exam_attempt_data, register_exams
+from edx_exams.apps.router.interop import (
+    get_provider_settings,
+    get_student_exam_attempt_data,
+    get_user_onboarding_data,
+    register_exams
+)
 
 log = logging.getLogger(__name__)
 
@@ -97,6 +102,28 @@ class ProctoringSettingsLegacyView(APIView):
         Get provider settings given an exam ID. Pass through the response from edx-proctoring directly
         """
         response_data, response_status = get_provider_settings(exam_id)
+
+        return JsonResponse(
+            data=response_data,
+            status=response_status,
+            safe=False
+        )
+
+
+class UserOnboardingLegacyView(APIView):
+    """
+    View to handle user onboarding for exams managed by edx-proctoring
+    """
+    authentication_classes = (JwtAuthentication,)
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request, course_id):
+        """
+        Get user onboarding data given course_id and an optional username
+        """
+        username = request.GET.get('username')
+
+        response_data, response_status = get_user_onboarding_data(course_id, username)
 
         return JsonResponse(
             data=response_data,

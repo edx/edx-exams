@@ -14,6 +14,7 @@ from edx_exams.apps.router.interop import (
     get_active_exam_attempt,
     get_provider_settings,
     get_student_exam_attempt_data,
+    get_user_onboarding_data,
     register_exams
 )
 
@@ -152,5 +153,37 @@ class LegacyInteropTest(TestCase):
             json={"foo": "bar"},
         )
         response_data, status = get_provider_settings(self.exam_id)
+        self.assertEqual(status, response_status)
+        self.assertEqual(response_data, {"foo": "bar"})
+
+    @ddt.data(
+        (200, None),
+        (422, None),
+        (200, 'edx'),
+        (422, 'edx')
+    )
+    @mock_oauth_login
+    @responses.activate
+    @ddt.unpack
+    def test_get_onboarding_data(self, response_status, username):
+        """
+        Request is authenticated and forwarded to the LMS.
+        HTTP exceptions are handled and response is returned for
+        non-200 states codes
+        """
+        self.lms_url = (
+            f'{settings.LMS_ROOT_URL}/api/edx_proctoring/v1/user_onboarding/status'
+            f'?is_learning_mfe=true&course_id={self.course_id}'
+        )
+        if username:
+            self.lms_url += f'&username={username}'
+
+        responder = responses.add(
+            responses.GET,
+            self.lms_url,
+            status=response_status,
+            json={"foo": "bar"},
+        )
+        response_data, status = get_user_onboarding_data(self.course_id, username)
         self.assertEqual(status, response_status)
         self.assertEqual(response_data, {"foo": "bar"})

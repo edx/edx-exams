@@ -335,3 +335,62 @@ class CourseProviderSettingsLegacyViewTest(ExamsAPITestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTrue(response.json().get('learner_notification_from_email'))
         self.assertEqual(response.json().get('provider_name'), 'Test Provider')
+
+
+class UserOnboardingDataLegacyViewTest(ExamsAPITestCase):
+    """
+    Tests for the legacy onboarding data endpoint.
+    """
+
+    def setUp(self):
+        super().setUp()
+
+        self.course_id = 'course-v1:edx+test+f19'
+        self.username = 'edx'
+        self.url = reverse(
+            'api:v1:student-onboarding',
+            kwargs={'course_id': self.course_id}
+        ) + f'?username={self.username}'
+
+    def get_api(self, user):
+        """
+        Helper function to make a patch request to the API
+        """
+        headers = self.build_jwt_headers(user)
+        return self.client.get(self.url, **headers)
+
+    def test_auth_failures(self):
+        """
+        Verify the endpoint validates permissions
+        """
+        # Test unauthenticated
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 401)
+
+    @mock.patch('edx_exams.apps.router.views.get_user_onboarding_data')
+    def test_get_lms_onboarding_data_failed(self, mock_get_user_onboarding_data):
+        """
+        An error response from the LMS should be returned with the same code
+        """
+        mock_get_user_onboarding_data.return_value = ('some error', 500)
+
+        response = self.get_api(self.user)
+        mock_get_user_onboarding_data.assert_called_once_with(self.course_id, self.username)
+        self.assertEqual(response.status_code, 500)
+
+    @mock.patch('edx_exams.apps.router.views.get_user_onboarding_data')
+    def test_get_lms_onboarding_data(self, mock_get_user_onboarding_data):
+        """
+        Provider settings data should be returned by the LMS
+        """
+        mock_get_user_onboarding_data.return_value = ({
+            'onboarding_status': 'verified',
+            'onboarding_link': 'test.com',
+            'expiration_date': None,
+            'onboarding_past_due': False,
+        }, 200)
+        response = self.get_api(self.user)
+        mock_get_user_onboarding_data.assert_called_once_with(self.course_id, self.username)
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(response.json().get('expiration_date'))
+        self.assertEqual(response.json().get('onboarding_status'), 'verified')
