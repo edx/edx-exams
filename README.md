@@ -88,13 +88,13 @@
 | edx\_exams/apps/lti/urls.py                                                           |        4 |        0 |        0 |        0 |    100% |           |
 | edx\_exams/apps/lti/views.py                                                          |      166 |        0 |       28 |        0 |    100% |           |
 | edx\_exams/apps/router/\_\_init\_\_.py                                                |        0 |        0 |        0 |        0 |    100% |           |
-| edx\_exams/apps/router/interop.py                                                     |       70 |        0 |       12 |        0 |    100% |           |
+| edx\_exams/apps/router/interop.py                                                     |       72 |        0 |       12 |        0 |    100% |           |
 | edx\_exams/apps/router/middleware.py                                                  |       18 |        0 |        4 |        0 |    100% |           |
-| edx\_exams/apps/router/tests/test\_interop.py                                         |       82 |        0 |        2 |        0 |    100% |           |
+| edx\_exams/apps/router/tests/test\_interop.py                                         |       84 |        0 |        2 |        0 |    100% |           |
 | edx\_exams/apps/router/tests/test\_views.py                                           |      150 |        0 |        0 |        0 |    100% |           |
 | edx\_exams/apps/router/views.py                                                       |       46 |        1 |        6 |        0 |     98% |        61 |
 | edx\_exams/urls.py                                                                    |       14 |        0 |        0 |        0 |    100% |           |
-|                                                                             **TOTAL** | **3812** |    **6** |  **268** |    **2** | **99%** |           |
+|                                                                             **TOTAL** | **3816** |    **6** |  **268** |    **2** | **99%** |           |
 
 
 ## Setup coverage badge
