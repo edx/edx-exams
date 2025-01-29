@@ -159,8 +159,8 @@ class LegacyInteropTest(TestCase):
     @ddt.data(
         (200, None),
         (422, None),
-        (200, 'edx'),
-        (422, 'edx')
+        (200, 'edx@edx.org'),
+        (422, 'edx@edx.org')
     )
     @mock_oauth_login
     @responses.activate
@@ -171,12 +171,15 @@ class LegacyInteropTest(TestCase):
         HTTP exceptions are handled and response is returned for
         non-200 states codes
         """
+        url_course_id = 'course-v1%3Aedx%2Btest%2Bf19'
+        url_username = 'edx%40edx.org'
+
         self.lms_url = (
             f'{settings.LMS_ROOT_URL}/api/edx_proctoring/v1/user_onboarding/status'
-            f'?is_learning_mfe=true&course_id={self.course_id}'
+            f'?is_learning_mfe=true&course_id={url_course_id}'
         )
         if username:
-            self.lms_url += f'&username={username}'
+            self.lms_url += f'&username={url_username}'
 
         responder = responses.add(
             responses.GET,

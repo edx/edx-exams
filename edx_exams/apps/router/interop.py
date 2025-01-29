@@ -88,12 +88,14 @@ def get_user_onboarding_data(course_id, username=None):
     Get user onboarding data given a course_id and optional username
     """
     template = LMS_PROCTORED_EXAM_ONBOARDING_DATA_API_TPL
+    url_safe_course_id = quote_plus(course_id)
 
     if username:
         template += '&username={}'
-        path = template.format(course_id, username)
+        url_safe_username = quote_plus(username)
+        path = template.format(url_safe_course_id, url_safe_username)
     else:
-        path = template.format(course_id)
+        path = template.format(url_safe_course_id)
 
     response = _make_proctoring_request(path, 'GET')
 
