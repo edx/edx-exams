@@ -318,9 +318,10 @@ class ExamAccessTokensView(ExamsAPIView):
     View to create signed exam access tokens for a specific user and exam.
 
     Given an exam_id and user (in request), this view will either grant access
-    as an exam access token or not grant access. Access is granted if there is an
-    existing exam attempt (must be started if no due date or prior to due date or
-    verified if past the due date.) or if the exam is past its due date.
+    as an exam access token or not grant access. Access is granted if the requesting
+    user is course staff, if there is an existing exam attempt (must be started if
+    no due date or prior to due date or verified if past the due date), or if the
+    exam is past its due date.
 
     HTTP GET
     Provides an Exam Access Token as a cookie if access is granted.
