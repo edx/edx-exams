@@ -815,6 +815,26 @@ class ExamAccessTokensViewsTests(ExamsAPITestCase):
         if response_status == 200:
             self.assert_valid_exam_access_token(response, self.user, no_due_date_exam)
 
+    def test_access_user_is_course_staff(self):
+        """
+        Verify the endpoint grants access for an exam
+        with no due date, if started exam attempt.
+        """
+        allowed_time_limit_mins = self.exam.time_limit_mins
+        start_time = timezone.now() - timedelta(minutes=allowed_time_limit_mins/2)
+        ExamAttempt.objects.create(
+            user=self.user,
+            exam=self.exam,
+            attempt_number=1,
+            status='started',
+            start_time=start_time,
+            allowed_time_limit_mins=allowed_time_limit_mins
+        )
+
+        response = self.get_exam_access(self.user, self.url)
+        self.assertEqual(200, response.status_code)
+        self.assert_valid_exam_access_token(response, self.user, self.exam)
+
     def test_access_not_granted_if_hide_after_due(self):
         """
         Verify the endpoint does not grant access for past-due exam

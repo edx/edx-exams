@@ -385,6 +385,10 @@ class ExamAccessTokensView(ExamsAPIView):
         elif exam.due_date is not None and timezone.now() >= exam.due_date:
             grant_access, response_status = True, status.HTTP_200_OK
 
+        # If user is course staff, then grant them access
+        elif user.has_course_staff_permission(exam.course_id):
+            grant_access, response_status = True, status.HTTP_200_OK
+
         if grant_access:
             log.info('Creating exam access token')
             access_token = sign_token_for(user.lms_user_id, expiration_window, claims)
