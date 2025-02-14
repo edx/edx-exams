@@ -654,6 +654,8 @@ class ExamAccessTokensViewsTests(ExamsAPITestCase):
 
         self.course_id = 'course-v1:edx+test+f19'
 
+        self.user.is_staff = False
+
         self.due_date = timezone.now() + timedelta(minutes=5)
         self.exam = Exam.objects.create(
             resource_id=str(uuid.uuid4()),
@@ -721,8 +723,10 @@ class ExamAccessTokensViewsTests(ExamsAPITestCase):
     def test_access_not_granted(self):
         """
         Verify the endpoint doesn't grant access for an exam
-        without an existing exam attempt or past due date.
+        without an existing exam attempt or past due date
+        while user is not course staff.
         """
+        self.user.is_staff = False
         response = self.get_exam_access(self.user, self.url)
         self.assertEqual(403, response.status_code)
 
@@ -814,6 +818,23 @@ class ExamAccessTokensViewsTests(ExamsAPITestCase):
         self.assertEqual(response_status, response.status_code)
         if response_status == 200:
             self.assert_valid_exam_access_token(response, self.user, no_due_date_exam)
+
+    @ddt.data(
+        (True, 200),
+        (False, 403),
+    )
+    @ddt.unpack
+    def test_access_user_is_course_staff(self, is_course_staff, response_status):
+        """
+        Verify the endpoint immediately grants access
+        for anyone who is course staff.
+        """
+        self.user.is_staff = is_course_staff
+
+        response = self.get_exam_access(self.user, self.url)
+        self.assertEqual(response_status, response.status_code)
+        if response_status == 200:
+            self.assert_valid_exam_access_token(response, self.user, self.exam)
 
     def test_access_not_granted_if_hide_after_due(self):
         """

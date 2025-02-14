@@ -318,9 +318,10 @@ class ExamAccessTokensView(ExamsAPIView):
     View to create signed exam access tokens for a specific user and exam.
 
     Given an exam_id and user (in request), this view will either grant access
-    as an exam access token or not grant access. Access is granted if there is an
-    existing exam attempt (must be started if no due date or prior to due date or
-    verified if past the due date.) or if the exam is past its due date.
+    as an exam access token or not grant access. Access is granted if the requesting
+    user is course staff, if there is an existing exam attempt (must be started if
+    no due date or prior to due date or verified if past the due date), or if the
+    exam is past its due date.
 
     HTTP GET
     Provides an Exam Access Token as a cookie if access is granted.
@@ -365,8 +366,12 @@ class ExamAccessTokensView(ExamsAPIView):
         grant_access = False
         response_status = status.HTTP_403_FORBIDDEN
 
+        # If user is course staff, then grant them access
+        if user.has_course_staff_permission(exam.course_id):
+            grant_access, response_status = True, status.HTTP_200_OK
+
         # If exam attempt exists for user, then grant exam access
-        if exam_attempt is not None:
+        elif exam_attempt is not None:
             # If no due date or if before due date, grant access if attempt started
             # and get expiration window.
             if exam.due_date is None or timezone.now() < exam.due_date:
