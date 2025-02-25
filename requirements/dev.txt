@@ -27,11 +27,11 @@ bleach==6.2.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/validation.txt
     #   lti-consumer-xblock
-boto3==1.36.17
+boto3==1.37.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/validation.txt
     #   fs-s3fs
-botocore==1.36.17
+botocore==1.37.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/validation.txt
     #   boto3
@@ -40,7 +40,7 @@ build==1.2.2.post1
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/pip-tools.txt
     #   pip-tools
-cachetools==5.5.1
+cachetools==5.5.2
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/validation.txt
     #   tox
@@ -97,7 +97,7 @@ coverage[toml]==7.6.12
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/validation.txt
     #   pytest-cov
-cryptography==44.0.0
+cryptography==44.0.1
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/validation.txt
     #   pyjwt
@@ -105,12 +105,12 @@ cryptography==44.0.0
     #   social-auth-core
 ddt==1.7.2
     # via -r /home/runner/work/edx-exams/edx-exams/requirements/validation.txt
-defusedxml==0.8.0rc2
+defusedxml==0.7.1
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/validation.txt
     #   python3-openid
     #   social-auth-core
-diff-cover==9.2.2
+diff-cover==9.2.3
     # via -r requirements/dev.in
 dill==0.3.9
     # via
@@ -153,11 +153,11 @@ django==4.2.19
     #   openedx-events
     #   openedx-filters
     #   social-auth-app-django
-django-appconf==1.0.6
+django-appconf==1.1.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/validation.txt
     #   django-statici18n
-django-config-models==2.7.0
+django-config-models==2.8.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/validation.txt
     #   lti-consumer-xblock
@@ -174,7 +174,7 @@ django-dynamic-fixture==4.0.1
     # via -r /home/runner/work/edx-exams/edx-exams/requirements/validation.txt
 django-extensions==3.2.3
     # via -r /home/runner/work/edx-exams/edx-exams/requirements/validation.txt
-django-filter==24.3
+django-filter==25.1
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/validation.txt
     #   lti-consumer-xblock
@@ -215,7 +215,7 @@ drf-jwt==1.19.2
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/validation.txt
     #   edx-drf-extensions
-drf-yasg==1.21.8
+drf-yasg==1.21.9
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/validation.txt
     #   edx-api-doc-tools
@@ -258,9 +258,9 @@ edx-opaque-keys[django]==2.11.0
     #   lti-consumer-xblock
     #   openedx-events
     #   openedx-filters
-edx-rest-api-client==6.0.0
+edx-rest-api-client==6.1.0
     # via -r /home/runner/work/edx-exams/edx-exams/requirements/validation.txt
-edx-toggles==5.2.0
+edx-toggles==5.3.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/validation.txt
     #   edx-event-bus-kafka
@@ -269,7 +269,7 @@ edx-token-utils==0.2.1
     # via -r /home/runner/work/edx-exams/edx-exams/requirements/validation.txt
 factory-boy==3.3.3
     # via -r /home/runner/work/edx-exams/edx-exams/requirements/validation.txt
-faker==36.1.0
+faker==36.1.1
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/validation.txt
     #   factory-boy
@@ -409,7 +409,7 @@ newrelic==10.6.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/validation.txt
     #   edx-django-utils
-nh3==0.2.20
+nh3==0.2.21
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/validation.txt
     #   readme-renderer
@@ -427,12 +427,12 @@ openedx-django-pyfs==3.7.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/validation.txt
     #   lti-consumer-xblock
-openedx-events==9.18.0
+openedx-events==9.18.2
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/validation.txt
     #   edx-event-bus-kafka
     #   edx-event-bus-redis
-openedx-filters==1.13.0
+openedx-filters==2.0.1
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/validation.txt
     #   lti-consumer-xblock
@@ -468,7 +468,7 @@ pluggy==1.5.0
     #   tox
 polib==1.2.0
     # via edx-i18n-tools
-psutil==6.1.1
+psutil==7.0.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/validation.txt
     #   edx-django-utils
@@ -632,7 +632,7 @@ semantic-version==2.10.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/validation.txt
     #   edx-drf-extensions
-simplejson==3.19.3
+simplejson==3.20.1
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/validation.txt
     #   django-rest-swagger
@@ -652,11 +652,11 @@ snowballstemmer==2.2.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/validation.txt
     #   pydocstyle
-social-auth-app-django==5.4.2
+social-auth-app-django==5.4.3
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/validation.txt
     #   edx-auth-backends
-social-auth-core==4.5.4
+social-auth-core==4.5.6
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/validation.txt
     #   edx-auth-backends
@@ -666,7 +666,7 @@ sqlparse==0.5.3
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/validation.txt
     #   django
     #   django-debug-toolbar
-stevedore==5.4.0
+stevedore==5.4.1
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/validation.txt
     #   code-annotations

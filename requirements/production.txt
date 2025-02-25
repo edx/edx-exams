@@ -22,12 +22,12 @@ bleach==6.2.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/base.txt
     #   lti-consumer-xblock
-boto3==1.36.17
+boto3==1.37.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/base.txt
     #   django-ses
     #   fs-s3fs
-botocore==1.36.17
+botocore==1.37.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/base.txt
     #   boto3
@@ -63,12 +63,12 @@ coreschema==0.0.4
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/base.txt
     #   coreapi
-cryptography==44.0.0
+cryptography==44.0.1
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/base.txt
     #   pyjwt
     #   social-auth-core
-defusedxml==0.8.0rc2
+defusedxml==0.7.1
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/base.txt
     #   python3-openid
@@ -105,11 +105,11 @@ django==4.2.19
     #   openedx-events
     #   openedx-filters
     #   social-auth-app-django
-django-appconf==1.0.6
+django-appconf==1.1.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/base.txt
     #   django-statici18n
-django-config-models==2.7.0
+django-config-models==2.8.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/base.txt
     #   lti-consumer-xblock
@@ -122,7 +122,7 @@ django-crum==0.7.9
     #   edx-toggles
 django-extensions==3.2.3
     # via -r /home/runner/work/edx-exams/edx-exams/requirements/base.txt
-django-filter==24.3
+django-filter==25.1
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/base.txt
     #   lti-consumer-xblock
@@ -161,7 +161,7 @@ drf-jwt==1.19.2
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/base.txt
     #   edx-drf-extensions
-drf-yasg==1.21.8
+drf-yasg==1.21.9
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/base.txt
     #   edx-api-doc-tools
@@ -200,9 +200,9 @@ edx-opaque-keys[django]==2.11.0
     #   lti-consumer-xblock
     #   openedx-events
     #   openedx-filters
-edx-rest-api-client==6.0.0
+edx-rest-api-client==6.1.0
     # via -r /home/runner/work/edx-exams/edx-exams/requirements/base.txt
-edx-toggles==5.2.0
+edx-toggles==5.3.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/base.txt
     #   edx-event-bus-kafka
@@ -303,12 +303,12 @@ openedx-django-pyfs==3.7.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/base.txt
     #   lti-consumer-xblock
-openedx-events==9.18.0
+openedx-events==9.18.2
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/base.txt
     #   edx-event-bus-kafka
     #   edx-event-bus-redis
-openedx-filters==1.13.0
+openedx-filters==2.0.1
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/base.txt
     #   lti-consumer-xblock
@@ -321,7 +321,7 @@ pbr==6.1.1
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/base.txt
     #   stevedore
-psutil==6.1.1
+psutil==7.0.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/base.txt
     #   edx-django-utils
@@ -411,7 +411,7 @@ semantic-version==2.10.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/base.txt
     #   edx-drf-extensions
-simplejson==3.19.3
+simplejson==3.20.1
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/base.txt
     #   django-rest-swagger
@@ -426,11 +426,11 @@ six==1.17.0
     #   fs-s3fs
     #   pyjwkest
     #   python-dateutil
-social-auth-app-django==5.4.2
+social-auth-app-django==5.4.3
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/base.txt
     #   edx-auth-backends
-social-auth-core==4.5.4
+social-auth-core==4.5.6
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/base.txt
     #   edx-auth-backends
@@ -439,7 +439,7 @@ sqlparse==0.5.3
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/base.txt
     #   django
-stevedore==5.4.0
+stevedore==5.4.1
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/base.txt
     #   code-annotations
