@@ -59,7 +59,7 @@ MIDDLEWARE = (
     # Resets RequestCache utility for added safety.
     'edx_django_utils.cache.middleware.RequestCacheMiddleware',
     # Enables monitoring utility for writing custom metrics.
-    'edx_django_utils.monitoring.middleware.MonitoringCustomMetricsMiddleware',
+    'edx_django_utils.monitoring.CachedCustomMonitoringMiddleware',
     'edx_django_utils.monitoring.DeploymentMonitoringMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
