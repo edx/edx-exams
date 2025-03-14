@@ -15,7 +15,7 @@ asgiref==3.8.1
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   django
     #   django-cors-headers
-astroid==3.3.8
+astroid==3.3.9
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
@@ -32,12 +32,12 @@ bleach==6.2.0
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   lti-consumer-xblock
-boto3==1.37.0
+boto3==1.37.10
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   fs-s3fs
-botocore==1.37.0
+botocore==1.37.10
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
@@ -109,7 +109,7 @@ coverage[toml]==7.6.12
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   pytest-cov
-cryptography==44.0.1
+cryptography==44.0.2
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
@@ -136,7 +136,7 @@ distlib==0.3.9
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   virtualenv
-django==4.2.19
+django==4.2.20
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
@@ -249,7 +249,7 @@ drf-jwt==1.19.2
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   edx-drf-extensions
-drf-yasg==1.21.9
+drf-yasg==1.21.10
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
@@ -272,7 +272,7 @@ edx-django-release-util==1.4.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
-edx-django-utils==7.1.0
+edx-django-utils==7.2.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
@@ -326,7 +326,7 @@ factory-boy==3.3.3
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
-faker==36.1.1
+faker==37.0.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
@@ -382,7 +382,7 @@ iniconfig==2.0.0
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   pytest
-isort==6.0.0
+isort==6.0.1
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
@@ -404,12 +404,12 @@ jaraco-functools==4.1.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   keyring
-jeepney==0.8.0
+jeepney==0.9.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   keyring
     #   secretstorage
-jinja2==3.1.5
+jinja2==3.1.6
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
@@ -471,7 +471,7 @@ mdurl==0.1.2
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   markdown-it-py
-mock==5.1.0
+mock==5.2.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
@@ -484,7 +484,7 @@ mysqlclient==2.2.7
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
-newrelic==10.6.0
+newrelic==10.7.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
@@ -589,7 +589,7 @@ pyjwt[crypto]==2.10.1
     #   edx-rest-api-client
     #   lti-consumer-xblock
     #   social-auth-core
-pylint==3.3.4
+pylint==3.3.5
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
@@ -617,7 +617,7 @@ pymemcache==4.0.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
-pymongo==4.11.1
+pymongo==4.11.2
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
@@ -632,7 +632,7 @@ pyproject-api==1.9.0
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   tox
-pytest==8.3.4
+pytest==8.3.5
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
@@ -722,7 +722,7 @@ rich==13.9.4
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   twine
-s3transfer==0.11.2
+s3transfer==0.11.4
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
@@ -791,7 +791,7 @@ tomlkit==0.13.2
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   pylint
-tox==4.24.1
+tox==4.24.2
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
@@ -821,7 +821,7 @@ urllib3==2.2.3
     #   requests
     #   responses
     #   twine
-virtualenv==20.29.2
+virtualenv==20.29.3
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
