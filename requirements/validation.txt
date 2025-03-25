@@ -32,12 +32,12 @@ bleach==6.2.0
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   lti-consumer-xblock
-boto3==1.37.14
+boto3==1.37.19
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   fs-s3fs
-botocore==1.37.14
+botocore==1.37.19
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
@@ -104,7 +104,7 @@ coreschema==0.0.4
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   coreapi
-coverage[toml]==7.7.0
+coverage[toml]==7.7.1
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
@@ -299,7 +299,7 @@ edx-lint==5.6.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
-edx-opaque-keys[django]==2.11.0
+edx-opaque-keys[django]==2.12.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
@@ -326,7 +326,7 @@ factory-boy==3.3.3
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
-faker==37.0.0
+faker==37.1.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
@@ -377,7 +377,7 @@ inflection==0.5.1
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   drf-yasg
-iniconfig==2.0.0
+iniconfig==2.1.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
@@ -535,7 +535,7 @@ pbr==6.1.1
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   stevedore
-platformdirs==4.3.6
+platformdirs==4.3.7
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
@@ -589,7 +589,7 @@ pyjwt[crypto]==2.10.1
     #   edx-rest-api-client
     #   lti-consumer-xblock
     #   social-auth-core
-pylint==3.3.5
+pylint==3.3.6
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
@@ -663,7 +663,7 @@ python3-openid==3.2.0
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   social-auth-core
-pytz==2025.1
+pytz==2025.2
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
@@ -802,7 +802,7 @@ typing-extensions==4.12.2
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   edx-opaque-keys
-tzdata==2025.1
+tzdata==2025.2
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt

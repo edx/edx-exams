@@ -17,9 +17,9 @@ attrs==25.3.0
     #   openedx-events
 bleach==6.2.0
     # via lti-consumer-xblock
-boto3==1.37.14
+boto3==1.37.19
     # via fs-s3fs
-botocore==1.37.14
+botocore==1.37.19
     # via
     #   boto3
     #   s3transfer
@@ -152,7 +152,7 @@ edx-event-bus-kafka==6.0.0
     # via -r requirements/base.in
 edx-event-bus-redis==0.5.1
     # via -r requirements/base.in
-edx-opaque-keys[django]==2.11.0
+edx-opaque-keys[django]==2.12.0
     # via
     #   -r requirements/base.in
     #   edx-ccx-keys
@@ -270,7 +270,7 @@ python-slugify==8.0.4
     # via code-annotations
 python3-openid==3.2.0
     # via social-auth-core
-pytz==2025.1
+pytz==2025.2
     # via
     #   -r requirements/base.in
     #   drf-yasg
