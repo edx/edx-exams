@@ -32,12 +32,12 @@ bleach==6.2.0
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   lti-consumer-xblock
-boto3==1.37.24
+boto3==1.37.29
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   fs-s3fs
-botocore==1.37.24
+botocore==1.37.29
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
@@ -82,7 +82,7 @@ click-log==0.4.0
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   edx-lint
-code-annotations==2.2.0
+code-annotations==2.3.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
@@ -192,7 +192,7 @@ django-dynamic-fixture==4.0.1
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
-django-extensions==3.2.3
+django-extensions==4.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
@@ -283,11 +283,11 @@ edx-django-utils==7.2.0
     #   edx-rest-api-client
     #   edx-toggles
     #   openedx-events
-edx-drf-extensions==10.5.0
+edx-drf-extensions==10.6.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
-edx-event-bus-kafka==6.0.0
+edx-event-bus-kafka==6.0.1
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
@@ -435,11 +435,11 @@ lazy==1.6
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   lti-consumer-xblock
-lti-consumer-xblock==9.13.3
+lti-consumer-xblock==9.13.4
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
-lxml==5.3.1
+lxml==5.3.2
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
@@ -617,7 +617,7 @@ pymemcache==4.0.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
-pymongo==4.11.3
+pymongo==4.12.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
@@ -638,11 +638,11 @@ pytest==8.3.5
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   pytest-cov
     #   pytest-django
-pytest-cov==6.1.0
+pytest-cov==6.1.1
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
-pytest-django==4.10.0
+pytest-django==4.11.1
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
@@ -797,7 +797,7 @@ tox==4.25.0
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
 twine==6.1.0
     # via -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
-typing-extensions==4.13.0
+typing-extensions==4.13.1
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
@@ -831,7 +831,7 @@ walrus==0.9.4
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   edx-event-bus-redis
-web-fragments==2.2.0
+web-fragments==3.0.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/quality.txt
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
