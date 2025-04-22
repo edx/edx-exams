@@ -17,9 +17,9 @@ attrs==25.3.0
     #   openedx-events
 bleach==6.2.0
     # via lti-consumer-xblock
-boto3==1.37.24
+boto3==1.37.38
     # via fs-s3fs
-botocore==1.37.24
+botocore==1.37.38
     # via
     #   boto3
     #   s3transfer
@@ -35,7 +35,7 @@ click==8.1.8
     # via
     #   code-annotations
     #   edx-django-utils
-code-annotations==2.2.0
+code-annotations==2.3.0
     # via edx-toggles
 coreapi==2.3.3
     # via
@@ -85,7 +85,7 @@ django==4.2.20
     #   social-auth-app-django
 django-appconf==1.1.0
     # via django-statici18n
-django-config-models==2.8.0
+django-config-models==2.9.0
     # via lti-consumer-xblock
 django-cors-headers==4.7.0
     # via -r requirements/base.in
@@ -93,7 +93,7 @@ django-crum==0.7.9
     # via
     #   edx-django-utils
     #   edx-toggles
-django-extensions==3.2.3
+django-extensions==4.1
     # via -r requirements/base.in
 django-filter==25.1
     # via lti-consumer-xblock
@@ -128,7 +128,7 @@ drf-yasg==1.21.10
     # via edx-api-doc-tools
 edx-api-doc-tools==2.0.0
     # via -r requirements/base.in
-edx-auth-backends==4.4.0
+edx-auth-backends==4.5.0
     # via -r requirements/base.in
 edx-ccx-keys==2.0.2
     # via
@@ -136,7 +136,7 @@ edx-ccx-keys==2.0.2
     #   openedx-events
 edx-django-release-util==1.4.0
     # via -r requirements/base.in
-edx-django-utils==7.2.0
+edx-django-utils==7.4.0
     # via
     #   -r requirements/base.in
     #   django-config-models
@@ -146,11 +146,11 @@ edx-django-utils==7.2.0
     #   edx-rest-api-client
     #   edx-toggles
     #   openedx-events
-edx-drf-extensions==10.5.0
+edx-drf-extensions==10.6.0
     # via -r requirements/base.in
-edx-event-bus-kafka==6.0.0
+edx-event-bus-kafka==6.1.0
     # via -r requirements/base.in
-edx-event-bus-redis==0.5.1
+edx-event-bus-redis==0.6.1
     # via -r requirements/base.in
 edx-opaque-keys[django]==2.12.0
     # via
@@ -160,7 +160,7 @@ edx-opaque-keys[django]==2.12.0
     #   lti-consumer-xblock
     #   openedx-events
     #   openedx-filters
-edx-rest-api-client==6.1.0
+edx-rest-api-client==6.2.0
     # via -r requirements/base.in
 edx-toggles==5.3.0
     # via
@@ -197,13 +197,13 @@ jsonfield==3.1.0
     # via lti-consumer-xblock
 lazy==1.6
     # via lti-consumer-xblock
-lti-consumer-xblock==9.13.3
+lti-consumer-xblock==9.13.4
     # via -r requirements/base.in
-lxml==5.3.1
+lxml==5.3.2
     # via
     #   lti-consumer-xblock
     #   xblock
-mako==1.3.9
+mako==1.3.10
     # via
     #   lti-consumer-xblock
     #   xblock
@@ -214,7 +214,7 @@ markupsafe==3.0.2
     #   xblock
 mysqlclient==2.2.7
     # via -r requirements/base.in
-newrelic==10.8.1
+newrelic==10.9.0
     # via edx-django-utils
 oauthlib==3.2.2
     # via
@@ -225,14 +225,14 @@ openapi-codec==1.3.2
     # via django-rest-swagger
 openedx-django-pyfs==3.7.0
     # via lti-consumer-xblock
-openedx-events==9.20.0
+openedx-events==10.0.0
     # via
     #   -r requirements/base.in
     #   edx-event-bus-kafka
     #   edx-event-bus-redis
 openedx-filters==2.0.1
     # via lti-consumer-xblock
-packaging==24.2
+packaging==25.0
     # via drf-yasg
 pbr==6.1.1
     # via stevedore
@@ -258,7 +258,7 @@ pyjwt[crypto]==2.10.1
     #   social-auth-core
 pymemcache==4.0.0
     # via -r requirements/base.in
-pymongo==4.11.3
+pymongo==4.12.0
     # via edx-opaque-keys
 pynacl==1.5.0
     # via edx-django-utils
@@ -293,7 +293,7 @@ requests==2.32.3
     #   social-auth-core
 requests-oauthlib==2.0.0
     # via social-auth-core
-s3transfer==0.11.4
+s3transfer==0.11.5
     # via boto3
 semantic-version==2.10.0
     # via edx-drf-extensions
@@ -325,7 +325,7 @@ stevedore==5.4.1
     #   edx-opaque-keys
 text-unidecode==1.3
     # via python-slugify
-typing-extensions==4.13.0
+typing-extensions==4.13.2
     # via edx-opaque-keys
 uritemplate==4.1.1
     # via
@@ -338,13 +338,13 @@ urllib3==2.2.3
     #   requests
 walrus==0.9.4
     # via edx-event-bus-redis
-web-fragments==2.2.0
+web-fragments==3.0.0
     # via xblock
 webencodings==0.5.1
     # via bleach
 webob==1.8.9
     # via xblock
-xblock==5.1.2
+xblock==5.2.0
     # via lti-consumer-xblock
 
 # The following packages are considered to be unsafe in a requirements file:
