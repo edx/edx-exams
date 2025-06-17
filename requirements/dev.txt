@@ -27,11 +27,11 @@ bleach==6.2.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/validation.txt
     #   lti-consumer-xblock
-boto3==1.38.35
+boto3==1.38.37
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/validation.txt
     #   fs-s3fs
-botocore==1.38.35
+botocore==1.38.37
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/validation.txt
     #   boto3
@@ -40,11 +40,11 @@ build==1.2.2.post1
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/pip-tools.txt
     #   pip-tools
-cachetools==6.0.0
+cachetools==6.1.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/validation.txt
     #   tox
-certifi==2025.4.26
+certifi==2025.6.15
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/validation.txt
     #   requests
@@ -93,7 +93,7 @@ coreschema==0.0.4
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/validation.txt
     #   coreapi
-coverage[toml]==7.9.0
+coverage[toml]==7.9.1
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/validation.txt
     #   pytest-cov
@@ -462,6 +462,7 @@ pluggy==1.6.0
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/validation.txt
     #   diff-cover
     #   pytest
+    #   pytest-cov
     #   tox
 polib==1.2.0
     # via edx-i18n-tools
@@ -525,7 +526,7 @@ pylint-plugin-utils==0.8.2
     #   pylint-django
 pymemcache==4.0.0
     # via -r /home/runner/work/edx-exams/edx-exams/requirements/validation.txt
-pymongo==4.13.1
+pymongo==4.13.2
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/validation.txt
     #   edx-opaque-keys
@@ -547,7 +548,7 @@ pytest==8.4.0
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/validation.txt
     #   pytest-cov
     #   pytest-django
-pytest-cov==6.2.0
+pytest-cov==6.2.1
     # via -r /home/runner/work/edx-exams/edx-exams/requirements/validation.txt
 pytest-django==4.11.1
     # via -r /home/runner/work/edx-exams/edx-exams/requirements/validation.txt
@@ -678,7 +679,7 @@ tomlkit==0.13.3
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/validation.txt
     #   pylint
-tox==4.26.0
+tox==4.27.0
     # via -r /home/runner/work/edx-exams/edx-exams/requirements/validation.txt
 twine==6.1.0
     # via -r /home/runner/work/edx-exams/edx-exams/requirements/validation.txt

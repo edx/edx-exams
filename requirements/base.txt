@@ -17,13 +17,13 @@ attrs==25.3.0
     #   openedx-events
 bleach==6.2.0
     # via lti-consumer-xblock
-boto3==1.38.35
+boto3==1.38.37
     # via fs-s3fs
-botocore==1.38.35
+botocore==1.38.37
     # via
     #   boto3
     #   s3transfer
-certifi==2025.4.26
+certifi==2025.6.15
     # via requests
 cffi==1.17.1
     # via
@@ -256,7 +256,7 @@ pyjwt[crypto]==2.10.1
     #   social-auth-core
 pymemcache==4.0.0
     # via -r requirements/base.in
-pymongo==4.13.1
+pymongo==4.13.2
     # via edx-opaque-keys
 pynacl==1.5.0
     # via edx-django-utils

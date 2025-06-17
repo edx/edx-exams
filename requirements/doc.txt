@@ -31,22 +31,22 @@ bleach==6.2.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   lti-consumer-xblock
-boto3==1.38.35
+boto3==1.38.37
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   fs-s3fs
-botocore==1.38.35
+botocore==1.38.37
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   boto3
     #   s3transfer
 build==1.2.2.post1
     # via -r requirements/doc.in
-cachetools==6.0.0
+cachetools==6.1.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   tox
-certifi==2025.4.26
+certifi==2025.6.15
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   requests
@@ -92,7 +92,7 @@ coreschema==0.0.4
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   coreapi
-coverage[toml]==7.9.0
+coverage[toml]==7.9.1
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   pytest-cov
@@ -202,7 +202,7 @@ dnspython==2.7.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   pymongo
-doc8==1.1.2
+doc8==2.0.0
     # via -r requirements/doc.in
 docutils==0.19
     # via
@@ -435,6 +435,7 @@ pluggy==1.6.0
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   pytest
+    #   pytest-cov
     #   tox
 psutil==7.0.0
     # via
@@ -493,7 +494,7 @@ pylint-plugin-utils==0.8.2
     #   pylint-django
 pymemcache==4.0.0
     # via -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
-pymongo==4.13.1
+pymongo==4.13.2
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   edx-opaque-keys
@@ -512,7 +513,7 @@ pytest==8.4.0
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   pytest-cov
     #   pytest-django
-pytest-cov==6.2.0
+pytest-cov==6.2.1
     # via -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
 pytest-django==4.11.1
     # via -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
@@ -650,7 +651,7 @@ tomlkit==0.13.3
     # via
     #   -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
     #   pylint
-tox==4.26.0
+tox==4.27.0
     # via -r /home/runner/work/edx-exams/edx-exams/requirements/test.txt
 twine==6.1.0
     # via -r requirements/doc.in
