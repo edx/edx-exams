@@ -4,7 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Coverage for edx_exams/apps/core/email.py: 100%</title>
     <link rel="icon" sizes="32x32" href="favicon_32_cb_58284776.png">
-    <link rel="stylesheet" href="style_cb_8e611ae1.css" type="text/css">
+    <link rel="stylesheet" href="style_cb_6b508a39.css" type="text/css">
     <script src="coverage_html_cb_6fb7b396.js" defer></script>
 </head>
 <body class="pyfile">
@@ -66,8 +66,8 @@
             <a id="indexLink" class="nav" href="index.html">&Hat; index</a> &nbsp; &nbsp;
             <a id="nextFileLink" class="nav" href="z_48dc7f5fd95c8ca7_exam_types_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
-            <a class="nav" href="https://coverage.readthedocs.io/en/7.8.2">coverage.py v7.8.2</a>,
-            created at 2025-06-12 11:05 +0000
+            <a class="nav" href="https://coverage.readthedocs.io/en/7.10.5">coverage.py v7.10.5</a>,
+            created at 2025-09-01 06:29 +0000
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -132,27 +132,27 @@
     <p class="run"><span class="n"><a id="t48" href="#t48">48</a></span><span class="t">        <span class="nam">contact_url_text</span> <span class="op">=</span> <span class="nam">contact_url</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t49" href="#t49">49</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t50" href="#t50">50</a></span><span class="t">    <span class="nam">body</span> <span class="op">=</span> <span class="nam">email_template</span><span class="op">.</span><span class="nam">render</span><span class="op">(</span><span class="op">{</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t51" href="#t51">51</a></span><span class="t">        <span class="str">'exam_name'</span><span class="op">:</span> <span class="nam">exam</span><span class="op">.</span><span class="nam">exam_name</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t52" href="#t52">52</a></span><span class="t">        <span class="str">'course_url'</span><span class="op">:</span> <span class="nam">course_url</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t53" href="#t53">53</a></span><span class="t">        <span class="str">'contact_url'</span><span class="op">:</span> <span class="nam">contact_url</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t54" href="#t54">54</a></span><span class="t">        <span class="str">'contact_url_text'</span><span class="op">:</span> <span class="nam">contact_url_text</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t55" href="#t55">55</a></span><span class="t">    <span class="op">}</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t51" href="#t51">51</a></span><span class="t">        <span class="str">'exam_name'</span><span class="op">:</span> <span class="nam">exam</span><span class="op">.</span><span class="nam">exam_name</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t52" href="#t52">52</a></span><span class="t">        <span class="str">'course_url'</span><span class="op">:</span> <span class="nam">course_url</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t53" href="#t53">53</a></span><span class="t">        <span class="str">'contact_url'</span><span class="op">:</span> <span class="nam">contact_url</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t54" href="#t54">54</a></span><span class="t">        <span class="str">'contact_url_text'</span><span class="op">:</span> <span class="nam">contact_url_text</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t55" href="#t55">55</a></span><span class="t">    <span class="op">}</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t56" href="#t56">56</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t57" href="#t57">57</a></span><span class="t">    <span class="nam">email</span> <span class="op">=</span> <span class="nam">EmailMessage</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t58" href="#t58">58</a></span><span class="t">        <span class="nam">subject</span><span class="op">=</span><span class="nam">email_subject</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t59" href="#t59">59</a></span><span class="t">        <span class="nam">body</span><span class="op">=</span><span class="nam">body</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t60" href="#t60">60</a></span><span class="t">        <span class="nam">from_email</span><span class="op">=</span><span class="nam">settings</span><span class="op">.</span><span class="nam">DEFAULT_FROM_EMAIL</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t61" href="#t61">61</a></span><span class="t">        <span class="nam">to</span><span class="op">=</span><span class="op">[</span><span class="nam">attempt</span><span class="op">.</span><span class="nam">user</span><span class="op">.</span><span class="nam">email</span><span class="op">]</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t62" href="#t62">62</a></span><span class="t">    <span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t58" href="#t58">58</a></span><span class="t">        <span class="nam">subject</span><span class="op">=</span><span class="nam">email_subject</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t59" href="#t59">59</a></span><span class="t">        <span class="nam">body</span><span class="op">=</span><span class="nam">body</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t60" href="#t60">60</a></span><span class="t">        <span class="nam">from_email</span><span class="op">=</span><span class="nam">settings</span><span class="op">.</span><span class="nam">DEFAULT_FROM_EMAIL</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t61" href="#t61">61</a></span><span class="t">        <span class="nam">to</span><span class="op">=</span><span class="op">[</span><span class="nam">attempt</span><span class="op">.</span><span class="nam">user</span><span class="op">.</span><span class="nam">email</span><span class="op">]</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t62" href="#t62">62</a></span><span class="t">    <span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t63" href="#t63">63</a></span><span class="t">    <span class="nam">email</span><span class="op">.</span><span class="nam">content_subtype</span> <span class="op">=</span> <span class="str">'html'</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t64" href="#t64">64</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t65" href="#t65">65</a></span><span class="t">    <span class="key">try</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t66" href="#t66">66</a></span><span class="t">        <span class="nam">email</span><span class="op">.</span><span class="nam">send</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t67" href="#t67">67</a></span><span class="t">    <span class="key">except</span> <span class="nam">Exception</span> <span class="key">as</span> <span class="nam">err</span><span class="op">:</span>  <span class="com"># pylint: disable=broad-except</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t68" href="#t68">68</a></span><span class="t">        <span class="nam">log</span><span class="op">.</span><span class="nam">error</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t69" href="#t69">69</a></span><span class="t">            <span class="str">'Error while sending proctoring status email for '</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t70" href="#t70">70</a></span><span class="t">            <span class="fst">f'</span><span class="fst">user_id </span><span class="op">{</span><span class="nam">attempt</span><span class="op">.</span><span class="nam">user</span><span class="op">.</span><span class="nam">id</span><span class="op">}</span><span class="fst">, exam_id </span><span class="op">{</span><span class="nam">exam</span><span class="op">.</span><span class="nam">id</span><span class="op">}</span><span class="fst">: </span><span class="op">{</span><span class="nam">err</span><span class="op">}</span><span class="fst">'</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t71" href="#t71">71</a></span><span class="t">        <span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t69" href="#t69">69</a></span><span class="t">            <span class="str">'Error while sending proctoring status email for '</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t70" href="#t70">70</a></span><span class="t">            <span class="fst">f'</span><span class="fst">user_id </span><span class="op">{</span><span class="nam">attempt</span><span class="op">.</span><span class="nam">user</span><span class="op">.</span><span class="nam">id</span><span class="op">}</span><span class="fst">, exam_id </span><span class="op">{</span><span class="nam">exam</span><span class="op">.</span><span class="nam">id</span><span class="op">}</span><span class="fst">: </span><span class="op">{</span><span class="nam">err</span><span class="op">}</span><span class="fst">'</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t71" href="#t71">71</a></span><span class="t">        <span class="op">)</span>&nbsp;</span><span class="r"></span></p>
 </main>
 <footer>
     <div class="content">
@@ -161,8 +161,8 @@
             <a class="nav" href="index.html">&Hat; index</a> &nbsp; &nbsp;
             <a class="nav" href="z_48dc7f5fd95c8ca7_exam_types_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
-            <a class="nav" href="https://coverage.readthedocs.io/en/7.8.2">coverage.py v7.8.2</a>,
-            created at 2025-06-12 11:05 +0000
+            <a class="nav" href="https://coverage.readthedocs.io/en/7.10.5">coverage.py v7.10.5</a>,
+            created at 2025-09-01 06:29 +0000
         </p>
     </div>
 </footer>
