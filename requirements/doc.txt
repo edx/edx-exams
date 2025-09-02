@@ -31,11 +31,11 @@ bleach==6.2.0
     # via
     #   -r requirements/test.txt
     #   lti-consumer-xblock
-boto3==1.40.17
+boto3==1.40.21
     # via
     #   -r requirements/test.txt
     #   fs-s3fs
-botocore==1.40.17
+botocore==1.40.21
     # via
     #   -r requirements/test.txt
     #   boto3
@@ -92,11 +92,11 @@ coreschema==0.0.4
     # via
     #   -r requirements/test.txt
     #   coreapi
-coverage[toml]==7.10.5
+coverage[toml]==7.10.6
     # via
     #   -r requirements/test.txt
     #   pytest-cov
-cryptography==45.0.6
+cryptography==45.0.7
     # via
     #   -r requirements/test.txt
     #   edx-token-utils
@@ -270,7 +270,7 @@ edx-token-utils==0.3.0
     # via -r requirements/test.txt
 factory-boy==3.3.3
     # via -r requirements/test.txt
-faker==37.5.3
+faker==37.6.0
     # via
     #   -r requirements/test.txt
     #   factory-boy
@@ -378,7 +378,7 @@ mdurl==0.1.2
     # via markdown-it-py
 mock==5.2.0
     # via -r requirements/test.txt
-more-itertools==10.7.0
+more-itertools==10.8.0
     # via
     #   jaraco-classes
     #   jaraco-functools
@@ -638,7 +638,7 @@ tomlkit==0.13.3
     # via
     #   -r requirements/test.txt
     #   pylint
-tox==4.28.4
+tox==4.29.0
     # via -r requirements/test.txt
 twine==6.1.0
     # via -r requirements/doc.in

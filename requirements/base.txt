@@ -17,9 +17,9 @@ attrs==25.3.0
     #   openedx-events
 bleach==6.2.0
     # via lti-consumer-xblock
-boto3==1.40.17
+boto3==1.40.21
     # via fs-s3fs
-botocore==1.40.17
+botocore==1.40.21
     # via
     #   boto3
     #   s3transfer
@@ -43,7 +43,7 @@ coreapi==2.3.3
     #   openapi-codec
 coreschema==0.0.4
     # via coreapi
-cryptography==45.0.6
+cryptography==45.0.7
     # via
     #   edx-token-utils
     #   pyjwt
