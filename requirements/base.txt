@@ -17,15 +17,15 @@ attrs==25.3.0
     #   openedx-events
 bleach==6.2.0
     # via lti-consumer-xblock
-boto3==1.40.17
+boto3==1.40.26
     # via fs-s3fs
-botocore==1.40.17
+botocore==1.40.26
     # via
     #   boto3
     #   s3transfer
 certifi==2025.8.3
     # via requests
-cffi==1.17.1
+cffi==2.0.0
     # via
     #   cryptography
     #   pynacl
@@ -43,7 +43,7 @@ coreapi==2.3.3
     #   openapi-codec
 coreschema==0.0.4
     # via coreapi
-cryptography==45.0.6
+cryptography==45.0.7
     # via
     #   edx-token-utils
     #   pyjwt
@@ -52,7 +52,7 @@ defusedxml==0.7.1
     # via
     #   python3-openid
     #   social-auth-core
-django==4.2.23
+django==4.2.24
     # via
     #   -c requirements/common_constraints.txt
     #   -r requirements/base.in
@@ -88,7 +88,7 @@ django-appconf==1.1.0
     # via django-statici18n
 django-config-models==2.9.0
     # via lti-consumer-xblock
-django-cors-headers==4.7.0
+django-cors-headers==4.8.0
     # via -r requirements/base.in
 django-crum==0.7.9
     # via
@@ -121,7 +121,7 @@ djangorestframework==3.16.1
     #   drf-yasg
     #   edx-api-doc-tools
     #   edx-drf-extensions
-dnspython==2.7.0
+dnspython==2.8.0
     # via pymongo
 drf-jwt==1.19.2
     # via edx-drf-extensions
@@ -169,7 +169,7 @@ edx-toggles==5.4.1
     #   edx-auth-backends
     #   edx-event-bus-kafka
     #   edx-event-bus-redis
-edx-token-utils==0.3.0
+edx-token-utils==0.3.1
     # via -r requirements/base.in
 fastavro==1.12.0
     # via openedx-events
@@ -235,7 +235,7 @@ packaging==25.0
     # via drf-yasg
 psutil==7.0.0
     # via edx-django-utils
-pycparser==2.22
+pycparser==2.23
     # via cffi
 pycryptodomex==3.23.0
     # via lti-consumer-xblock
