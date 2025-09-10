@@ -27,11 +27,11 @@ bleach==6.2.0
     # via
     #   -r requirements/validation.txt
     #   lti-consumer-xblock
-boto3==1.40.17
+boto3==1.40.26
     # via
     #   -r requirements/validation.txt
     #   fs-s3fs
-botocore==1.40.17
+botocore==1.40.26
     # via
     #   -r requirements/validation.txt
     #   boto3
@@ -48,7 +48,7 @@ certifi==2025.8.3
     # via
     #   -r requirements/validation.txt
     #   requests
-cffi==1.17.1
+cffi==2.0.0
     # via
     #   -r requirements/validation.txt
     #   cryptography
@@ -93,11 +93,11 @@ coreschema==0.0.4
     # via
     #   -r requirements/validation.txt
     #   coreapi
-coverage[toml]==7.10.5
+coverage[toml]==7.10.6
     # via
     #   -r requirements/validation.txt
     #   pytest-cov
-cryptography==45.0.6
+cryptography==45.0.7
     # via
     #   -r requirements/validation.txt
     #   edx-token-utils
@@ -121,7 +121,7 @@ distlib==0.4.0
     # via
     #   -r requirements/validation.txt
     #   virtualenv
-django==4.2.23
+django==4.2.24
     # via
     #   -r requirements/validation.txt
     #   django-appconf
@@ -162,7 +162,7 @@ django-config-models==2.9.0
     # via
     #   -r requirements/validation.txt
     #   lti-consumer-xblock
-django-cors-headers==4.7.0
+django-cors-headers==4.8.0
     # via -r requirements/validation.txt
 django-crum==0.7.9
     # via
@@ -204,7 +204,7 @@ djangorestframework==3.16.1
     #   drf-yasg
     #   edx-api-doc-tools
     #   edx-drf-extensions
-dnspython==2.7.0
+dnspython==2.8.0
     # via
     #   -r requirements/validation.txt
     #   pymongo
@@ -268,11 +268,11 @@ edx-toggles==5.4.1
     #   edx-auth-backends
     #   edx-event-bus-kafka
     #   edx-event-bus-redis
-edx-token-utils==0.3.0
+edx-token-utils==0.3.1
     # via -r requirements/validation.txt
 factory-boy==3.3.3
     # via -r requirements/validation.txt
-faker==37.5.3
+faker==37.6.0
     # via
     #   -r requirements/validation.txt
     #   factory-boy
@@ -397,7 +397,7 @@ mdurl==0.1.2
     #   markdown-it-py
 mock==5.2.0
     # via -r requirements/validation.txt
-more-itertools==10.7.0
+more-itertools==10.8.0
     # via
     #   -r requirements/validation.txt
     #   jaraco-classes
@@ -466,7 +466,7 @@ psutil==7.0.0
     #   edx-django-utils
 pycodestyle==2.14.0
     # via -r requirements/validation.txt
-pycparser==2.22
+pycparser==2.23
     # via
     #   -r requirements/validation.txt
     #   cffi
@@ -532,12 +532,12 @@ pyproject-hooks==1.2.0
     #   -r requirements/pip-tools.txt
     #   build
     #   pip-tools
-pytest==8.4.1
+pytest==8.4.2
     # via
     #   -r requirements/validation.txt
     #   pytest-cov
     #   pytest-django
-pytest-cov==6.2.1
+pytest-cov==7.0.0
     # via -r requirements/validation.txt
 pytest-django==4.11.1
     # via -r requirements/validation.txt
@@ -666,9 +666,9 @@ tomlkit==0.13.3
     # via
     #   -r requirements/validation.txt
     #   pylint
-tox==4.28.4
+tox==4.30.2
     # via -r requirements/validation.txt
-twine==6.1.0
+twine==6.2.0
     # via -r requirements/validation.txt
 typing-extensions==4.15.0
     # via

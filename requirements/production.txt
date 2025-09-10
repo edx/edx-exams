@@ -22,12 +22,12 @@ bleach==6.2.0
     # via
     #   -r requirements/base.txt
     #   lti-consumer-xblock
-boto3==1.40.17
+boto3==1.40.26
     # via
     #   -r requirements/base.txt
     #   django-ses
     #   fs-s3fs
-botocore==1.40.17
+botocore==1.40.26
     # via
     #   -r requirements/base.txt
     #   boto3
@@ -36,7 +36,7 @@ certifi==2025.8.3
     # via
     #   -r requirements/base.txt
     #   requests
-cffi==1.17.1
+cffi==2.0.0
     # via
     #   -r requirements/base.txt
     #   cryptography
@@ -63,7 +63,7 @@ coreschema==0.0.4
     # via
     #   -r requirements/base.txt
     #   coreapi
-cryptography==45.0.6
+cryptography==45.0.7
     # via
     #   -r requirements/base.txt
     #   edx-token-utils
@@ -74,7 +74,7 @@ defusedxml==0.7.1
     #   -r requirements/base.txt
     #   python3-openid
     #   social-auth-core
-django==4.2.23
+django==4.2.24
     # via
     #   -r requirements/base.txt
     #   django-appconf
@@ -114,7 +114,7 @@ django-config-models==2.9.0
     # via
     #   -r requirements/base.txt
     #   lti-consumer-xblock
-django-cors-headers==4.7.0
+django-cors-headers==4.8.0
     # via -r requirements/base.txt
 django-crum==0.7.9
     # via
@@ -154,7 +154,7 @@ djangorestframework==3.16.1
     #   drf-yasg
     #   edx-api-doc-tools
     #   edx-drf-extensions
-dnspython==2.7.0
+dnspython==2.8.0
     # via
     #   -r requirements/base.txt
     #   pymongo
@@ -210,7 +210,7 @@ edx-toggles==5.4.1
     #   edx-auth-backends
     #   edx-event-bus-kafka
     #   edx-event-bus-redis
-edx-token-utils==0.3.0
+edx-token-utils==0.3.1
     # via -r requirements/base.txt
 fastavro==1.12.0
     # via
@@ -226,7 +226,7 @@ fs-s3fs==1.1.1
     # via
     #   -r requirements/base.txt
     #   openedx-django-pyfs
-gevent==25.5.1
+gevent==25.8.2
     # via -r requirements/production.in
 greenlet==3.2.4
     # via gevent
@@ -316,7 +316,7 @@ psutil==7.0.0
     # via
     #   -r requirements/base.txt
     #   edx-django-utils
-pycparser==2.22
+pycparser==2.23
     # via
     #   -r requirements/base.txt
     #   cffi
