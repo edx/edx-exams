@@ -17,9 +17,9 @@ attrs==25.3.0
     #   openedx-events
 bleach==6.2.0
     # via lti-consumer-xblock
-boto3==1.40.26
+boto3==1.40.31
     # via fs-s3fs
-botocore==1.40.26
+botocore==1.40.31
     # via
     #   boto3
     #   s3transfer
@@ -250,9 +250,9 @@ pyjwt[crypto]==2.10.1
     #   social-auth-core
 pymemcache==4.0.0
     # via -r requirements/base.in
-pymongo==4.14.1
+pymongo==4.15.0
     # via edx-opaque-keys
-pynacl==1.5.0
+pynacl==1.6.0
     # via edx-django-utils
 python-dateutil==2.9.0.post0
     # via
@@ -284,7 +284,7 @@ requests==2.32.5
     #   social-auth-core
 requests-oauthlib==2.0.0
     # via social-auth-core
-s3transfer==0.13.1
+s3transfer==0.14.0
     # via boto3
 semantic-version==2.10.0
     # via edx-drf-extensions
