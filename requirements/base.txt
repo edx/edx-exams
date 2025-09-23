@@ -6,7 +6,7 @@
 #
 appdirs==1.4.4
     # via fs
-asgiref==3.9.1
+asgiref==3.9.2
     # via
     #   django
     #   django-cors-headers
@@ -17,9 +17,9 @@ attrs==25.3.0
     #   openedx-events
 bleach==6.2.0
     # via lti-consumer-xblock
-boto3==1.40.26
+boto3==1.40.36
     # via fs-s3fs
-botocore==1.40.26
+botocore==1.40.36
     # via
     #   boto3
     #   s3transfer
@@ -31,7 +31,7 @@ cffi==2.0.0
     #   pynacl
 charset-normalizer==3.4.3
     # via requests
-click==8.2.1
+click==8.3.0
     # via
     #   code-annotations
     #   edx-django-utils
@@ -43,7 +43,7 @@ coreapi==2.3.3
     #   openapi-codec
 coreschema==0.0.4
     # via coreapi
-cryptography==45.0.7
+cryptography==46.0.1
     # via
     #   edx-token-utils
     #   pyjwt
@@ -88,7 +88,7 @@ django-appconf==1.1.0
     # via django-statici18n
 django-config-models==2.9.0
     # via lti-consumer-xblock
-django-cors-headers==4.8.0
+django-cors-headers==4.9.0
     # via -r requirements/base.in
 django-crum==0.7.9
     # via
@@ -200,7 +200,7 @@ lazy==1.6
     # via lti-consumer-xblock
 lti-consumer-xblock==9.14.2
     # via -r requirements/base.in
-lxml==6.0.1
+lxml==6.0.2
     # via
     #   lti-consumer-xblock
     #   xblock
@@ -233,7 +233,7 @@ openedx-filters==2.1.0
     # via lti-consumer-xblock
 packaging==25.0
     # via drf-yasg
-psutil==7.0.0
+psutil==7.1.0
     # via edx-django-utils
 pycparser==2.23
     # via cffi
@@ -250,9 +250,9 @@ pyjwt[crypto]==2.10.1
     #   social-auth-core
 pymemcache==4.0.0
     # via -r requirements/base.in
-pymongo==4.14.1
+pymongo==4.15.1
     # via edx-opaque-keys
-pynacl==1.5.0
+pynacl==1.6.0
     # via edx-django-utils
 python-dateutil==2.9.0.post0
     # via
@@ -284,7 +284,7 @@ requests==2.32.5
     #   social-auth-core
 requests-oauthlib==2.0.0
     # via social-auth-core
-s3transfer==0.13.1
+s3transfer==0.14.0
     # via boto3
 semantic-version==2.10.0
     # via edx-drf-extensions
