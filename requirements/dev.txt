@@ -27,11 +27,11 @@ bleach==6.2.0
     # via
     #   -r requirements/validation.txt
     #   lti-consumer-xblock
-boto3==1.40.36
+boto3==1.40.41
     # via
     #   -r requirements/validation.txt
     #   fs-s3fs
-botocore==1.40.36
+botocore==1.40.41
     # via
     #   -r requirements/validation.txt
     #   boto3
@@ -111,7 +111,7 @@ defusedxml==0.7.1
     #   -r requirements/validation.txt
     #   python3-openid
     #   social-auth-core
-diff-cover==9.6.0
+diff-cover==9.7.1
     # via -r requirements/dev.in
 dill==0.4.0
     # via
@@ -216,13 +216,13 @@ drf-jwt==1.19.2
     # via
     #   -r requirements/validation.txt
     #   edx-drf-extensions
-drf-yasg==1.21.10
+drf-yasg==1.21.11
     # via
     #   -r requirements/validation.txt
     #   edx-api-doc-tools
 edx-api-doc-tools==2.1.0
     # via -r requirements/validation.txt
-edx-auth-backends==4.6.0
+edx-auth-backends==4.6.1
     # via -r requirements/validation.txt
 edx-ccx-keys==2.0.2
     # via
@@ -231,7 +231,7 @@ edx-ccx-keys==2.0.2
     #   openedx-events
 edx-django-release-util==1.5.0
     # via -r requirements/validation.txt
-edx-django-utils==8.0.0
+edx-django-utils==8.0.1
     # via
     #   -r requirements/validation.txt
     #   django-config-models
@@ -381,7 +381,7 @@ markdown-it-py==4.0.0
     # via
     #   -r requirements/validation.txt
     #   rich
-markupsafe==3.0.2
+markupsafe==3.0.3
     # via
     #   -r requirements/validation.txt
     #   jinja2
@@ -560,7 +560,7 @@ pytz==2025.2
     #   -r requirements/validation.txt
     #   drf-yasg
     #   xblock
-pyyaml==6.0.2
+pyyaml==6.0.3
     # via
     #   -r requirements/validation.txt
     #   code-annotations
@@ -619,7 +619,7 @@ semantic-version==2.10.0
     # via
     #   -r requirements/validation.txt
     #   edx-drf-extensions
-simplejson==3.20.1
+simplejson==3.20.2
     # via
     #   -r requirements/validation.txt
     #   django-rest-swagger
