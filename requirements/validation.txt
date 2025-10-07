@@ -9,7 +9,7 @@ appdirs==1.4.4
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   fs
-asgiref==3.9.2
+asgiref==3.10.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -21,7 +21,7 @@ astroid==3.3.11
     #   -r requirements/test.txt
     #   pylint
     #   pylint-celery
-attrs==25.3.0
+attrs==25.4.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -32,12 +32,12 @@ bleach==6.2.0
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   lti-consumer-xblock
-boto3==1.40.36
+boto3==1.40.46
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   fs-s3fs
-botocore==1.40.36
+botocore==1.40.46
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -48,7 +48,7 @@ cachetools==6.2.0
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   tox
-certifi==2025.8.3
+certifi==2025.10.5
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -109,14 +109,13 @@ coverage[toml]==7.10.7
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   pytest-cov
-cryptography==46.0.1
+cryptography==46.0.2
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   edx-token-utils
     #   pyjwt
     #   secretstorage
-    #   social-auth-core
 ddt==1.7.2
     # via
     #   -r requirements/quality.txt
@@ -137,7 +136,7 @@ distlib==0.4.0
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   virtualenv
-django==4.2.24
+django==4.2.25
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -250,7 +249,7 @@ drf-jwt==1.19.2
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   edx-drf-extensions
-drf-yasg==1.21.10
+drf-yasg==1.21.11
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -259,7 +258,7 @@ edx-api-doc-tools==2.1.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
-edx-auth-backends==4.6.0
+edx-auth-backends==4.6.1
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -273,7 +272,7 @@ edx-django-release-util==1.5.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
-edx-django-utils==8.0.0
+edx-django-utils==8.0.1
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -329,7 +328,7 @@ factory-boy==3.3.3
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
-faker==37.8.0
+faker==37.11.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -380,7 +379,7 @@ iniconfig==2.1.0
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   pytest
-isort==6.0.1
+isort==6.1.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -453,7 +452,7 @@ markdown-it-py==4.0.0
     # via
     #   -r requirements/quality.txt
     #   rich
-markupsafe==3.0.2
+markupsafe==3.0.3
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -482,7 +481,7 @@ mysqlclient==2.2.7
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
-nh3==0.3.0
+nh3==0.3.1
     # via
     #   -r requirements/quality.txt
     #   readme-renderer
@@ -574,7 +573,7 @@ pyjwt[crypto]==2.10.1
     #   edx-token-utils
     #   lti-consumer-xblock
     #   social-auth-core
-pylint==3.3.8
+pylint==3.3.9
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -602,7 +601,7 @@ pymemcache==4.0.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
-pymongo==4.15.1
+pymongo==4.15.2
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -654,7 +653,7 @@ pytz==2025.2
     #   -r requirements/test.txt
     #   drf-yasg
     #   xblock
-pyyaml==6.0.2
+pyyaml==6.0.3
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -720,7 +719,7 @@ semantic-version==2.10.0
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   edx-drf-extensions
-simplejson==3.20.1
+simplejson==3.20.2
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -746,7 +745,7 @@ social-auth-app-django==5.4.3
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   edx-auth-backends
-social-auth-core==4.7.0
+social-auth-core==4.8.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -774,7 +773,7 @@ tomlkit==0.13.3
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   pylint
-tox==4.30.2
+tox==4.30.3
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
