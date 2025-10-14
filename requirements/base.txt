@@ -6,30 +6,30 @@
 #
 appdirs==1.4.4
     # via fs
-asgiref==3.9.2
+asgiref==3.10.0
     # via
     #   django
     #   django-cors-headers
-attrs==25.3.0
+attrs==25.4.0
     # via
     #   -r requirements/base.in
     #   lti-consumer-xblock
     #   openedx-events
 bleach==6.2.0
     # via lti-consumer-xblock
-boto3==1.40.36
+boto3==1.40.51
     # via fs-s3fs
-botocore==1.40.36
+botocore==1.40.51
     # via
     #   boto3
     #   s3transfer
-certifi==2025.8.3
+certifi==2025.10.5
     # via requests
 cffi==2.0.0
     # via
     #   cryptography
     #   pynacl
-charset-normalizer==3.4.3
+charset-normalizer==3.4.4
     # via requests
 click==8.3.0
     # via
@@ -43,16 +43,15 @@ coreapi==2.3.3
     #   openapi-codec
 coreschema==0.0.4
     # via coreapi
-cryptography==46.0.1
+cryptography==46.0.2
     # via
     #   edx-token-utils
     #   pyjwt
-    #   social-auth-core
 defusedxml==0.7.1
     # via
     #   python3-openid
     #   social-auth-core
-django==4.2.24
+django==4.2.25
     # via
     #   -c requirements/common_constraints.txt
     #   -r requirements/base.in
@@ -125,11 +124,11 @@ dnspython==2.8.0
     # via pymongo
 drf-jwt==1.19.2
     # via edx-drf-extensions
-drf-yasg==1.21.10
+drf-yasg==1.21.11
     # via edx-api-doc-tools
 edx-api-doc-tools==2.1.0
     # via -r requirements/base.in
-edx-auth-backends==4.6.0
+edx-auth-backends==4.6.1
     # via -r requirements/base.in
 edx-ccx-keys==2.0.2
     # via
@@ -137,7 +136,7 @@ edx-ccx-keys==2.0.2
     #   openedx-events
 edx-django-release-util==1.5.0
     # via -r requirements/base.in
-edx-django-utils==8.0.0
+edx-django-utils==8.0.1
     # via
     #   -r requirements/base.in
     #   django-config-models
@@ -171,7 +170,7 @@ edx-toggles==5.4.1
     #   edx-event-bus-redis
 edx-token-utils==0.3.1
     # via -r requirements/base.in
-fastavro==1.12.0
+fastavro==1.12.1
     # via openedx-events
 fs==2.4.16
     # via
@@ -180,7 +179,7 @@ fs==2.4.16
     #   xblock
 fs-s3fs==1.1.1
     # via openedx-django-pyfs
-idna==3.10
+idna==3.11
     # via requests
 inflection==0.5.1
     # via drf-yasg
@@ -208,7 +207,7 @@ mako==1.3.10
     # via
     #   lti-consumer-xblock
     #   xblock
-markupsafe==3.0.2
+markupsafe==3.0.3
     # via
     #   jinja2
     #   mako
@@ -250,7 +249,7 @@ pyjwt[crypto]==2.10.1
     #   social-auth-core
 pymemcache==4.0.0
     # via -r requirements/base.in
-pymongo==4.15.1
+pymongo==4.15.3
     # via edx-opaque-keys
 pynacl==1.6.0
     # via edx-django-utils
@@ -267,7 +266,7 @@ pytz==2025.2
     #   -r requirements/base.in
     #   drf-yasg
     #   xblock
-pyyaml==6.0.2
+pyyaml==6.0.3
     # via
     #   code-annotations
     #   drf-yasg
@@ -288,7 +287,7 @@ s3transfer==0.14.0
     # via boto3
 semantic-version==2.10.0
     # via edx-drf-extensions
-simplejson==3.20.1
+simplejson==3.20.2
     # via
     #   django-rest-swagger
     #   xblock
@@ -302,7 +301,7 @@ six==1.17.0
     #   python-dateutil
 social-auth-app-django==5.4.3
     # via edx-auth-backends
-social-auth-core==4.7.0
+social-auth-core==4.8.1
     # via
     #   edx-auth-backends
     #   social-auth-app-django
