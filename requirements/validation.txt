@@ -9,46 +9,46 @@ appdirs==1.4.4
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   fs
-asgiref==3.9.2
+asgiref==3.11.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   django
     #   django-cors-headers
-astroid==3.3.11
+astroid==4.0.3
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   pylint
     #   pylint-celery
-attrs==25.3.0
+attrs==25.4.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   lti-consumer-xblock
     #   openedx-events
-bleach==6.2.0
+bleach==6.3.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   lti-consumer-xblock
-boto3==1.40.36
+boto3==1.42.35
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   fs-s3fs
-botocore==1.40.36
+botocore==1.42.35
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   boto3
     #   s3transfer
-cachetools==6.2.0
+cachetools==6.2.5
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   tox
-certifi==2025.8.3
+certifi==2026.1.4
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -64,12 +64,12 @@ chardet==5.2.0
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   tox
-charset-normalizer==3.4.3
+charset-normalizer==3.4.4
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   requests
-click==8.3.0
+click==8.3.1
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -104,19 +104,18 @@ coreschema==0.0.4
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   coreapi
-coverage[toml]==7.10.7
+coverage[toml]==7.13.2
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   pytest-cov
-cryptography==46.0.1
+cryptography==46.0.3
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   edx-token-utils
     #   pyjwt
     #   secretstorage
-    #   social-auth-core
 ddt==1.7.2
     # via
     #   -r requirements/quality.txt
@@ -127,7 +126,7 @@ defusedxml==0.7.1
     #   -r requirements/test.txt
     #   python3-openid
     #   social-auth-core
-dill==0.4.0
+dill==0.4.1
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -137,7 +136,7 @@ distlib==0.4.0
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   virtualenv
-django==4.2.24
+django==5.2.10
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -169,7 +168,7 @@ django==4.2.24
     #   openedx-events
     #   openedx-filters
     #   social-auth-app-django
-django-appconf==1.1.0
+django-appconf==1.2.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -197,7 +196,7 @@ django-extensions==4.1
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
-django-filter==25.1
+django-filter==25.2
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -210,7 +209,7 @@ django-rest-swagger==2.2.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
-django-simple-history==3.10.1
+django-simple-history==3.11.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -241,7 +240,7 @@ dnspython==2.8.0
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   pymongo
-docutils==0.22.2
+docutils==0.22.4
     # via
     #   -r requirements/quality.txt
     #   readme-renderer
@@ -250,7 +249,7 @@ drf-jwt==1.19.2
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   edx-drf-extensions
-drf-yasg==1.21.10
+drf-yasg==1.21.14
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -259,7 +258,7 @@ edx-api-doc-tools==2.1.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
-edx-auth-backends==4.6.0
+edx-auth-backends==4.6.2
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -273,7 +272,7 @@ edx-django-release-util==1.5.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
-edx-django-utils==8.0.0
+edx-django-utils==8.0.1
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -329,17 +328,17 @@ factory-boy==3.3.3
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
-faker==37.8.0
+faker==40.1.2
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   factory-boy
-fastavro==1.12.0
+fastavro==1.12.1
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   openedx-events
-filelock==3.19.1
+filelock==3.20.3
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -365,7 +364,7 @@ id==1.5.0
     # via
     #   -r requirements/quality.txt
     #   twine
-idna==3.10
+idna==3.11
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -375,12 +374,12 @@ inflection==0.5.1
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   drf-yasg
-iniconfig==2.1.0
+iniconfig==2.3.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   pytest
-isort==6.0.1
+isort==7.0.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -394,11 +393,11 @@ jaraco-classes==3.4.0
     # via
     #   -r requirements/quality.txt
     #   keyring
-jaraco-context==6.0.1
+jaraco-context==6.1.0
     # via
     #   -r requirements/quality.txt
     #   keyring
-jaraco-functools==4.3.0
+jaraco-functools==4.4.0
     # via
     #   -r requirements/quality.txt
     #   keyring
@@ -413,7 +412,7 @@ jinja2==3.1.6
     #   -r requirements/test.txt
     #   code-annotations
     #   coreschema
-jmespath==1.0.1
+jmespath==1.1.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -424,7 +423,7 @@ jsonfield==3.2.0
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   lti-consumer-xblock
-keyring==25.6.0
+keyring==25.7.0
     # via
     #   -r requirements/quality.txt
     #   twine
@@ -433,7 +432,7 @@ lazy==1.6
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   lti-consumer-xblock
-lti-consumer-xblock==9.14.2
+lti-consumer-xblock==9.14.3
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -453,7 +452,7 @@ markdown-it-py==4.0.0
     # via
     #   -r requirements/quality.txt
     #   rich
-markupsafe==3.0.2
+markupsafe==3.0.3
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -482,7 +481,7 @@ mysqlclient==2.2.7
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
-nh3==0.3.0
+nh3==0.3.2
     # via
     #   -r requirements/quality.txt
     #   readme-renderer
@@ -514,7 +513,7 @@ openedx-filters==2.1.0
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   lti-consumer-xblock
-packaging==25.0
+packaging==26.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -523,7 +522,7 @@ packaging==25.0
     #   pytest
     #   tox
     #   twine
-platformdirs==4.4.0
+platformdirs==4.5.1
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -537,14 +536,14 @@ pluggy==1.6.0
     #   pytest
     #   pytest-cov
     #   tox
-psutil==7.1.0
+psutil==7.2.1
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   edx-django-utils
 pycodestyle==2.14.0
     # via -r requirements/quality.txt
-pycparser==2.23
+pycparser==3.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -574,7 +573,7 @@ pyjwt[crypto]==2.10.1
     #   edx-token-utils
     #   lti-consumer-xblock
     #   social-auth-core
-pylint==3.3.8
+pylint==4.0.4
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -587,7 +586,7 @@ pylint-celery==0.3
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   edx-lint
-pylint-django==2.6.1
+pylint-django==2.7.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -602,22 +601,22 @@ pymemcache==4.0.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
-pymongo==4.15.1
+pymongo==4.16.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   edx-opaque-keys
-pynacl==1.6.0
+pynacl==1.6.2
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   edx-django-utils
-pyproject-api==1.9.1
+pyproject-api==1.10.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   tox
-pytest==8.4.2
+pytest==9.0.2
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -654,7 +653,7 @@ pytz==2025.2
     #   -r requirements/test.txt
     #   drf-yasg
     #   xblock
-pyyaml==6.0.2
+pyyaml==6.0.3
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -667,7 +666,7 @@ readme-renderer==44.0
     # via
     #   -r requirements/quality.txt
     #   twine
-redis==6.4.0
+redis==7.1.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -702,16 +701,16 @@ rfc3986==2.0.0
     # via
     #   -r requirements/quality.txt
     #   twine
-rich==14.1.0
+rich==14.3.1
     # via
     #   -r requirements/quality.txt
     #   twine
-s3transfer==0.14.0
+s3transfer==0.16.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   boto3
-secretstorage==3.4.0
+secretstorage==3.5.0
     # via
     #   -r requirements/quality.txt
     #   keyring
@@ -720,7 +719,7 @@ semantic-version==2.10.0
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   edx-drf-extensions
-simplejson==3.20.1
+simplejson==3.20.2
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -741,23 +740,23 @@ snowballstemmer==3.0.1
     # via
     #   -r requirements/quality.txt
     #   pydocstyle
-social-auth-app-django==5.4.3
+social-auth-app-django==5.7.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   edx-auth-backends
-social-auth-core==4.7.0
+social-auth-core==4.8.3
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   edx-auth-backends
     #   social-auth-app-django
-sqlparse==0.5.3
+sqlparse==0.5.5
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   django
-stevedore==5.5.0
+stevedore==5.6.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -769,12 +768,12 @@ text-unidecode==1.3
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   python-slugify
-tomlkit==0.13.3
+tomlkit==0.14.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   pylint
-tox==4.30.2
+tox==4.34.1
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -785,18 +784,13 @@ typing-extensions==4.15.0
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   edx-opaque-keys
-tzdata==2025.2
-    # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
-    #   faker
 uritemplate==4.2.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   coreapi
     #   drf-yasg
-urllib3==2.5.0
+urllib3==2.6.3
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -804,12 +798,12 @@ urllib3==2.5.0
     #   requests
     #   responses
     #   twine
-virtualenv==20.34.0
+virtualenv==20.36.1
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   tox
-walrus==0.9.5
+walrus==0.9.8
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -829,7 +823,7 @@ webob==1.8.9
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   xblock
-xblock==5.2.0
+xblock==5.3.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
