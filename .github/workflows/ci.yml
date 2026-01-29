@@ -17,7 +17,7 @@ jobs:
       matrix:
         os: [ubuntu-latest]
         python-version: ['3.12']
-        toxenv: [django42, quality, pii_check]
+        toxenv: [django52, quality, pii_check]
 
     steps:
     - uses: actions/checkout@v2
@@ -38,7 +38,7 @@ jobs:
       run: tox
 
     - name: Run coverage
-      if: matrix.python-version == '3.12' && matrix.toxenv == 'django42'
+      if: matrix.python-version == '3.12' && matrix.toxenv == 'django52'
       uses: py-cov-action/python-coverage-comment-action@v3
       with:
         GITHUB_TOKEN: ${{ github.token }}
