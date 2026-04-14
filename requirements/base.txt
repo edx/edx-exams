@@ -6,36 +6,30 @@
 #
 appdirs==1.4.4
     # via fs
-asgiref==3.11.0
+asgiref==3.11.1
     # via
     #   django
     #   django-cors-headers
-attrs==25.4.0
+attrs==26.1.0
     # via
     #   -r requirements/base.in
     #   lti-consumer-xblock
     #   openedx-events
 bleach==6.3.0
     # via lti-consumer-xblock
-boto3==1.42.35
-    # via fs-s3fs
-botocore==1.42.35
-    # via
-    #   boto3
-    #   s3transfer
-certifi==2026.1.4
+certifi==2026.2.25
     # via requests
 cffi==2.0.0
     # via
     #   cryptography
     #   pynacl
-charset-normalizer==3.4.4
+charset-normalizer==3.4.7
     # via requests
-click==8.3.1
+click==8.3.2
     # via
     #   code-annotations
     #   edx-django-utils
-code-annotations==2.3.0
+code-annotations==3.0.0
     # via edx-toggles
 coreapi==2.3.3
     # via
@@ -43,7 +37,7 @@ coreapi==2.3.3
     #   openapi-codec
 coreschema==0.0.4
     # via coreapi
-cryptography==46.0.3
+cryptography==46.0.7
     # via
     #   edx-token-utils
     #   pyjwt
@@ -51,7 +45,7 @@ defusedxml==0.7.1
     # via
     #   python3-openid
     #   social-auth-core
-django==5.2.10
+django==5.2.13
     # via
     #   -c requirements/common_constraints.txt
     #   -r requirements/base.in
@@ -79,13 +73,12 @@ django==5.2.10
     #   edx-token-utils
     #   jsonfield
     #   lti-consumer-xblock
-    #   openedx-django-pyfs
     #   openedx-events
     #   openedx-filters
     #   social-auth-app-django
 django-appconf==1.2.0
     # via django-statici18n
-django-config-models==2.9.0
+django-config-models==3.0.0
     # via lti-consumer-xblock
 django-cors-headers==4.9.0
     # via -r requirements/base.in
@@ -103,7 +96,7 @@ django-rest-swagger==2.2.0
     # via -r requirements/base.in
 django-simple-history==3.11.0
     # via -r requirements/base.in
-django-statici18n==2.6.0
+django-statici18n==2.7.1
     # via lti-consumer-xblock
 django-waffle==5.0.0
     # via
@@ -111,7 +104,7 @@ django-waffle==5.0.0
     #   edx-django-utils
     #   edx-drf-extensions
     #   edx-toggles
-djangorestframework==3.16.1
+djangorestframework==3.17.1
     # via
     #   -r requirements/base.in
     #   django-config-models
@@ -124,11 +117,11 @@ dnspython==2.8.0
     # via pymongo
 drf-jwt==1.19.2
     # via edx-drf-extensions
-drf-yasg==1.21.14
+drf-yasg==1.21.15
     # via edx-api-doc-tools
-edx-api-doc-tools==2.1.0
+edx-api-doc-tools==3.0.0
     # via -r requirements/base.in
-edx-auth-backends==4.6.2
+edx-auth-backends==5.0.0
     # via -r requirements/base.in
 edx-ccx-keys==2.0.2
     # via
@@ -151,9 +144,9 @@ edx-drf-extensions==10.6.0
     # via -r requirements/base.in
 edx-event-bus-kafka==6.1.0
     # via -r requirements/base.in
-edx-event-bus-redis==0.6.1
+edx-event-bus-redis==1.0.0
     # via -r requirements/base.in
-edx-opaque-keys[django]==3.0.0
+edx-opaque-keys[django]==4.0.0
     # via
     #   -r requirements/base.in
     #   edx-ccx-keys
@@ -161,9 +154,9 @@ edx-opaque-keys[django]==3.0.0
     #   lti-consumer-xblock
     #   openedx-events
     #   openedx-filters
-edx-rest-api-client==6.2.0
+edx-rest-api-client==7.0.0
     # via -r requirements/base.in
-edx-toggles==5.4.1
+edx-toggles==6.0.0
     # via
     #   edx-auth-backends
     #   edx-event-bus-kafka
@@ -173,12 +166,7 @@ edx-token-utils==0.3.1
 fastavro==1.12.1
     # via openedx-events
 fs==2.4.16
-    # via
-    #   fs-s3fs
-    #   openedx-django-pyfs
-    #   xblock
-fs-s3fs==1.1.1
-    # via openedx-django-pyfs
+    # via xblock
 idna==3.11
     # via requests
 inflection==0.5.1
@@ -189,17 +177,13 @@ jinja2==3.1.6
     # via
     #   code-annotations
     #   coreschema
-jmespath==1.1.0
-    # via
-    #   boto3
-    #   botocore
 jsonfield==3.2.0
     # via lti-consumer-xblock
 lazy==1.6
     # via lti-consumer-xblock
-lti-consumer-xblock==9.14.3
+lti-consumer-xblock==10.0.1
     # via -r requirements/base.in
-lxml==6.0.2
+lxml==6.0.4
     # via
     #   lti-consumer-xblock
     #   xblock
@@ -212,7 +196,7 @@ markupsafe==3.0.3
     #   jinja2
     #   mako
     #   xblock
-mysqlclient==2.2.7
+mysqlclient==2.2.8
     # via -r requirements/base.in
 oauthlib==3.3.1
     # via
@@ -221,24 +205,22 @@ oauthlib==3.3.1
     #   social-auth-core
 openapi-codec==1.3.2
     # via django-rest-swagger
-openedx-django-pyfs==3.8.0
-    # via lti-consumer-xblock
-openedx-events==10.5.0
+openedx-events==11.1.1
     # via
     #   -r requirements/base.in
     #   edx-event-bus-kafka
     #   edx-event-bus-redis
-openedx-filters==2.1.0
+openedx-filters==3.1.0
     # via lti-consumer-xblock
 packaging==26.0
     # via drf-yasg
-psutil==7.2.1
+psutil==7.2.2
     # via edx-django-utils
 pycparser==3.0
     # via cffi
 pycryptodomex==3.23.0
     # via lti-consumer-xblock
-pyjwt[crypto]==2.10.1
+pyjwt[crypto]==2.12.1
     # via
     #   drf-jwt
     #   edx-auth-backends
@@ -254,14 +236,12 @@ pymongo==4.16.0
 pynacl==1.6.2
     # via edx-django-utils
 python-dateutil==2.9.0.post0
-    # via
-    #   botocore
-    #   xblock
+    # via xblock
 python-slugify==8.0.4
     # via code-annotations
 python3-openid==3.2.0
     # via social-auth-core
-pytz==2025.2
+pytz==2026.1.post1
     # via
     #   -r requirements/base.in
     #   drf-yasg
@@ -272,9 +252,9 @@ pyyaml==6.0.3
     #   drf-yasg
     #   edx-django-release-util
     #   xblock
-redis==7.1.0
+redis==7.4.0
     # via walrus
-requests==2.32.5
+requests==2.33.1
     # via
     #   coreapi
     #   edx-drf-extensions
@@ -283,8 +263,6 @@ requests==2.32.5
     #   social-auth-core
 requests-oauthlib==2.0.0
     # via social-auth-core
-s3transfer==0.16.0
-    # via boto3
 semantic-version==2.10.0
     # via edx-drf-extensions
 simplejson==3.20.2
@@ -297,17 +275,16 @@ six==1.17.0
     #   edx-ccx-keys
     #   edx-django-release-util
     #   fs
-    #   fs-s3fs
     #   python-dateutil
 social-auth-app-django==5.7.0
     # via edx-auth-backends
-social-auth-core==4.8.3
+social-auth-core==4.8.5
     # via
     #   edx-auth-backends
     #   social-auth-app-django
 sqlparse==0.5.5
     # via django
-stevedore==5.6.0
+stevedore==5.7.0
     # via
     #   code-annotations
     #   edx-django-utils
@@ -321,18 +298,16 @@ uritemplate==4.2.0
     #   coreapi
     #   drf-yasg
 urllib3==2.6.3
-    # via
-    #   botocore
-    #   requests
+    # via requests
 walrus==0.9.8
     # via edx-event-bus-redis
-web-fragments==3.1.0
+web-fragments==4.0.0
     # via xblock
 webencodings==0.5.1
     # via bleach
 webob==1.8.9
     # via xblock
-xblock==5.3.0
+xblock==6.0.0
     # via lti-consumer-xblock
 
 # The following packages are considered to be unsafe in a requirements file:
