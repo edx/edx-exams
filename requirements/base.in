@@ -22,6 +22,7 @@ edx-rest-api-client
 edx-token-utils
 lti-consumer-xblock
 mysqlclient
+openedx-atlas
 openedx-events
 pytz
 pymemcache

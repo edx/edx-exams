@@ -214,6 +214,8 @@ markupsafe==3.0.3
     #   xblock
 mysqlclient==2.2.7
     # via -r requirements/base.in
+openedx-atlas==0.7.1
+    # via -r requirements/base.in
 oauthlib==3.3.1
     # via
     #   lti-consumer-xblock

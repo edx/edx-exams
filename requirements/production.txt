@@ -283,6 +283,8 @@ mysqlclient==2.2.7
     # via
     #   -r requirements/base.txt
     #   -r requirements/production.in
+openedx-atlas==0.7.1
+    # via -r requirements/base.txt
 oauthlib==3.3.1
     # via
     #   -r requirements/base.txt

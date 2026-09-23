@@ -403,6 +403,8 @@ more-itertools==10.8.0
     #   jaraco-functools
 mysqlclient==2.2.7
     # via -r requirements/validation.txt
+openedx-atlas==0.7.1
+    # via -r requirements/validation.txt
 nh3==0.3.2
     # via
     #   -r requirements/validation.txt

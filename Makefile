@@ -4,8 +4,8 @@
         validation_requirements doc_requirements production-requirements static shell \
         test coverage isort_check isort style lint quality pii_check validate \
         migrate html_coverage upgrade extract_translation dummy_translations \
-        compile_translations fake_translations  pull_translations \
-        push_translations start-devstack open-devstack  pkg-devstack \
+        compile_translations fake_translations pull_translations \
+        start-devstack open-devstack  pkg-devstack \
         detect_changed_source_translations validate_translations check_keywords
 
 define BROWSER_PYSCRIPT
@@ -138,11 +138,10 @@ compile_translations: # compile translation files, outputting .po files for each
 
 fake_translations: ## generate and compile dummy translation files
 
-pull_translations: ## pull translations from Transifex
-	tx pull -t -a -f --mode reviewed
-
-push_translations: ## push source translation files (.po) from Transifex
-	tx push -s
+pull_translations: ## pull translations from edx/openedx-translations via atlas (OEP-58)
+	find edx_exams/conf/locale -mindepth 1 -maxdepth 1 -type d -exec rm -r {} \;
+	atlas pull $(ATLAS_OPTIONS) translations/edx-exams/edx_exams/conf/locale:edx_exams/conf/locale
+	python manage.py compilemessages
 
 start-devstack: ## run a local development copy of the server
 	docker-compose --x-networking up
