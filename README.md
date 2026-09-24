@@ -62,7 +62,7 @@
 | edx\_exams/apps/core/migrations/0027\_coursestaffrole\_unique\_course\_staff\_role.py |        4 |        0 |        0 |        0 |    100% |           |
 | edx\_exams/apps/core/migrations/0028\_admin\_optional\_fields.py                      |        4 |        0 |        0 |        0 |    100% |           |
 | edx\_exams/apps/core/migrations/\_\_init\_\_.py                                       |        0 |        0 |        0 |        0 |    100% |           |
-| edx\_exams/apps/core/models.py                                                        |      204 |        0 |       10 |        1 |     99% |  467->470 |
+| edx\_exams/apps/core/models.py                                                        |      204 |        0 |       10 |        1 |     99% | 467-\>470 |
 | edx\_exams/apps/core/rest\_utils.py                                                   |       11 |        0 |        2 |        0 |    100% |           |
 | edx\_exams/apps/core/signals/\_\_init\_\_.py                                          |        0 |        0 |        0 |        0 |    100% |           |
 | edx\_exams/apps/core/signals/signals.py                                               |       21 |        0 |        0 |        0 |    100% |           |
