@@ -369,6 +369,8 @@ more-itertools==10.8.0
     #   jaraco-functools
 mysqlclient==2.2.7
     # via -r requirements/test.txt
+openedx-atlas==0.7.1
+    # via -r requirements/test.txt
 nh3==0.3.2
     # via readme-renderer
 oauthlib==3.3.1

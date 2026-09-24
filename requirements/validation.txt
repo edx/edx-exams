@@ -481,6 +481,10 @@ mysqlclient==2.2.7
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
+openedx-atlas==0.7.1
+    # via
+    #   -r requirements/quality.txt
+    #   -r requirements/test.txt
 nh3==0.3.2
     # via
     #   -r requirements/quality.txt
