@@ -2060,3 +2060,170 @@ class UserOnboardingViewTest(ExamsAPITestCase):
 
         response = self.get_api()
         self.assertEqual(response.status_code, 404)
+
+
+class CertificateProctoringStatusViewTests(ExamsAPITestCase):
+    """
+    Tests CertificateProctoringStatusView
+    """
+
+    def setUp(self):
+        super().setUp()
+
+        self.course_id = 'course-v1:edx+test+f19'
+        self.learner = UserFactory.create(lms_user_id=4242)
+        self.exam = ExamFactory.create(course_id=self.course_id, provider=self.test_provider)
+
+    def get_api(self, user=None, course_id=None, lms_user_id='4242'):
+        """
+        Helper function to make GET request to the API
+        """
+        user = user or self.user
+        headers = self.build_jwt_headers(user)
+        url = reverse(
+            'api:v1:certificate-proctoring-status',
+            kwargs={'course_id': course_id or self.course_id},
+        )
+        if lms_user_id is not None:
+            url = f'{url}?lms_user_id={lms_user_id}'
+        return self.client.get(url, **headers)
+
+    def test_learner_is_forbidden(self):
+        """
+        A learner cannot read proctoring statuses, not even their own
+        """
+        response = self.get_api(user=self.learner)
+        self.assertEqual(response.status_code, 403)
+
+    def test_course_staff_is_forbidden(self):
+        """
+        Course staff are not service accounts and cannot call this endpoint
+        """
+        course_staff_user = UserFactory.create()
+        CourseStaffRole.objects.create(user=course_staff_user, course_id=self.course_id)
+        response = self.get_api(user=course_staff_user)
+        self.assertEqual(response.status_code, 403)
+
+    def test_requires_lms_user_id(self):
+        """
+        A missing or malformed lms_user_id is a bad request
+        """
+        self.assertEqual(self.get_api(lms_user_id=None).status_code, 400)
+        self.assertEqual(self.get_api(lms_user_id='abc').status_code, 400)
+
+    def test_no_attempt(self):
+        """
+        An exam with no attempt is returned with null attempt fields
+        """
+        response = self.get_api()
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data['course_id'], self.course_id)
+        self.assertEqual(response.data['lms_user_id'], 4242)
+        self.assertEqual(len(response.data['exams']), 1)
+        exam_data = response.data['exams'][0]
+        self.assertEqual(exam_data['exam_id'], self.exam.id)
+        self.assertEqual(exam_data['content_id'], self.exam.content_id)
+        self.assertIsNone(exam_data['attempt_id'])
+        self.assertIsNone(exam_data['status'])
+
+    def test_unknown_learner(self):
+        """
+        A learner that edx-exams has never seen gets exams with no attempts
+        """
+        response = self.get_api(lms_user_id='999999')
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data['exams']), 1)
+        self.assertIsNone(response.data['exams'][0]['status'])
+
+    def test_latest_attempt_is_returned(self):
+        """
+        The newest attempt wins when a learner has more than one
+        """
+        ExamAttemptFactory.create(
+            user=self.learner, exam=self.exam, status=ExamAttemptStatus.rejected, attempt_number=1,
+        )
+        newest = ExamAttemptFactory.create(
+            user=self.learner, exam=self.exam, status=ExamAttemptStatus.submitted, attempt_number=2,
+        )
+
+        response = self.get_api()
+
+        exam_data = response.data['exams'][0]
+        self.assertEqual(exam_data['attempt_id'], newest.id)
+        self.assertEqual(exam_data['status'], ExamAttemptStatus.submitted)
+
+    def test_multiple_exams(self):
+        """
+        Every proctored exam in the course is reported, each with its own status
+        """
+        second_exam = ExamFactory.create(course_id=self.course_id, provider=self.test_provider)
+        ExamAttemptFactory.create(user=self.learner, exam=self.exam, status=ExamAttemptStatus.verified)
+        ExamAttemptFactory.create(
+            user=self.learner, exam=second_exam, status=ExamAttemptStatus.second_review_required,
+        )
+
+        response = self.get_api()
+
+        statuses = {item['exam_id']: item['status'] for item in response.data['exams']}
+        self.assertEqual(statuses, {
+            self.exam.id: ExamAttemptStatus.verified,
+            second_exam.id: ExamAttemptStatus.second_review_required,
+        })
+
+    def test_only_active_non_practice_proctored_exams(self):
+        """
+        Timed, practice, onboarding and inactive exams are not part of certificate decisions
+        """
+        for exam_type in ('timed', 'practice', 'onboarding'):
+            other = ExamFactory.create(course_id=self.course_id, provider=self.test_provider, exam_type=exam_type)
+            ExamAttemptFactory.create(user=self.learner, exam=other, status=ExamAttemptStatus.submitted)
+        inactive = ExamFactory.create(course_id=self.course_id, provider=self.test_provider, is_active=False)
+        ExamAttemptFactory.create(user=self.learner, exam=inactive, status=ExamAttemptStatus.submitted)
+
+        response = self.get_api()
+
+        self.assertEqual([item['exam_id'] for item in response.data['exams']], [self.exam.id])
+
+    def test_other_course_and_other_learner_are_excluded(self):
+        """
+        Attempts for another course or another learner never leak into the response
+        """
+        other_course_exam = ExamFactory.create(course_id='course-v1:edx+other+f19', provider=self.test_provider)
+        ExamAttemptFactory.create(user=self.learner, exam=other_course_exam, status=ExamAttemptStatus.submitted)
+        other_learner = UserFactory.create(lms_user_id=777)
+        ExamAttemptFactory.create(user=other_learner, exam=self.exam, status=ExamAttemptStatus.submitted)
+
+        response = self.get_api()
+
+        self.assertEqual([item['exam_id'] for item in response.data['exams']], [self.exam.id])
+        self.assertIsNone(response.data['exams'][0]['status'])
+
+    def test_course_without_exams(self):
+        """
+        A course with no proctored exams returns an empty list
+        """
+        response = self.get_api(course_id='course-v1:edx+empty+f19')
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data['exams'], [])
+
+    def test_does_not_change_attempts(self):
+        """
+        A timed-out in-progress attempt is reported as stored and is not moved to submitted
+        """
+        attempt = ExamAttemptFactory.create(
+            user=self.learner,
+            exam=self.exam,
+            status=ExamAttemptStatus.started,
+            start_time=timezone.now() - timedelta(days=2),
+        )
+
+        with patch('edx_exams.apps.api.v1.views.check_if_exam_timed_out') as mock_timeout_check:
+            response = self.get_api()
+
+        mock_timeout_check.assert_not_called()
+        self.assertEqual(response.data['exams'][0]['status'], ExamAttemptStatus.started)
+        attempt.refresh_from_db()
+        self.assertEqual(attempt.status, ExamAttemptStatus.started)

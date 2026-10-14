@@ -4,6 +4,7 @@ from django.urls import path, re_path
 
 from edx_exams.apps.api.v1.views import (
     AllowanceView,
+    CertificateProctoringStatusView,
     CourseExamAttemptView,
     CourseExamConfigurationsView,
     CourseExamsView,
@@ -20,6 +21,11 @@ from edx_exams.apps.core.constants import COURSE_ID_PATTERN, EXAM_ID_PATTERN, US
 app_name = 'v1'
 
 urlpatterns = [
+    re_path(
+        fr'^certificate_proctoring/course_id/{COURSE_ID_PATTERN}/status$',
+        CertificateProctoringStatusView.as_view(),
+        name='certificate-proctoring-status'
+    ),
     re_path(
         fr'exams/course_id/{COURSE_ID_PATTERN}/allowances/(?P<allowance_id>\d+)',
         AllowanceView.as_view(),
