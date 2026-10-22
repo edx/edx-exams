@@ -2154,6 +2154,44 @@ class CertificateProctoringStatusViewTests(ExamsAPITestCase):
         self.assertEqual(exam_data['attempt_id'], newest.id)
         self.assertEqual(exam_data['status'], ExamAttemptStatus.submitted)
 
+    def test_latest_attempt_is_by_created_not_attempt_number_or_modified(self):
+        """
+        The newest attempt by creation time wins, even if an older attempt has a higher attempt
+        number or was modified more recently (for example a late proctoring review callback).
+        """
+        older = ExamAttemptFactory.create(
+            user=self.learner, exam=self.exam, status=ExamAttemptStatus.verified, attempt_number=2,
+        )
+        newer = ExamAttemptFactory.create(
+            user=self.learner, exam=self.exam, status=ExamAttemptStatus.submitted, attempt_number=1,
+        )
+        now = datetime.now(pytz.UTC)
+        ExamAttempt.objects.filter(id=older.id).update(created=now - timedelta(days=2))
+        ExamAttempt.objects.filter(id=newer.id).update(created=now - timedelta(days=1))
+        # Touch the older attempt last so its ``modified`` is the most recent.
+        older.refresh_from_db()
+        older.status = ExamAttemptStatus.verified
+        older.save()
+
+        response = self.get_api()
+
+        exam_data = response.data['exams'][0]
+        self.assertEqual(exam_data['attempt_id'], newer.id)
+        self.assertEqual(exam_data['status'], ExamAttemptStatus.submitted)
+
+    def test_attempts_created_at_the_same_time_fall_back_to_highest_id(self):
+        """
+        Attempts with identical creation times resolve deterministically to the highest id
+        """
+        first = ExamAttemptFactory.create(user=self.learner, exam=self.exam, status=ExamAttemptStatus.rejected)
+        second = ExamAttemptFactory.create(user=self.learner, exam=self.exam, status=ExamAttemptStatus.verified)
+        same_time = datetime.now(pytz.UTC)
+        ExamAttempt.objects.filter(id__in=[first.id, second.id]).update(created=same_time)
+
+        response = self.get_api()
+
+        self.assertEqual(response.data['exams'][0]['attempt_id'], second.id)
+
     def test_multiple_exams(self):
         """
         Every proctored exam in the course is reported, each with its own status
