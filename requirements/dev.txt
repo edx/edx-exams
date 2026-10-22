@@ -44,7 +44,7 @@ cachetools==6.2.5
     # via
     #   -r requirements/validation.txt
     #   tox
-certifi==2026.1.4
+certifi==2026.10.19
     # via
     #   -r requirements/validation.txt
     #   requests
@@ -445,7 +445,7 @@ packaging==26.0
     #   wheel
 path==16.16.0
     # via edx-i18n-tools
-pip-tools==7.5.2
+pip-tools==7.6.2
     # via -r requirements/pip-tools.txt
 platformdirs==4.5.1
     # via

@@ -46,7 +46,7 @@ cachetools==6.2.5
     # via
     #   -r requirements/test.txt
     #   tox
-certifi==2026.1.4
+certifi==2026.10.19
     # via
     #   -r requirements/test.txt
     #   requests
