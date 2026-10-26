@@ -15,18 +15,6 @@ class CourseStaffUserPermissions(BasePermission):
         return request.user.is_staff  # pragma: no cover
 
 
-class ServiceUserPermissions(BasePermission):
-    """
-    Permission class that only admits service accounts (the LMS worker) and global staff.
-
-    Course staff are deliberately excluded: the endpoints using this permission expose
-    data about arbitrary learners and are meant for backend-to-backend calls only.
-    """
-
-    def has_permission(self, request, view):
-        return bool(request.user and request.user.is_authenticated and request.user.is_staff)
-
-
 class CourseStaffOrReadOnlyPermissions(CourseStaffUserPermissions):
     """
     Permission class granting write access to course staff users

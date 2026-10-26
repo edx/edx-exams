@@ -12,15 +12,11 @@ from edx_rest_framework_extensions.auth.jwt.authentication import JwtAuthenticat
 from rest_framework import status
 from rest_framework.generics import ListAPIView
 from rest_framework.pagination import LimitOffsetPagination
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 from token_utils.api import sign_token_for
 
-from edx_exams.apps.api.permissions import (
-    CourseStaffOrReadOnlyPermissions,
-    CourseStaffUserPermissions,
-    ServiceUserPermissions
-)
+from edx_exams.apps.api.permissions import CourseStaffOrReadOnlyPermissions, CourseStaffUserPermissions
 from edx_exams.apps.api.serializers import (
     AllowanceSerializer,
     CertificateProctoringStatusSerializer,
@@ -729,7 +725,7 @@ class CertificateProctoringStatusView(ExamsAPIView):
     """
 
     authentication_classes = (JwtAuthentication,)
-    permission_classes = (ServiceUserPermissions,)
+    permission_classes = (IsAuthenticated, IsAdminUser)
 
     def get(self, request, course_id):
         """

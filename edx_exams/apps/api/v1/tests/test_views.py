@@ -2247,21 +2247,71 @@ class CertificateProctoringStatusViewTests(ExamsAPITestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data['exams'], [])
 
-    def test_does_not_change_attempts(self):
+    def test_timed_out_attempt_is_reported_as_submitted_but_not_saved(self):
         """
-        A timed-out in-progress attempt is reported as stored and is not moved to submitted
+        An in-progress attempt whose time has run out is reported as submitted, without
+        changing what is stored
         """
         attempt = ExamAttemptFactory.create(
             user=self.learner,
             exam=self.exam,
             status=ExamAttemptStatus.started,
             start_time=timezone.now() - timedelta(days=2),
+            allowed_time_limit_mins=30,
         )
 
         with patch('edx_exams.apps.api.v1.views.check_if_exam_timed_out') as mock_timeout_check:
             response = self.get_api()
 
         mock_timeout_check.assert_not_called()
-        self.assertEqual(response.data['exams'][0]['status'], ExamAttemptStatus.started)
+        self.assertEqual(response.data['exams'][0]['status'], ExamAttemptStatus.submitted)
         attempt.refresh_from_db()
         self.assertEqual(attempt.status, ExamAttemptStatus.started)
+
+    def test_ready_to_submit_timed_out_attempt_is_reported_as_submitted(self):
+        """
+        ready_to_submit is also an in-progress status
+        """
+        ExamAttemptFactory.create(
+            user=self.learner,
+            exam=self.exam,
+            status=ExamAttemptStatus.ready_to_submit,
+            start_time=timezone.now() - timedelta(days=2),
+            allowed_time_limit_mins=30,
+        )
+
+        response = self.get_api()
+
+        self.assertEqual(response.data['exams'][0]['status'], ExamAttemptStatus.submitted)
+
+    def test_attempt_with_time_remaining_is_reported_as_stored(self):
+        """
+        An in-progress attempt that still has time left keeps its stored status
+        """
+        ExamAttemptFactory.create(
+            user=self.learner,
+            exam=self.exam,
+            status=ExamAttemptStatus.started,
+            start_time=timezone.now() - timedelta(minutes=5),
+            allowed_time_limit_mins=30,
+        )
+
+        response = self.get_api()
+
+        self.assertEqual(response.data['exams'][0]['status'], ExamAttemptStatus.started)
+
+    def test_non_in_progress_attempt_is_never_rewritten(self):
+        """
+        A finished attempt is reported as stored even when its time window has passed
+        """
+        ExamAttemptFactory.create(
+            user=self.learner,
+            exam=self.exam,
+            status=ExamAttemptStatus.verified,
+            start_time=timezone.now() - timedelta(days=2),
+            allowed_time_limit_mins=30,
+        )
+
+        response = self.get_api()
+
+        self.assertEqual(response.data['exams'][0]['status'], ExamAttemptStatus.verified)
