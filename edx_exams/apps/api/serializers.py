@@ -240,6 +240,34 @@ class StudentAttemptSerializer(serializers.ModelSerializer):
         )
 
 
+class CertificateProctoringStatusSerializer(serializers.Serializer):  # pylint: disable=abstract-method
+    """
+    Serializer for the status of one proctored exam, from the point of view of certificate access.
+
+    ``attempt_id`` and ``status`` are null when the learner has no attempt for the exam.
+    """
+    exam_id = serializers.IntegerField()
+    content_id = serializers.CharField()
+    exam_name = serializers.CharField()
+    exam_type = serializers.CharField()
+    attempt_id = serializers.IntegerField(allow_null=True)
+    status = serializers.CharField(allow_null=True)
+
+    @classmethod
+    def from_exam_and_attempt(cls, exam, attempt):
+        """
+        Build the serializer for an ``(exam, attempt)`` pair; ``attempt`` may be None.
+        """
+        return cls({
+            'exam_id': exam.id,
+            'content_id': exam.content_id,
+            'exam_name': exam.exam_name,
+            'exam_type': exam.exam_type,
+            'attempt_id': attempt.id if attempt else None,
+            'status': attempt.status if attempt else None,
+        })
+
+
 class InstructorViewAttemptSerializer(serializers.ModelSerializer):
     """
     Serializer for the ExamAttempt model containing fields needed for the instructor view

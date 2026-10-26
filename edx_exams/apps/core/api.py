@@ -11,7 +11,7 @@ from opaque_keys.edx.keys import CourseKey, UsageKey
 
 from edx_exams.apps.core.data import CourseExamConfigurationData
 from edx_exams.apps.core.email import send_attempt_status_email
-from edx_exams.apps.core.exam_types import OnboardingExamType, PracticeExamType, get_exam_type
+from edx_exams.apps.core.exam_types import OnboardingExamType, PracticeExamType, ProctoredExamType, get_exam_type
 from edx_exams.apps.core.exceptions import (
     ExamAttemptAlreadyExists,
     ExamAttemptOnPastDueExam,
@@ -394,6 +394,44 @@ def get_current_exam_attempt(user_id, exam_id):
     """
     attempt = ExamAttempt.get_current_exam_attempt(user_id, exam_id)
     return attempt
+
+
+def get_certificate_proctoring_statuses(course_id, lms_user_id):
+    """
+    Return the latest attempt for each active, non-practice proctored exam in a course.
+
+    Used by the LMS to decide whether a learner's certificate must be held. This is
+    read-only on purpose: unlike the learner-facing views it never saves a move to
+    ``submitted`` when time has run out. Instead, an in-progress attempt whose time has run
+    out is reported as ``submitted`` on the returned object, which is not saved.
+
+    Returns a list of ``(exam, attempt)`` tuples in exam id order. ``attempt`` is None
+    when the learner has no attempt for that exam.
+    """
+    exams = list(
+        get_course_exams(course_id).filter(exam_type=ProctoredExamType.name).order_by('id')
+    )
+    if not exams:
+        return []
+
+    # lms_user_id is indexed but not unique, so match on it rather than on a single user row.
+    # Ordering oldest to newest means the last attempt written for an exam is the latest.
+    attempts = ExamAttempt.objects.filter(
+        user__lms_user_id=lms_user_id,
+        exam__in=exams,
+    ).order_by('created', 'id')
+    latest_by_exam = {attempt.exam_id: attempt for attempt in attempts}
+
+    # check_if_exam_timed_out only runs when the learner reopens the exam, so the stored status
+    # can stay "started" indefinitely. Report what it would store, without saving it.
+    for attempt in latest_by_exam.values():
+        if (
+            attempt.status in ExamAttemptStatus.in_progress_statuses
+            and get_exam_attempt_time_remaining(attempt) == 0
+        ):
+            attempt.status = ExamAttemptStatus.submitted
+
+    return [(exam, latest_by_exam.get(exam.id)) for exam in exams]
 
 
 def get_exam_url_path(course_id, content_id):

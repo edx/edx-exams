@@ -12,13 +12,14 @@ from edx_rest_framework_extensions.auth.jwt.authentication import JwtAuthenticat
 from rest_framework import status
 from rest_framework.generics import ListAPIView
 from rest_framework.pagination import LimitOffsetPagination
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 from token_utils.api import sign_token_for
 
 from edx_exams.apps.api.permissions import CourseStaffOrReadOnlyPermissions, CourseStaffUserPermissions
 from edx_exams.apps.api.serializers import (
     AllowanceSerializer,
+    CertificateProctoringStatusSerializer,
     CourseExamConfigurationReadSerializer,
     CourseExamConfigurationWriteSerializer,
     ExamSerializer,
@@ -33,6 +34,7 @@ from edx_exams.apps.core.api import (
     create_or_update_course_exam_configuration,
     get_active_attempt_for_user,
     get_attempt_by_id,
+    get_certificate_proctoring_statuses,
     get_course_exam_configuration_by_course_id,
     get_course_exams,
     get_current_exam_attempt,
@@ -688,6 +690,66 @@ class InstructorAttemptsListView(ExamsAPIView):
         return paginator.get_paginated_response(
             InstructorViewAttemptSerializer(paginated_attempts, many=True).data
         )
+
+
+class CertificateProctoringStatusView(ExamsAPIView):
+    """
+    Endpoint for the LMS to read a learner's proctoring status for certificate decisions.
+    /certificate_proctoring/course_id/{course_id}/status?lms_user_id={lms_user_id}
+
+    Only service accounts and global staff may call this; course staff and learners get 403.
+    The endpoint never changes data.
+
+    Supports:
+        HTTP GET: Latest attempt status of every active, non-practice proctored exam in the course.
+
+    **GET data Parameters**
+        'lms_user_id': (required) The LMS user id of the learner.
+
+    **Returns**
+    {
+        'course_id': string,
+        'lms_user_id': int,
+        'exams': [
+            {
+                'exam_id': int,
+                'content_id': string,
+                'exam_name': string,
+                'exam_type': string,
+                'attempt_id': int or null,
+                'status': string or null,
+            },
+        ]
+    }
+    ``attempt_id`` and ``status`` are null when the learner has no attempt for that exam.
+    """
+
+    authentication_classes = (JwtAuthentication,)
+    permission_classes = (IsAuthenticated, IsAdminUser)
+
+    def get(self, request, course_id):
+        """
+        HTTP GET handler. Returns the latest attempt status for each proctored exam in the course.
+        """
+        raw_lms_user_id = request.query_params.get('lms_user_id')
+        try:
+            lms_user_id = int(raw_lms_user_id)
+        except (TypeError, ValueError):
+            return Response(
+                status=status.HTTP_400_BAD_REQUEST,
+                data={'detail': 'lms_user_id is required and must be an integer'},
+            )
+
+        statuses = get_certificate_proctoring_statuses(course_id, lms_user_id)
+        exams = [
+            CertificateProctoringStatusSerializer.from_exam_and_attempt(exam, attempt).data
+            for exam, attempt in statuses
+        ]
+        return Response({
+            'course_id': course_id,
+            'lms_user_id': lms_user_id,
+            'exams': exams,
+        })
 
 
 class CourseExamAttemptView(ExamsAPIView):
